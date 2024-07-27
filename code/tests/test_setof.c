@@ -1,0 +1,119 @@
+/*
+ * -----------------------------------------------------------------------------
+ * Project: Fossil Logic
+ *
+ * This file is part of the Fossil Logic project, which aims to develop high-
+ * performance, cross-platform applications and libraries. The code contained
+ * herein is subject to the terms and conditions defined in the project license.
+ *
+ * Author: Michael Gene Brockus (Dreamer)
+ *
+ * Copyright (C) 2024 Fossil Logic. All rights reserved.
+ * -----------------------------------------------------------------------------
+ */
+#include <fossil/unittest/framework.h>
+#include <fossil/xassume.h>
+
+#include "fossil/tofu/framework.h"
+
+// * * * * * * * * * * * * * * * * * * * * * * * *
+// * Fossil Logic Test Utilities
+// * * * * * * * * * * * * * * * * * * * * * * * *
+// Setup steps for things like test fixtures and
+// mock objects are set here.
+// * * * * * * * * * * * * * * * * * * * * * * * *
+
+FOSSIL_FIXTURE(struct_set_fixture);
+fossil_set_t* mock_set;
+
+FOSSIL_SETUP(struct_set_fixture) {
+    mock_set = fossil_set_create("int");
+}
+
+FOSSIL_TEARDOWN(struct_set_fixture) {
+    fossil_set_erase(mock_set);
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * *
+// * Fossil Logic Test Cases
+// * * * * * * * * * * * * * * * * * * * * * * * *
+// The test cases below are provided as samples, inspired
+// by the Meson build system's approach of using test cases
+// as samples for library usage.
+// * * * * * * * * * * * * * * * * * * * * * * * *
+
+FOSSIL_TEST(test_set_create_and_erase) {
+    // Check if the set is created with the expected values
+    ASSUME_NOT_CNULL(mock_set);
+    ASSUME_ITS_CNULL(mock_set->head);
+}
+
+FOSSIL_TEST(test_set_insert_and_size) {
+    // Insert some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    ASSUME_ITS_TRUE(fossil_set_insert(mock_set, element1) == 0);
+    ASSUME_ITS_TRUE(fossil_set_insert(mock_set, element2) == 0);
+    ASSUME_ITS_TRUE(fossil_set_insert(mock_set, element3) == 0);
+
+    // Check if the size is correct
+    ASSUME_ITS_EQUAL_SIZE(3, fossil_set_size(mock_set));
+
+    fossil_tofu_erase(&element1);
+    fossil_tofu_erase(&element2);
+    fossil_tofu_erase(&element3);
+}
+
+FOSSIL_TEST(test_set_remove) {
+    // Insert some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_set_insert(mock_set, element1);
+    fossil_set_insert(mock_set, element2);
+    fossil_set_insert(mock_set, element3);
+
+    // Remove an element
+    ASSUME_ITS_TRUE(fossil_set_remove(mock_set, element2) == 0);
+
+    // Check if the size is correct
+    ASSUME_ITS_EQUAL_SIZE(2, fossil_set_size(mock_set));
+}
+
+FOSSIL_TEST(test_set_contains) {
+    // Insert some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_set_insert(mock_set, element1);
+    fossil_set_insert(mock_set, element2);
+    fossil_set_insert(mock_set, element3);
+
+    // Check if elements are contained in the set
+    ASSUME_ITS_TRUE(fossil_set_contains(mock_set, element1));
+    ASSUME_ITS_TRUE(fossil_set_contains(mock_set, element3));
+
+    // Check for non-existing element
+    fossil_tofu_t nonExistingElement = fossil_tofu_create("int", "42");
+    ASSUME_ITS_FALSE(fossil_set_contains(mock_set, nonExistingElement) == 0);
+
+    fossil_tofu_erase(&nonExistingElement);
+    fossil_tofu_erase(&element1);
+    fossil_tofu_erase(&element2);
+    fossil_tofu_erase(&element3);
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * *
+// * Fossil Logic Test Pool
+// * * * * * * * * * * * * * * * * * * * * * * * *
+FOSSIL_TEST_GROUP(c_setof_structure_tests) {
+    // Set Fixture
+    ADD_TESTF(test_set_create_and_erase, struct_set_fixture);
+    ADD_TESTF(test_set_insert_and_size, struct_set_fixture);
+    ADD_TESTF(test_set_remove, struct_set_fixture);
+    ADD_TESTF(test_set_contains, struct_set_fixture);
+} // end of tests
