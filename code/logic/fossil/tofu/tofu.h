@@ -383,193 +383,171 @@ char* fossil_tofu_strdup(const char* str);
 #endif
 
 #ifdef __cplusplus
+
+#include <string>
+
 namespace fossil {
 
-template<typename T>
-class Tofu {
-public:
-    Tofu() = default;
-    Tofu(const T& value) : m_value(value) {}
-    Tofu(const Tofu& other) : m_value(other.m_value) {}
-    Tofu& operator=(const Tofu& other) {
-        if (this != &other) {
-            m_value = other.m_value;
+    namespace tofu {
+
+    fossil_tofu_t create(std::string type, std::string value) {
+        return fossil_tofu_create(type.c_str(), value.c_str());
+    }
+
+    void memorize(fossil_tofu_t *tofu) {
+        fossil_tofu_memorize(tofu);
+    }
+
+    void print(fossil_tofu_t tofu) {
+        fossil_tofu_print(tofu);
+    }
+
+    void erase(fossil_tofu_t *tofu) {
+        fossil_tofu_erase(tofu);
+    }
+
+    const char* type_to_string(fossil_tofu_type_t type) {
+        return fossil_tofu_type_to_string(type);
+    }
+
+    bool equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
+        return fossil_tofu_equals(tofu1, tofu2);
+    }
+
+    fossil_tofu_t copy(fossil_tofu_t tofu) {
+        return fossil_tofu_copy(tofu);
+    }
+
+    bool compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2) {
+        return fossil_tofu_compare(tofu1, tofu2);
+    }
+
+    void actionof_transform(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t)) {
+        fossil_tofu_actionof_transform(array, size, func);
+    }
+
+    fossil_tofu_t actionof_accumulate(fossil_tofu_t *array, size_t size, fossil_tofu_t init, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t)) {
+        return fossil_tofu_actionof_accumulate(array, size, init, func);
+    }
+
+    size_t actionof_filter(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t)) {
+        return fossil_tofu_actionof_filter(array, size, pred);
+    }
+
+    fossil_tofu_t* actionof_search(fossil_tofu_t *array, size_t size, fossil_tofu_t key, bool (*compare)(fossil_tofu_t, fossil_tofu_t)) {
+        return fossil_tofu_actionof_search(array, size, key, compare);
+    }
+
+    void actionof_reverse(fossil_tofu_t *array, size_t size) {
+        fossil_tofu_actionof_reverse(array, size);
+    }
+
+    void actionof_swap(fossil_tofu_t *array, size_t index1, size_t index2) {
+        fossil_tofu_actionof_swap(array, index1, index2);
+    }
+
+    int actionof_compare(fossil_tofu_t a, fossil_tofu_t b) {
+        return fossil_tofu_actionof_compare(a, b);
+    }
+
+    fossil_tofu_t actionof_reduce(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t)) {
+        return fossil_tofu_actionof_reduce(array, size, func);
+    }
+
+    void actionof_shuffle(fossil_tofu_t *array, size_t size) {
+        fossil_tofu_actionof_shuffle(array, size);
+    }
+
+    void actionof_for_each(fossil_tofu_t *array, size_t size, void (*func)(fossil_tofu_t)) {
+        fossil_tofu_actionof_for_each(array, size, func);
+    }
+
+    size_t actionof_partition(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t)) {
+        return fossil_tofu_actionof_partition(array, size, pred);
+    }
+
+    fossil_tofu_t actionof_summary(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t)) {
+        return fossil_tofu_actionof_summary(array, size, func);
+    }
+
+    fossil_tofu_t actionof_average(fossil_tofu_t *array, size_t size) {
+        return fossil_tofu_actionof_average(array, size);
+    }
+
+    fossil_tofu_iteratorof_t iteratorof_create(fossil_tofu_t *array, size_t size) {
+        return fossil_tofu_iteratorof_create(array, size);
+    }
+
+    bool iteratorof_has_next(fossil_tofu_iteratorof_t *iterator) {
+        return fossil_tofu_iteratorof_has_next(iterator);
+    }
+
+    fossil_tofu_t iteratorof_next(fossil_tofu_iteratorof_t *iterator) {
+        return fossil_tofu_iteratorof_next(iterator);
+    }
+
+    void iteratorof_reset(fossil_tofu_iteratorof_t *iterator) {
+        fossil_tofu_iteratorof_reset(iterator);
+    }
+
+    char* strdup(std::string str) {
+        return fossil_tofu_strdup(str.c_str());
+    }
+
+    } // namespace tofu
+
+
+    class ToFu {
+    public:
+        ToFu(fossil_tofu_t *array, size_t size) : array_(array), size_(size) {}
+
+        size_t filter(bool (*pred)(fossil_tofu_t)) {
+            return fossil::tofu::actionof_filter(array_, size_, pred);
         }
-        return *this;
-    }
-    ~Tofu() = default;
 
-    T value() const { return m_value; }
-    void setValue(const T& value) { m_value = value; }
+        fossil_tofu_t* search(fossil_tofu_t key, bool (*compare)(fossil_tofu_t, fossil_tofu_t)) {
+            return fossil::tofu::actionof_search(array_, size_, key, compare);
+        }
 
-    bool operator==(const Tofu& other) const {
-        return m_value == other.m_value;
-    }
+        void swap(size_t index1, size_t index2) {
+            fossil::tofu::actionof_swap(array_, index1, index2);
+        }
 
-    bool operator!=(const Tofu& other) const {
-        return m_value != other.m_value;
-    }
+        int compare(fossil_tofu_t a, fossil_tofu_t b) {
+            return fossil::tofu::actionof_compare(a, b);
+        }
 
-    bool operator<(const Tofu& other) const {
-        return m_value < other.m_value;
-    }
+        fossil_tofu_t reduce(fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t)) {
+            return fossil::tofu::actionof_reduce(array_, size_, func);
+        }
 
-    bool operator>(const Tofu& other) const {
-        return m_value > other.m_value;
-    }
+        void shuffle() {
+            fossil::tofu::actionof_shuffle(array_, size_);
+        }
 
-    bool operator<=(const Tofu& other) const {
-        return m_value <= other.m_value;
-    }
+        void for_each(void (*func)(fossil_tofu_t)) {
+            fossil::tofu::actionof_for_each(array_, size_, func);
+        }
 
-    bool operator>=(const Tofu& other) const {
-        return m_value >= other.m_value;
-    }
+        size_t partition(bool (*pred)(fossil_tofu_t)) {
+            return fossil::tofu::actionof_partition(array_, size_, pred);
+        }
 
-    Tofu operator+(const Tofu& other) const {
-        return Tofu(m_value + other.m_value);
-    }
+        fossil_tofu_t summary(fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t)) {
+            return fossil::tofu::actionof_summary(array_, size_, func);
+        }
 
-    Tofu operator-(const Tofu& other) const {
-        return Tofu(m_value - other.m_value);
-    }
+        fossil_tofu_t average() {
+            return fossil::tofu::actionof_average(array_, size_);
+        }
 
-    Tofu operator*(const Tofu& other) const {
-        return Tofu(m_value * other.m_value);
-    }
-
-    Tofu operator/(const Tofu& other) const {
-        return Tofu(m_value / other.m_value);
-    }
-
-    Tofu operator%(const Tofu& other) const {
-        return Tofu(m_value % other.m_value);
-    }
-
-    Tofu operator&(const Tofu& other) const {
-        return Tofu(m_value & other.m_value);
-    }
-
-    Tofu operator|(const Tofu& other) const {
-        return Tofu(m_value | other.m_value);
-    }
-
-    Tofu operator^(const Tofu& other) const {
-        return Tofu(m_value ^ other.m_value);
-    }
-
-    Tofu operator<<(const Tofu& other) const {
-        return Tofu(m_value << other.m_value);
-    }
-
-    Tofu operator>>(const Tofu& other) const {
-        return Tofu(m_value >> other.m_value);
-    }
-
-    Tofu operator&&(const Tofu& other) const {
-        return Tofu(m_value && other.m_value);
-    }
-
-    Tofu operator||(const Tofu& other) const {
-        return Tofu(m_value || other.m_value);
-    }
-
-    Tofu operator!() const {
-        return Tofu(!m_value);
-    }
-
-    Tofu operator~() const {
-        return Tofu(~m_value);
-    }
-
-    Tofu operator-() const {
-        return Tofu(-m_value);
-    }
-
-    Tofu operator+() const {
-        return Tofu(+m_value);
-    }
-
-    Tofu& operator+=(const Tofu& other) {
-        m_value += other.m_value;
-        return *this;
-    }
-
-    Tofu& operator-=(const Tofu& other) {
-        m_value -= other.m_value;
-        return *this;
-    }
-
-    Tofu& operator*=(const Tofu& other) {
-        m_value *= other.m_value;
-        return *this;
-    }
-
-    Tofu& operator/=(const Tofu& other) {
-        m_value /= other.m_value;
-        return *this;
-    }
-
-    Tofu& operator%=(const Tofu& other) {
-        m_value %= other.m_value;
-        return *this;
-    }
-
-    Tofu& operator&=(const Tofu& other) {
-        m_value &= other.m_value;
-        return *this;
-    }
-
-    Tofu& operator|=(const Tofu& other) {
-        m_value |= other.m_value;
-        return *this;
-    }
-
-    Tofu& operator^=(const Tofu& other) {
-        m_value ^= other.m_value;
-        return *this;
-    }
-
-    Tofu& operator<<=(const Tofu& other) {
-        m_value <<= other.m_value;
-        return *this;
-    }
-
-    Tofu& operator>>=(const Tofu& other) {
-        m_value >>= other.m_value;
-        return *this;
-    }
-
-    Tofu& operator++() {
-        ++m_value;
-        return *this;
-    }
-
-    Tofu operator++(int) {
-        Tofu temp(*this);
-        ++m_value;
-        return temp;
-    }
-
-    Tofu& operator--() {
-        --m_value;
-        return *this;
-    }
-
-    Tofu operator--(int) {
-        Tofu temp(*this);
-        --m_value;
-        return temp;
-    }
-
-private:
-    T m_value;
-};
+    private:
+        fossil_tofu_t *array_;
+        size_t size_;
+    };
 
 } // namespace fossil
 
-
-}
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */
