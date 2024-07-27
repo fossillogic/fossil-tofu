@@ -16,6 +16,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <stdio.h>
 
 // Function to create an arrayof with an initial set of elements
 fossil_tofu_arrayof_t fossil_tofu_arrayof_create(char *type, size_t size, ...) {
