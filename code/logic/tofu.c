@@ -107,7 +107,7 @@ fossil_tofu_t fossil_tofu_create(char* type, char* value) {
             tofu.value.c_string_val = fossil_tofu_strdup(value);
             break;
         case FOSSIL_TOFU_TYPE_BCHAR:
-            tofu.value.byte_val = (uint8_t *) fossil_tofu_alloc(strlen(value) + 1);
+            tofu.value.byte_val = (char16_t *)fossil_tofu_alloc(strlen(value) + 1);
             memcpy(tofu.value.byte_val, value, strlen(value) + 1);
             break;
         case FOSSIL_TOFU_TYPE_CCHAR:
@@ -236,7 +236,7 @@ bool fossil_tofu_compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2) {
         case FOSSIL_TOFU_TYPE_DOUBLE:
             return tofu1->value.double_val == tofu2->value.double_val;
         case FOSSIL_TOFU_TYPE_BSTR:
-            return strcmp(tofu1->value.byte_string_val, tofu2->value.byte_string_val) == 0;
+            return strcmp((char *)tofu1->value.byte_string_val, (char *)tofu2->value.byte_string_val) == 0;
         case FOSSIL_TOFU_TYPE_WSTR:
             return wcscmp(tofu1->value.wide_string_val, tofu2->value.wide_string_val) == 0;
         case FOSSIL_TOFU_TYPE_CSTR:
@@ -273,7 +273,7 @@ bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
         case FOSSIL_TOFU_TYPE_DOUBLE:
             return tofu1.value.double_val == tofu2.value.double_val;
         case FOSSIL_TOFU_TYPE_BSTR:
-            return strcmp(tofu1.value.byte_string_val, tofu2.value.byte_string_val) == 0;
+            return strcmp((char *)tofu1.value.byte_string_val, (char *)tofu2.value.byte_string_val) == 0;
         case FOSSIL_TOFU_TYPE_WSTR:
             return wcscmp(tofu1.value.wide_string_val, tofu2.value.wide_string_val) == 0;
         case FOSSIL_TOFU_TYPE_CSTR:
@@ -315,7 +315,7 @@ fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu) {
             copy.value.double_val = tofu.value.double_val;
             break;
         case FOSSIL_TOFU_TYPE_BSTR:
-            copy.value.byte_string_val = fossil_tofu_strdup(tofu.value.byte_string_val);
+            copy.value.byte_string_val = (char16_t *)fossil_tofu_strdup((char *)tofu.value.byte_string_val);
             break;
         case FOSSIL_TOFU_TYPE_WSTR:
             copy.value.wide_string_val = (wchar_t *) fossil_tofu_alloc((wcslen(tofu.value.wide_string_val) + 1) * sizeof(wchar_t));
@@ -325,7 +325,7 @@ fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu) {
             copy.value.c_string_val = fossil_tofu_strdup(tofu.value.c_string_val);
             break;
         case FOSSIL_TOFU_TYPE_BCHAR:
-            copy.value.byte_val = (uint8_t *) fossil_tofu_alloc(strlen((char *)tofu.value.byte_val) + 1);
+            copy.value.byte_val = (char16_t *) fossil_tofu_alloc(strlen((char *)tofu.value.byte_val) + 1);
             memcpy(copy.value.byte_val, tofu.value.byte_val, strlen((char *)tofu.value.byte_val) + 1);
             break;
         case FOSSIL_TOFU_TYPE_CCHAR:
