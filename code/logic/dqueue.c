@@ -1,0 +1,146 @@
+/*
+ * -----------------------------------------------------------------------------
+ * Project: Fossil Logic
+ *
+ * This file is part of the Fossil Logic project, which aims to develop high-
+ * performance, cross-platform applications and libraries. The code contained
+ * herein is subject to the terms and conditions defined in the project license.
+ *
+ * Author: Michael Gene Brockus (Dreamer)
+ *
+ * Copyright (C) 2024 Fossil Logic. All rights reserved.
+ * -----------------------------------------------------------------------------
+ */
+#include "fossil/tofu/dqueue.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+fossil_dqueue_t* fossil_dqueue_create(char* type) {
+    fossil_dqueue_t* dqueue = (fossil_dqueue_t*)fossil_tofu_alloc(sizeof(fossil_dqueue_t));
+    if (dqueue) {
+        dqueue->front = NULL;
+        dqueue->rear = NULL;
+        dqueue->type = type;  // Assuming type is a static string or managed separately
+    }
+    return dqueue;
+}
+
+void fossil_dqueue_erase(fossil_dqueue_t* dqueue) {
+    if (!dqueue) return;
+
+    fossil_dqueue_node_t* current = dqueue->front;
+    while (current) {
+        fossil_dqueue_node_t* next = current->next;
+        fossil_tofu_free(current);
+        current = next;
+    }
+    dqueue->front = NULL;
+    dqueue->rear = NULL;
+    fossil_tofu_free(dqueue);
+}
+
+int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
+    fossil_dqueue_node_t* new_node = (fossil_dqueue_node_t*)fossil_tofu_alloc(sizeof(fossil_dqueue_node_t));
+    if (!new_node) {
+        return -1;  // Allocation failed
+    }
+
+    new_node->data = data;
+    new_node->prev = NULL;
+    new_node->next = NULL;
+
+    if (dqueue->rear == NULL) {
+        // Empty queue case
+        dqueue->front = new_node;
+        dqueue->rear = new_node;
+    } else {
+        // Non-empty queue case
+        new_node->prev = dqueue->rear;
+        dqueue->rear->next = new_node;
+        dqueue->rear = new_node;
+    }
+
+    return 0;  // Success
+}
+
+int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue, fossil_tofu_t* data) {
+    if (fossil_dqueue_is_empty(dqueue)) {
+        return -1;  // Empty queue
+    }
+
+    fossil_dqueue_node_t* node_to_remove = dqueue->front;
+
+    if (node_to_remove == dqueue->rear) {
+        dqueue->front = NULL;
+        dqueue->rear = NULL;
+    } else {
+        dqueue->front = node_to_remove->next;
+        dqueue->front->prev = NULL;
+    }
+
+    *data = node_to_remove->data;
+    fossil_tofu_free(node_to_remove);
+
+    return 0;  // Success
+}
+
+int32_t fossil_dqueue_search(const fossil_dqueue_t* dqueue, fossil_tofu_t data) {
+    fossil_dqueue_node_t* current = dqueue->front;
+    while (current) {
+        if (fossil_tofu_equals(current->data, data)) {
+            return 0;  // Found
+        }
+        current = current->next;
+    }
+    return -1;  // Not found
+}
+
+size_t fossil_dqueue_size(const fossil_dqueue_t* dqueue) {
+    size_t count = 0;
+    fossil_dqueue_node_t* current = dqueue->front;
+    while (current) {
+        count++;
+        current = current->next;
+    }
+    return count;
+}
+
+fossil_tofu_t* fossil_dqueue_getter(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
+    fossil_dqueue_node_t* current = dqueue->front;
+    while (current) {
+        if (fossil_tofu_equals(current->data, data)) {
+            return &(current->data);  // Return pointer to found data
+        }
+        current = current->next;
+    }
+    return NULL;  // Not found
+}
+
+int32_t fossil_dqueue_setter(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
+    fossil_dqueue_node_t* current = dqueue->front;
+    while (current) {
+        if (fossil_tofu_equals(current->data, data)) {
+            current->data = data;  // Update data
+            return 0;  // Success
+        }
+        current = current->next;
+    }
+    return -1;  // Not found
+}
+
+bool fossil_dqueue_not_empty(const fossil_dqueue_t* dqueue) {
+    return dqueue->front != NULL;
+}
+
+bool fossil_dqueue_not_cnullptr(const fossil_dqueue_t* dqueue) {
+    return dqueue != NULL;
+}
+
+bool fossil_dqueue_is_empty(const fossil_dqueue_t* dqueue) {
+    return dqueue->front == NULL;
+}
+
+bool fossil_dqueue_is_cnullptr(const fossil_dqueue_t* dqueue) {
+    return dqueue == NULL;
+}
