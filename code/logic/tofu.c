@@ -107,8 +107,7 @@ fossil_tofu_t fossil_tofu_create(char* type, char* value) {
             tofu.value.c_string_val = fossil_tofu_strdup(value);
             break;
         case FOSSIL_TOFU_TYPE_BCHAR:
-            tofu.value.byte_val = (char16_t *)fossil_tofu_alloc(strlen(value) + 1);
-            memcpy(tofu.value.byte_val, value, strlen(value) + 1);
+            tofu.value.byte_val = (char16_t *)value;
             break;
         case FOSSIL_TOFU_TYPE_CCHAR:
             tofu.value.char_val = value[0];
@@ -168,7 +167,7 @@ void fossil_tofu_print(fossil_tofu_t tofu) {
             printf("cstr: %s\n", tofu.value.c_string_val);
             break;
         case FOSSIL_TOFU_TYPE_BCHAR:
-            printf("uchar: %s\n", tofu.value.byte_val);
+            printf("uchar: %d\n", tofu.value.byte_val);
             break;
         case FOSSIL_TOFU_TYPE_CCHAR:
             printf("cchar: %c\n", tofu.value.char_val);
@@ -199,9 +198,6 @@ void fossil_tofu_erase(fossil_tofu_t *tofu) {
             break;
         case FOSSIL_TOFU_TYPE_CSTR:
             fossil_tofu_free(tofu->value.c_string_val);
-            break;
-        case FOSSIL_TOFU_TYPE_BCHAR:
-            fossil_tofu_free(tofu->value.byte_val);
             break;
         default:
             // No dynamic memory to free for other types
@@ -514,7 +510,7 @@ tofu_memory_t fossil_tofu_alloc(size_t size) {
         return NULL;
     }
     return ptr;
-} // end of fun
+}
 
 /**
  * @brief Reallocate memory.
@@ -535,7 +531,7 @@ tofu_memory_t fossil_tofu_realloc(tofu_memory_t ptr, size_t size) {
     }
 
     return new_ptr;
-} // end of fun
+}
 
 /**
  * @brief Free memory.
