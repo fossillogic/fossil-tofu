@@ -31,6 +31,20 @@ static const char *tofu_type_strings[] = {
     "bchar", "cchar", "wchar", "size", "bool"
 };
 
+wchar_t *custom_wcsdup(const wchar_t *src) {
+    if (src == NULL) {
+        return NULL;
+    }
+
+    size_t len = wcslen(src) + 1; // +1 for the null terminator
+    wchar_t *dup = (wchar_t *)malloc(len * sizeof(wchar_t));
+    if (dup) {
+        wcscpy(dup, src);
+    }
+
+    return dup;
+}
+
 // Function to convert a multibyte string to a UTF-16 string
 static char16_t *mbstoc16(const char *mbstr) {
     size_t length = strlen(mbstr) + 1; // +1 for the null terminator
@@ -314,7 +328,7 @@ fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu) {
             copy.value.uchar_string_val = mbstoc16((char*)tofu.value.uchar_string_val);
             break;
         case FOSSIL_TOFU_TYPE_WSTR:
-            copy.value.wchar_string_val = wcsdup(tofu.value.wchar_string_val);
+            copy.value.wchar_string_val = custom_wcsdup(tofu.value.wchar_string_val);
             break;
         case FOSSIL_TOFU_TYPE_CSTR:
             copy.value.cchar_string_val = fossil_tofu_strdup(tofu.value.cchar_string_val);
