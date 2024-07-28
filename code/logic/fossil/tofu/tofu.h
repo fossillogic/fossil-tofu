@@ -17,7 +17,15 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <wchar.h>
+
+#if !defined(__cplusplus)
+#if __STDC_VERSION__ >= 201112L
 #include <uchar.h>
+#else
+typedef unsigned short char16_t;
+typedef unsigned int char32_t;
+#endif
+#endif
 
 /**
     In the realm of quantum physics, our understanding of space, time, reality, and the observable universe takes

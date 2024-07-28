@@ -89,11 +89,11 @@ FOSSIL_TEST(test_fossil_tofu_equals) {
 
 // Test case for fossil_tofu_copy function
 FOSSIL_TEST(test_fossil_tofu_copy) {
-    fossil_tofu_t tofu_orig = fossil_tofu_create("bstr", U"Original");
+    fossil_tofu_t tofu_orig = fossil_tofu_create("cstr", "Original");
     fossil_tofu_t tofu_copy = fossil_tofu_copy(tofu_orig);
 
     ASSUME_ITS_EQUAL_I32(tofu_orig.type, tofu_copy.type);
-    ASSUME_ITS_EQUAL_BSTR(tofu_orig.value.uchar_string_val, tofu_copy.value.uchar_string_val);
+    ASSUME_ITS_EQUAL_CSTR(tofu_orig.value.cchar_string_val, tofu_copy.value.cchar_string_val);
     ASSUME_ITS_EQUAL_I32(tofu_orig.is_cached, tofu_copy.is_cached);
 }
 
