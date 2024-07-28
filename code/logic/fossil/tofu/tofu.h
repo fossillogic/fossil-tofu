@@ -18,13 +18,12 @@
 #include <stdint.h>
 #include <wchar.h>
 
-#if !defined(__cplusplus)
-#if __STDC_VERSION__ >= 201112L
-#include <uchar.h>
+#if defined(__APPLE__)
+#include <wchar.h> // Use wchar.h on macOS
+typedef wchar_t char16_t;
+typedef wchar_t char32_t;
 #else
-typedef unsigned short char16_t;
-typedef unsigned int char32_t;
-#endif
+#include <uchar.h> // Use uchar.h on other systems
 #endif
 
 /**
