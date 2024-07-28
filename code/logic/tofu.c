@@ -199,7 +199,7 @@ void fossil_tofu_print(fossil_tofu_t tofu) {
             printf("%lc", tofu.value.wchar_val);
             break;
         case FOSSIL_TOFU_TYPE_SIZE:
-            printf("%z", tofu.value.size_val);
+            printf("%zu", (size_t)tofu.value.size_val);
             break;
         case FOSSIL_TOFU_TYPE_BOOL:
             printf("%s", tofu.value.bool_val ? "true" : "false");
