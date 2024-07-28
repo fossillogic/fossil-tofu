@@ -83,16 +83,17 @@ typedef enum {
 
 // Union for holding different types of values
 typedef union {
-    int64_t int_val;
-    uint64_t uint_val;
-    double double_val;
-    float float_val;
-    char16_t *byte_string_val; // for byte string types
-    wchar_t *wide_string_val; // for wide string types
-    char *c_string_val; // for C string type
-    char char_val; // for char types
+    int64_t int_val; // for signed int types
+    uint64_t uint_val; // for unsigned int types
+    double double_val; // for double types
+    float float_val; // for float types
+    char16_t *uchar_string_val; // for byte string types
+    wchar_t *wchar_string_val; // for wide string types
+    char *cchar_string_val; // for C string type
+    char cchar_val; // for char types
     wchar_t wchar_val; // for wide char types
-    char16_t byte_val; // for byte types
+    char16_t uchar_val; // for byte types
+    size_t size_val; // for size types
     uint8_t bool_val; // for bool types
 } fossil_tofu_value_t;
 

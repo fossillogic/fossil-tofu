@@ -21,7 +21,7 @@ fossil_dlist_t* fossil_dlist_create(char* type) {
     if (dlist) {
         dlist->head = NULL;
         dlist->tail = NULL;
-        dlist->type = type;  // Assuming type is a static string or managed separately
+        dlist->type = type;  // Ensure type is managed appropriately
     }
     return dlist;
 }
@@ -32,30 +32,28 @@ void fossil_dlist_erase(fossil_dlist_t* dlist) {
     fossil_dlist_node_t* current = dlist->head;
     while (current) {
         fossil_dlist_node_t* next = current->next;
-        fossil_tofu_free(current);
+        fossil_tofu_free(current); // Ensure deep free of node's data if necessary
         current = next;
     }
-    dlist->head = NULL;
-    dlist->tail = NULL;
     fossil_tofu_free(dlist);
 }
 
 int32_t fossil_dlist_insert(fossil_dlist_t* dlist, fossil_tofu_t data) {
+    if (!dlist) return -1;
+
     fossil_dlist_node_t* new_node = (fossil_dlist_node_t*)fossil_tofu_alloc(sizeof(fossil_dlist_node_t));
     if (!new_node) {
         return -1;  // Allocation failed
     }
 
-    new_node->data = data;
+    new_node->data = data;  // Consider deep copying data if necessary
     new_node->prev = NULL;
     new_node->next = NULL;
 
-    if (dlist->head == NULL) {
-        // Empty list case
+    if (dlist->tail == NULL) {
         dlist->head = new_node;
         dlist->tail = new_node;
     } else {
-        // Non-empty list case
         new_node->prev = dlist->tail;
         dlist->tail->next = new_node;
         dlist->tail = new_node;
@@ -70,9 +68,9 @@ int32_t fossil_dlist_remove(fossil_dlist_t* dlist, fossil_tofu_t* data) {
     }
 
     fossil_dlist_node_t* node_to_remove = dlist->tail;
+    if (!node_to_remove) return -1;
 
     if (node_to_remove == dlist->head) {
-        // Only one node in the list
         dlist->head = NULL;
         dlist->tail = NULL;
     } else {
@@ -80,7 +78,7 @@ int32_t fossil_dlist_remove(fossil_dlist_t* dlist, fossil_tofu_t* data) {
         dlist->tail->next = NULL;
     }
 
-    *data = node_to_remove->data;
+    *data = node_to_remove->data;  // Consider deep copy if necessary
     fossil_tofu_free(node_to_remove);
 
     return 0;  // Success
@@ -98,6 +96,8 @@ int32_t fossil_dlist_search(const fossil_dlist_t* dlist, fossil_tofu_t data) {
 }
 
 void fossil_dlist_reverse_forward(fossil_dlist_t* dlist) {
+    if (!dlist) return;
+
     fossil_dlist_node_t* current = dlist->head;
     fossil_dlist_node_t* temp = NULL;
 
@@ -105,16 +105,22 @@ void fossil_dlist_reverse_forward(fossil_dlist_t* dlist) {
         temp = current->prev;
         current->prev = current->next;
         current->next = temp;
-        current = current->prev; // Move to the next node
+        current = current->prev;  // Move to the next node (which is actually previous in the original order)
     }
 
     // Swap head and tail
-    temp = dlist->head;
-    dlist->head = dlist->tail;
-    dlist->tail = temp;
+    if (temp) {
+        dlist->head = temp->prev;
+    }
+    dlist->tail = dlist->head;
+    while (dlist->tail && dlist->tail->next) {
+        dlist->tail = dlist->tail->next;
+    }
 }
 
 void fossil_dlist_reverse_backward(fossil_dlist_t* dlist) {
+    if (!dlist) return;
+
     fossil_dlist_node_t* current = dlist->tail;
     fossil_dlist_node_t* temp = NULL;
 
@@ -122,13 +128,17 @@ void fossil_dlist_reverse_backward(fossil_dlist_t* dlist) {
         temp = current->next;
         current->next = current->prev;
         current->prev = temp;
-        current = current->next; // Move to the previous node
+        current = current->next;  // Move to the next node (which is actually previous in the original order)
     }
 
     // Swap head and tail
-    temp = dlist->head;
+    if (temp) {
+        dlist->tail = temp->next;
+    }
     dlist->head = dlist->tail;
-    dlist->tail = temp;
+    while (dlist->head && dlist->head->prev) {
+        dlist->head = dlist->head->prev;
+    }
 }
 
 size_t fossil_dlist_size(const fossil_dlist_t* dlist) {
@@ -145,7 +155,7 @@ fossil_tofu_t* fossil_dlist_getter(fossil_dlist_t* dlist, fossil_tofu_t data) {
     fossil_dlist_node_t* current = dlist->head;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
-            return &(current->data);  // Return pointer to found data
+            return &(current->data);
         }
         current = current->next;
     }
@@ -156,7 +166,8 @@ int32_t fossil_dlist_setter(fossil_dlist_t* dlist, fossil_tofu_t data) {
     fossil_dlist_node_t* current = dlist->head;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
-            current->data = data;  // Update data
+            // Ensure to free old data if it was dynamically allocated
+            current->data = data;
             return 0;  // Success
         }
         current = current->next;

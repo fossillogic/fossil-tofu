@@ -74,7 +74,7 @@ FOSSIL_TEST(test_fossil_tofu_create) {
 
     fossil_tofu_t tofu_bstr = fossil_tofu_create("bstr", "Hello");
     ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_BSTR, tofu_bstr.type);
-    ASSUME_ITS_EQUAL_BSTR(u"Hello", tofu_bstr.value.byte_string_val);
+    ASSUME_ITS_EQUAL_BSTR("Hello", tofu_bstr.value.uchar_string_val);
 }
 
 // Test case for fossil_tofu_equals function
@@ -89,11 +89,11 @@ FOSSIL_TEST(test_fossil_tofu_equals) {
 
 // Test case for fossil_tofu_copy function
 FOSSIL_TEST(test_fossil_tofu_copy) {
-    fossil_tofu_t tofu_orig = fossil_tofu_create("bstr", "Original");
+    fossil_tofu_t tofu_orig = fossil_tofu_create("bstr", u"Original");
     fossil_tofu_t tofu_copy = fossil_tofu_copy(tofu_orig);
 
     ASSUME_ITS_EQUAL_I32(tofu_orig.type, tofu_copy.type);
-    ASSUME_ITS_EQUAL_BSTR(tofu_orig.value.byte_string_val, tofu_copy.value.byte_string_val);
+    ASSUME_ITS_EQUAL_BSTR(tofu_orig.value.uchar_string_val, tofu_copy.value.uchar_string_val);
     ASSUME_ITS_EQUAL_I32(tofu_orig.is_cached, tofu_copy.is_cached);
 }
 

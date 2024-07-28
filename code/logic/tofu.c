@@ -26,22 +26,32 @@
 
 // Lookup table for valid strings corresponding to each tofu type.
 static const char *tofu_type_strings[] = {
-    "ghost",
-    "int",
-    "uint",
-    "hex",
-    "octal",
-    "float",
-    "double",
-    "bstr",
-    "wstr",
-    "cstr",
-    "bchar",
-    "cchar",
-    "wchar",
-    "size",
-    "bool"
+    "ghost", "int", "uint", "hex", "octal",
+    "float", "double", "bstr", "wstr", "cstr",
+    "bchar", "cchar", "wchar", "size", "bool"
 };
+
+// Function to convert a multibyte string to a UTF-16 string
+static char16_t *mbstoc16(const char *mbstr) {
+    size_t length = strlen(mbstr) + 1; // +1 for the null terminator
+    char16_t *utf16str = malloc(length * sizeof(char16_t));
+    if (!utf16str) {
+        return NULL; // Handle allocation failure
+    }
+
+    mbstate_t state = {0};
+    const char *src = mbstr;
+    char16_t *dest = utf16str;
+
+    size_t ret;
+    while ((ret = mbrtoc16(dest, src, MB_CUR_MAX, &state)) > 0) {
+        src += ret;
+        dest++;
+    }
+
+    *dest = u'\0'; // Null-terminate the UTF-16 string
+    return utf16str;
+}
 
 // Helper function to convert hexadecimal string to uint64_t
 static uint64_t parse_hexadecimal(const char *value) {
@@ -68,7 +78,7 @@ fossil_tofu_type_t string_to_tofu_type(const char *str) {
 }
 
 // Function to create fossil_tofu_t based on type and value strings
-fossil_tofu_t fossil_tofu_create(char* type, char* value) {
+fossil_tofu_t fossil_tofu_create(char *type, char *value) {
     fossil_tofu_type_t tofu_type = string_to_tofu_type(type);
     fossil_tofu_t tofu;
     tofu.type = tofu_type;
@@ -94,26 +104,24 @@ fossil_tofu_t fossil_tofu_create(char* type, char* value) {
             tofu.value.double_val = strtod(value, NULL);
             break;
         case FOSSIL_TOFU_TYPE_BSTR:
-            tofu.value.byte_string_val = (char16_t *)fossil_tofu_alloc((strlen(value) + 1) * sizeof(char16_t));
-            strcpy((char *)tofu.value.byte_string_val, value);
+            tofu.value.uchar_string_val = (char16_t *)fossil_tofu_alloc((strlen(value) + 1) * sizeof(char16_t));
+            strcpy((char *)tofu.value.uchar_string_val, value);
             break;
         case FOSSIL_TOFU_TYPE_WSTR:
             // Assuming wide string conversion is handled appropriately
-            // Here, we just allocate memory and copy the value
-            tofu.value.wide_string_val = (wchar_t *) fossil_tofu_alloc((wcslen((wchar_t *)value) + 1) * sizeof(wchar_t));
-            wcscpy(tofu.value.wide_string_val, (wchar_t *)value);
+            tofu.value.wchar_string_val = (wchar_t *)fossil_tofu_alloc((wcslen((wchar_t *)value) + 1) * sizeof(wchar_t));
+            wcscpy(tofu.value.wchar_string_val, (wchar_t *)value);
             break;
         case FOSSIL_TOFU_TYPE_CSTR:
-            tofu.value.c_string_val = fossil_tofu_strdup(value);
+            tofu.value.cchar_string_val = fossil_tofu_strdup(value);
             break;
         case FOSSIL_TOFU_TYPE_BCHAR:
-            tofu.value.byte_val = (char16_t *)value;
+            tofu.value.uchar_val = value[0];
             break;
         case FOSSIL_TOFU_TYPE_CCHAR:
-            tofu.value.char_val = value[0];
+            tofu.value.cchar_val = value[0];
             break;
         case FOSSIL_TOFU_TYPE_WCHAR:
-            // Assuming wide char conversion is handled appropriately
             tofu.value.wchar_val = ((wchar_t *)value)[0];
             break;
         case FOSSIL_TOFU_TYPE_BOOL:
@@ -138,69 +146,76 @@ void fossil_tofu_memorize(fossil_tofu_t *tofu) {
 
 // Utility function to print fossil_tofu_t
 void fossil_tofu_print(fossil_tofu_t tofu) {
+    printf("Type: %s, Value: ", fossil_tofu_type_to_string(tofu.type));
     switch (tofu.type) {
         case FOSSIL_TOFU_TYPE_INT:
-            printf("int: %ld\n", (long int)tofu.value.int_val);
+            printf("%" PRId64, tofu.value.int_val);
             break;
         case FOSSIL_TOFU_TYPE_UINT:
-            printf("uint: %llu\n", (unsigned long long)tofu.value.uint_val);
+            printf("%" PRIu64, tofu.value.uint_val);
             break;
         case FOSSIL_TOFU_TYPE_HEX:
-            printf("hex: %llx\n", (unsigned long long)tofu.value.uint_val);
+            printf("0x%" PRIX64, tofu.value.uint_val);
             break;
         case FOSSIL_TOFU_TYPE_OCTAL:
-            printf("octal: %llo\n", (unsigned long long)tofu.value.uint_val);
+            printf("0%" PRIo64, tofu.value.uint_val);
             break;
         case FOSSIL_TOFU_TYPE_FLOAT:
-            printf("float: %f\n", tofu.value.float_val);
+            printf("%f", tofu.value.float_val);
             break;
         case FOSSIL_TOFU_TYPE_DOUBLE:
-            printf("double: %lf\n", tofu.value.double_val);
+            printf("%f", tofu.value.double_val);
             break;
         case FOSSIL_TOFU_TYPE_BSTR:
-            printf("bstr: %ls\n", tofu.value.byte_string_val);
+            printf("%s", (char*)tofu.value.uchar_string_val);
             break;
         case FOSSIL_TOFU_TYPE_WSTR:
-            wprintf(L"wstr: %ls\n", tofu.value.wide_string_val);
+            printf("%ls", tofu.value.wchar_string_val);
             break;
         case FOSSIL_TOFU_TYPE_CSTR:
-            printf("cstr: %s\n", tofu.value.c_string_val);
+            printf("%s", tofu.value.cchar_string_val);
             break;
         case FOSSIL_TOFU_TYPE_BCHAR:
-            printf("uchar: %d\n", tofu.value.byte_val);
+            printf("%c", (char)tofu.value.uchar_val);
             break;
         case FOSSIL_TOFU_TYPE_CCHAR:
-            printf("cchar: %c\n", tofu.value.char_val);
+            printf("%c", tofu.value.cchar_val);
             break;
         case FOSSIL_TOFU_TYPE_WCHAR:
-            wprintf(L"wchar: %lc\n", tofu.value.wchar_val);
+            printf("%lc", tofu.value.wchar_val);
+            break;
+        case FOSSIL_TOFU_TYPE_SIZE:
+            printf("%zu", tofu.value.size_val);
             break;
         case FOSSIL_TOFU_TYPE_BOOL:
-            printf("bool: %s\n", tofu.value.bool_val ? "true" : "false");
-            break;
-        case FOSSIL_TOFU_TYPE_GHOST:
-            printf("scary ghost value\n");
+            printf("%s", tofu.value.bool_val ? "true" : "false");
             break;
         default:
-            printf("Unknown type\n");
+            printf("unknown");
             break;
     }
+    printf("\n");
 }
 
 // Function to destroy fossil_tofu_t and free allocated memory
 void fossil_tofu_erase(fossil_tofu_t *tofu) {
+    if (!tofu) {
+        return;
+    }
+
     switch (tofu->type) {
         case FOSSIL_TOFU_TYPE_BSTR:
-            fossil_tofu_free(tofu->value.byte_string_val);
+            fossil_tofu_free(tofu->value.uchar_string_val);
             break;
         case FOSSIL_TOFU_TYPE_WSTR:
-            fossil_tofu_free(tofu->value.wide_string_val);
+            fossil_tofu_free(tofu->value.wchar_string_val);
             break;
         case FOSSIL_TOFU_TYPE_CSTR:
-            fossil_tofu_free(tofu->value.c_string_val);
+            fossil_tofu_free(tofu->value.cchar_string_val);
             break;
         default:
-            // No dynamic memory to free for other types
+            tofu->type = FOSSIL_TOFU_TYPE_GHOST;
+            tofu->is_cached = false;
             break;
     }
 }
@@ -214,16 +229,15 @@ const char* fossil_tofu_type_to_string(fossil_tofu_type_t type) {
     }
 }
 
+// Utility function to compare two fossil_tofu_t objects
 bool fossil_tofu_compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2) {
-    if (tofu1->type != tofu2->type) {
-        return false;
-    }
+    if (!tofu1 || !tofu2) return false;
+    if (tofu1->type != tofu2->type) return false;
 
     switch (tofu1->type) {
         case FOSSIL_TOFU_TYPE_INT:
             return tofu1->value.int_val == tofu2->value.int_val;
         case FOSSIL_TOFU_TYPE_UINT:
-            return tofu1->value.uint_val == tofu2->value.uint_val;
         case FOSSIL_TOFU_TYPE_HEX:
         case FOSSIL_TOFU_TYPE_OCTAL:
             return tofu1->value.uint_val == tofu2->value.uint_val;
@@ -232,17 +246,19 @@ bool fossil_tofu_compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2) {
         case FOSSIL_TOFU_TYPE_DOUBLE:
             return tofu1->value.double_val == tofu2->value.double_val;
         case FOSSIL_TOFU_TYPE_BSTR:
-            return strcmp((char *)tofu1->value.byte_string_val, (char *)tofu2->value.byte_string_val) == 0;
+            return strcmp((char*)tofu1->value.uchar_string_val, (char*)tofu2->value.uchar_string_val) == 0;
         case FOSSIL_TOFU_TYPE_WSTR:
-            return wcscmp(tofu1->value.wide_string_val, tofu2->value.wide_string_val) == 0;
+            return wcscmp(tofu1->value.wchar_string_val, tofu2->value.wchar_string_val) == 0;
         case FOSSIL_TOFU_TYPE_CSTR:
-            return strcmp(tofu1->value.c_string_val, tofu2->value.c_string_val) == 0;
+            return strcmp(tofu1->value.cchar_string_val, tofu2->value.cchar_string_val) == 0;
         case FOSSIL_TOFU_TYPE_BCHAR:
-            return tofu1->value.byte_val == tofu2->value.byte_val;
+            return tofu1->value.uchar_val == tofu2->value.uchar_val;
         case FOSSIL_TOFU_TYPE_CCHAR:
-            return tofu1->value.char_val == tofu2->value.char_val;
+            return tofu1->value.cchar_val == tofu2->value.cchar_val;
         case FOSSIL_TOFU_TYPE_WCHAR:
             return tofu1->value.wchar_val == tofu2->value.wchar_val;
+        case FOSSIL_TOFU_TYPE_SIZE:
+            return tofu1->value.size_val == tofu2->value.size_val;
         case FOSSIL_TOFU_TYPE_BOOL:
             return tofu1->value.bool_val == tofu2->value.bool_val;
         default:
@@ -260,7 +276,6 @@ bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
         case FOSSIL_TOFU_TYPE_INT:
             return tofu1.value.int_val == tofu2.value.int_val;
         case FOSSIL_TOFU_TYPE_UINT:
-            return tofu1.value.uint_val == tofu2.value.uint_val;
         case FOSSIL_TOFU_TYPE_HEX:
         case FOSSIL_TOFU_TYPE_OCTAL:
             return tofu1.value.uint_val == tofu2.value.uint_val;
@@ -269,17 +284,19 @@ bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
         case FOSSIL_TOFU_TYPE_DOUBLE:
             return tofu1.value.double_val == tofu2.value.double_val;
         case FOSSIL_TOFU_TYPE_BSTR:
-            return strcmp((char *)tofu1.value.byte_string_val, (char *)tofu2.value.byte_string_val) == 0;
+            return strcmp((char*)tofu1.value.uchar_string_val, (char*)tofu2.value.uchar_string_val) == 0;
         case FOSSIL_TOFU_TYPE_WSTR:
-            return wcscmp(tofu1.value.wide_string_val, tofu2.value.wide_string_val) == 0;
+            return wcscmp(tofu1.value.wchar_string_val, tofu2.value.wchar_string_val) == 0;
         case FOSSIL_TOFU_TYPE_CSTR:
-            return strcmp(tofu1.value.c_string_val, tofu2.value.c_string_val) == 0;
+            return strcmp(tofu1.value.cchar_string_val, tofu2.value.cchar_string_val) == 0;
         case FOSSIL_TOFU_TYPE_BCHAR:
-            return strcmp((char *)tofu1.value.byte_val, (char *)tofu2.value.byte_val) == 0;
+            return tofu1.value.uchar_val == tofu2.value.uchar_val;
         case FOSSIL_TOFU_TYPE_CCHAR:
-            return tofu1.value.char_val == tofu2.value.char_val;
+            return tofu1.value.cchar_val == tofu2.value.cchar_val;
         case FOSSIL_TOFU_TYPE_WCHAR:
             return tofu1.value.wchar_val == tofu2.value.wchar_val;
+        case FOSSIL_TOFU_TYPE_SIZE:
+            return tofu1.value.size_val == tofu2.value.size_val;
         case FOSSIL_TOFU_TYPE_BOOL:
             return tofu1.value.bool_val == tofu2.value.bool_val;
         default:
@@ -289,17 +306,23 @@ bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
 
 // Utility function to copy a fossil_tofu_t object
 fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu) {
-    fossil_tofu_t copy;
-    copy.type = tofu.type;
-    copy.is_cached = tofu.is_cached;
-
+    fossil_tofu_t copy = tofu;
+    copy.is_cached = false; // Reset the cached state in the copy
+    
     switch (tofu.type) {
+        case FOSSIL_TOFU_TYPE_BSTR:
+            copy.value.uchar_string_val = mbstoc16((char*)tofu.value.uchar_string_val);
+            break;
+        case FOSSIL_TOFU_TYPE_WSTR:
+            copy.value.wchar_string_val = wcsdup(tofu.value.wchar_string_val);
+            break;
+        case FOSSIL_TOFU_TYPE_CSTR:
+            copy.value.cchar_string_val = fossil_tofu_strdup(tofu.value.cchar_string_val);
+            break;
         case FOSSIL_TOFU_TYPE_INT:
             copy.value.int_val = tofu.value.int_val;
             break;
         case FOSSIL_TOFU_TYPE_UINT:
-            copy.value.uint_val = tofu.value.uint_val;
-            break;
         case FOSSIL_TOFU_TYPE_HEX:
         case FOSSIL_TOFU_TYPE_OCTAL:
             copy.value.uint_val = tofu.value.uint_val;
@@ -310,35 +333,24 @@ fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu) {
         case FOSSIL_TOFU_TYPE_DOUBLE:
             copy.value.double_val = tofu.value.double_val;
             break;
-        case FOSSIL_TOFU_TYPE_BSTR:
-            copy.value.byte_string_val = (char16_t *)fossil_tofu_strdup((char *)tofu.value.byte_string_val);
-            break;
-        case FOSSIL_TOFU_TYPE_WSTR:
-            copy.value.wide_string_val = (wchar_t *) fossil_tofu_alloc((wcslen(tofu.value.wide_string_val) + 1) * sizeof(wchar_t));
-            wcscpy(copy.value.wide_string_val, tofu.value.wide_string_val);
-            break;
-        case FOSSIL_TOFU_TYPE_CSTR:
-            copy.value.c_string_val = fossil_tofu_strdup(tofu.value.c_string_val);
-            break;
         case FOSSIL_TOFU_TYPE_BCHAR:
-            copy.value.byte_val = (char16_t *) fossil_tofu_alloc(strlen((char *)tofu.value.byte_val) + 1);
-            memcpy(copy.value.byte_val, tofu.value.byte_val, strlen((char *)tofu.value.byte_val) + 1);
+            copy.value.uchar_val = tofu.value.uchar_val;
             break;
         case FOSSIL_TOFU_TYPE_CCHAR:
-            copy.value.char_val = tofu.value.char_val;
+            copy.value.cchar_val = tofu.value.cchar_val;
             break;
         case FOSSIL_TOFU_TYPE_WCHAR:
             copy.value.wchar_val = tofu.value.wchar_val;
+            break;
+        case FOSSIL_TOFU_TYPE_SIZE:
+            copy.value.size_val = tofu.value.size_val;
             break;
         case FOSSIL_TOFU_TYPE_BOOL:
             copy.value.bool_val = tofu.value.bool_val;
             break;
         default:
-            // Handle unknown type or ghost type
-            copy.type = FOSSIL_TOFU_TYPE_GHOST;
             break;
     }
-
     return copy;
 }
 

@@ -21,7 +21,7 @@ fossil_dqueue_t* fossil_dqueue_create(char* type) {
     if (dqueue) {
         dqueue->front = NULL;
         dqueue->rear = NULL;
-        dqueue->type = type;  // Assuming type is a static string or managed separately
+        dqueue->type = fossil_tofu_strdup(type);  // Duplicate the type string to manage its memory
     }
     return dqueue;
 }
@@ -37,6 +37,7 @@ void fossil_dqueue_erase(fossil_dqueue_t* dqueue) {
     }
     dqueue->front = NULL;
     dqueue->rear = NULL;
+    fossil_tofu_free(dqueue->type);  // Free the duplicated type string
     fossil_tofu_free(dqueue);
 }
 
@@ -110,7 +111,7 @@ fossil_tofu_t* fossil_dqueue_getter(fossil_dqueue_t* dqueue, fossil_tofu_t data)
     fossil_dqueue_node_t* current = dqueue->front;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
-            return &(current->data);  // Return pointer to found data
+            return &(current->data);  // Return pointer to the found data
         }
         current = current->next;
     }
@@ -121,6 +122,7 @@ int32_t fossil_dqueue_setter(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
     fossil_dqueue_node_t* current = dqueue->front;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
+            // Assuming `data` should replace current->data
             current->data = data;  // Update data
             return 0;  // Success
         }
