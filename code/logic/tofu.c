@@ -44,28 +44,6 @@ wchar_t *custom_wcsdup(const wchar_t *src) {
     return dup;
 }
 
-// Function to convert a multibyte string to a UTF-16 string
-static char16_t *mbstoc16(const char *mbstr) {
-    size_t length = strlen(mbstr) + 1; // +1 for the null terminator
-    char16_t *utf16str = malloc(length * sizeof(char16_t));
-    if (!utf16str) {
-        return NULL; // Handle allocation failure
-    }
-
-    mbstate_t state = {0};
-    const char *src = mbstr;
-    char16_t *dest = utf16str;
-
-    size_t ret;
-    while ((ret = mbrtoc16(dest, src, MB_CUR_MAX, &state)) > 0) {
-        src += ret;
-        dest++;
-    }
-
-    *dest = u'\0'; // Null-terminate the UTF-16 string
-    return utf16str;
-}
-
 // Helper function to convert hexadecimal string to uint64_t
 static uint64_t parse_hexadecimal(const char *value) {
     uint64_t result;
@@ -117,7 +95,7 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
             tofu.value.double_val = strtod(value, NULL);
             break;
         case FOSSIL_TOFU_TYPE_BSTR:
-            tofu.value.uchar_string_val = (char16_t *)fossil_tofu_alloc((strlen(value) + 1) * sizeof(char16_t));
+            tofu.value.uchar_string_val = (uint16_t *)fossil_tofu_alloc((strlen(value) + 1) * sizeof(uint16_t));
             strcpy((char *)tofu.value.uchar_string_val, value);
             break;
         case FOSSIL_TOFU_TYPE_WSTR:
@@ -129,7 +107,7 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
             tofu.value.cchar_string_val = fossil_tofu_strdup(value);
             break;
         case FOSSIL_TOFU_TYPE_BCHAR:
-            tofu.value.uchar_val = value[0];
+            tofu.value.uchar_val = (uint16_t)value[0];
             break;
         case FOSSIL_TOFU_TYPE_CCHAR:
             tofu.value.cchar_val = value[0];
@@ -324,7 +302,7 @@ fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu) {
     
     switch (tofu.type) {
         case FOSSIL_TOFU_TYPE_BSTR:
-            copy.value.uchar_string_val = mbstoc16((char*)tofu.value.uchar_string_val);
+            copy.value.uchar_string_val = (uint16_t *)fossil_tofu_strdup((char*)tofu.value.uchar_string_val);
             break;
         case FOSSIL_TOFU_TYPE_WSTR:
             copy.value.wchar_string_val = custom_wcsdup(tofu.value.wchar_string_val);

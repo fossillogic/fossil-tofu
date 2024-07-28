@@ -18,14 +18,6 @@
 #include <stdint.h>
 #include <wchar.h>
 
-#if defined(__APPLE__)
-#include <wchar.h> // Use wchar.h on macOS
-typedef wchar_t char16_t;
-typedef wchar_t char32_t;
-#else
-#include <uchar.h> // Use uchar.h on other systems
-#endif
-
 /**
     In the realm of quantum physics, our understanding of space, time, reality, and the observable universe takes
     on a fascinating and intricate character. Quantum physics delves into the fundamental nature of matter and
@@ -94,12 +86,12 @@ typedef union {
     uint64_t uint_val; // for unsigned int types
     double double_val; // for double types
     float float_val; // for float types
-    char16_t *uchar_string_val; // for byte string types
+    uint16_t *uchar_string_val; // for byte string types
     wchar_t *wchar_string_val; // for wide string types
     char *cchar_string_val; // for C string type
     char cchar_val; // for char types
     wchar_t wchar_val; // for wide char types
-    char16_t uchar_val; // for byte types
+    uint16_t uchar_val; // for byte types
     size_t size_val; // for size types
     uint8_t bool_val; // for bool types
 } fossil_tofu_value_t;
