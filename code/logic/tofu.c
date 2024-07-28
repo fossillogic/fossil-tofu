@@ -19,7 +19,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <wchar.h>
-#include <uchar.h>
 #include <inttypes.h>
 #include <stdbool.h>
 #include <time.h>
