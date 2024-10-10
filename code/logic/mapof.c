@@ -16,13 +16,31 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Function to create a new map with a given capacity
-fossil_tofu_mapof_t fossil_tofu_mapof_create(size_t capacity) {
+// Function to create a new map with a given type instead of capacity
+fossil_tofu_mapof_t fossil_tofu_mapof_create(const char *type) {
     fossil_tofu_mapof_t map;
-    map.keys = (fossil_tofu_t *)fossil_tofu_alloc(capacity * sizeof(fossil_tofu_t));
-    map.values = (fossil_tofu_t *)fossil_tofu_alloc(capacity * sizeof(fossil_tofu_t));
+
+    // Validate if the provided type is supported
+    if (!fossil_tofu_is_valid_type(type)) {
+        fprintf(stderr, "Error: Invalid type '%s' for map creation.\n", type);
+        exit(EXIT_FAILURE);
+    }
+
+    // Assign an initial capacity based on type
+    if (strcmp(type, "int") == 0 || strcmp(type, "uint") == 0) {
+        map.capacity = 10;
+    } else if (strcmp(type, "cstr") == 0 || strcmp(type, "bstr") == 0 || strcmp(type, "wstr") == 0) {
+        map.capacity = 20;
+    } else if (strcmp(type, "float") == 0 || strcmp(type, "double") == 0) {
+        map.capacity = 15;
+    } else {
+        map.capacity = 5;
+    }
+
+    map.keys = (fossil_tofu_t *)fossil_tofu_alloc(map.capacity * sizeof(fossil_tofu_t));
+    map.values = (fossil_tofu_t *)fossil_tofu_alloc(map.capacity * sizeof(fossil_tofu_t));
     map.size = 0;
-    map.capacity = capacity;
+
     return map;
 }
 
