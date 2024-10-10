@@ -12,7 +12,7 @@
  * -----------------------------------------------------------------------------
  */
 #include <fossil/unittest/framework.h>
-#include <fossil/xassume.h>
+#include <fossil/unittest/assume.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -239,6 +239,49 @@ FOSSIL_TEST(test_reduce) {
     ASSUME_ITS_EQUAL_I32(60, result.value.int_val);
 }
 
+// Test case for verifying assumptions using xassume.h
+FOSSIL_TEST(test_fossil_verification_checks) {
+    // Create a valid tofu object and check assumption
+    fossil_tofu_t tofu_int = fossil_tofu_create("int", "100");
+    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_INT, tofu_int.type);
+    ASSUME_ITS_EQUAL_I64(100, tofu_int.value.int_val);
+
+    // Create an invalid type (force invalid assumption check)
+    fossil_tofu_t tofu_invalid = fossil_tofu_create("int", "abc");  // invalid integer
+    ASSUME_ITS_FALSE(fossil_tofu_equals(tofu_int, tofu_invalid));   // this should fail, catch
+
+    // Test verification failure for mismatching types
+    fossil_tofu_t tofu_float = fossil_tofu_create("float", "3.14");
+    ASSUME_ITS_FALSE(fossil_tofu_equals(tofu_int, tofu_float));
+
+    // Add more cases to trigger assertion failures and validate xassume behavior
+    fossil_tofu_t tofu_bstr = fossil_tofu_create("bstr", "hello");
+    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_BSTR, tofu_bstr.type); // expected to pass
+    ASSUME_ITS_FALSE(fossil_tofu_equals(tofu_float, tofu_bstr));  // this check must succeed
+
+    // Check for invalid tofu types
+    fossil_tofu_t tofu_ghost = fossil_tofu_create("ghost", "invisible");
+    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_GHOST, tofu_ghost.type); // ensure it's recognized as invalid/ghost
+}
+
+// Test case for failed verification checks in fossil_tofu_create
+FOSSIL_TEST(test_fossil_tofu_create_invalid) {
+    // Try to create a tofu object with an invalid type
+    fossil_tofu_t tofu_invalid_type = fossil_tofu_create("invalid_type", "123");
+    // Verification should fail and return FOSSIL_TOFU_TYPE_GHOST or other failure result
+    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_GHOST, tofu_invalid_type.type);
+
+    // Try to create a tofu object with an invalid value format for int
+    fossil_tofu_t tofu_invalid_value = fossil_tofu_create("int", "invalid_int");
+    // Verification should fail and return FOSSIL_TOFU_TYPE_GHOST
+    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_GHOST, tofu_invalid_value.type);
+
+    // Try to create a tofu object with a valid type but missing value
+    fossil_tofu_t tofu_missing_value = fossil_tofu_create("int", "");
+    // Verification should fail and return FOSSIL_TOFU_TYPE_GHOST
+    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_GHOST, tofu_missing_value.type);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -261,4 +304,8 @@ FOSSIL_TEST_GROUP(c_generic_tofu_tests) {
     ADD_TEST(test_reverse);
     ADD_TEST(test_swap);
     ADD_TEST(test_reduce);
+
+    // Verification checks fixture
+    ADD_TEST(test_fossil_verification_checks);
+    ADD_TEST(test_fossil_tofu_create_invalid);
 } // end of tests
