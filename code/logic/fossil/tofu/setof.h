@@ -146,4 +146,67 @@ int32_t fossil_set_contains(const fossil_set_t* set, fossil_tofu_t data);
 }
 #endif
 
+#ifdef __cplusplus
+
+#include <string>
+
+namespace fossil {
+    class Set {
+    public:
+        Set(const std::string& type) : set_(fossil_set_create(const_cast<char*>(type.c_str()))) {}
+
+        ~Set() {
+            fossil_set_erase(set_);
+        }
+
+        void insert(fossil_tofu_t data) {
+            fossil_set_insert(set_, data);
+        }
+
+        void remove(fossil_tofu_t data) {
+            fossil_set_remove(set_, data);
+        }
+
+        int search(fossil_tofu_t data) {
+            return fossil_set_search(set_, data);
+        }
+
+        size_t size() {
+            return fossil_set_size(set_);
+        }
+
+        fossil_tofu_t* getter(fossil_tofu_t data) {
+            return fossil_set_getter(set_, data);
+        }
+
+        void setter(fossil_tofu_t data) {
+            fossil_set_setter(set_, data);
+        }
+
+        bool not_empty() {
+            return fossil_set_not_empty(set_);
+        }
+
+        bool not_cnullptr() {
+            return fossil_set_not_cnullptr(set_);
+        }
+
+        bool is_empty() {
+            return fossil_set_is_empty(set_);
+        }
+
+        bool is_cnullptr() {
+            return fossil_set_is_cnullptr(set_);
+        }
+
+        bool contains(fossil_tofu_t data) {
+            return fossil_set_contains(set_, data);
+        }
+
+    private:
+        fossil_set_t* set_;
+    };
+}
+#endif
+
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

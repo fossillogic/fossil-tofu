@@ -134,6 +134,17 @@ fossil_tofu_type_t string_to_tofu_type(const char *str) {
     return FOSSIL_TOFU_TYPE_GHOST; // Default to ghost type if not found
 }
 
+// Helper function to check if a type is valid.
+bool fossil_tofu_is_valid_type(const char *type) {
+    size_t num_types = sizeof(tofu_type_strings) / sizeof(tofu_type_strings[0]);
+    for (size_t i = 0; i < num_types; i++) {
+        if (strcmp(type, tofu_type_strings[i]) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // Function to create fossil_tofu_t based on type and value strings with validation checks
 fossil_tofu_t fossil_tofu_create(char *type, char *value) {
     fossil_tofu_type_t tofu_type = string_to_tofu_type(type);

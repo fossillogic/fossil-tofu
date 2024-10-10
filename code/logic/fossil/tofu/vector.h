@@ -138,4 +138,67 @@ void fossil_vector_peek(const fossil_vector_t* vector);
 }
 #endif
 
+#ifdef __cplusplus
+
+#include <string>
+
+namespace fossil {
+    class Vector {
+    public:
+        Vector(const std::string& type) : vector_(fossil_vector_create(const_cast<char*>(type.c_str()))) {}
+
+        ~Vector() {
+            fossil_vector_erase(vector_);
+        }
+
+        void push_back(fossil_tofu_t element) {
+            fossil_vector_push_back(vector_, element);
+        }
+
+        int search(fossil_tofu_t target) {
+            return fossil_vector_search(vector_, target);
+        }
+
+        void reverse() {
+            fossil_vector_reverse(vector_);
+        }
+
+        bool is_cnullptr() {
+            return fossil_vector_is_cnullptr(vector_);
+        }
+
+        bool not_cnullptr() {
+            return fossil_vector_not_cnullptr(vector_);
+        }
+
+        bool is_empty() {
+            return fossil_vector_is_empty(vector_);
+        }
+
+        bool not_empty() {
+            return fossil_vector_not_empty(vector_);
+        }
+
+        void setter(size_t index, fossil_tofu_t element) {
+            fossil_vector_setter(vector_, index, element);
+        }
+
+        fossil_tofu_t* getter(size_t index) {
+            return fossil_vector_getter(vector_, index);
+        }
+
+        size_t size() {
+            return fossil_vector_size(vector_);
+        }
+
+        void peek() {
+            fossil_vector_peek(vector_);
+        }
+
+    private:
+        fossil_vector_t* vector_;
+    };
+}
+#endif
+
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

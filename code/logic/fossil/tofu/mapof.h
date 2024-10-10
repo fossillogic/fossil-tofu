@@ -30,12 +30,12 @@ typedef struct {
 } fossil_tofu_mapof_t;
 
 /**
- * @brief Creates a new map with the specified capacity.
+ * @brief Creates a new map with a given type.
  *
- * @param capacity The initial capacity of the map.
- * @return The newly created map.
+ * @param type The type of the map.
+ * @return The created map.
  */
-fossil_tofu_mapof_t fossil_tofu_mapof_create(size_t capacity);
+fossil_tofu_mapof_t fossil_tofu_mapof_create(const char *type);
 
 /**
  * @brief Adds a key-value pair to the map.
@@ -110,6 +110,57 @@ void fossil_tofu_mapof_erase(fossil_tofu_mapof_t *map);
 void fossil_tofu_mapof_print(fossil_tofu_mapof_t *map);
 
 #ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
+
+#include <string>
+
+namespace fossil {
+    class Map {
+    public:
+        Map(const std::string &type) : map_(fossil_tofu_mapof_create(type.c_str())) {}
+
+        ~Map() {
+            fossil_tofu_mapof_erase(&map_);
+        }
+
+        void add(fossil_tofu_t key, fossil_tofu_t value) {
+            fossil_tofu_mapof_add(&map_, key, value);
+        }
+
+        fossil_tofu_t get(fossil_tofu_t key) {
+            return fossil_tofu_mapof_get(&map_, key);
+        }
+
+        bool contains(fossil_tofu_t key) {
+            return fossil_tofu_mapof_contains(&map_, key);
+        }
+
+        void remove(fossil_tofu_t key) {
+            fossil_tofu_mapof_remove(&map_, key);
+        }
+
+        size_t size() {
+            return fossil_tofu_mapof_size(&map_);
+        }
+
+        bool is_empty() {
+            return fossil_tofu_mapof_is_empty(&map_);
+        }
+
+        void clear() {
+            fossil_tofu_mapof_clear(&map_);
+        }
+
+        void print() {
+            fossil_tofu_mapof_print(&map_);
+        }
+
+    private:
+        fossil_tofu_mapof_t map_;
+    };
 }
 #endif
 

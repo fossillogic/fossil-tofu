@@ -139,4 +139,65 @@ bool fossil_dqueue_is_cnullptr(const fossil_dqueue_t* dqueue);
 }
 #endif
 
+#ifdef __cplusplus
+
+#include <string>
+
+namespace fossil {
+    class DQueue {
+    public:
+        DQueue(const std::string& type) : dqueue_(fossil_dqueue_create(const_cast<char*>(type.c_str()))) {}
+
+        ~DQueue() {
+            fossil_dqueue_erase(dqueue_);
+        }
+
+        void insert(fossil_tofu_t data) {
+            fossil_dqueue_insert(dqueue_, data);
+        }
+
+        fossil_tofu_t remove() {
+            fossil_tofu_t data;
+            fossil_dqueue_remove(dqueue_, &data);
+            return data;
+        }
+
+        int search(fossil_tofu_t data) {
+            return fossil_dqueue_search(dqueue_, data);
+        }
+
+        size_t size() {
+            return fossil_dqueue_size(dqueue_);
+        }
+
+        fossil_tofu_t* getter(fossil_tofu_t data) {
+            return fossil_dqueue_getter(dqueue_, data);
+        }
+
+        void setter(fossil_tofu_t data) {
+            fossil_dqueue_setter(dqueue_, data);
+        }
+
+        bool not_empty() {
+            return fossil_dqueue_not_empty(dqueue_);
+        }
+
+        bool not_cnullptr() {
+            return fossil_dqueue_not_cnullptr(dqueue_);
+        }
+
+        bool is_empty() {
+            return fossil_dqueue_is_empty(dqueue_);
+        }
+
+        bool is_cnullptr() {
+            return fossil_dqueue_is_cnullptr(dqueue_);
+        }
+
+    private:
+        fossil_dqueue_t* dqueue_;
+    };
+}
+#endif
+
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

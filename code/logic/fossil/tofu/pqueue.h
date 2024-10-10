@@ -141,4 +141,65 @@ bool fossil_pqueue_is_cnullptr(const fossil_pqueue_t* pqueue);
 }
 #endif
 
+#ifdef __cplusplus
+
+#include <string>
+
+namespace fossil {
+    class PQueue {
+    public:
+        PQueue(const std::string& type) : pqueue_(fossil_pqueue_create(const_cast<char*>(type.c_str()))) {}
+
+        ~PQueue() {
+            fossil_pqueue_erase(pqueue_);
+        }
+
+        void insert(fossil_tofu_t data, int32_t priority) {
+            fossil_pqueue_insert(pqueue_, data, priority);
+        }
+
+        fossil_tofu_t remove() {
+            fossil_tofu_t data;
+            fossil_pqueue_remove(pqueue_, &data, 0);
+            return data;
+        }
+
+        bool search(fossil_tofu_t data, int32_t priority) {
+            return fossil_pqueue_search(pqueue_, data, priority) == 0;
+        }
+
+        size_t size() {
+            return fossil_pqueue_size(pqueue_);
+        }
+
+        fossil_tofu_t* getter(fossil_tofu_t data, int32_t priority) {
+            return fossil_pqueue_getter(pqueue_, data, priority);
+        }
+
+        void setter(fossil_tofu_t data, int32_t priority) {
+            fossil_pqueue_setter(pqueue_, data, priority);
+        }
+
+        bool not_empty() {
+            return fossil_pqueue_not_empty(pqueue_);
+        }
+
+        bool not_cnullptr() {
+            return fossil_pqueue_not_cnullptr(pqueue_);
+        }
+
+        bool is_empty() {
+            return fossil_pqueue_is_empty(pqueue_);
+        }
+
+        bool is_cnullptr() {
+            return fossil_pqueue_is_cnullptr(pqueue_);
+        }
+
+    private:
+        fossil_pqueue_t* pqueue_;
+    };
+}
+#endif
+
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

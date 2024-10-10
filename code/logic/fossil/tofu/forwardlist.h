@@ -151,4 +151,73 @@ bool fossil_flist_is_cnullptr(const fossil_flist_t* flist);
 }
 #endif
 
+#ifdef __cplusplus
+
+#include <string>
+
+namespace fossil {
+    class ForwardList {
+    public:
+        ForwardList(const std::string& type) : flist_(fossil_flist_create(const_cast<char*>(type.c_str()))) {}
+
+        ~ForwardList() {
+            fossil_flist_erase(flist_);
+        }
+
+        void insert(fossil_tofu_t data) {
+            fossil_flist_insert(flist_, data);
+        }
+
+        fossil_tofu_t remove() {
+            fossil_tofu_t data;
+            fossil_flist_remove(flist_, &data);
+            return data;
+        }
+
+        bool search(fossil_tofu_t data) {
+            return fossil_flist_search(flist_, data) == 0;
+        }
+
+        size_t size() {
+            return fossil_flist_size(flist_);
+        }
+
+        fossil_tofu_t* getter(fossil_tofu_t data) {
+            return fossil_flist_getter(flist_, data);
+        }
+
+        void setter(fossil_tofu_t data) {
+            fossil_flist_setter(flist_, data);
+        }
+
+        void reverse_forward() {
+            fossil_flist_reverse_forward(flist_);
+        }
+
+        void reverse_backward() {
+            fossil_flist_reverse_backward(flist_);
+        }
+
+        bool not_empty() {
+            return fossil_flist_not_empty(flist_);
+        }
+
+        bool not_cnullptr() {
+            return fossil_flist_not_cnullptr(flist_);
+        }
+
+        bool is_empty() {
+            return fossil_flist_is_empty(flist_);
+        }
+
+        bool is_cnullptr() {
+            return fossil_flist_is_cnullptr(flist_);
+        }
+
+    private:
+        fossil_flist_t* flist_;
+    };
+}
+#endif
+
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

@@ -145,4 +145,69 @@ fossil_tofu_t fossil_stack_top(fossil_stack_t* stack, fossil_tofu_t default_valu
 }
 #endif
 
+#ifdef __cplusplus
+
+#include <string>
+
+namespace fossil {
+    class Stack {
+    public:
+        Stack(const std::string& type) : stack_(fossil_stack_create(const_cast<char*>(type.c_str()))) {}
+
+        ~Stack() {
+            fossil_stack_erase(stack_);
+        }
+
+        void insert(fossil_tofu_t data) {
+            fossil_stack_insert(stack_, data);
+        }
+
+        fossil_tofu_t remove() {
+            fossil_tofu_t data;
+            fossil_stack_remove(stack_, &data);
+            return data;
+        }
+
+        bool search(fossil_tofu_t data) {
+            return fossil_stack_search(stack_, data) == 0;
+        }
+
+        size_t size() {
+            return fossil_stack_size(stack_);
+        }
+
+        fossil_tofu_t* getter(fossil_tofu_t data) {
+            return fossil_stack_getter(stack_, data);
+        }
+
+        void setter(fossil_tofu_t data) {
+            fossil_stack_setter(stack_, data);
+        }
+
+        bool not_empty() {
+            return fossil_stack_not_empty(stack_);
+        }
+
+        bool not_cnullptr() {
+            return fossil_stack_not_cnullptr(stack_);
+        }
+
+        bool is_empty() {
+            return fossil_stack_is_empty(stack_);
+        }
+
+        bool is_cnullptr() {
+            return fossil_stack_is_cnullptr(stack_);
+        }
+
+        fossil_tofu_t top(fossil_tofu_t default_value) {
+            return fossil_stack_top(stack_, default_value);
+        }
+
+    private:
+        fossil_stack_t* stack_;
+    };
+}
+#endif
+
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */
