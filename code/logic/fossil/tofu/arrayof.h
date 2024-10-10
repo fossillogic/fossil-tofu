@@ -96,4 +96,44 @@ void fossil_tofu_arrayof_print(const fossil_tofu_arrayof_t *arrayof);
 }
 #endif
 
+#ifdef __cplusplus
+namespace fossil {
+    class ArrayOf {
+    public:
+        ArrayOf(char* type, size_t size, ...) : arrayof_(fossil_tofu_arrayof_create(type, size)) {}
+
+        ~ArrayOf() {
+            fossil_tofu_arrayof_erase(arrayof_);
+        }
+
+        void add(fossil_tofu_t element) {
+            fossil_tofu_arrayof_add(arrayof_, element);
+        }
+
+        fossil_tofu_t get(size_t index) {
+            return fossil_tofu_arrayof_get(arrayof_, index);
+        }
+
+        size_t size() {
+            return fossil_tofu_arrayof_size(arrayof_);
+        }
+
+        bool is_empty() {
+            return fossil_tofu_arrayof_is_empty(arrayof_);
+        }
+
+        void clear() {
+            fossil_tofu_arrayof_clear(arrayof_);
+        }
+
+        void print() {
+            fossil_tofu_arrayof_print(arrayof_);
+        }
+
+    private:
+        fossil_tofu_arrayof_t* arrayof_;
+    };
+}
+#endif
+
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

@@ -138,4 +138,62 @@ bool fossil_queue_is_cnullptr(const fossil_queue_t* queue);
 }
 #endif
 
+#ifdef __cplusplus
+namespace fossil {
+    class Queue {
+    public:
+        Queue(char* type) : queue_(fossil_queue_create(type)) {}
+
+        ~Queue() {
+            fossil_queue_erase(queue_);
+        }
+
+        void insert(fossil_tofu_t data) {
+            fossil_queue_insert(queue_, data);
+        }
+
+        fossil_tofu_t remove() {
+            fossil_tofu_t data;
+            fossil_queue_remove(queue_, &data);
+            return data;
+        }
+
+        bool search(fossil_tofu_t data) {
+            return fossil_queue_search(queue_, data) == 0;
+        }
+
+        size_t size() {
+            return fossil_queue_size(queue_);
+        }
+
+        fossil_tofu_t* getter(fossil_tofu_t data) {
+            return fossil_queue_getter(queue_, data);
+        }
+
+        void setter(fossil_tofu_t data) {
+            fossil_queue_setter(queue_, data);
+        }
+
+        bool not_empty() {
+            return fossil_queue_not_empty(queue_);
+        }
+
+        bool not_cnullptr() {
+            return fossil_queue_not_cnullptr(queue_);
+        }
+
+        bool is_empty() {
+            return fossil_queue_is_empty(queue_);
+        }
+
+        bool is_cnullptr() {
+            return fossil_queue_is_cnullptr(queue_);
+        }
+
+    private:
+        fossil_queue_t* queue_;
+    };
+}
+#endif
+
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

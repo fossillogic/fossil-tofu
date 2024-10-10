@@ -153,4 +153,70 @@ bool fossil_dlist_is_cnullptr(const fossil_dlist_t* dlist);
 }
 #endif
 
+#ifdef __cplusplus
+namespace fossil {
+    class DoublyList {
+    public:
+        DoublyList(char* type) : dlist_(fossil_dlist_create(type)) {}
+
+        ~DoublyList() {
+            fossil_dlist_erase(dlist_);
+        }
+
+        void insert(fossil_tofu_t data) {
+            fossil_dlist_insert(dlist_, data);
+        }
+
+        fossil_tofu_t remove() {
+            fossil_tofu_t data;
+            fossil_dlist_remove(dlist_, &data);
+            return data;
+        }
+
+        int search(fossil_tofu_t data) {
+            return fossil_dlist_search(dlist_, data);
+        }
+
+        size_t size() {
+            return fossil_dlist_size(dlist_);
+        }
+
+        fossil_tofu_t* getter(fossil_tofu_t data) {
+            return fossil_dlist_getter(dlist_, data);
+        }
+
+        void setter(fossil_tofu_t data) {
+            fossil_dlist_setter(dlist_, data);
+        }
+
+        void reverse_forward() {
+            fossil_dlist_reverse_forward(dlist_);
+        }
+
+        void reverse_backward() {
+            fossil_dlist_reverse_backward(dlist_);
+        }
+
+        bool not_empty() {
+            return fossil_dlist_not_empty(dlist_);
+        }
+
+        bool not_cnullptr() {
+            return fossil_dlist_not_cnullptr(dlist_);
+        }
+
+        bool is_empty() {
+            return fossil_dlist_is_empty(dlist_);
+        }
+
+        bool is_cnullptr() {
+            return fossil_dlist_is_cnullptr(dlist_);
+        }
+
+    private:
+        fossil_dlist_t* dlist_;
+    };
+}
+#endif
+
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

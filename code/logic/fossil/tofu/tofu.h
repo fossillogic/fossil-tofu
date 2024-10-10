@@ -150,6 +150,14 @@ void fossil_tofu_print(fossil_tofu_t tofu);
 void fossil_tofu_erase(fossil_tofu_t *tofu);
 
 /**
+ * Utility function to check if a given type is valid.
+ *
+ * @param type The type string to be checked.
+ * @return `true` if the type is valid, `false` otherwise.
+ */
+bool fossil_tofu_is_valid_type(const char *type);
+
+/**
  * Utility function to convert a `fossil_tofu_t` object's type to a string representation.
  *
  * @param type The `fossil_tofu_t` object's type.
