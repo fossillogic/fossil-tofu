@@ -12,15 +12,15 @@
  * -----------------------------------------------------------------------------
  */
 #include "fossil/tofu/tofu.h"
+#include <inttypes.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
-#include <string.h>
+#include <ctype.h>
 #include <wchar.h>
-#include <inttypes.h>
-#include <stdbool.h>
 #include <time.h>
 
 // Lookup table for valid strings corresponding to each tofu type.
