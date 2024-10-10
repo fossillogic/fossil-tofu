@@ -414,6 +414,10 @@ namespace fossil {
         fossil_tofu_erase(tofu);
     }
 
+    bool is_valid_type(const char *type) {
+        return fossil_tofu_is_valid_type(type);
+    }
+
     const char* type_to_string(fossil_tofu_type_t type) {
         return fossil_tofu_type_to_string(type);
     }
