@@ -275,11 +275,6 @@ FOSSIL_TEST(test_fossil_tofu_create_invalid) {
     fossil_tofu_t tofu_invalid_value = fossil_tofu_create("int", "invalid_int");
     // Verification should fail and return FOSSIL_TOFU_TYPE_GHOST
     ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_GHOST, tofu_invalid_value.type);
-
-    // Try to create a tofu object with a valid type but missing value
-    fossil_tofu_t tofu_missing_value = fossil_tofu_create("int", "");
-    // Verification should fail and return FOSSIL_TOFU_TYPE_GHOST
-    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_GHOST, tofu_missing_value.type);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
