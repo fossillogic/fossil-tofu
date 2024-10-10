@@ -146,10 +146,13 @@ fossil_tofu_t fossil_stack_top(fossil_stack_t* stack, fossil_tofu_t default_valu
 #endif
 
 #ifdef __cplusplus
+
+#include <string>
+
 namespace fossil {
     class Stack {
     public:
-        Stack(char* type) : stack_(fossil_stack_create(type)) {}
+        Stack(const std::string& type) : stack_(fossil_stack_create(const_cast<char*>(type.c_str()))) {}
 
         ~Stack() {
             fossil_stack_erase(stack_);

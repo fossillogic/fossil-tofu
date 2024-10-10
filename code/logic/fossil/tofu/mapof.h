@@ -114,10 +114,13 @@ void fossil_tofu_mapof_print(fossil_tofu_mapof_t *map);
 #endif
 
 #ifdef __cplusplus
+
+#include <string>
+
 namespace fossil {
     class Map {
     public:
-        Map(char *type) : map_(fossil_tofu_mapof_create(type)) {}
+        Map(const std::string &type) : map_(fossil_tofu_mapof_create(type.c_str())) {}
 
         ~Map() {
             fossil_tofu_mapof_erase(&map_);

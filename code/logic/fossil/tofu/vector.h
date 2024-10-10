@@ -139,10 +139,13 @@ void fossil_vector_peek(const fossil_vector_t* vector);
 #endif
 
 #ifdef __cplusplus
+
+#include <string>
+
 namespace fossil {
     class Vector {
     public:
-        Vector(char* type) : vector_(fossil_vector_create(type)) {}
+        Vector(const std::string& type) : vector_(fossil_vector_create(const_cast<char*>(type.c_str()))) {}
 
         ~Vector() {
             fossil_vector_erase(vector_);

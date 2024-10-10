@@ -152,10 +152,13 @@ bool fossil_flist_is_cnullptr(const fossil_flist_t* flist);
 #endif
 
 #ifdef __cplusplus
+
+#include <string>
+
 namespace fossil {
     class ForwardList {
     public:
-        ForwardList(char* type) : flist_(fossil_flist_create(type)) {}
+        ForwardList(const std::string& type) : flist_(fossil_flist_create(const_cast<char*>(type.c_str()))) {}
 
         ~ForwardList() {
             fossil_flist_erase(flist_);

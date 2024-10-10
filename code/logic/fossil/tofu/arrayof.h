@@ -97,10 +97,13 @@ void fossil_tofu_arrayof_print(const fossil_tofu_arrayof_t *arrayof);
 #endif
 
 #ifdef __cplusplus
+
+#include <string>
+
 namespace fossil {
     class ArrayOf {
     public:
-        ArrayOf(char* type, size_t size, ...) : arrayof_(fossil_tofu_arrayof_create(type, size)) {}
+        ArrayOf(const std::string& type, size_t size, ...) : arrayof_(fossil_tofu_arrayof_create(const_cast<char*>(type.c_str()), size)) {}
 
         ~ArrayOf() {
             fossil_tofu_arrayof_erase(arrayof_);

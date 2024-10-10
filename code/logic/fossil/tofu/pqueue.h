@@ -142,10 +142,13 @@ bool fossil_pqueue_is_cnullptr(const fossil_pqueue_t* pqueue);
 #endif
 
 #ifdef __cplusplus
+
+#include <string>
+
 namespace fossil {
     class PQueue {
     public:
-        PQueue(char* type) : pqueue_(fossil_pqueue_create(type)) {}
+        PQueue(const std::string& type) : pqueue_(fossil_pqueue_create(const_cast<char*>(type.c_str()))) {}
 
         ~PQueue() {
             fossil_pqueue_erase(pqueue_);

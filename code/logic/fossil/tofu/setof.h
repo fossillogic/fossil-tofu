@@ -147,10 +147,13 @@ int32_t fossil_set_contains(const fossil_set_t* set, fossil_tofu_t data);
 #endif
 
 #ifdef __cplusplus
+
+#include <string>
+
 namespace fossil {
     class Set {
     public:
-        Set(char* type) : set_(fossil_set_create(type)) {}
+        Set(const std::string& type) : set_(fossil_set_create(const_cast<char*>(type.c_str()))) {}
 
         ~Set() {
             fossil_set_erase(set_);

@@ -154,10 +154,13 @@ bool fossil_dlist_is_cnullptr(const fossil_dlist_t* dlist);
 #endif
 
 #ifdef __cplusplus
+
+#include <string>
+
 namespace fossil {
     class DoublyList {
     public:
-        DoublyList(char* type) : dlist_(fossil_dlist_create(type)) {}
+        DoublyList(const std::string& type) : dlist_(fossil_dlist_create(const_cast<char*>(type.c_str()))) {}
 
         ~DoublyList() {
             fossil_dlist_erase(dlist_);
