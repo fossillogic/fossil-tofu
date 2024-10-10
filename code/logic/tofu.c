@@ -12,15 +12,15 @@
  * -----------------------------------------------------------------------------
  */
 #include "fossil/tofu/tofu.h"
+#include <inttypes.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
-#include <string.h>
+#include <ctype.h>
 #include <wchar.h>
-#include <inttypes.h>
-#include <stdbool.h>
 #include <time.h>
 
 // Lookup table for valid strings corresponding to each tofu type.
@@ -29,6 +29,72 @@ static const char *tofu_type_strings[] = {
     "float", "double", "bstr", "wstr", "cstr",
     "bchar", "cchar", "wchar", "size", "bool"
 };
+
+// Function to check if a string represents a valid integer
+bool is_valid_int(const char *str) {
+    if (*str == '-' || *str == '+') str++;
+    while (*str) {
+        if (!isdigit(*str)) return false;
+        str++;
+    }
+    return true;
+}
+
+// Function to check if a string represents a valid unsigned integer
+bool is_valid_uint(const char *str) {
+    while (*str) {
+        if (!isdigit(*str)) return false;
+        str++;
+    }
+    return true;
+}
+
+// Function to check if a string represents a valid hexadecimal number
+bool is_valid_hex(const char *str) {
+    if (strlen(str) > 2 && str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
+        str += 2;  // Skip "0x" or "0X"
+        while (*str) {
+            if (!isxdigit(*str)) return false;
+            str++;
+        }
+        return true;
+    }
+    return false;
+}
+
+// Function to check if a string represents a valid octal number
+bool is_valid_octal(const char *str) {
+    if (strlen(str) > 1 && str[0] == '0') {
+        str++;  // Skip "0"
+        while (*str) {
+            if (*str < '0' || *str > '7') return false;
+            str++;
+        }
+        return true;
+    }
+    return false;
+}
+
+// Function to check if a string represents a valid float/double
+bool is_valid_float(const char *str) {
+    bool has_dot = false;
+    if (*str == '-' || *str == '+') str++;
+    while (*str) {
+        if (*str == '.') {
+            if (has_dot) return false;  // More than one dot
+            has_dot = true;
+        } else if (!isdigit(*str)) {
+            return false;
+        }
+        str++;
+    }
+    return has_dot;  // Ensure there was at least one dot
+}
+
+// Function to check if a string represents a valid boolean (0 or 1)
+bool is_valid_bool(const char *str) {
+    return strcmp(str, "true") == 0 || strcmp(str, "false") == 0;
+}
 
 wchar_t *custom_wcsdup(const wchar_t *src) {
     if (src == NULL) {
@@ -68,7 +134,7 @@ fossil_tofu_type_t string_to_tofu_type(const char *str) {
     return FOSSIL_TOFU_TYPE_GHOST; // Default to ghost type if not found
 }
 
-// Function to create fossil_tofu_t based on type and value strings
+// Function to create fossil_tofu_t based on type and value strings with validation checks
 fossil_tofu_t fossil_tofu_create(char *type, char *value) {
     fossil_tofu_type_t tofu_type = string_to_tofu_type(type);
     fossil_tofu_t tofu;
@@ -77,31 +143,59 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
 
     switch (tofu_type) {
         case FOSSIL_TOFU_TYPE_INT:
-            tofu.value.int_val = atoll(value);
+            if (!is_valid_int(value)) {
+                fprintf(stderr, "Invalid integer value\n");
+                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
+            } else {
+                tofu.value.int_val = atoll(value);
+            }
             break;
         case FOSSIL_TOFU_TYPE_UINT:
-            tofu.value.uint_val = strtoull(value, NULL, 10);
+            if (!is_valid_uint(value)) {
+                fprintf(stderr, "Invalid unsigned integer value\n");
+                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
+            } else {
+                tofu.value.uint_val = strtoull(value, NULL, 10);
+            }
             break;
         case FOSSIL_TOFU_TYPE_HEX:
-            tofu.value.uint_val = parse_hexadecimal(value);
+            if (!is_valid_hex(value)) {
+                fprintf(stderr, "Invalid hexadecimal value\n");
+                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
+            } else {
+                tofu.value.uint_val = parse_hexadecimal(value);
+            }
             break;
         case FOSSIL_TOFU_TYPE_OCTAL:
-            tofu.value.uint_val = parse_octal(value);
+            if (!is_valid_octal(value)) {
+                fprintf(stderr, "Invalid octal value\n");
+                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
+            } else {
+                tofu.value.uint_val = parse_octal(value);
+            }
             break;
         case FOSSIL_TOFU_TYPE_FLOAT:
-            tofu.value.float_val = strtof(value, NULL);
+            if (!is_valid_float(value)) {
+                fprintf(stderr, "Invalid float value\n");
+                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
+            } else {
+                tofu.value.float_val = strtof(value, NULL);
+            }
             break;
         case FOSSIL_TOFU_TYPE_DOUBLE:
-            tofu.value.double_val = strtod(value, NULL);
+            if (!is_valid_float(value)) {
+                fprintf(stderr, "Invalid double value\n");
+                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
+            } else {
+                tofu.value.double_val = strtod(value, NULL);
+            }
             break;
         case FOSSIL_TOFU_TYPE_BSTR:
             tofu.value.uchar_string_val = (uint16_t *)fossil_tofu_alloc((strlen(value) + 1) * sizeof(uint16_t));
             strcpy((char *)tofu.value.uchar_string_val, value);
             break;
         case FOSSIL_TOFU_TYPE_WSTR:
-            // Assuming wide string conversion is handled appropriately
-            tofu.value.wchar_string_val = (wchar_t *)fossil_tofu_alloc((wcslen((wchar_t *)value) + 1) * sizeof(wchar_t));
-            wcscpy(tofu.value.wchar_string_val, (wchar_t *)value);
+            tofu.value.wchar_string_val = custom_wcsdup((wchar_t *)value);
             break;
         case FOSSIL_TOFU_TYPE_CSTR:
             tofu.value.cchar_string_val = fossil_tofu_strdup(value);
@@ -116,7 +210,12 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
             tofu.value.wchar_val = ((wchar_t *)value)[0];
             break;
         case FOSSIL_TOFU_TYPE_BOOL:
-            tofu.value.bool_val = (uint8_t)atoi(value);
+            if (!is_valid_bool(value)) {
+                fprintf(stderr, "Invalid boolean value\n");
+                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
+            } else {
+                tofu.value.bool_val = (uint8_t)atoi(value);
+            }
             break;
         default:
             fprintf(stderr, "Unsupported type\n");
