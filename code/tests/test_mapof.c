@@ -123,6 +123,7 @@ FOSSIL_TEST(benchmark_fossil_tofu_mapof_add_and_get) {
         fossil_tofu_t value = fossil_tofu_create("int", "100");
         fossil_tofu_mapof_add(&map, key, value);
         fossil_tofu_t retrieved = fossil_tofu_mapof_get(&map, key);
+        ASSUME_ITS_EQUAL_I32(100, retrieved.value.int_val);
         fossil_tofu_mapof_erase(&map);
     }
     TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
