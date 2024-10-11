@@ -107,16 +107,16 @@ FOSSIL_TEST(test_fossil_tofu_mapof_clear) {
 // implmentation.
 
 FOSSIL_TEST(benchmark_fossil_tofu_mapof_create) {
-    MARK_START(fossil_tofu_mapof_create);
+    TEST_BENCHMARK();
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
         fossil_tofu_mapof_erase(&map);
     }
-    MARK_STOP(fossil_tofu_mapof_create);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 }
 
 FOSSIL_TEST(benchmark_fossil_tofu_mapof_add_and_get) {
-    MARK_START(fossil_tofu_mapof_add_and_get);
+    TEST_BENCHMARK();
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
         fossil_tofu_t key = fossil_tofu_create("int", "1");
@@ -125,11 +125,11 @@ FOSSIL_TEST(benchmark_fossil_tofu_mapof_add_and_get) {
         fossil_tofu_t retrieved = fossil_tofu_mapof_get(&map, key);
         fossil_tofu_mapof_erase(&map);
     }
-    MARK_STOP(fossil_tofu_mapof_add_and_get);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 }
 
 FOSSIL_TEST(benchmark_fossil_tofu_mapof_contains) {
-    MARK_START(fossil_tofu_mapof_contains);
+    TEST_BENCHMARK();
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
         fossil_tofu_t key = fossil_tofu_create("int", "1");
@@ -138,11 +138,11 @@ FOSSIL_TEST(benchmark_fossil_tofu_mapof_contains) {
         fossil_tofu_mapof_contains(&map, key);
         fossil_tofu_mapof_erase(&map);
     }
-    MARK_STOP(fossil_tofu_mapof_contains);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 }
 
 FOSSIL_TEST(benchmark_fossil_tofu_mapof_remove) {
-    MARK_START(fossil_tofu_mapof_remove);
+    TEST_BENCHMARK();
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
         fossil_tofu_t key = fossil_tofu_create("int", "1");
@@ -151,11 +151,11 @@ FOSSIL_TEST(benchmark_fossil_tofu_mapof_remove) {
         fossil_tofu_mapof_remove(&map, key);
         fossil_tofu_mapof_erase(&map);
     }
-    MARK_STOP(fossil_tofu_mapof_remove);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 }
 
 FOSSIL_TEST(benchmark_fossil_tofu_mapof_size) {
-    MARK_START(fossil_tofu_mapof_size);
+    TEST_BENCHMARK();
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
         fossil_tofu_t key1 = fossil_tofu_create("int", "1");
@@ -167,7 +167,7 @@ FOSSIL_TEST(benchmark_fossil_tofu_mapof_size) {
         fossil_tofu_mapof_size(&map);
         fossil_tofu_mapof_erase(&map);
     }
-    MARK_STOP(fossil_tofu_mapof_size);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *

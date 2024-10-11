@@ -146,13 +146,13 @@ FOSSIL_TEST(benchmark_flist_insert) {
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
     // Start the benchmark
-    MARK_START(flist_insert);
+    TEST_BENCHMARK();
 
     // Insert the element
     fossil_flist_insert(mock_flist, element);
 
     // Stop the benchmark
-    MARK_STOP(flist_insert);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element);
 }
@@ -165,14 +165,14 @@ FOSSIL_TEST(benchmark_flist_remove) {
     fossil_flist_insert(mock_flist, element);
 
     // Start the benchmark
-    MARK_START(flist_remove);
+    TEST_BENCHMARK();
 
     // Remove the element
     fossil_tofu_t removedElement;
     fossil_flist_remove(mock_flist, &removedElement);
 
     // Stop the benchmark
-    MARK_STOP(flist_remove);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element);
 }
@@ -188,13 +188,13 @@ FOSSIL_TEST(benchmark_flist_reverse_forward) {
     fossil_flist_insert(mock_flist, element3);
 
     // Start the benchmark
-    MARK_START(flist_reverse_forward);
+    TEST_BENCHMARK();
 
     // Reverse the linked list forward
     fossil_flist_reverse_forward(mock_flist);
 
     // Stop the benchmark
-    MARK_STOP(flist_reverse_forward);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element1);
     fossil_tofu_erase(&element2);
@@ -212,13 +212,13 @@ FOSSIL_TEST(benchmark_flist_reverse_backward) {
     fossil_flist_insert(mock_flist, element3);
 
     // Start the benchmark
-    MARK_START(flist_reverse_backward);
+    TEST_BENCHMARK();
 
     // Reverse the linked list backward
     fossil_flist_reverse_backward(mock_flist);
 
     // Stop the benchmark
-    MARK_STOP(flist_reverse_backward);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element1);
     fossil_tofu_erase(&element2);

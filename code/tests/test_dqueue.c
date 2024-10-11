@@ -136,13 +136,13 @@ FOSSIL_TEST(benchmark_dqueue_insert) {
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
     // Start the benchmark
-    MARK_START(dqueue_insert);
+    TEST_BENCHMARK();
 
     // Insert the element
     fossil_dqueue_insert(mock_dqueue, element);
 
     // Stop the benchmark
-    MARK_STOP(dqueue_insert);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element);
 }
@@ -155,14 +155,14 @@ FOSSIL_TEST(benchmark_dqueue_remove) {
     fossil_dqueue_insert(mock_dqueue, element);
 
     // Start the benchmark
-    MARK_START(dqueue_remove);
+    TEST_BENCHMARK();
 
     // Remove the element
     fossil_tofu_t removedElement;
     fossil_dqueue_remove(mock_dqueue, &removedElement);
 
     // Stop the benchmark
-    MARK_STOP(dqueue_remove);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element);
 }
@@ -175,13 +175,13 @@ FOSSIL_TEST(benchmark_dqueue_size) {
     fossil_dqueue_insert(mock_dqueue, element);
 
     // Start the benchmark
-    MARK_START(dqueue_size);
+    TEST_BENCHMARK();
 
     // Get the size
     fossil_dqueue_size(mock_dqueue);
 
     // Stop the benchmark
-    MARK_STOP(dqueue_size);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element);
 }
@@ -194,14 +194,14 @@ FOSSIL_TEST(benchmark_dqueue_not_empty) {
     fossil_dqueue_insert(mock_dqueue, element);
 
     // Start the benchmark
-    MARK_START(dqueue_not_empty);
+    TEST_BENCHMARK();
 
     for (size_t i = 0; i < 1000000; i++) {
         fossil_dqueue_not_empty(mock_dqueue);
     }
 
     // Stop the benchmark
-    MARK_STOP(dqueue_not_empty);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element);
 }
@@ -214,14 +214,14 @@ FOSSIL_TEST(benchmark_dqueue_is_empty) {
     fossil_dqueue_insert(mock_dqueue, element);
 
     // Start the benchmark
-    MARK_START(dqueue_is_empty);
+    TEST_BENCHMARK();
 
     for (size_t i = 0; i < 1000000; i++) {
         fossil_dqueue_is_empty(mock_dqueue);
     }
 
     // Stop the benchmark
-    MARK_STOP(dqueue_is_empty);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element);
 }

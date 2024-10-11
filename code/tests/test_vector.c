@@ -141,7 +141,7 @@ FOSSIL_TEST(benchmark_vector_push_back) {
     fossil_tofu_t element3 = fossil_tofu_create("int", "5");
 
     // Start the benchmark
-    MARK_START(vector_push_back);
+    TEST_BENCHMARK();
 
     for (size_t i = 0; i < 1000000; i++) {
         fossil_vector_push_back(mock_vector, element1);
@@ -150,7 +150,7 @@ FOSSIL_TEST(benchmark_vector_push_back) {
     }
 
     // Stop the benchmark
-    MARK_STOP(vector_push_back);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     // Check if the elements are added correctly
     ASSUME_ITS_EQUAL_U32(3000000, mock_vector->size);
@@ -171,7 +171,7 @@ FOSSIL_TEST(benchmark_vector_search) {
     fossil_vector_push_back(mock_vector, element3);
 
     // Start the benchmark
-    MARK_START(vector_search);
+    TEST_BENCHMARK();
 
     for (size_t i = 0; i < 1000000; i++) {
         fossil_vector_search(mock_vector, element1);
@@ -180,7 +180,7 @@ FOSSIL_TEST(benchmark_vector_search) {
     }
 
     // Stop the benchmark
-    MARK_STOP(vector_search);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element1);
     fossil_tofu_erase(&element2);
@@ -198,14 +198,14 @@ FOSSIL_TEST(benchmark_vector_reverse) {
     fossil_vector_push_back(mock_vector, element3);
 
     // Start the benchmark
-    MARK_START(vector_reverse);
+    TEST_BENCHMARK();
 
     for (size_t i = 0; i < 1000000; i++) {
         fossil_vector_reverse(mock_vector);
     }
 
     // Stop the benchmark
-    MARK_STOP(vector_reverse);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element1);
     fossil_tofu_erase(&element2);
@@ -223,14 +223,14 @@ FOSSIL_TEST(benchmark_vector_size) {
     fossil_vector_push_back(mock_vector, element3);
 
     // Start the benchmark
-    MARK_START(vector_size);
+    TEST_BENCHMARK();
 
     for (size_t i = 0; i < 1000000; i++) {
         fossil_vector_size(mock_vector);
     }
 
     // Stop the benchmark
-    MARK_STOP(vector_size);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element1);
     fossil_tofu_erase(&element2);

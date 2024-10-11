@@ -101,14 +101,14 @@ FOSSIL_TEST(benchmark_stack_insert) {
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
     // Start the benchmark
-    MARK_START(stack_insert);
+    TEST_BENCHMARK();
 
     for (size_t i = 0; i < 1000000; i++) {
         fossil_stack_insert(mock_stack, element);
     }
 
     // Stop the benchmark
-    MARK_STOP(stack_insert);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element);
 }
@@ -121,14 +121,14 @@ FOSSIL_TEST(benchmark_stack_remove) {
     fossil_stack_insert(mock_stack, element);
 
     // Start the benchmark
-    MARK_START(stack_remove);
+    TEST_BENCHMARK();
 
     for (size_t i = 0; i < 1000000; i++) {
         fossil_stack_remove(mock_stack, &element);
     }
 
     // Stop the benchmark
-    MARK_STOP(stack_remove);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element);
 }
@@ -141,14 +141,14 @@ FOSSIL_TEST(benchmark_stack_size) {
     fossil_stack_insert(mock_stack, element);
 
     // Start the benchmark
-    MARK_START(stack_size);
+    TEST_BENCHMARK();
 
     for (size_t i = 0; i < 1000000; i++) {
         fossil_stack_size(mock_stack);
     }
 
     // Stop the benchmark
-    MARK_STOP(stack_size);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element);
 }

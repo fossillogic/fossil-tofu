@@ -87,16 +87,16 @@ FOSSIL_TEST(test_fossil_tofu_arrayof_clear) {
 // implmentation.
 
 FOSSIL_TEST(benchmark_fossil_tofu_arrayof_create) {
-    MARK_START(fossil_tofu_arrayof_create);
+    TEST_BENCHMARK();
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 3, "10", "20", "30");
         fossil_tofu_arrayof_erase(&array);
     }
-    MARK_STOP(fossil_tofu_arrayof_create);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 }
 
 FOSSIL_TEST(benchmark_fossil_tofu_arrayof_add) {
-    MARK_START(fossil_tofu_arrayof_add);
+    TEST_BENCHMARK();
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 0);
         fossil_tofu_t tofu1 = fossil_tofu_create("int", "10");
@@ -105,17 +105,17 @@ FOSSIL_TEST(benchmark_fossil_tofu_arrayof_add) {
         fossil_tofu_arrayof_add(&array, tofu2);
         fossil_tofu_arrayof_erase(&array);
     }
-    MARK_STOP(fossil_tofu_arrayof_add);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 }
 
 FOSSIL_TEST(benchmark_fossil_tofu_arrayof_get) {
-    MARK_START(fossil_tofu_arrayof_get);
+    TEST_BENCHMARK();
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 3, "10", "20", "30");
         fossil_tofu_t tofu = fossil_tofu_arrayof_get(&array, 1);
         fossil_tofu_arrayof_erase(&array);
     }
-    MARK_STOP(fossil_tofu_arrayof_get);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 }
 
 FOSSIL_TEST(benchmark_fossil_tofu_arrayof_size) {
@@ -129,23 +129,23 @@ FOSSIL_TEST(benchmark_fossil_tofu_arrayof_size) {
 }
 
 FOSSIL_TEST(benchmark_fossil_tofu_arrayof_is_empty) {
-    MARK_START(fossil_tofu_arrayof_is_empty);
+    TEST_BENCHMARK();
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 0);
         fossil_tofu_arrayof_is_empty(&array);
         fossil_tofu_arrayof_erase(&array);
     }
-    MARK_STOP(fossil_tofu_arrayof_is_empty);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 }
 
 FOSSIL_TEST(benchmark_fossil_tofu_arrayof_clear) {
-    MARK_START(fossil_tofu_arrayof_clear);
+    TEST_BENCHMARK();
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 3, "10", "20", "30");
         fossil_tofu_arrayof_clear(&array);
         fossil_tofu_arrayof_erase(&array);
     }
-    MARK_STOP(fossil_tofu_arrayof_clear);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
