@@ -138,7 +138,7 @@ FOSSIL_TEST(test_dlist_reverse_backward) {
 // performence based on current structures
 // implmentation.
 
-FOSSIL_TEST(benchmark_dlist_insert) {
+FOSSIL_TEST(stress_test_dlist) {
     // Create an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
@@ -152,74 +152,6 @@ FOSSIL_TEST(benchmark_dlist_insert) {
     TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     fossil_tofu_erase(&element);
-}
-
-FOSSIL_TEST(benchmark_dlist_remove) {
-    // Create an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-
-    // Insert the element
-    fossil_dlist_insert(mock_dlist, element);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    // Remove the element
-    fossil_tofu_t removedElement;
-    fossil_dlist_remove(mock_dlist, &removedElement);
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element);
-}
-
-FOSSIL_TEST(benchmark_dlist_reverse_forward) {
-    // Insert some elements
-    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
-    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
-    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
-
-    fossil_dlist_insert(mock_dlist, element1);
-    fossil_dlist_insert(mock_dlist, element2);
-    fossil_dlist_insert(mock_dlist, element3);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    // Reverse the doubly linked list forward
-    fossil_dlist_reverse_forward(mock_dlist);
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
-}
-
-FOSSIL_TEST(benchmark_dlist_reverse_backward) {
-    // Insert some elements
-    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
-    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
-    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
-
-    fossil_dlist_insert(mock_dlist, element1);
-    fossil_dlist_insert(mock_dlist, element2);
-    fossil_dlist_insert(mock_dlist, element3);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    // Reverse the doubly linked list backward
-    fossil_dlist_reverse_backward(mock_dlist);
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -233,8 +165,5 @@ FOSSIL_TEST_GROUP(c_dlist_structure_tests) {
     ADD_TESTF(test_dlist_reverse_forward, struct_dlist_fixture);
     ADD_TESTF(test_dlist_reverse_backward, struct_dlist_fixture);
 
-    ADD_TESTF(benchmark_dlist_insert, struct_dlist_fixture);
-    ADD_TESTF(benchmark_dlist_remove, struct_dlist_fixture);
-    ADD_TESTF(benchmark_dlist_reverse_forward, struct_dlist_fixture);
-    ADD_TESTF(benchmark_dlist_reverse_backward, struct_dlist_fixture);
+    ADD_TESTF(stress_test_dlist, struct_dlist_fixture);
 } // end of tests

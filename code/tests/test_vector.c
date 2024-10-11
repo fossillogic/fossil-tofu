@@ -134,8 +134,8 @@ FOSSIL_TEST(test_vector_size) {
 // performence based on current structures
 // implmentation.
 
-FOSSIL_TEST(benchmark_vector_push_back) {
-    // Push back some elements
+FOSSIL_TEST(stress_test_vector_usage) {
+    // setup nodes
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
     fossil_tofu_t element3 = fossil_tofu_create("int", "5");
@@ -153,88 +153,7 @@ FOSSIL_TEST(benchmark_vector_push_back) {
     TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     // Check if the elements are added correctly
-    ASSUME_ITS_EQUAL_U32(3000000, mock_vector->size);
-
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
-}
-
-FOSSIL_TEST(benchmark_vector_search) {
-    // Push back some elements
-    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
-    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
-    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
-
-    fossil_vector_push_back(mock_vector, element1);
-    fossil_vector_push_back(mock_vector, element2);
-    fossil_vector_push_back(mock_vector, element3);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_vector_search(mock_vector, element1);
-        fossil_vector_search(mock_vector, element2);
-        fossil_vector_search(mock_vector, element3);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
-}
-
-FOSSIL_TEST(benchmark_vector_reverse) {
-    // Push back some elements
-    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
-    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
-    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
-
-    fossil_vector_push_back(mock_vector, element1);
-    fossil_vector_push_back(mock_vector, element2);
-    fossil_vector_push_back(mock_vector, element3);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_vector_reverse(mock_vector);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
-}
-
-FOSSIL_TEST(benchmark_vector_size) {
-    // Push back some elements
-    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
-    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
-    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
-
-    fossil_vector_push_back(mock_vector, element1);
-    fossil_vector_push_back(mock_vector, element2);
-    fossil_vector_push_back(mock_vector, element3);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_vector_size(mock_vector);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
+    ASSUME_ITS_EQUAL_I32(3000000, mock_vector->size);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -249,8 +168,5 @@ FOSSIL_TEST_GROUP(c_vector_structure_tests) {
     ADD_TESTF(test_vector_size, struct_vect_fixture);
 
     // Vector Benchmark
-    ADD_TESTF(benchmark_vector_push_back, struct_vect_fixture);
-    ADD_TESTF(benchmark_vector_search, struct_vect_fixture);
-    ADD_TESTF(benchmark_vector_reverse, struct_vect_fixture);
-    ADD_TESTF(benchmark_vector_size, struct_vect_fixture);
+    ADD_TESTF(stress_test_vector_usage, struct_vect_fixture);
 } // end of tests

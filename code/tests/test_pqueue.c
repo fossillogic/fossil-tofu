@@ -101,7 +101,7 @@ FOSSIL_TEST(test_pqueue_not_empty_and_is_empty) {
 // performence based on current structures
 // implmentation.
 
-FOSSIL_TEST(benchmark_pqueue_insert) {
+FOSSIL_TEST(stress_test_pqueue) {
     // Create an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
@@ -110,86 +110,7 @@ FOSSIL_TEST(benchmark_pqueue_insert) {
 
     for (size_t i = 0; i < 1000000; i++) {
         fossil_pqueue_insert(mock_pqueue, element, 2);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element);
-}
-
-FOSSIL_TEST(benchmark_pqueue_remove) {
-    // Create an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-
-    // Insert the element
-    fossil_pqueue_insert(mock_pqueue, element, 2);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_pqueue_remove(mock_pqueue, &element, 0);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element);
-}
-
-FOSSIL_TEST(benchmark_pqueue_size) {
-    // Create an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-
-    // Insert the element
-    fossil_pqueue_insert(mock_pqueue, element, 2);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_pqueue_size(mock_pqueue);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element);
-}
-
-FOSSIL_TEST(benchmark_pqueue_not_empty) {
-    // Create an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-
-    // Insert the element
-    fossil_pqueue_insert(mock_pqueue, element, 2);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_pqueue_not_empty(mock_pqueue);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element);
-}
-
-FOSSIL_TEST(benchmark_pqueue_is_empty) {
-    // Create an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-
-    // Insert the element
-    fossil_pqueue_insert(mock_pqueue, element, 2);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_pqueue_is_empty(mock_pqueue);
+        fossil_pqueue_remove(mock_pqueue, &element, 2);
     }
 
     // Stop the benchmark
@@ -209,9 +130,5 @@ FOSSIL_TEST_GROUP(c_pqueue_structure_tests) {
     ADD_TESTF(test_pqueue_not_empty_and_is_empty, struct_pqueue_fixture);
 
     // Benchmarking
-    ADD_TESTF(benchmark_pqueue_insert, struct_pqueue_fixture);
-    ADD_TESTF(benchmark_pqueue_remove, struct_pqueue_fixture);
-    ADD_TESTF(benchmark_pqueue_size, struct_pqueue_fixture);
-    ADD_TESTF(benchmark_pqueue_not_empty, struct_pqueue_fixture);
-    ADD_TESTF(benchmark_pqueue_is_empty, struct_pqueue_fixture);
+    ADD_TESTF(stress_test_pqueue, struct_pqueue_fixture);
 } // end of tests

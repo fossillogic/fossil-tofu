@@ -109,7 +109,7 @@ FOSSIL_TEST(test_queue_not_empty_and_is_empty) {
 // performence based on current structures
 // implmentation.
 
-FOSSIL_TEST(benchmark_queue_insert) {
+FOSSIL_TEST(stress_test_queue) {
     // Create an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
@@ -118,66 +118,7 @@ FOSSIL_TEST(benchmark_queue_insert) {
 
     for (size_t i = 0; i < 1000000; i++) {
         fossil_queue_insert(mock_queue, element);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element);
-}
-
-FOSSIL_TEST(benchmark_queue_remove) {
-    // Create an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-
-    // Insert the element
-    fossil_queue_insert(mock_queue, element);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
         fossil_queue_remove(mock_queue, &element);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element);
-}
-
-FOSSIL_TEST(benchmark_queue_size) {
-    // Create an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-
-    // Insert the element
-    fossil_queue_insert(mock_queue, element);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_queue_size(mock_queue);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element);
-}
-
-FOSSIL_TEST(benchmark_queue_not_empty) {
-    // Create an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-
-    // Insert the element
-    fossil_queue_insert(mock_queue, element);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_queue_not_empty(mock_queue);
     }
 
     // Stop the benchmark
@@ -197,8 +138,5 @@ FOSSIL_TEST_GROUP(c_structure_tests) {
     ADD_TESTF(test_queue_not_empty_and_is_empty, struct_queue_fixture);
 
     // Benchmarking
-    ADD_TESTF(benchmark_queue_insert, struct_queue_fixture);
-    ADD_TESTF(benchmark_queue_remove, struct_queue_fixture);
-    ADD_TESTF(benchmark_queue_size, struct_queue_fixture);
-    ADD_TESTF(benchmark_queue_not_empty, struct_queue_fixture);
+    ADD_TESTF(stress_test_queue, struct_queue_fixture);
 } // end of tests

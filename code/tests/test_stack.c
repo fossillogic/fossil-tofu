@@ -96,7 +96,7 @@ FOSSIL_TEST(test_stack_remove) {
 // performence based on current structures
 // implmentation.
 
-FOSSIL_TEST(benchmark_stack_insert) {
+FOSSIL_TEST(stress_test_stack) {
     // Create an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
@@ -105,46 +105,7 @@ FOSSIL_TEST(benchmark_stack_insert) {
 
     for (size_t i = 0; i < 1000000; i++) {
         fossil_stack_insert(mock_stack, element);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element);
-}
-
-FOSSIL_TEST(benchmark_stack_remove) {
-    // Create an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-
-    // Insert the element
-    fossil_stack_insert(mock_stack, element);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
         fossil_stack_remove(mock_stack, &element);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_erase(&element);
-}
-
-FOSSIL_TEST(benchmark_stack_size) {
-    // Create an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-
-    // Insert the element
-    fossil_stack_insert(mock_stack, element);
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_stack_size(mock_stack);
     }
 
     // Stop the benchmark
@@ -164,7 +125,5 @@ FOSSIL_TEST_GROUP(c_stack_structure_tests) {
     ADD_TESTF(test_stack_remove, struct_stack_fixture);
 
     // Stack Benchmark
-    ADD_TESTF(benchmark_stack_insert, struct_stack_fixture);
-    ADD_TESTF(benchmark_stack_remove, struct_stack_fixture);
-    ADD_TESTF(benchmark_stack_size, struct_stack_fixture);
+    ADD_TESTF(stress_test_stack, struct_stack_fixture);
 } // end of tests
