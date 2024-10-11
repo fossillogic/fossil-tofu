@@ -12,6 +12,7 @@
  * -----------------------------------------------------------------------------
  */
 #include <fossil/unittest/framework.h>
+#include <fossil/benchmark/framework.h>
 #include <fossil/unittest/assume.h>
 
 #include "fossil/tofu/framework.h"
@@ -107,6 +108,87 @@ FOSSIL_TEST(test_set_contains) {
     fossil_tofu_erase(&element3);
 }
 
+// benchmarking cases to capture the true
+// performence based on current structures
+// implmentation.
+
+FOSSIL_TEST(benchmark_set_insert) {
+    // Create an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+
+    // Start the benchmark
+    MARK_START(set_insert);
+
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_set_insert(mock_set, element);
+    }
+
+    // Stop the benchmark
+    MARK_STOP(set_insert);
+
+    fossil_tofu_erase(&element);
+}
+
+FOSSIL_TEST(benchmark_set_remove) {
+    // Create an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+
+    // Insert the element
+    fossil_set_insert(mock_set, element);
+
+    // Start the benchmark
+    MARK_START(set_remove);
+
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_set_remove(mock_set, element);
+    }
+
+    // Stop the benchmark
+    MARK_STOP(set_remove);
+
+    fossil_tofu_erase(&element);
+}
+
+FOSSIL_TEST(benchmark_set_size) {
+    // Create an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+
+    // Insert the element
+    fossil_set_insert(mock_set, element);
+
+    // Start the benchmark
+    MARK_START(set_size);
+
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_set_size(mock_set);
+    }
+
+    // Stop the benchmark
+    MARK_STOP(set_size);
+
+    fossil_tofu_erase(&element);
+}
+
+FOSSIL_TEST(benchmark_set_contains) {
+    // Create an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+
+    // Insert the element
+    fossil_set_insert(mock_set, element);
+
+    // Start the benchmark
+    MARK_START(set_contains);
+
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_set_contains(mock_set, element);
+    }
+
+    // Stop the benchmark
+    MARK_STOP(set_contains);
+
+    fossil_tofu_erase(&element);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -116,4 +198,10 @@ FOSSIL_TEST_GROUP(c_setof_structure_tests) {
     ADD_TESTF(test_set_insert_and_size, struct_set_fixture);
     ADD_TESTF(test_set_remove, struct_set_fixture);
     ADD_TESTF(test_set_contains, struct_set_fixture);
+
+    // Benchmarking
+    ADD_TESTF(benchmark_set_insert, struct_set_fixture);
+    ADD_TESTF(benchmark_set_remove, struct_set_fixture);
+    ADD_TESTF(benchmark_set_size, struct_set_fixture);
+    ADD_TESTF(benchmark_set_contains, struct_set_fixture);
 } // end of tests

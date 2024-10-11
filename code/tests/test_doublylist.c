@@ -12,6 +12,7 @@
  * -----------------------------------------------------------------------------
  */
 #include <fossil/unittest/framework.h>
+#include <fossil/benchmark/framework.h>
 #include <fossil/unittest/assume.h>
 #include "fossil/tofu/framework.h"
 
@@ -133,6 +134,94 @@ FOSSIL_TEST(test_dlist_reverse_backward) {
     ASSUME_ITS_EQUAL_I32(42, retrievedElement->value.int_val);
 }
 
+// benchmarking cases to capture the true
+// performence based on current structures
+// implmentation.
+
+FOSSIL_TEST(benchmark_dlist_insert) {
+    // Create an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+
+    // Start the benchmark
+    MARK_START(dlist_insert);
+
+    // Insert the element
+    fossil_dlist_insert(mock_dlist, element);
+
+    // Stop the benchmark
+    MARK_STOP(dlist_insert);
+
+    fossil_tofu_erase(&element);
+}
+
+FOSSIL_TEST(benchmark_dlist_remove) {
+    // Create an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+
+    // Insert the element
+    fossil_dlist_insert(mock_dlist, element);
+
+    // Start the benchmark
+    MARK_START(dlist_remove);
+
+    // Remove the element
+    fossil_tofu_t removedElement;
+    fossil_dlist_remove(mock_dlist, &removedElement);
+
+    // Stop the benchmark
+    MARK_STOP(dlist_remove);
+
+    fossil_tofu_erase(&element);
+}
+
+FOSSIL_TEST(benchmark_dlist_reverse_forward) {
+    // Insert some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_dlist_insert(mock_dlist, element1);
+    fossil_dlist_insert(mock_dlist, element2);
+    fossil_dlist_insert(mock_dlist, element3);
+
+    // Start the benchmark
+    MARK_START(dlist_reverse_forward);
+
+    // Reverse the doubly linked list forward
+    fossil_dlist_reverse_forward(mock_dlist);
+
+    // Stop the benchmark
+    MARK_STOP(dlist_reverse_forward);
+
+    fossil_tofu_erase(&element1);
+    fossil_tofu_erase(&element2);
+    fossil_tofu_erase(&element3);
+}
+
+FOSSIL_TEST(benchmark_dlist_reverse_backward) {
+    // Insert some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_dlist_insert(mock_dlist, element1);
+    fossil_dlist_insert(mock_dlist, element2);
+    fossil_dlist_insert(mock_dlist, element3);
+
+    // Start the benchmark
+    MARK_START(dlist_reverse_backward);
+
+    // Reverse the doubly linked list backward
+    fossil_dlist_reverse_backward(mock_dlist);
+
+    // Stop the benchmark
+    MARK_STOP(dlist_reverse_backward);
+
+    fossil_tofu_erase(&element1);
+    fossil_tofu_erase(&element2);
+    fossil_tofu_erase(&element3);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -143,4 +232,9 @@ FOSSIL_TEST_GROUP(c_dlist_structure_tests) {
     ADD_TESTF(test_dlist_remove, struct_dlist_fixture);
     ADD_TESTF(test_dlist_reverse_forward, struct_dlist_fixture);
     ADD_TESTF(test_dlist_reverse_backward, struct_dlist_fixture);
+
+    ADD_TESTF(benchmark_dlist_insert, struct_dlist_fixture);
+    ADD_TESTF(benchmark_dlist_remove, struct_dlist_fixture);
+    ADD_TESTF(benchmark_dlist_reverse_forward, struct_dlist_fixture);
+    ADD_TESTF(benchmark_dlist_reverse_backward, struct_dlist_fixture);
 } // end of tests

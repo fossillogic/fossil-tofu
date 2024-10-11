@@ -12,6 +12,7 @@
  * -----------------------------------------------------------------------------
  */
 #include <fossil/unittest/framework.h>
+#include <fossil/benchmark/framework.h>
 #include <fossil/unittest/assume.h>
 
 #include "fossil/tofu/framework.h"
@@ -81,6 +82,72 @@ FOSSIL_TEST(test_fossil_tofu_arrayof_clear) {
     fossil_tofu_arrayof_erase(&array);
 }
 
+// benchmarking cases to capture the true
+// performence based on current structures
+// implmentation.
+
+FOSSIL_TEST(benchmark_fossil_tofu_arrayof_create) {
+    MARK_START(fossil_tofu_arrayof_create);
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 3, "10", "20", "30");
+        fossil_tofu_arrayof_erase(&array);
+    }
+    MARK_STOP(fossil_tofu_arrayof_create);
+}
+
+FOSSIL_TEST(benchmark_fossil_tofu_arrayof_add) {
+    MARK_START(fossil_tofu_arrayof_add);
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 0);
+        fossil_tofu_t tofu1 = fossil_tofu_create("int", "10");
+        fossil_tofu_t tofu2 = fossil_tofu_create("int", "20");
+        fossil_tofu_arrayof_add(&array, tofu1);
+        fossil_tofu_arrayof_add(&array, tofu2);
+        fossil_tofu_arrayof_erase(&array);
+    }
+    MARK_STOP(fossil_tofu_arrayof_add);
+}
+
+FOSSIL_TEST(benchmark_fossil_tofu_arrayof_get) {
+    MARK_START(fossil_tofu_arrayof_get);
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 3, "10", "20", "30");
+        fossil_tofu_t tofu = fossil_tofu_arrayof_get(&array, 1);
+        fossil_tofu_arrayof_erase(&array);
+    }
+    MARK_STOP(fossil_tofu_arrayof_get);
+}
+
+FOSSIL_TEST(benchmark_fossil_tofu_arrayof_size) {
+    MARK_START(fossil_tofu_arrayof_size);
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 2, "10", "20");
+        fossil_tofu_arrayof_size(&array);
+        fossil_tofu_arrayof_erase(&array);
+    }
+    MARK_STOP(fossil_tofu_arrayof_size);
+}
+
+FOSSIL_TEST(benchmark_fossil_tofu_arrayof_is_empty) {
+    MARK_START(fossil_tofu_arrayof_is_empty);
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 0);
+        fossil_tofu_arrayof_is_empty(&array);
+        fossil_tofu_arrayof_erase(&array);
+    }
+    MARK_STOP(fossil_tofu_arrayof_is_empty);
+}
+
+FOSSIL_TEST(benchmark_fossil_tofu_arrayof_clear) {
+    MARK_START(fossil_tofu_arrayof_clear);
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 3, "10", "20", "30");
+        fossil_tofu_arrayof_clear(&array);
+        fossil_tofu_arrayof_erase(&array);
+    }
+    MARK_STOP(fossil_tofu_arrayof_clear);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -92,4 +159,12 @@ FOSSIL_TEST_GROUP(c_arrayof_structure_tests) {
     ADD_TEST(test_fossil_tofu_arrayof_size);
     ADD_TEST(test_fossil_tofu_arrayof_is_empty);
     ADD_TEST(test_fossil_tofu_arrayof_clear);
+
+    // Benchmarking
+    ADD_TEST(benchmark_fossil_tofu_arrayof_create);
+    ADD_TEST(benchmark_fossil_tofu_arrayof_add);
+    ADD_TEST(benchmark_fossil_tofu_arrayof_get);
+    ADD_TEST(benchmark_fossil_tofu_arrayof_size);
+    ADD_TEST(benchmark_fossil_tofu_arrayof_is_empty);
+    ADD_TEST(benchmark_fossil_tofu_arrayof_clear);
 } // end of tests

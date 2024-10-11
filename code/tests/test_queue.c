@@ -12,6 +12,7 @@
  * -----------------------------------------------------------------------------
  */
 #include <fossil/unittest/framework.h>
+#include <fossil/benchmark/framework.h>
 #include <fossil/unittest/assume.h>
 
 #include "fossil/tofu/framework.h"
@@ -104,6 +105,87 @@ FOSSIL_TEST(test_queue_not_empty_and_is_empty) {
     fossil_tofu_erase(&element);
 }
 
+// benchmarking cases to capture the true
+// performence based on current structures
+// implmentation.
+
+FOSSIL_TEST(benchmark_queue_insert) {
+    // Create an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+
+    // Start the benchmark
+    MARK_START(queue_insert);
+
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_queue_insert(mock_queue, element);
+    }
+
+    // Stop the benchmark
+    MARK_STOP(queue_insert);
+
+    fossil_tofu_erase(&element);
+}
+
+FOSSIL_TEST(benchmark_queue_remove) {
+    // Create an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+
+    // Insert the element
+    fossil_queue_insert(mock_queue, element);
+
+    // Start the benchmark
+    MARK_START(queue_remove);
+
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_queue_remove(mock_queue, &element);
+    }
+
+    // Stop the benchmark
+    MARK_STOP(queue_remove);
+
+    fossil_tofu_erase(&element);
+}
+
+FOSSIL_TEST(benchmark_queue_size) {
+    // Create an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+
+    // Insert the element
+    fossil_queue_insert(mock_queue, element);
+
+    // Start the benchmark
+    MARK_START(queue_size);
+
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_queue_size(mock_queue);
+    }
+
+    // Stop the benchmark
+    MARK_STOP(queue_size);
+
+    fossil_tofu_erase(&element);
+}
+
+FOSSIL_TEST(benchmark_queue_not_empty) {
+    // Create an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+
+    // Insert the element
+    fossil_queue_insert(mock_queue, element);
+
+    // Start the benchmark
+    MARK_START(queue_not_empty);
+
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_queue_not_empty(mock_queue);
+    }
+
+    // Stop the benchmark
+    MARK_STOP(queue_not_empty);
+
+    fossil_tofu_erase(&element);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -113,4 +195,10 @@ FOSSIL_TEST_GROUP(c_structure_tests) {
     ADD_TESTF(test_queue_insert_and_size, struct_queue_fixture);
     ADD_TESTF(test_queue_remove, struct_queue_fixture);
     ADD_TESTF(test_queue_not_empty_and_is_empty, struct_queue_fixture);
+
+    // Benchmarking
+    ADD_TESTF(benchmark_queue_insert, struct_queue_fixture);
+    ADD_TESTF(benchmark_queue_remove, struct_queue_fixture);
+    ADD_TESTF(benchmark_queue_size, struct_queue_fixture);
+    ADD_TESTF(benchmark_queue_not_empty, struct_queue_fixture);
 } // end of tests

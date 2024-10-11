@@ -12,6 +12,7 @@
  * -----------------------------------------------------------------------------
  */
 #include <fossil/unittest/framework.h>
+#include <fossil/benchmark/framework.h>
 #include <fossil/unittest/assume.h>
 
 #include "fossil/tofu/framework.h"
@@ -277,6 +278,504 @@ FOSSIL_TEST(test_fossil_tofu_create_invalid) {
     ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_GHOST, tofu_invalid_value.type);
 }
 
+// benchmarking cases to capture the true
+// performence based on current structures
+// implmentation.
+
+FOSSIL_TEST(benchmark_tofu_speed_create) {
+    // Start the benchmark
+    MARK_START(tofu_speed_create);
+
+    fossil_tofu_t tofu = fossil_tofu_create("int", "100");
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_create);
+
+    fossil_tofu_erase(&tofu);
+    
+}
+
+FOSSIL_TEST(benchmark_tofu_speed_equals) {
+    // Create two tofu objects
+    fossil_tofu_t tofu1 = fossil_tofu_create("int", "100");
+    fossil_tofu_t tofu2 = fossil_tofu_create("int", "100");
+
+    // Start the benchmark
+    MARK_START(tofu_speed_equals);
+
+    // Compare the two tofu objects
+    fossil_tofu_equals(tofu1, tofu2);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_equals);
+
+    fossil_tofu_erase(&tofu1);
+    fossil_tofu_erase(&tofu2);
+}
+
+FOSSIL_TEST(benchmark_tofu_speed_copy) {
+    // Create a tofu object
+    fossil_tofu_t tofu_orig = fossil_tofu_create("int", "100");
+
+    // Start the benchmark
+    MARK_START(tofu_speed_copy);
+
+    // Copy the tofu object
+    fossil_tofu_t tofu_copy = fossil_tofu_copy(tofu_orig);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_copy);
+
+    fossil_tofu_erase(&tofu_orig);
+    fossil_tofu_erase(&tofu_copy);
+}
+
+FOSSIL_TEST(benchmark_tofu_speed_transform) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "10"),
+        fossil_tofu_create("int", "20"),
+        fossil_tofu_create("int", "30")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_transform);
+
+    // Transform the array
+    fossil_tofu_actionof_transform(array, size, double_value);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_transform);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+FOSSIL_TEST(benchmark_tofu_speed_accumulate) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "10"),
+        fossil_tofu_create("int", "20"),
+        fossil_tofu_create("int", "30")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Create an initial tofu object
+    fossil_tofu_t init = fossil_tofu_create("int", "0");
+
+    // Start the benchmark
+    MARK_START(tofu_speed_accumulate);
+
+    // Accumulate the array
+    fossil_tofu_actionof_accumulate(array, size, init, sum);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_accumulate);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+    fossil_tofu_erase(&init);
+}
+
+FOSSIL_TEST(benchmark_tofu_speed_filter) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "10"),
+        fossil_tofu_create("int", "20"),
+        fossil_tofu_create("int", "30")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_filter);
+
+    // Filter the array
+    fossil_tofu_actionof_filter(array, size, tofu_mock_is_even);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_filter);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+FOSSIL_TEST(benchmark_tofu_speed_reverse) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "10"),
+        fossil_tofu_create("int", "20"),
+        fossil_tofu_create("int", "30")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_reverse);
+
+    // Reverse the array
+    fossil_tofu_actionof_reverse(array, size);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_reverse);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+FOSSIL_TEST(benchmark_tofu_speed_swap) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "10"),
+        fossil_tofu_create("int", "20"),
+        fossil_tofu_create("int", "30")
+    };
+
+    // Start the benchmark
+    MARK_START(tofu_speed_swap);
+
+    // Swap two tofu objects
+    fossil_tofu_actionof_swap(array, 0, 2);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_swap);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < 3; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+FOSSIL_TEST(benchmark_tofu_speed_reduce) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "10"),
+        fossil_tofu_create("int", "20"),
+        fossil_tofu_create("int", "30")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_reduce);
+
+    // Reduce the array
+    fossil_tofu_actionof_reduce(array, size, sum_function);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_reduce);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+// Test case for benchmarking the average function
+FOSSIL_TEST(benchmark_tofu_speed_average) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "10"),
+        fossil_tofu_create("int", "20"),
+        fossil_tofu_create("int", "30")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_average);
+
+    // Calculate the average of the array
+    fossil_tofu_actionof_average(array, size);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_average);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+// Test case for benchmarking the shuffle function
+FOSSIL_TEST(benchmark_tofu_speed_shuffle) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "10"),
+        fossil_tofu_create("int", "20"),
+        fossil_tofu_create("int", "30")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_shuffle);
+
+    // Shuffle the array
+    fossil_tofu_actionof_shuffle(array, size);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_shuffle);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+// Test case for benchmarking the for_each function
+FOSSIL_TEST(benchmark_tofu_speed_for_each) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "10"),
+        fossil_tofu_create("int", "20"),
+        fossil_tofu_create("int", "30")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_for_each);
+
+    // Apply a function to each element in the array
+    fossil_tofu_actionof_for_each(array, size, double_value);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_for_each);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+// Test case for benchmarking the partition function
+FOSSIL_TEST(benchmark_tofu_speed_partition) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "10"),
+        fossil_tofu_create("int", "20"),
+        fossil_tofu_create("int", "30"),
+        fossil_tofu_create("int", "40"),
+        fossil_tofu_create("int", "50"),
+        fossil_tofu_create("int", "60"),
+        fossil_tofu_create("int", "70"),
+        fossil_tofu_create("int", "80"),
+        fossil_tofu_create("int", "90"),
+        fossil_tofu_create("int", "100")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_partition);
+
+    // Partition the array
+    fossil_tofu_actionof_partition(array, size, tofu_mock_is_even);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_partition);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+// Test case for benchmarking the summary function
+FOSSIL_TEST(benchmark_tofu_speed_summary) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "10"),
+        fossil_tofu_create("int", "20"),
+        fossil_tofu_create("int", "30"),
+        fossil_tofu_create("int", "40"),
+        fossil_tofu_create("int", "50"),
+        fossil_tofu_create("int", "60"),
+        fossil_tofu_create("int", "70"),
+        fossil_tofu_create("int", "80"),
+        fossil_tofu_create("int", "90"),
+        fossil_tofu_create("int", "100")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_summary);
+
+    // Calculate the summary of the array
+    fossil_tofu_actionof_summary(array, size, sum_function);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_summary);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+// Test case for benchmarking the average function
+FOSSIL_TEST(benchmark_tofu_speed_average) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "10"),
+        fossil_tofu_create("int", "20"),
+        fossil_tofu_create("int", "30"),
+        fossil_tofu_create("int", "40"),
+        fossil_tofu_create("int", "50"),
+        fossil_tofu_create("int", "60"),
+        fossil_tofu_create("int", "70"),
+        fossil_tofu_create("int", "80"),
+        fossil_tofu_create("int", "90"),
+        fossil_tofu_create("int", "100")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_average);
+
+    // Calculate the average of the array
+    fossil_tofu_actionof_average(array, size);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_average);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+// Test case for benchmarking the shuffle function
+FOSSIL_TEST(benchmark_tofu_speed_shuffle) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "1"),
+        fossil_tofu_create("int", "2"),
+        fossil_tofu_create("int", "3"),
+        fossil_tofu_create("int", "4"),
+        fossil_tofu_create("int", "5"),
+        fossil_tofu_create("int", "6"),
+        fossil_tofu_create("int", "7"),
+        fossil_tofu_create("int", "8"),
+        fossil_tofu_create("int", "9"),
+        fossil_tofu_create("int", "10")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_shuffle);
+
+    // Shuffle the array
+    fossil_tofu_actionof_shuffle(array, size);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_shuffle);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+// Test case for benchmarking the for_each function
+FOSSIL_TEST(benchmark_tofu_speed_for_each) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "1"),
+        fossil_tofu_create("int", "2"),
+        fossil_tofu_create("int", "3"),
+        fossil_tofu_create("int", "4"),
+        fossil_tofu_create("int", "5"),
+        fossil_tofu_create("int", "6"),
+        fossil_tofu_create("int", "7"),
+        fossil_tofu_create("int", "8"),
+        fossil_tofu_create("int", "9"),
+        fossil_tofu_create("int", "10")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_for_each);
+
+    // Apply a function to each element in the array
+    fossil_tofu_actionof_for_each(array, size, double_value);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_for_each);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+// Test case for benchmarking the partition function
+FOSSIL_TEST(benchmark_tofu_speed_partition) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "1"),
+        fossil_tofu_create("int", "2"),
+        fossil_tofu_create("int", "3"),
+        fossil_tofu_create("int", "4"),
+        fossil_tofu_create("int", "5"),
+        fossil_tofu_create("int", "6"),
+        fossil_tofu_create("int", "7"),
+        fossil_tofu_create("int", "8"),
+        fossil_tofu_create("int", "9"),
+        fossil_tofu_create("int", "10")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_partition);
+
+    // Partition the array
+    fossil_tofu_actionof_partition(array, size, tofu_mock_is_even);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_partition);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
+// Test case for benchmarking the summary function
+FOSSIL_TEST(benchmark_tofu_speed_summary) {
+    // Create an array of tofu objects
+    fossil_tofu_t array[] = {
+        fossil_tofu_create("int", "1"),
+        fossil_tofu_create("int", "2"),
+        fossil_tofu_create("int", "3"),
+        fossil_tofu_create("int", "4"),
+        fossil_tofu_create("int", "5"),
+        fossil_tofu_create("int", "6"),
+        fossil_tofu_create("int", "7"),
+        fossil_tofu_create("int", "8"),
+        fossil_tofu_create("int", "9"),
+        fossil_tofu_create("int", "10")
+    };
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    // Start the benchmark
+    MARK_START(tofu_speed_summary);
+
+    // Calculate the summary of the array
+    fossil_tofu_actionof_summary(array, size, sum_function);
+
+    // Stop the benchmark
+    MARK_STOP(tofu_speed_summary);
+
+    // Erase the tofu objects
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_erase(&array[i]);
+    }
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -303,4 +802,20 @@ FOSSIL_TEST_GROUP(c_generic_tofu_tests) {
     // Verification checks fixture
     ADD_TEST(test_fossil_verification_checks);
     ADD_TEST(test_fossil_tofu_create_invalid);
+
+    // Benchmarking cases
+    ADD_TEST(benchmark_tofu_speed_create);
+    ADD_TEST(benchmark_tofu_speed_equals);
+    ADD_TEST(benchmark_tofu_speed_copy);
+    ADD_TEST(benchmark_tofu_speed_transform);
+    ADD_TEST(benchmark_tofu_speed_accumulate);
+    ADD_TEST(benchmark_tofu_speed_filter);
+    ADD_TEST(benchmark_tofu_speed_reverse);
+    ADD_TEST(benchmark_tofu_speed_swap);
+    ADD_TEST(benchmark_tofu_speed_reduce);
+    ADD_TEST(benchmark_tofu_speed_average);
+    ADD_TEST(benchmark_tofu_speed_shuffle);
+    ADD_TEST(benchmark_tofu_speed_for_each);
+    ADD_TEST(benchmark_tofu_speed_partition);
+    ADD_TEST(benchmark_tofu_speed_summary);
 } // end of tests

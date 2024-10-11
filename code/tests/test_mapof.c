@@ -12,6 +12,7 @@
  * -----------------------------------------------------------------------------
  */
 #include <fossil/unittest/framework.h>
+#include <fossil/benchmark/framework.h>
 #include <fossil/unittest/assume.h>
 
 #include "fossil/tofu/framework.h"
@@ -101,6 +102,74 @@ FOSSIL_TEST(test_fossil_tofu_mapof_clear) {
     fossil_tofu_mapof_erase(&map);
 }
 
+// benchmarking cases to capture the true
+// performence based on current structures
+// implmentation.
+
+FOSSIL_TEST(benchmark_fossil_tofu_mapof_create) {
+    MARK_START(fossil_tofu_mapof_create);
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
+        fossil_tofu_mapof_erase(&map);
+    }
+    MARK_STOP(fossil_tofu_mapof_create);
+}
+
+FOSSIL_TEST(benchmark_fossil_tofu_mapof_add_and_get) {
+    MARK_START(fossil_tofu_mapof_add_and_get);
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
+        fossil_tofu_t key = fossil_tofu_create("int", "1");
+        fossil_tofu_t value = fossil_tofu_create("int", "100");
+        fossil_tofu_mapof_add(&map, key, value);
+        fossil_tofu_t retrieved = fossil_tofu_mapof_get(&map, key);
+        fossil_tofu_mapof_erase(&map);
+    }
+    MARK_STOP(fossil_tofu_mapof_add_and_get);
+}
+
+FOSSIL_TEST(benchmark_fossil_tofu_mapof_contains) {
+    MARK_START(fossil_tofu_mapof_contains);
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
+        fossil_tofu_t key = fossil_tofu_create("int", "1");
+        fossil_tofu_t value = fossil_tofu_create("int", "100");
+        fossil_tofu_mapof_add(&map, key, value);
+        fossil_tofu_mapof_contains(&map, key);
+        fossil_tofu_mapof_erase(&map);
+    }
+    MARK_STOP(fossil_tofu_mapof_contains);
+}
+
+FOSSIL_TEST(benchmark_fossil_tofu_mapof_remove) {
+    MARK_START(fossil_tofu_mapof_remove);
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
+        fossil_tofu_t key = fossil_tofu_create("int", "1");
+        fossil_tofu_t value = fossil_tofu_create("int", "100");
+        fossil_tofu_mapof_add(&map, key, value);
+        fossil_tofu_mapof_remove(&map, key);
+        fossil_tofu_mapof_erase(&map);
+    }
+    MARK_STOP(fossil_tofu_mapof_remove);
+}
+
+FOSSIL_TEST(benchmark_fossil_tofu_mapof_size) {
+    MARK_START(fossil_tofu_mapof_size);
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
+        fossil_tofu_t key1 = fossil_tofu_create("int", "1");
+        fossil_tofu_t value1 = fossil_tofu_create("int", "100");
+        fossil_tofu_t key2 = fossil_tofu_create("int", "2");
+        fossil_tofu_t value2 = fossil_tofu_create("int", "200");
+        fossil_tofu_mapof_add(&map, key1, value1);
+        fossil_tofu_mapof_add(&map, key2, value2);
+        fossil_tofu_mapof_size(&map);
+        fossil_tofu_mapof_erase(&map);
+    }
+    MARK_STOP(fossil_tofu_mapof_size);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -113,4 +182,11 @@ FOSSIL_TEST_GROUP(c_mapof_structure_tests) {
     ADD_TEST(test_fossil_tofu_mapof_size);
     ADD_TEST(test_fossil_tofu_mapof_is_empty);
     ADD_TEST(test_fossil_tofu_mapof_clear);
+
+    // Benchmarking
+    ADD_TEST(benchmark_fossil_tofu_mapof_create);
+    ADD_TEST(benchmark_fossil_tofu_mapof_add_and_get);
+    ADD_TEST(benchmark_fossil_tofu_mapof_contains);
+    ADD_TEST(benchmark_fossil_tofu_mapof_remove);
+    ADD_TEST(benchmark_fossil_tofu_mapof_size);
 } // end of tests
