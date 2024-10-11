@@ -119,13 +119,13 @@ FOSSIL_TEST(benchmark_fossil_tofu_arrayof_get) {
 }
 
 FOSSIL_TEST(benchmark_fossil_tofu_arrayof_size) {
-    MARK_START(fossil_tofu_arrayof_size);
+    TEST_BENCHMARK();
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 2, "10", "20");
         fossil_tofu_arrayof_size(&array);
         fossil_tofu_arrayof_erase(&array);
     }
-    MARK_STOP(fossil_tofu_arrayof_size);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 }
 
 FOSSIL_TEST(benchmark_fossil_tofu_arrayof_is_empty) {
