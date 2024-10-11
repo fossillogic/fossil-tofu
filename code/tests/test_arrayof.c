@@ -113,6 +113,7 @@ FOSSIL_TEST(benchmark_fossil_tofu_arrayof_get) {
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 3, "10", "20", "30");
         fossil_tofu_t tofu = fossil_tofu_arrayof_get(&array, 1);
+        ASSUME_ITS_EQUAL_I32(20, tofu.value.int_val);
         fossil_tofu_arrayof_erase(&array);
     }
     TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
