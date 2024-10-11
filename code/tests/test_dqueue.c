@@ -237,9 +237,9 @@ FOSSIL_TEST_GROUP(c_dqueue_structure_tests) {
     ADD_TESTF(test_dqueue_not_empty_and_is_empty, struct_dqueue_fixture);
 
     // Benchmarking cases
-    ADD_TEST(benchmark_dqueue_insert);
-    ADD_TEST(benchmark_dqueue_remove);
-    ADD_TEST(benchmark_dqueue_size);
-    ADD_TEST(benchmark_dqueue_not_empty);
-    ADD_TEST(benchmark_dqueue_is_empty);
+    ADD_TESTF(benchmark_dqueue_insert, struct_dqueue_fixture);
+    ADD_TESTF(benchmark_dqueue_remove, struct_dqueue_fixture);
+    ADD_TESTF(benchmark_dqueue_size, struct_dqueue_fixture);
+    ADD_TESTF(benchmark_dqueue_not_empty, struct_dqueue_fixture);
+    ADD_TESTF(benchmark_dqueue_is_empty, struct_dqueue_fixture);
 } // end of tests
