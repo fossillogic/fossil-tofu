@@ -12,6 +12,7 @@
  * -----------------------------------------------------------------------------
  */
 #include <fossil/unittest/framework.h>
+#include <fossil/benchmark/framework.h>
 #include <fossil/unittest/assume.h>
 
 #include "fossil/tofu/framework.h"
@@ -91,6 +92,28 @@ FOSSIL_TEST(test_stack_remove) {
     fossil_tofu_erase(&element3);
 }
 
+// benchmarking cases to capture the true
+// performence based on current structures
+// implmentation.
+
+FOSSIL_TEST(stress_test_stack) {
+    // Create an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+
+    // Start the benchmark
+    TEST_BENCHMARK();
+
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_stack_insert(mock_stack, element);
+        fossil_stack_remove(mock_stack, &element);
+    }
+
+    // Stop the benchmark
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
+
+    fossil_tofu_erase(&element);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -100,4 +123,7 @@ FOSSIL_TEST_GROUP(c_stack_structure_tests) {
     ADD_TESTF(test_stack_create_and_erase, struct_stack_fixture);
     ADD_TESTF(test_stack_insert_and_size, struct_stack_fixture);
     ADD_TESTF(test_stack_remove, struct_stack_fixture);
+
+    // Stack Benchmark
+    ADD_TESTF(stress_test_stack, struct_stack_fixture);
 } // end of tests

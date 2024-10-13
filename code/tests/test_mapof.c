@@ -12,6 +12,7 @@
  * -----------------------------------------------------------------------------
  */
 #include <fossil/unittest/framework.h>
+#include <fossil/benchmark/framework.h>
 #include <fossil/unittest/assume.h>
 
 #include "fossil/tofu/framework.h"
@@ -101,6 +102,32 @@ FOSSIL_TEST(test_fossil_tofu_mapof_clear) {
     fossil_tofu_mapof_erase(&map);
 }
 
+// benchmarking cases to capture the true
+// performence based on current structures
+// implmentation.
+
+FOSSIL_TEST(stress_test_map) {
+    // Create a map object
+    fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
+
+    // Start the benchmark
+    TEST_BENCHMARK();
+
+    // Perform some operations
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_tofu_t key = fossil_tofu_create("int", "1");
+        fossil_tofu_t value = fossil_tofu_create("int", "100");
+        fossil_tofu_mapof_add(&map, key, value);
+        fossil_tofu_mapof_remove(&map, key);
+    }
+
+    // Stop the benchmark
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
+
+    // Erase the map object
+    fossil_tofu_mapof_erase(&map);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -113,4 +140,7 @@ FOSSIL_TEST_GROUP(c_mapof_structure_tests) {
     ADD_TEST(test_fossil_tofu_mapof_size);
     ADD_TEST(test_fossil_tofu_mapof_is_empty);
     ADD_TEST(test_fossil_tofu_mapof_clear);
+
+    // Benchmarking
+    ADD_TEST(stress_test_map);
 } // end of tests

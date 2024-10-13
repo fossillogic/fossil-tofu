@@ -12,6 +12,7 @@
  * -----------------------------------------------------------------------------
  */
 #include <fossil/unittest/framework.h>
+#include <fossil/benchmark/framework.h>
 #include <fossil/unittest/assume.h>
 
 #include "fossil/tofu/framework.h"
@@ -96,6 +97,28 @@ FOSSIL_TEST(test_pqueue_not_empty_and_is_empty) {
     ASSUME_ITS_TRUE(fossil_pqueue_remove(mock_pqueue, &removedElement, removedPriority));
 }
 
+// benchmarking cases to capture the true
+// performence based on current structures
+// implmentation.
+
+FOSSIL_TEST(stress_test_pqueue) {
+    // Create an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+
+    // Start the benchmark
+    TEST_BENCHMARK();
+
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_pqueue_insert(mock_pqueue, element, 2);
+        fossil_pqueue_remove(mock_pqueue, &element, 2);
+    }
+
+    // Stop the benchmark
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
+
+    fossil_tofu_erase(&element);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -105,4 +128,7 @@ FOSSIL_TEST_GROUP(c_pqueue_structure_tests) {
     ADD_TESTF(test_pqueue_insert_and_size, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_remove, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_not_empty_and_is_empty, struct_pqueue_fixture);
+
+    // Benchmarking
+    ADD_TESTF(stress_test_pqueue, struct_pqueue_fixture);
 } // end of tests

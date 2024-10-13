@@ -12,7 +12,9 @@
  * -----------------------------------------------------------------------------
  */
 #include <fossil/unittest/framework.h>
+#include <fossil/benchmark/framework.h>
 #include <fossil/unittest/assume.h>
+
 #include <fossil/tofu/framework.h>
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -125,6 +127,27 @@ FOSSIL_TEST(test_dqueue_not_empty_and_is_empty) {
     ASSUME_ITS_TRUE(fossil_dqueue_is_empty(mock_dqueue));
 }
 
+// benchmarking cases to capture the true
+// performence based on current structures
+// implmentation.
+
+FOSSIL_TEST(stress_test_dqueue) {
+    // Create an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+
+    // Start the benchmark
+    TEST_BENCHMARK();
+
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_dqueue_insert(mock_dqueue, element);
+    }
+
+    // Stop the benchmark
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
+
+    fossil_tofu_erase(&element);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -134,4 +157,7 @@ FOSSIL_TEST_GROUP(c_dqueue_structure_tests) {
     ADD_TESTF(test_dqueue_remove, struct_dqueue_fixture);
     //ADD_TESTF(test_dqueue_getter_and_setter, struct_dqueue_fixture);
     ADD_TESTF(test_dqueue_not_empty_and_is_empty, struct_dqueue_fixture);
+
+    // Benchmarking cases
+    ADD_TESTF(stress_test_dqueue, struct_dqueue_fixture);
 } // end of tests

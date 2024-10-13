@@ -17,6 +17,7 @@ if get_option('with_test').enabled()
         dependencies: [
             dependency('fossil-test'),
             dependency('fossil-mock'),
+            dependency('fossil-mark'),
             fossil_tofu_dep])
 
     test('Pizza Test Run', pizza)

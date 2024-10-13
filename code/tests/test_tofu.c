@@ -12,6 +12,7 @@
  * -----------------------------------------------------------------------------
  */
 #include <fossil/unittest/framework.h>
+#include <fossil/benchmark/framework.h>
 #include <fossil/unittest/assume.h>
 
 #include "fossil/tofu/framework.h"
@@ -277,6 +278,30 @@ FOSSIL_TEST(test_fossil_tofu_create_invalid) {
     ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_GHOST, tofu_invalid_value.type);
 }
 
+// benchmarking cases to capture the true
+// performence based on current structures
+// implmentation.
+
+FOSSIL_TEST(stress_test_tofu_type) {
+    // Create a tofu object
+    fossil_tofu_t tofu = fossil_tofu_create("int", "100");
+
+    // Start the benchmark
+    TEST_BENCHMARK();
+
+    // Perform some operations
+    for (size_t i = 0; i < 1000000; i++) {
+        fossil_tofu_t tofu_copy = fossil_tofu_copy(tofu);
+        fossil_tofu_erase(&tofu_copy);
+    }
+
+    // Stop the benchmark
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
+
+    // Erase the tofu object
+    fossil_tofu_erase(&tofu);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -303,4 +328,7 @@ FOSSIL_TEST_GROUP(c_generic_tofu_tests) {
     // Verification checks fixture
     ADD_TEST(test_fossil_verification_checks);
     ADD_TEST(test_fossil_tofu_create_invalid);
+
+    // Benchmarking cases
+    ADD_TEST(stress_test_tofu_type);
 } // end of tests
