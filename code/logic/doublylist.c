@@ -39,11 +39,11 @@ void fossil_dlist_erase(fossil_dlist_t* dlist) {
 }
 
 int32_t fossil_dlist_insert(fossil_dlist_t* dlist, fossil_tofu_t data) {
-    if (!dlist) return -1;
+    if (!dlist) return FOSSIL_TOFU_FAILURE;
 
     fossil_dlist_node_t* new_node = (fossil_dlist_node_t*)fossil_tofu_alloc(sizeof(fossil_dlist_node_t));
     if (!new_node) {
-        return -1;  // Allocation failed
+        return FOSSIL_TOFU_FAILURE;  // Allocation failed
     }
 
     new_node->data = data;  // Consider deep copying data if necessary
@@ -59,16 +59,16 @@ int32_t fossil_dlist_insert(fossil_dlist_t* dlist, fossil_tofu_t data) {
         dlist->tail = new_node;
     }
 
-    return 0;  // Success
+    return FOSSIL_TOFU_SUCCESS;  // Success
 }
 
 int32_t fossil_dlist_remove(fossil_dlist_t* dlist, fossil_tofu_t* data) {
     if (fossil_dlist_is_empty(dlist)) {
-        return -1;  // Empty list
+        return FOSSIL_TOFU_FAILURE;  // Empty list
     }
 
     fossil_dlist_node_t* node_to_remove = dlist->tail;
-    if (!node_to_remove) return -1;
+    if (!node_to_remove) return FOSSIL_TOFU_FAILURE;
 
     if (node_to_remove == dlist->head) {
         dlist->head = NULL;
@@ -81,18 +81,18 @@ int32_t fossil_dlist_remove(fossil_dlist_t* dlist, fossil_tofu_t* data) {
     *data = node_to_remove->data;  // Consider deep copy if necessary
     fossil_tofu_free(node_to_remove);
 
-    return 0;  // Success
+    return FOSSIL_TOFU_SUCCESS;  // Success
 }
 
 int32_t fossil_dlist_search(const fossil_dlist_t* dlist, fossil_tofu_t data) {
     fossil_dlist_node_t* current = dlist->head;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
-            return 0;  // Found
+            return FOSSIL_TOFU_SUCCESS;  // Found
         }
         current = current->next;
     }
-    return -1;  // Not found
+    return FOSSIL_TOFU_FAILURE;  // Not found
 }
 
 void fossil_dlist_reverse_forward(fossil_dlist_t* dlist) {
@@ -168,11 +168,11 @@ int32_t fossil_dlist_setter(fossil_dlist_t* dlist, fossil_tofu_t data) {
         if (fossil_tofu_equals(current->data, data)) {
             // Ensure to free old data if it was dynamically allocated
             current->data = data;
-            return 0;  // Success
+            return FOSSIL_TOFU_SUCCESS;  // Success
         }
         current = current->next;
     }
-    return -1;  // Not found
+    return FOSSIL_TOFU_FAILURE;  // Not found
 }
 
 bool fossil_dlist_not_empty(const fossil_dlist_t* dlist) {

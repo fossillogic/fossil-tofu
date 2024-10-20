@@ -69,13 +69,25 @@ FOSSIL_TEST(test_fossil_tofu_create) {
     ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_INT, tofu_int.type);
     ASSUME_ITS_EQUAL_I64(123, tofu_int.value.int_val);
 
+    fossil_tofu_t tofu_uint = fossil_tofu_create("uint", "123");
+    ASSUME_ITS_EQUAL_U32(FOSSIL_TOFU_TYPE_UINT, tofu_uint.type);
+    ASSUME_ITS_EQUAL_U64(123, tofu_uint.value.uint_val);
+
+    fossil_tofu_t tofu_bool = fossil_tofu_create("bool", "true");
+    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_BOOL, tofu_bool.type);
+    ASSUME_ITS_TRUE(tofu_bool.value.bool_val);
+
     fossil_tofu_t tofu_float = fossil_tofu_create("float", "3.14");
     ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_FLOAT, tofu_float.type);
     ASSUME_ITS_EQUAL_F32(3.14f, tofu_float.value.float_val, FOSSIL_TEST_FLOAT_EPSILON);
 
-    fossil_tofu_t tofu_bstr = fossil_tofu_create("bstr", "Hello");
-    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_BSTR, tofu_bstr.type);
-    ASSUME_ITS_EQUAL_BSTR("Hello", tofu_bstr.value.uchar_string_val);
+    fossil_tofu_t tofu_double = fossil_tofu_create("double", "3.14");
+    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_DOUBLE, tofu_double.type);
+    ASSUME_ITS_EQUAL_F64(3.14, tofu_double.value.double_val, FOSSIL_TEST_DOUBLE_EPSILON);
+
+    fossil_tofu_t tofu_cstr = fossil_tofu_create("cstr", "Hello");
+    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_CSTR, tofu_cstr.type);
+    ASSUME_ITS_EQUAL_CSTR("Hello", tofu_cstr.value.cchar_string_val);
 }
 
 // Test case for fossil_tofu_equals function
@@ -85,7 +97,13 @@ FOSSIL_TEST(test_fossil_tofu_equals) {
     ASSUME_ITS_TRUE(fossil_tofu_equals(tofu1, tofu2));
 
     fossil_tofu_t tofu3 = fossil_tofu_create("float", "3.14");
+    fossil_tofu_t tofu4 = fossil_tofu_create("float", "3.14");
     ASSUME_ITS_FALSE(fossil_tofu_equals(tofu1, tofu3));
+    ASSUME_ITS_TRUE(fossil_tofu_equals(tofu3, tofu4));
+
+    fossil_tofu_t tofu5 = fossil_tofu_create("cstr", "Hello");
+    fossil_tofu_t tofu6 = fossil_tofu_create("cstr", "Hello");
+    ASSUME_ITS_TRUE(fossil_tofu_equals(tofu5, tofu6));
 }
 
 // Test case for fossil_tofu_copy function

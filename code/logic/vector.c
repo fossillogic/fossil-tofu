@@ -58,7 +58,7 @@ int fossil_vector_search(const fossil_vector_t* vector, fossil_tofu_t target) {
             return (int)i; // Found
         }
     }
-    return -1; // Not found
+    return FOSSIL_TOFU_FAILURE; // Not found
 }
 
 void fossil_vector_reverse(fossil_vector_t* vector) {

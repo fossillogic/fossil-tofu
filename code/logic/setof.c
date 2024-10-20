@@ -40,7 +40,7 @@ void fossil_set_erase(fossil_set_t* set) {
 
 int32_t fossil_set_insert(fossil_set_t* set, fossil_tofu_t data) {
     if (fossil_set_contains(set, data)) {
-        return -1;  // Duplicate element, insert fails
+        return FOSSIL_TOFU_FAILURE;  // Duplicate element, insert fails
     }
 
     fossil_set_node_t* new_node = (fossil_set_node_t*)fossil_tofu_alloc(sizeof(fossil_set_node_t));
@@ -52,7 +52,7 @@ int32_t fossil_set_insert(fossil_set_t* set, fossil_tofu_t data) {
     new_node->next = set->head;
     set->head = new_node;
 
-    return 0;  // Success
+    return FOSSIL_TOFU_SUCCESS;  // Success
 }
 
 int32_t fossil_set_remove(fossil_set_t* set, fossil_tofu_t data) {
@@ -67,23 +67,23 @@ int32_t fossil_set_remove(fossil_set_t* set, fossil_tofu_t data) {
                 set->head = current->next;
             }
             fossil_tofu_free(current);
-            return 0;  // Success
+            return FOSSIL_TOFU_SUCCESS;  // Success
         }
         prev = current;
         current = current->next;
     }
-    return -1;  // Element not found
+    return FOSSIL_TOFU_FAILURE;  // Element not found
 }
 
 int32_t fossil_set_search(const fossil_set_t* set, fossil_tofu_t data) {
     fossil_set_node_t* current = set->head;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
-            return 0;  // Found
+            return FOSSIL_TOFU_SUCCESS;  // Found
         }
         current = current->next;
     }
-    return -1;  // Not found
+    return FOSSIL_TOFU_FAILURE;  // Not found
 }
 
 int32_t fossil_set_contains(const fossil_set_t* set, fossil_tofu_t data) {
@@ -116,11 +116,11 @@ int32_t fossil_set_setter(fossil_set_t* set, fossil_tofu_t data) {
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
             current->data = data;  // Update data
-            return 0;  // Success
+            return FOSSIL_TOFU_SUCCESS;  // Success
         }
         current = current->next;
     }
-    return -1;  // Not found
+    return FOSSIL_TOFU_FAILURE;  // Not found
 }
 
 bool fossil_set_not_empty(const fossil_set_t* set) {

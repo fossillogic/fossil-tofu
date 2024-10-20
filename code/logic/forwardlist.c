@@ -41,19 +41,19 @@ void fossil_flist_erase(fossil_flist_t* flist) {
 int32_t fossil_flist_insert(fossil_flist_t* flist, fossil_tofu_t data) {
     fossil_flist_node_t* new_node = (fossil_flist_node_t*)fossil_tofu_alloc(sizeof(fossil_flist_node_t));
     if (!new_node) {
-        return -1;  // Allocation failed
+        return FOSSIL_TOFU_FAILURE;  // Allocation failed
     }
 
     new_node->data = data;
     new_node->next = flist->head;
     flist->head = new_node;
 
-    return 0;  // Success
+    return FOSSIL_TOFU_SUCCESS;  // Success
 }
 
 int32_t fossil_flist_remove(fossil_flist_t* flist, fossil_tofu_t* data) {
     if (fossil_flist_is_cnullptr(flist)) {
-        return -1;  // Empty list
+        return FOSSIL_TOFU_FAILURE;  // Empty list
     }
 
     fossil_flist_node_t* node_to_remove = flist->head;
@@ -61,18 +61,18 @@ int32_t fossil_flist_remove(fossil_flist_t* flist, fossil_tofu_t* data) {
     flist->head = node_to_remove->next;
     fossil_tofu_free(node_to_remove);
 
-    return 0;  // Success
+    return FOSSIL_TOFU_SUCCESS;  // Success
 }
 
 int32_t fossil_flist_search(const fossil_flist_t* flist, fossil_tofu_t data) {
     fossil_flist_node_t* current = flist->head;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
-            return 0;  // Found
+            return FOSSIL_TOFU_SUCCESS;  // Found
         }
         current = current->next;
     }
-    return -1;  // Not found
+    return FOSSIL_TOFU_FAILURE;  // Not found
 }
 
 void fossil_flist_reverse_forward(fossil_flist_t* flist) {
@@ -120,11 +120,11 @@ int32_t fossil_flist_setter(fossil_flist_t* flist, fossil_tofu_t data) {
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
             current->data = data;  // Update data
-            return 0;  // Success
+            return FOSSIL_TOFU_SUCCESS;  // Success
         }
         current = current->next;
     }
-    return -1;  // Not found
+    return FOSSIL_TOFU_FAILURE;  // Not found
 }
 
 bool fossil_flist_not_empty(const fossil_flist_t* flist) {

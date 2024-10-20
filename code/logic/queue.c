@@ -43,7 +43,7 @@ void fossil_queue_erase(fossil_queue_t* queue) {
 int32_t fossil_queue_insert(fossil_queue_t* queue, fossil_tofu_t data) {
     fossil_queue_node_t* new_node = (fossil_queue_node_t*)fossil_tofu_alloc(sizeof(fossil_queue_node_t));
     if (!new_node) {
-        return -1;  // Allocation failed
+        return FOSSIL_TOFU_FAILURE;  // Allocation failed
     }
 
     new_node->data = data;
@@ -57,12 +57,12 @@ int32_t fossil_queue_insert(fossil_queue_t* queue, fossil_tofu_t data) {
         queue->rear = new_node;
     }
 
-    return 0;  // Success
+    return FOSSIL_TOFU_SUCCESS;  // Success
 }
 
 int32_t fossil_queue_remove(fossil_queue_t* queue, fossil_tofu_t* data) {
     if (fossil_queue_is_empty(queue)) {
-        return -1;  // Empty queue
+        return FOSSIL_TOFU_FAILURE;  // Empty queue
     }
 
     fossil_queue_node_t* node_to_remove = queue->front;
@@ -74,18 +74,18 @@ int32_t fossil_queue_remove(fossil_queue_t* queue, fossil_tofu_t* data) {
         queue->rear = NULL;
     }
 
-    return 0;  // Success
+    return FOSSIL_TOFU_SUCCESS;  // Success
 }
 
 int32_t fossil_queue_search(const fossil_queue_t* queue, fossil_tofu_t data) {
     fossil_queue_node_t* current = queue->front;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
-            return 0;  // Found
+            return FOSSIL_TOFU_SUCCESS;  // Found
         }
         current = current->next;
     }
-    return -1;  // Not found
+    return FOSSIL_TOFU_FAILURE;  // Not found
 }
 
 size_t fossil_queue_size(const fossil_queue_t* queue) {
@@ -114,11 +114,11 @@ int32_t fossil_queue_setter(fossil_queue_t* queue, fossil_tofu_t data) {
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
             current->data = data;  // Update data
-            return 0;  // Success
+            return FOSSIL_TOFU_SUCCESS;  // Success
         }
         current = current->next;
     }
-    return -1;  // Not found
+    return FOSSIL_TOFU_FAILURE;  // Not found
 }
 
 
