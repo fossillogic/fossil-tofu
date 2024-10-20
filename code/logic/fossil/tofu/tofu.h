@@ -131,6 +131,7 @@ typedef void * tofu_memory_t;
  * @param type The type string.
  * @param value The value string.
  * @return The created `fossil_tofu_t` object.
+ * @note O(1) - Constant time complexity.
  */
 fossil_tofu_t fossil_tofu_create(char* type, char* value);
 
@@ -138,6 +139,7 @@ fossil_tofu_t fossil_tofu_create(char* type, char* value);
  * Memorization (caching) function for a `fossil_tofu_t` object.
  *
  * @param tofu The `fossil_tofu_t` object to be memorized.
+ * @note O(1) - Constant time complexity.
  */
 void fossil_tofu_memorize(fossil_tofu_t *tofu);
 
@@ -145,6 +147,7 @@ void fossil_tofu_memorize(fossil_tofu_t *tofu);
  * Utility function to print a `fossil_tofu_t` object.
  *
  * @param tofu The `fossil_tofu_t` object to be printed.
+ * @note O(1) - Constant time complexity.
  */
 void fossil_tofu_print(fossil_tofu_t tofu);
 
@@ -152,6 +155,7 @@ void fossil_tofu_print(fossil_tofu_t tofu);
  * Function to destroy a `fossil_tofu_t` object and free the allocated memory.
  *
  * @param tofu The `fossil_tofu_t` object to be destroyed.
+ * @note O(1) - Constant time complexity.
  */
 void fossil_tofu_erase(fossil_tofu_t *tofu);
 
@@ -160,6 +164,7 @@ void fossil_tofu_erase(fossil_tofu_t *tofu);
  *
  * @param type The type string to be checked.
  * @return `true` if the type is valid, `false` otherwise.
+ * @note O(n) - Linear time complexity, where n is the number of valid types.
  */
 bool fossil_tofu_is_valid_type(const char *type);
 
@@ -168,6 +173,7 @@ bool fossil_tofu_is_valid_type(const char *type);
  *
  * @param type The `fossil_tofu_t` object's type.
  * @return The string representation of the type.
+ * @note O(1) - Constant time complexity.
  */
 const char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
 
@@ -177,6 +183,7 @@ const char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
  * @param tofu1 The first `fossil_tofu_t` object.
  * @param tofu2 The second `fossil_tofu_t` object.
  * @return `true` if the objects are equal, `false` otherwise.
+ * @note O(1) - Constant time complexity.
  */
 bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2);
 
@@ -185,6 +192,7 @@ bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2);
  *
  * @param tofu The `fossil_tofu_t` object to be copied.
  * @return The copied `fossil_tofu_t` object.
+ * @note O(1) - Constant time complexity.
  */
 fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu);
 
@@ -194,6 +202,7 @@ fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu);
  * @param tofu1 The first `fossil_tofu_t` object.
  * @param tofu2 The second `fossil_tofu_t` object.
  * @return `true` if the objects are equal, `false` otherwise.
+ * @note O(1) - Constant time complexity.
  */
 bool fossil_tofu_compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2);
 
@@ -203,6 +212,7 @@ bool fossil_tofu_compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2);
  * @param array The array of elements to be transformed.
  * @param size The size of the array.
  * @param func The function to be applied to each element.
+ * @note O(n) - Linear time complexity, where n is the size of the array.
  */
 void fossil_tofu_actionof_transform(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t));
 
@@ -214,6 +224,7 @@ void fossil_tofu_actionof_transform(fossil_tofu_t *array, size_t size, fossil_to
  * @param init The initial value for accumulation.
  * @param func The function to be applied to each element during accumulation.
  * @return The accumulated value.
+ * @note O(n) - Linear time complexity, where n is the size of the array.
  */
 fossil_tofu_t fossil_tofu_actionof_accumulate(fossil_tofu_t *array, size_t size, fossil_tofu_t init, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t));
 
@@ -224,6 +235,7 @@ fossil_tofu_t fossil_tofu_actionof_accumulate(fossil_tofu_t *array, size_t size,
  * @param size The size of the array.
  * @param pred The predicate function to determine whether an element should be included in the filtered result.
  * @return The number of elements that pass the filter.
+ * @note O(n) - Linear time complexity, where n is the size of the array.
  */
 size_t fossil_tofu_actionof_filter(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t));
 
@@ -235,6 +247,7 @@ size_t fossil_tofu_actionof_filter(fossil_tofu_t *array, size_t size, bool (*pre
  * @param key The key to search for.
  * @param compare The comparison function to determine equality between elements.
  * @return A pointer to the first occurrence of the key in the array, or NULL if not found.
+ * @note O(n) - Linear time complexity, where n is the size of the array.
  */
 fossil_tofu_t* fossil_tofu_actionof_search(fossil_tofu_t *array, size_t size, fossil_tofu_t key, bool (*compare)(fossil_tofu_t, fossil_tofu_t));
 
@@ -243,6 +256,7 @@ fossil_tofu_t* fossil_tofu_actionof_search(fossil_tofu_t *array, size_t size, fo
  *
  * @param array The array of elements to be reversed.
  * @param size The size of the array.
+ * @note O(n) - Linear time complexity, where n is the size of the array.
  */
 void fossil_tofu_actionof_reverse(fossil_tofu_t *array, size_t size);
 
@@ -252,6 +266,7 @@ void fossil_tofu_actionof_reverse(fossil_tofu_t *array, size_t size);
  * @param array The array containing the elements to be swapped.
  * @param index1 The index of the first element to be swapped.
  * @param index2 The index of the second element to be swapped.
+ * @note O(1) - Constant time complexity.
  */
 void fossil_tofu_actionof_swap(fossil_tofu_t *array, size_t index1, size_t index2);
 
@@ -261,6 +276,7 @@ void fossil_tofu_actionof_swap(fossil_tofu_t *array, size_t index1, size_t index
  * @param a The first element to be compared.
  * @param b The second element to be compared.
  * @return A negative value if a is less than b, a positive value if a is greater than b, or zero if they are equal.
+ * @note O(1) - Constant time complexity.
  */
 int fossil_tofu_actionof_compare(fossil_tofu_t a, fossil_tofu_t b);
 
@@ -271,6 +287,7 @@ int fossil_tofu_actionof_compare(fossil_tofu_t a, fossil_tofu_t b);
  * @param size The size of the array.
  * @param func The function to be applied to each pair of elements during reduction.
  * @return The reduced value.
+ * @note O(n) - Linear time complexity, where n is the size of the array.
  */
 fossil_tofu_t fossil_tofu_actionof_reduce(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t));
 
@@ -279,6 +296,7 @@ fossil_tofu_t fossil_tofu_actionof_reduce(fossil_tofu_t *array, size_t size, fos
  *
  * @param array The array of elements to be shuffled.
  * @param size The size of the array.
+ * @note O(n) - Linear time complexity, where n is the size of the array.
  */
 void fossil_tofu_actionof_shuffle(fossil_tofu_t *array, size_t size);
 
@@ -288,6 +306,7 @@ void fossil_tofu_actionof_shuffle(fossil_tofu_t *array, size_t size);
  * @param array The array of elements to apply the function to.
  * @param size The size of the array.
  * @param func The function to be applied to each element.
+ * @note O(n) - Linear time complexity, where n is the size of the array.
  */
 void fossil_tofu_actionof_for_each(fossil_tofu_t *array, size_t size, void (*func)(fossil_tofu_t));
 
@@ -298,6 +317,7 @@ void fossil_tofu_actionof_for_each(fossil_tofu_t *array, size_t size, void (*fun
  * @param size The size of the array.
  * @param pred The predicate function to determine the partitioning condition.
  * @return The index of the first element in the second partition.
+ * @note O(n) - Linear time complexity, where n is the size of the array.
  */
 size_t fossil_tofu_actionof_partition(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t));
 
@@ -308,6 +328,7 @@ size_t fossil_tofu_actionof_partition(fossil_tofu_t *array, size_t size, bool (*
  * @param size The size of the array.
  * @param func The function to be applied to each pair of elements during calculation.
  * @return The calculated summary.
+ * @note O(n) - Linear time complexity, where n is the size of the array.
  */
 fossil_tofu_t fossil_tofu_actionof_summary(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t));
 
@@ -317,6 +338,7 @@ fossil_tofu_t fossil_tofu_actionof_summary(fossil_tofu_t *array, size_t size, fo
  * @param array The array of elements to calculate the average for.
  * @param size The size of the array.
  * @return The calculated average.
+ * @note O(n) - Linear time complexity, where n is the size of the array.
  */
 fossil_tofu_t fossil_tofu_actionof_average(fossil_tofu_t *array, size_t size);
 
@@ -328,6 +350,7 @@ fossil_tofu_t fossil_tofu_actionof_average(fossil_tofu_t *array, size_t size);
  * @param array The array of tofu.
  * @param size The size of the array.
  * @return The created iterator.
+ * @note O(1) - Constant time complexity.
  */
 fossil_tofu_iteratorof_t fossil_tofu_iteratorof_create(fossil_tofu_t *array, size_t size);
 
@@ -338,6 +361,7 @@ fossil_tofu_iteratorof_t fossil_tofu_iteratorof_create(fossil_tofu_t *array, siz
  *
  * @param iterator The iterator to check.
  * @return true if the iterator has more elements, false otherwise.
+ * @note O(1) - Constant time complexity.
  */
 bool fossil_tofu_iteratorof_has_next(fossil_tofu_iteratorof_t *iterator);
 
@@ -348,6 +372,7 @@ bool fossil_tofu_iteratorof_has_next(fossil_tofu_iteratorof_t *iterator);
  *
  * @param iterator The iterator.
  * @return The next element in the iterator.
+ * @note O(1) - Constant time complexity.
  */
 fossil_tofu_t fossil_tofu_iteratorof_next(fossil_tofu_iteratorof_t *iterator);
 
@@ -357,6 +382,7 @@ fossil_tofu_t fossil_tofu_iteratorof_next(fossil_tofu_iteratorof_t *iterator);
  * This function resets the iterator to the beginning, allowing iteration from the start again.
  *
  * @param iterator The iterator to reset.
+ * @note O(1) - Constant time complexity.
  */
 void fossil_tofu_iteratorof_reset(fossil_tofu_iteratorof_t *iterator);
 
@@ -365,6 +391,7 @@ void fossil_tofu_iteratorof_reset(fossil_tofu_iteratorof_t *iterator);
  * 
  * @param size Size of the memory to allocate.
  * @return Pointer to the allocated memory.
+ * @note O(1) - Constant time complexity.
  */
 tofu_memory_t fossil_tofu_alloc(size_t size);
 
@@ -374,6 +401,7 @@ tofu_memory_t fossil_tofu_alloc(size_t size);
  * @param ptr Pointer to the memory to reallocate.
  * @param size Size of the memory to reallocate.
  * @return Pointer to the reallocated memory.
+ * @note O(1) - Constant time complexity.
  */
 tofu_memory_t fossil_tofu_realloc(tofu_memory_t ptr, size_t size);
 
@@ -381,6 +409,7 @@ tofu_memory_t fossil_tofu_realloc(tofu_memory_t ptr, size_t size);
  * @brief Free memory.
  * 
  * @param ptr Pointer to the memory to free.
+ * @note O(1) - Constant time complexity.
  */
 void fossil_tofu_free(tofu_memory_t ptr);
 
@@ -389,6 +418,7 @@ void fossil_tofu_free(tofu_memory_t ptr);
  * 
  * @param str String to duplicate.
  * @return Pointer to the duplicated string.
+ * @note O(n) - Linear time complexity, where n is the length of the string.
  */
 char* fossil_tofu_strdup(const char* str);
 

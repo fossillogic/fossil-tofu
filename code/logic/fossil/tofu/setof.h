@@ -38,6 +38,7 @@ typedef struct fossil_set_t {
  *
  * @param list_type The type of data the set will store.
  * @return          The created set.
+ * @note            O(1) - Constant time complexity.
  */
 fossil_set_t* fossil_set_create(char* type);
 
@@ -45,6 +46,7 @@ fossil_set_t* fossil_set_create(char* type);
  * Erase the contents of the set and free allocated memory.
  *
  * @param set The set to erase.
+ * @note      O(n) - Linear time complexity, where n is the number of elements in the set.
  */
 void fossil_set_erase(fossil_set_t* set);
 
@@ -54,6 +56,7 @@ void fossil_set_erase(fossil_set_t* set);
  * @param set  The set to insert data into.
  * @param data The data to insert.
  * @return     The error code indicating the success or failure of the operation.
+ * @note       O(1) - Constant time complexity.
  */
 int32_t fossil_set_insert(fossil_set_t* set, fossil_tofu_t data);
 
@@ -63,6 +66,7 @@ int32_t fossil_set_insert(fossil_set_t* set, fossil_tofu_t data);
  * @param set  The set to remove data from.
  * @param data The data to remove.
  * @return     The error code indicating the success or failure of the operation.
+ * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
  */
 int32_t fossil_set_remove(fossil_set_t* set, fossil_tofu_t data);
 
@@ -72,6 +76,7 @@ int32_t fossil_set_remove(fossil_set_t* set, fossil_tofu_t data);
  * @param set  The set to search.
  * @param data The data to search for.
  * @return     The error code indicating the success or failure of the operation.
+ * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
  */
 int32_t fossil_set_search(const fossil_set_t* set, fossil_tofu_t data);
 
@@ -80,6 +85,7 @@ int32_t fossil_set_search(const fossil_set_t* set, fossil_tofu_t data);
  *
  * @param set The set for which to get the size.
  * @return    The size of the set.
+ * @note      O(n) - Linear time complexity, where n is the number of elements in the set.
  */
 size_t fossil_set_size(const fossil_set_t* set);
 
@@ -89,6 +95,7 @@ size_t fossil_set_size(const fossil_set_t* set);
  * @param set  The set from which to get the data.
  * @param data The data to search for.
  * @return     A pointer to the matching data, or NULL if not found.
+ * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
  */
 fossil_tofu_t* fossil_set_getter(fossil_set_t* set, fossil_tofu_t data);
 
@@ -98,6 +105,7 @@ fossil_tofu_t* fossil_set_getter(fossil_set_t* set, fossil_tofu_t data);
  * @param set  The set in which to set the data.
  * @param data The data to set.
  * @return     The error code indicating the success or failure of the operation.
+ * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
  */
 int32_t fossil_set_setter(fossil_set_t* set, fossil_tofu_t data);
 
@@ -106,6 +114,7 @@ int32_t fossil_set_setter(fossil_set_t* set, fossil_tofu_t data);
  *
  * @param set The set to check.
  * @return    True if the set is not empty, false otherwise.
+ * @note      O(1) - Constant time complexity.
  */
 bool fossil_set_not_empty(const fossil_set_t* set);
 
@@ -114,6 +123,7 @@ bool fossil_set_not_empty(const fossil_set_t* set);
  *
  * @param set The set to check.
  * @return    True if the set is not a null pointer, false otherwise.
+ * @note      O(1) - Constant time complexity.
  */
 bool fossil_set_not_cnullptr(const fossil_set_t* set);
 
@@ -122,6 +132,7 @@ bool fossil_set_not_cnullptr(const fossil_set_t* set);
  *
  * @param set The set to check.
  * @return    True if the set is empty, false otherwise.
+ * @note      O(1) - Constant time complexity.
  */
 bool fossil_set_is_empty(const fossil_set_t* set);
 
@@ -130,6 +141,7 @@ bool fossil_set_is_empty(const fossil_set_t* set);
  *
  * @param set The set to check.
  * @return    True if the set is a null pointer, false otherwise.
+ * @note      O(1) - Constant time complexity.
  */
 bool fossil_set_is_cnullptr(const fossil_set_t* set);
 
@@ -139,6 +151,7 @@ bool fossil_set_is_cnullptr(const fossil_set_t* set);
  * @param set  The set to check.
  * @param data The data to search for.
  * @return     True if the set contains the element, false otherwise.
+ * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
  */
 int32_t fossil_set_contains(const fossil_set_t* set, fossil_tofu_t data);
 

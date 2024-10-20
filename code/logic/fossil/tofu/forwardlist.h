@@ -38,6 +38,7 @@ typedef struct fossil_flist_t {
  *
  * @param list_type The type of data the forward list will store.
  * @return          The created forward list.
+ * @complexity      O(1)
  */
 fossil_flist_t* fossil_flist_create(char* type);
 
@@ -45,6 +46,7 @@ fossil_flist_t* fossil_flist_create(char* type);
  * Erase the contents of the forward list and free allocated memory.
  *
  * @param flist The forward list to erase.
+ * @complexity  O(n)
  */
 void fossil_flist_erase(fossil_flist_t* flist);
 
@@ -54,6 +56,7 @@ void fossil_flist_erase(fossil_flist_t* flist);
  * @param flist The forward list to insert data into.
  * @param data  The data to insert.
  * @return      The error code indicating the success or failure of the operation.
+ * @complexity  O(1)
  */
 int32_t fossil_flist_insert(fossil_flist_t* flist, fossil_tofu_t data);
 
@@ -63,6 +66,7 @@ int32_t fossil_flist_insert(fossil_flist_t* flist, fossil_tofu_t data);
  * @param flist The forward list to remove data from.
  * @param data  A pointer to store the removed data.
  * @return      The error code indicating the success or failure of the operation.
+ * @complexity  O(1)
  */
 int32_t fossil_flist_remove(fossil_flist_t* flist, fossil_tofu_t* data);
 
@@ -72,6 +76,7 @@ int32_t fossil_flist_remove(fossil_flist_t* flist, fossil_tofu_t* data);
  * @param flist The forward list to search.
  * @param data  The data to search for.
  * @return      The error code indicating the success or failure of the operation.
+ * @complexity  O(n)
  */
 int32_t fossil_flist_search(const fossil_flist_t* flist, fossil_tofu_t data);
 
@@ -79,6 +84,7 @@ int32_t fossil_flist_search(const fossil_flist_t* flist, fossil_tofu_t data);
  * Reverse the forward list in the forward direction.
  *
  * @param flist The forward list to reverse.
+ * @complexity  O(n)
  */
 void fossil_flist_reverse_forward(fossil_flist_t* flist);
 
@@ -86,6 +92,7 @@ void fossil_flist_reverse_forward(fossil_flist_t* flist);
  * Reverse the forward list in the backward direction.
  *
  * @param flist The forward list to reverse.
+ * @complexity  O(n)
  */
 void fossil_flist_reverse_backward(fossil_flist_t* flist);
 
@@ -94,6 +101,7 @@ void fossil_flist_reverse_backward(fossil_flist_t* flist);
  *
  * @param flist The forward list for which to get the size.
  * @return      The size of the forward list.
+ * @complexity  O(n)
  */
 size_t fossil_flist_size(const fossil_flist_t* flist);
 
@@ -103,6 +111,7 @@ size_t fossil_flist_size(const fossil_flist_t* flist);
  * @param flist The forward list from which to get the data.
  * @param data  The data to search for.
  * @return      A pointer to the matching data.
+ * @complexity  O(n)
  */
 fossil_tofu_t* fossil_flist_getter(fossil_flist_t* flist, fossil_tofu_t data);
 
@@ -112,6 +121,7 @@ fossil_tofu_t* fossil_flist_getter(fossil_flist_t* flist, fossil_tofu_t data);
  * @param flist The forward list in which to set the data.
  * @param data  The data to set.
  * @return      The error code indicating the success or failure of the operation.
+ * @complexity  O(n)
  */
 int32_t fossil_flist_setter(fossil_flist_t* flist, fossil_tofu_t data);
 
@@ -120,6 +130,7 @@ int32_t fossil_flist_setter(fossil_flist_t* flist, fossil_tofu_t data);
  *
  * @param flist The forward list to check.
  * @return      True if the forward list is not empty, false otherwise.
+ * @complexity  O(1)
  */
 bool fossil_flist_not_empty(const fossil_flist_t* flist);
 
@@ -128,6 +139,7 @@ bool fossil_flist_not_empty(const fossil_flist_t* flist);
  *
  * @param flist The forward list to check.
  * @return      True if the forward list is not a null pointer, false otherwise.
+ * @complexity  O(1)
  */
 bool fossil_flist_not_cnullptr(const fossil_flist_t* flist);
 
@@ -136,6 +148,7 @@ bool fossil_flist_not_cnullptr(const fossil_flist_t* flist);
  *
  * @param flist The forward list to check.
  * @return      True if the forward list is empty, false otherwise.
+ * @complexity  O(1)
  */
 bool fossil_flist_is_empty(const fossil_flist_t* flist);
 
@@ -144,6 +157,7 @@ bool fossil_flist_is_empty(const fossil_flist_t* flist);
  *
  * @param flist The forward list to check.
  * @return      True if the forward list is a null pointer, false otherwise.
+ * @complexity  O(1)
  */
 bool fossil_flist_is_cnullptr(const fossil_flist_t* flist);
 

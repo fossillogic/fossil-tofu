@@ -37,6 +37,7 @@ typedef struct fossil_pqueue_t {
  *
  * @param queue_type The type of data the priority queue will store.
  * @return           The created priority queue.
+ * @note             Time complexity: O(1)
  */
 fossil_pqueue_t* fossil_pqueue_create(char* type);
 
@@ -44,6 +45,7 @@ fossil_pqueue_t* fossil_pqueue_create(char* type);
  * Erase the contents of the priority queue and free allocated memory.
  *
  * @param pqueue The priority queue to erase.
+ * @note         Time complexity: O(n)
  */
 void fossil_pqueue_erase(fossil_pqueue_t* pqueue);
 
@@ -54,6 +56,7 @@ void fossil_pqueue_erase(fossil_pqueue_t* pqueue);
  * @param data     The data to insert.
  * @param priority The priority of the data.
  * @return         The error code indicating the success or failure of the operation.
+ * @note           Time complexity: O(n)
  */
 int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority);
 
@@ -64,6 +67,7 @@ int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_
  * @param data     The data to remove.
  * @param priority The priority of the data.
  * @return         The error code indicating the success or failure of the operation.
+ * @note           Time complexity: O(1)
  */
 int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, fossil_tofu_t* data, int32_t priority);
 
@@ -74,6 +78,7 @@ int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, fossil_tofu_t* data, int32
  * @param data     The data to search for.
  * @param priority The priority of the data.
  * @return         The error code indicating the success or failure of the operation.
+ * @note           Time complexity: O(n)
  */
 int32_t fossil_pqueue_search(const fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority);
 
@@ -82,6 +87,7 @@ int32_t fossil_pqueue_search(const fossil_pqueue_t* pqueue, fossil_tofu_t data, 
  *
  * @param pqueue The priority queue for which to get the size.
  * @return       The size of the priority queue.
+ * @note         Time complexity: O(1)
  */
 size_t fossil_pqueue_size(const fossil_pqueue_t* pqueue);
 
@@ -92,6 +98,7 @@ size_t fossil_pqueue_size(const fossil_pqueue_t* pqueue);
  * @param data     The data to search for.
  * @param priority The priority of the data.
  * @return         A pointer to the matching data, or NULL if not found.
+ * @note           Time complexity: O(n)
  */
 fossil_tofu_t* fossil_pqueue_getter(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority);
 
@@ -102,6 +109,7 @@ fossil_tofu_t* fossil_pqueue_getter(fossil_pqueue_t* pqueue, fossil_tofu_t data,
  * @param data     The data to set.
  * @param priority The priority of the data.
  * @return         The error code indicating the success or failure of the operation.
+ * @note           Time complexity: O(n)
  */
 int32_t fossil_pqueue_setter(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority);
 
@@ -110,6 +118,7 @@ int32_t fossil_pqueue_setter(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_
  *
  * @param pqueue The priority queue to check.
  * @return       True if the priority queue is not empty, false otherwise.
+ * @note         Time complexity: O(1)
  */
 bool fossil_pqueue_not_empty(const fossil_pqueue_t* pqueue);
 
@@ -118,6 +127,7 @@ bool fossil_pqueue_not_empty(const fossil_pqueue_t* pqueue);
  *
  * @param pqueue The priority queue to check.
  * @return       True if the priority queue is not a null pointer, false otherwise.
+ * @note         Time complexity: O(1)
  */
 bool fossil_pqueue_not_cnullptr(const fossil_pqueue_t* pqueue);
 
@@ -126,6 +136,7 @@ bool fossil_pqueue_not_cnullptr(const fossil_pqueue_t* pqueue);
  *
  * @param pqueue The priority queue to check.
  * @return       True if the priority queue is empty, false otherwise.
+ * @note         Time complexity: O(1)
  */
 bool fossil_pqueue_is_empty(const fossil_pqueue_t* pqueue);
 
@@ -134,6 +145,7 @@ bool fossil_pqueue_is_empty(const fossil_pqueue_t* pqueue);
  *
  * @param pqueue The priority queue to check.
  * @return       True if the priority queue is a null pointer, false otherwise.
+ * @note         Time complexity: O(1)
  */
 bool fossil_pqueue_is_cnullptr(const fossil_pqueue_t* pqueue);
 

@@ -40,6 +40,7 @@ typedef struct fossil_dqueue_t {
  *
  * @param list_type The type of data the dynamic queue will store.
  * @return          The created dynamic queue.
+ * @note            Time complexity: O(1)
  */
 fossil_dqueue_t* fossil_dqueue_create(char* type);
 
@@ -47,6 +48,7 @@ fossil_dqueue_t* fossil_dqueue_create(char* type);
  * Erase the contents of the dynamic queue and free allocated memory.
  *
  * @param dqueue The dynamic queue to erase.
+ * @note         Time complexity: O(n)
  */
 void fossil_dqueue_erase(fossil_dqueue_t* dqueue);
 
@@ -56,6 +58,7 @@ void fossil_dqueue_erase(fossil_dqueue_t* dqueue);
  * @param dqueue The dynamic queue to insert data into.
  * @param data   The data to insert.
  * @return       The error code indicating the success or failure of the operation.
+ * @note         Time complexity: O(1)
  */
 int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, fossil_tofu_t data);
 
@@ -65,6 +68,7 @@ int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, fossil_tofu_t data);
  * @param dqueue The dynamic queue to remove data from.
  * @param data   A pointer to store the removed data.
  * @return       The error code indicating the success or failure of the operation.
+ * @note         Time complexity: O(1)
  */
 int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue, fossil_tofu_t* data);
 
@@ -74,6 +78,7 @@ int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue, fossil_tofu_t* data);
  * @param dqueue The dynamic queue to search.
  * @param data   The data to search for.
  * @return       The error code indicating the success or failure of the operation.
+ * @note         Time complexity: O(n)
  */
 int32_t fossil_dqueue_search(const fossil_dqueue_t* dqueue, fossil_tofu_t data);
 
@@ -82,6 +87,7 @@ int32_t fossil_dqueue_search(const fossil_dqueue_t* dqueue, fossil_tofu_t data);
  *
  * @param dqueue The dynamic queue for which to get the size.
  * @return       The size of the dynamic queue.
+ * @note         Time complexity: O(1)
  */
 size_t fossil_dqueue_size(const fossil_dqueue_t* dqueue);
 
@@ -91,6 +97,7 @@ size_t fossil_dqueue_size(const fossil_dqueue_t* dqueue);
  * @param dqueue The dynamic queue from which to get the data.
  * @param data   The data to search for.
  * @return       A pointer to the matching data.
+ * @note         Time complexity: O(n)
  */
 fossil_tofu_t* fossil_dqueue_getter(fossil_dqueue_t* dqueue, fossil_tofu_t data);
 
@@ -100,6 +107,7 @@ fossil_tofu_t* fossil_dqueue_getter(fossil_dqueue_t* dqueue, fossil_tofu_t data)
  * @param dqueue The dynamic queue in which to set the data.
  * @param data   The data to set.
  * @return       The error code indicating the success or failure of the operation.
+ * @note         Time complexity: O(n)
  */
 int32_t fossil_dqueue_setter(fossil_dqueue_t* dqueue, fossil_tofu_t data);
 
@@ -108,6 +116,7 @@ int32_t fossil_dqueue_setter(fossil_dqueue_t* dqueue, fossil_tofu_t data);
  *
  * @param dqueue The dynamic queue to check.
  * @return       True if the dynamic queue is not empty, false otherwise.
+ * @note         Time complexity: O(1)
  */
 bool fossil_dqueue_not_empty(const fossil_dqueue_t* dqueue);
 
@@ -116,6 +125,7 @@ bool fossil_dqueue_not_empty(const fossil_dqueue_t* dqueue);
  *
  * @param dqueue The dynamic queue to check.
  * @return       True if the dynamic queue is not a null pointer, false otherwise.
+ * @note         Time complexity: O(1)
  */
 bool fossil_dqueue_not_cnullptr(const fossil_dqueue_t* dqueue);
 
@@ -124,6 +134,7 @@ bool fossil_dqueue_not_cnullptr(const fossil_dqueue_t* dqueue);
  *
  * @param dqueue The dynamic queue to check.
  * @return       True if the dynamic queue is empty, false otherwise.
+ * @note         Time complexity: O(1)
  */
 bool fossil_dqueue_is_empty(const fossil_dqueue_t* dqueue);
 
@@ -132,6 +143,7 @@ bool fossil_dqueue_is_empty(const fossil_dqueue_t* dqueue);
  *
  * @param dqueue The dynamic queue to check.
  * @return       True if the dynamic queue is a null pointer, false otherwise.
+ * @note         Time complexity: O(1)
  */
 bool fossil_dqueue_is_cnullptr(const fossil_dqueue_t* dqueue);
 

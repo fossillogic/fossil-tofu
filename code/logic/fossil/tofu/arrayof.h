@@ -35,6 +35,7 @@ typedef struct {
  * @param size The number of initial elements.
  * @param ... The initial values for the elements.
  * @return A newly created fossil_tofu_arrayof_t.
+ * @note Time complexity: O(n), where n is the number of initial elements.
  */
 fossil_tofu_arrayof_t fossil_tofu_arrayof_create(char *type, size_t size, ...);
 
@@ -42,6 +43,7 @@ fossil_tofu_arrayof_t fossil_tofu_arrayof_create(char *type, size_t size, ...);
  * @brief Destroys the arrayof and frees allocated memory.
  * 
  * @param arrayof A pointer to the fossil_tofu_arrayof_t to be destroyed.
+ * @note Time complexity: O(1).
  */
 void fossil_tofu_arrayof_erase(fossil_tofu_arrayof_t *arrayof);
 
@@ -50,6 +52,7 @@ void fossil_tofu_arrayof_erase(fossil_tofu_arrayof_t *arrayof);
  * 
  * @param arrayof A pointer to the fossil_tofu_arrayof_t.
  * @param tofu The fossil_tofu_t element to add.
+ * @note Time complexity: O(1) on average, O(n) in the worst case when resizing.
  */
 void fossil_tofu_arrayof_add(fossil_tofu_arrayof_t *arrayof, fossil_tofu_t tofu);
 
@@ -59,6 +62,7 @@ void fossil_tofu_arrayof_add(fossil_tofu_arrayof_t *arrayof, fossil_tofu_t tofu)
  * @param arrayof A pointer to the fossil_tofu_arrayof_t.
  * @param index The index of the element to retrieve.
  * @return The fossil_tofu_t element at the specified index.
+ * @note Time complexity: O(1).
  */
 fossil_tofu_t fossil_tofu_arrayof_get(const fossil_tofu_arrayof_t *arrayof, size_t index);
 
@@ -67,6 +71,7 @@ fossil_tofu_t fossil_tofu_arrayof_get(const fossil_tofu_arrayof_t *arrayof, size
  * 
  * @param arrayof A pointer to the fossil_tofu_arrayof_t.
  * @return The current number of elements in the arrayof.
+ * @note Time complexity: O(1).
  */
 size_t fossil_tofu_arrayof_size(const fossil_tofu_arrayof_t *arrayof);
 
@@ -75,6 +80,7 @@ size_t fossil_tofu_arrayof_size(const fossil_tofu_arrayof_t *arrayof);
  * 
  * @param arrayof A pointer to the fossil_tofu_arrayof_t.
  * @return True if the arrayof is empty, false otherwise.
+ * @note Time complexity: O(1).
  */
 bool fossil_tofu_arrayof_is_empty(const fossil_tofu_arrayof_t *arrayof);
 
@@ -82,6 +88,7 @@ bool fossil_tofu_arrayof_is_empty(const fossil_tofu_arrayof_t *arrayof);
  * @brief Clears all elements from the arrayof.
  * 
  * @param arrayof A pointer to the fossil_tofu_arrayof_t.
+ * @note Time complexity: O(n), where n is the number of elements in the array.
  */
 void fossil_tofu_arrayof_clear(fossil_tofu_arrayof_t *arrayof);
 
@@ -89,6 +96,7 @@ void fossil_tofu_arrayof_clear(fossil_tofu_arrayof_t *arrayof);
  * @brief Prints all elements of the arrayof.
  * 
  * @param arrayof A pointer to the fossil_tofu_arrayof_t.
+ * @note Time complexity: O(n), where n is the number of elements in the array.
  */
 void fossil_tofu_arrayof_print(const fossil_tofu_arrayof_t *arrayof);
 
