@@ -82,8 +82,8 @@ typedef enum {
     FOSSIL_TOFU_TYPE_BCHAR,
     FOSSIL_TOFU_TYPE_CCHAR,
     FOSSIL_TOFU_TYPE_WCHAR,
-    FOSSIL_TOFU_TYPE_SIZE,
-    FOSSIL_TOFU_TYPE_BOOL
+    FOSSIL_TOFU_TYPE_BOOL,
+    FOSSIL_TOFU_TYPE_SIZE
 } fossil_tofu_type_t;
 
 // Union for holding different types of values

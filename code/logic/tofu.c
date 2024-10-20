@@ -27,7 +27,7 @@
 static const char *tofu_type_strings[] = {
     "ghost", "int", "uint", "hex", "octal",
     "float", "double", "bstr", "wstr", "cstr",
-    "bchar", "cchar", "wchar", "size", "bool"
+    "bchar", "cchar", "wchar", "bool", "size"
 };
 
 // Function to check if a string represents a valid integer
