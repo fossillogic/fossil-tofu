@@ -132,11 +132,18 @@ static uint64_t parse_octal(const char *value) {
 
 // Function to convert string to fossil_tofu_type_t
 fossil_tofu_type_t string_to_tofu_type(const char *str) {
+    if (!str) {
+        fprintf(stderr, "Error: NULL pointer passed to string_to_tofu_type\n");
+        return FOSSIL_TOFU_TYPE_GHOST;
+    }
+
     for (int i = 0; i < FOSSIL_TOFU_TYPE_SIZE; ++i) {
         if (strcmp(str, tofu_type_strings[i]) == 0) {
             return (fossil_tofu_type_t)i;
         }
     }
+
+    fprintf(stderr, "Error: Invalid tofu type string '%s'\n", str);
     return FOSSIL_TOFU_TYPE_GHOST; // Default to ghost type if not found
 }
 
