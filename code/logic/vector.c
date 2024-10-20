@@ -27,7 +27,7 @@ fossil_vector_t* fossil_vector_create(char* type) {
     return vector;
 }
 
-void fossil_vector_erase(fossil_vector_t* vector) {
+void fossil_vector_destroy(fossil_vector_t* vector) {
     if (!vector) return;
 
     fossil_tofu_free(vector->data);
@@ -50,6 +50,21 @@ void fossil_vector_push_back(fossil_vector_t* vector, fossil_tofu_t element) {
     }
 
     vector->data[vector->size++] = element;
+}
+
+void fossil_vector_pop_back(fossil_vector_t* vector) {
+    if (!vector) {
+        // Handle null vector
+        fprintf(stderr, "Error: Attempt to pop from a null vector.\n");
+        return;
+    }
+
+    if (vector->size > 0) {
+        --vector->size;
+    } else {
+        // Handle empty vector
+        fprintf(stderr, "Error: Attempt to pop from an empty vector.\n");
+    }
 }
 
 int fossil_vector_search(const fossil_vector_t* vector, fossil_tofu_t target) {

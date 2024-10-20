@@ -47,7 +47,7 @@ fossil_vector_t* fossil_vector_create(char* type);
  *
  * @param vector The vector to erase.
  */
-void fossil_vector_erase(fossil_vector_t* vector);
+void fossil_vector_destroy(fossil_vector_t* vector);
 
 /**
  * Add an element to the end of the vector.
@@ -58,6 +58,15 @@ void fossil_vector_erase(fossil_vector_t* vector);
  * @param element The element to add.
  */
 void fossil_vector_push_back(fossil_vector_t* vector, fossil_tofu_t element);
+
+/**
+ * Remove the last element from the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector The vector from which to remove the last element.
+ */
+void fossil_vector_pop_back(fossil_vector_t* vector);
 
 /**
  * Search for a target element in the vector.
@@ -174,7 +183,7 @@ namespace fossil {
         Vector(const std::string& type) : vector_(fossil_vector_create(const_cast<char*>(type.c_str()))) {}
 
         ~Vector() {
-            fossil_vector_erase(vector_);
+            fossil_vector_destroy(vector_);
         }
 
         void push_back(fossil_tofu_t element) {
