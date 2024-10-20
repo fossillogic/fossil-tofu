@@ -75,7 +75,7 @@ FOSSIL_TEST(test_fossil_tofu_create) {
 
     fossil_tofu_t tofu_bstr = fossil_tofu_create("bstr", "Hello");
     ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_BSTR, tofu_bstr.type);
-    ASSUME_ITS_EQUAL_BSTR("Hello", tofu_bstr.value.uchar_string_val);
+    ASSUME_ITS_EQUAL_BSTR((uint16_t)"Hello", tofu_bstr.value.uchar_string_val);
 }
 
 // Test case for fossil_tofu_equals function
