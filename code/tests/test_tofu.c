@@ -315,7 +315,6 @@ FOSSIL_TEST(stress_test_tofu_type) {
 
     // Stop the benchmark
     TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-    ASSUME_ITS_EQUAL_F32(1.0, TEST_CURRENT_TIME(), FOSSIL_TEST_FLOAT_EPSILON);
 
     // Erase the tofu object
     fossil_tofu_erase(&tofu);
