@@ -34,6 +34,7 @@ typedef struct {
  *
  * @param type The type of the map.
  * @return The created map.
+ * @note Time complexity: O(1)
  */
 fossil_tofu_mapof_t fossil_tofu_mapof_create(const char *type);
 
@@ -43,6 +44,7 @@ fossil_tofu_mapof_t fossil_tofu_mapof_create(const char *type);
  * @param map The map to add the key-value pair to.
  * @param key The key to add.
  * @param value The value to add.
+ * @note Time complexity: O(1) on average, O(n) in the worst case due to resizing.
  */
 void fossil_tofu_mapof_add(fossil_tofu_mapof_t *map, fossil_tofu_t key, fossil_tofu_t value);
 
@@ -52,6 +54,7 @@ void fossil_tofu_mapof_add(fossil_tofu_mapof_t *map, fossil_tofu_t key, fossil_t
  * @param map The map to get the value from.
  * @param key The key to get the value for.
  * @return The value associated with the key, or NULL if the key is not found.
+ * @note Time complexity: O(1) on average, O(n) in the worst case.
  */
 fossil_tofu_t fossil_tofu_mapof_get(fossil_tofu_mapof_t *map, fossil_tofu_t key);
 
@@ -61,6 +64,7 @@ fossil_tofu_t fossil_tofu_mapof_get(fossil_tofu_mapof_t *map, fossil_tofu_t key)
  * @param map The map to check.
  * @param key The key to check for.
  * @return true if the key exists in the map, false otherwise.
+ * @note Time complexity: O(1) on average, O(n) in the worst case.
  */
 bool fossil_tofu_mapof_contains(fossil_tofu_mapof_t *map, fossil_tofu_t key);
 
@@ -69,6 +73,7 @@ bool fossil_tofu_mapof_contains(fossil_tofu_mapof_t *map, fossil_tofu_t key);
  *
  * @param map The map to remove the key-value pair from.
  * @param key The key to remove.
+ * @note Time complexity: O(1) on average, O(n) in the worst case.
  */
 void fossil_tofu_mapof_remove(fossil_tofu_mapof_t *map, fossil_tofu_t key);
 
@@ -77,6 +82,7 @@ void fossil_tofu_mapof_remove(fossil_tofu_mapof_t *map, fossil_tofu_t key);
  *
  * @param map The map to get the size of.
  * @return The number of key-value pairs in the map.
+ * @note Time complexity: O(1)
  */
 size_t fossil_tofu_mapof_size(fossil_tofu_mapof_t *map);
 
@@ -85,6 +91,7 @@ size_t fossil_tofu_mapof_size(fossil_tofu_mapof_t *map);
  *
  * @param map The map to check.
  * @return true if the map is empty, false otherwise.
+ * @note Time complexity: O(1)
  */
 bool fossil_tofu_mapof_is_empty(fossil_tofu_mapof_t *map);
 
@@ -92,6 +99,7 @@ bool fossil_tofu_mapof_is_empty(fossil_tofu_mapof_t *map);
  * @brief Clears all key-value pairs from the map.
  *
  * @param map The map to clear.
+ * @note Time complexity: O(n)
  */
 void fossil_tofu_mapof_clear(fossil_tofu_mapof_t *map);
 
@@ -99,6 +107,7 @@ void fossil_tofu_mapof_clear(fossil_tofu_mapof_t *map);
  * @brief Destroys the map and frees the allocated memory.
  *
  * @param map The map to destroy.
+ * @note Time complexity: O(n)
  */
 void fossil_tofu_mapof_erase(fossil_tofu_mapof_t *map);
 
@@ -106,6 +115,7 @@ void fossil_tofu_mapof_erase(fossil_tofu_mapof_t *map);
  * @brief Prints the contents of the map.
  *
  * @param map The map to print.
+ * @note Time complexity: O(n)
  */
 void fossil_tofu_mapof_print(fossil_tofu_mapof_t *map);
 

@@ -40,6 +40,7 @@ typedef struct fossil_dlist_t {
  *
  * @param list_type The type of data the doubly linked list will store.
  * @return          The created doubly linked list.
+ * @note            Time complexity: O(1)
  */
 fossil_dlist_t* fossil_dlist_create(char* type);
 
@@ -47,6 +48,7 @@ fossil_dlist_t* fossil_dlist_create(char* type);
  * Erase the contents of the doubly linked list and free allocated memory.
  *
  * @param dlist The doubly linked list to erase.
+ * @note        Time complexity: O(n)
  */
 void fossil_dlist_erase(fossil_dlist_t* dlist);
 
@@ -56,6 +58,7 @@ void fossil_dlist_erase(fossil_dlist_t* dlist);
  * @param dlist The doubly linked list to insert data into.
  * @param data  The data to insert.
  * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(1)
  */
 int32_t fossil_dlist_insert(fossil_dlist_t* dlist, fossil_tofu_t data);
 
@@ -65,6 +68,7 @@ int32_t fossil_dlist_insert(fossil_dlist_t* dlist, fossil_tofu_t data);
  * @param dlist The doubly linked list to remove data from.
  * @param data  A pointer to store the removed data.
  * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(1)
  */
 int32_t fossil_dlist_remove(fossil_dlist_t* dlist, fossil_tofu_t* data);
 
@@ -74,6 +78,7 @@ int32_t fossil_dlist_remove(fossil_dlist_t* dlist, fossil_tofu_t* data);
  * @param dlist The doubly linked list to search.
  * @param data  The data to search for.
  * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(n)
  */
 int32_t fossil_dlist_search(const fossil_dlist_t* dlist, fossil_tofu_t data);
 
@@ -81,6 +86,7 @@ int32_t fossil_dlist_search(const fossil_dlist_t* dlist, fossil_tofu_t data);
  * Reverse the doubly linked list in the forward direction.
  *
  * @param dlist The doubly linked list to reverse.
+ * @note        Time complexity: O(n)
  */
 void fossil_dlist_reverse_forward(fossil_dlist_t* dlist);
 
@@ -88,6 +94,7 @@ void fossil_dlist_reverse_forward(fossil_dlist_t* dlist);
  * Reverse the doubly linked list in the backward direction.
  *
  * @param dlist The doubly linked list to reverse.
+ * @note        Time complexity: O(n)
  */
 void fossil_dlist_reverse_backward(fossil_dlist_t* dlist);
 
@@ -96,6 +103,7 @@ void fossil_dlist_reverse_backward(fossil_dlist_t* dlist);
  *
  * @param dlist The doubly linked list for which to get the size.
  * @return      The size of the doubly linked list.
+ * @note        Time complexity: O(n)
  */
 size_t fossil_dlist_size(const fossil_dlist_t* dlist);
 
@@ -105,6 +113,7 @@ size_t fossil_dlist_size(const fossil_dlist_t* dlist);
  * @param dlist The doubly linked list from which to get the data.
  * @param data  The data to search for.
  * @return      A pointer to the matching data.
+ * @note        Time complexity: O(n)
  */
 fossil_tofu_t* fossil_dlist_getter(fossil_dlist_t* dlist, fossil_tofu_t data);
 
@@ -114,6 +123,7 @@ fossil_tofu_t* fossil_dlist_getter(fossil_dlist_t* dlist, fossil_tofu_t data);
  * @param dlist The doubly linked list in which to set the data.
  * @param data  The data to set.
  * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(n)
  */
 int32_t fossil_dlist_setter(fossil_dlist_t* dlist, fossil_tofu_t data);
 
@@ -122,6 +132,7 @@ int32_t fossil_dlist_setter(fossil_dlist_t* dlist, fossil_tofu_t data);
  *
  * @param dlist The doubly linked list to check.
  * @return      True if the doubly linked list is not empty, false otherwise.
+ * @note        Time complexity: O(1)
  */
 bool fossil_dlist_not_empty(const fossil_dlist_t* dlist);
 
@@ -130,6 +141,7 @@ bool fossil_dlist_not_empty(const fossil_dlist_t* dlist);
  *
  * @param dlist The doubly linked list to check.
  * @return      True if the doubly linked list is not a null pointer, false otherwise.
+ * @note        Time complexity: O(1)
  */
 bool fossil_dlist_not_cnullptr(const fossil_dlist_t* dlist);
 
@@ -138,6 +150,7 @@ bool fossil_dlist_not_cnullptr(const fossil_dlist_t* dlist);
  *
  * @param dlist The doubly linked list to check.
  * @return      True if the doubly linked list is empty, false otherwise.
+ * @note        Time complexity: O(1)
  */
 bool fossil_dlist_is_empty(const fossil_dlist_t* dlist);
 
@@ -146,6 +159,7 @@ bool fossil_dlist_is_empty(const fossil_dlist_t* dlist);
  *
  * @param dlist The doubly linked list to check.
  * @return      True if the doubly linked list is a null pointer, false otherwise.
+ * @note        Time complexity: O(1)
  */
 bool fossil_dlist_is_cnullptr(const fossil_dlist_t* dlist);
 

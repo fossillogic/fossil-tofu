@@ -39,6 +39,7 @@ typedef struct fossil_queue_t {
  *
  * @param list_type The type of data the queue will store.
  * @return          The created queue.
+ * @note            Time complexity: O(1)
  */
 fossil_queue_t* fossil_queue_create(char* type);
 
@@ -46,6 +47,7 @@ fossil_queue_t* fossil_queue_create(char* type);
  * Erase the contents of the queue and free allocated memory.
  *
  * @param queue The queue to erase.
+ * @note        Time complexity: O(n)
  */
 void fossil_queue_erase(fossil_queue_t* queue);
 
@@ -55,6 +57,7 @@ void fossil_queue_erase(fossil_queue_t* queue);
  * @param queue The queue to insert data into.
  * @param data  The data to insert.
  * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(1)
  */
 int32_t fossil_queue_insert(fossil_queue_t* queue, fossil_tofu_t data);
 
@@ -64,6 +67,7 @@ int32_t fossil_queue_insert(fossil_queue_t* queue, fossil_tofu_t data);
  * @param queue The queue to remove data from.
  * @param data  The data to remove.
  * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(1)
  */
 int32_t fossil_queue_remove(fossil_queue_t* queue, fossil_tofu_t* data);
 
@@ -73,6 +77,7 @@ int32_t fossil_queue_remove(fossil_queue_t* queue, fossil_tofu_t* data);
  * @param queue The queue to search.
  * @param data  The data to search for.
  * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(n)
  */
 int32_t fossil_queue_search(const fossil_queue_t* queue, fossil_tofu_t data);
 
@@ -81,6 +86,7 @@ int32_t fossil_queue_search(const fossil_queue_t* queue, fossil_tofu_t data);
  *
  * @param queue The queue for which to get the size.
  * @return      The size of the queue.
+ * @note        Time complexity: O(n)
  */
 size_t fossil_queue_size(const fossil_queue_t* queue);
 
@@ -90,6 +96,7 @@ size_t fossil_queue_size(const fossil_queue_t* queue);
  * @param queue The queue from which to get the data.
  * @param data  The data to search for.
  * @return      A pointer to the matching data, or NULL if not found.
+ * @note        Time complexity: O(n)
  */
 fossil_tofu_t* fossil_queue_getter(fossil_queue_t* queue, fossil_tofu_t data);
 
@@ -99,6 +106,7 @@ fossil_tofu_t* fossil_queue_getter(fossil_queue_t* queue, fossil_tofu_t data);
  * @param queue The queue in which to set the data.
  * @param data  The data to set.
  * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(n)
  */
 int32_t fossil_queue_setter(fossil_queue_t* queue, fossil_tofu_t data);
 
@@ -107,6 +115,7 @@ int32_t fossil_queue_setter(fossil_queue_t* queue, fossil_tofu_t data);
  *
  * @param queue The queue to check.
  * @return      True if the queue is not empty, false otherwise.
+ * @note        Time complexity: O(1)
  */
 bool fossil_queue_not_empty(const fossil_queue_t* queue);
 
@@ -115,6 +124,7 @@ bool fossil_queue_not_empty(const fossil_queue_t* queue);
  *
  * @param queue The queue to check.
  * @return      True if the queue is not a null pointer, false otherwise.
+ * @note        Time complexity: O(1)
  */
 bool fossil_queue_not_cnullptr(const fossil_queue_t* queue);
 
@@ -123,6 +133,7 @@ bool fossil_queue_not_cnullptr(const fossil_queue_t* queue);
  *
  * @param queue The queue to check.
  * @return      True if the queue is empty, false otherwise.
+ * @note        Time complexity: O(1)
  */
 bool fossil_queue_is_empty(const fossil_queue_t* queue);
 
@@ -131,6 +142,7 @@ bool fossil_queue_is_empty(const fossil_queue_t* queue);
  *
  * @param queue The queue to check.
  * @return      True if the queue is a null pointer, false otherwise.
+ * @note        Time complexity: O(1)
  */
 bool fossil_queue_is_cnullptr(const fossil_queue_t* queue);
 

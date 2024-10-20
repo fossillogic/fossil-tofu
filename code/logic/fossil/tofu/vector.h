@@ -32,6 +32,8 @@ typedef struct {
 
 /**
  * Create a new vector with the specified expected type.
+ * 
+ * Time complexity: O(1)
  *
  * @param expected_type The expected type of elements in the vector.
  * @return              The created vector.
@@ -40,6 +42,8 @@ fossil_vector_t* fossil_vector_create(char* type);
 
 /**
  * Erase the contents of the vector and free allocated memory.
+ * 
+ * Time complexity: O(n)
  *
  * @param vector The vector to erase.
  */
@@ -47,6 +51,8 @@ void fossil_vector_erase(fossil_vector_t* vector);
 
 /**
  * Add an element to the end of the vector.
+ * 
+ * Amortized time complexity: O(1)
  *
  * @param vector  The vector to which the element will be added.
  * @param element The element to add.
@@ -55,6 +61,8 @@ void fossil_vector_push_back(fossil_vector_t* vector, fossil_tofu_t element);
 
 /**
  * Search for a target element in the vector.
+ * 
+ * Time complexity: O(n)
  *
  * @param vector The vector to search.
  * @param target The element to search for.
@@ -64,6 +72,8 @@ int fossil_vector_search(const fossil_vector_t* vector, fossil_tofu_t target);
 
 /**
  * Reverse the order of elements in the vector.
+ * 
+ * Time complexity: O(n)
  *
  * @param vector The vector to reverse.
  */
@@ -71,6 +81,8 @@ void fossil_vector_reverse(fossil_vector_t* vector);
 
 /**
  * Check if the vector is a null pointer.
+ * 
+ * Time complexity: O(1)
  *
  * @param vector The vector to check.
  * @return       True if the vector is a null pointer, false otherwise.
@@ -79,6 +91,8 @@ bool fossil_vector_is_cnullptr(const fossil_vector_t* vector);
 
 /**
  * Check if the vector is not a null pointer.
+ * 
+ * Time complexity: O(1)
  *
  * @param vector The vector to check.
  * @return       True if the vector is not a null pointer, false otherwise.
@@ -87,6 +101,8 @@ bool fossil_vector_not_cnullptr(const fossil_vector_t* vector);
 
 /**
  * Check if the vector is empty.
+ * 
+ * Time complexity: O(1)
  *
  * @param vector The vector to check.
  * @return       True if the vector is empty, false otherwise.
@@ -95,6 +111,8 @@ bool fossil_vector_is_empty(const fossil_vector_t* vector);
 
 /**
  * Check if the vector is not empty.
+ * 
+ * Time complexity: O(1)
  *
  * @param vector The vector to check.
  * @return       True if the vector is not empty, false otherwise.
@@ -103,6 +121,8 @@ bool fossil_vector_not_empty(const fossil_vector_t* vector);
 
 /**
  * Set the element at the specified index in the vector.
+ * 
+ * Time complexity: O(1)
  *
  * @param vector The vector in which to set the element.
  * @param index  The index at which to set the element.
@@ -112,6 +132,8 @@ void fossil_vector_setter(fossil_vector_t* vector, size_t index, fossil_tofu_t e
 
 /**
  * Get the element at the specified index in the vector.
+ * 
+ * Time complexity: O(1)
  *
  * @param vector The vector from which to get the element.
  * @param index  The index from which to get the element.
@@ -121,6 +143,8 @@ fossil_tofu_t* fossil_vector_getter(const fossil_vector_t* vector, size_t index)
 
 /**
  * Get the size of the vector.
+ * 
+ * Time complexity: O(1)
  *
  * @param vector The vector for which to get the size.
  * @return       The size of the vector.
@@ -129,6 +153,8 @@ size_t fossil_vector_size(const fossil_vector_t* vector);
 
 /**
  * Display the contents of the vector.
+ * 
+ * Time complexity: O(n)
  *
  * @param vector The vector to peek into.
  */
