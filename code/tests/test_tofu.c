@@ -73,9 +73,9 @@ FOSSIL_TEST(test_fossil_tofu_create) {
     ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_FLOAT, tofu_float.type);
     ASSUME_ITS_EQUAL_F32(3.14f, tofu_float.value.float_val, FOSSIL_TEST_FLOAT_EPSILON);
 
-    fossil_tofu_t tofu_bstr = fossil_tofu_create("bstr", "Hello");
-    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_BSTR, tofu_bstr.type);
-    // ASSUME_ITS_EQUAL_BSTR("Hello", tofu_bstr.value.uchar_string_val);
+    fossil_tofu_t tofu_cstr = fossil_tofu_create("cstr", "Hello");
+    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_CSTR, tofu_cstr.type);
+    ASSUME_ITS_EQUAL_CSTR("Hello", tofu_cstr.value.cchar_string_val);
 }
 
 // Test case for fossil_tofu_equals function
