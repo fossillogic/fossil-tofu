@@ -310,14 +310,14 @@ FOSSIL_TEST(stress_test_tofu_type) {
     // Perform some operations
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_t tofu_copy = fossil_tofu_copy(tofu);
-        fossil_tofu_erase(&tofu_copy);
+        fossil_tofu_destroy(&tofu_copy);
     }
 
     // Stop the benchmark
     TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     // Erase the tofu object
-    fossil_tofu_erase(&tofu);
+    fossil_tofu_destroy(&tofu);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *

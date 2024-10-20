@@ -109,7 +109,7 @@ void fossil_tofu_mapof_clear(fossil_tofu_mapof_t *map);
  * @param map The map to destroy.
  * @note Time complexity: O(n)
  */
-void fossil_tofu_mapof_erase(fossil_tofu_mapof_t *map);
+void fossil_tofu_mapof_destroy(fossil_tofu_mapof_t *map);
 
 /**
  * @brief Prints the contents of the map.
@@ -133,7 +133,7 @@ namespace fossil {
         Map(const std::string &type) : map_(fossil_tofu_mapof_create(type.c_str())) {}
 
         ~Map() {
-            fossil_tofu_mapof_erase(&map_);
+            fossil_tofu_mapof_destroy(&map_);
         }
 
         void add(fossil_tofu_t key, fossil_tofu_t value) {

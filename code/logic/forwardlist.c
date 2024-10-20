@@ -25,7 +25,7 @@ fossil_flist_t* fossil_flist_create(char* type) {
     return flist;
 }
 
-void fossil_flist_erase(fossil_flist_t* flist) {
+void fossil_flist_destroy(fossil_flist_t* flist) {
     if (!flist) return;
 
     fossil_flist_node_t* current = flist->head;

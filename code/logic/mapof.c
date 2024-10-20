@@ -106,7 +106,7 @@ void fossil_tofu_mapof_clear(fossil_tofu_mapof_t *map) {
 }
 
 // Function to destroy the map and free allocated memory
-void fossil_tofu_mapof_erase(fossil_tofu_mapof_t *map) {
+void fossil_tofu_mapof_destroy(fossil_tofu_mapof_t *map) {
     fossil_tofu_free(map->keys);
     fossil_tofu_free(map->values);
 }

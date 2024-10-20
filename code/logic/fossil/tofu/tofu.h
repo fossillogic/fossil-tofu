@@ -157,7 +157,7 @@ void fossil_tofu_print(fossil_tofu_t tofu);
  * @param tofu The `fossil_tofu_t` object to be destroyed.
  * @note O(1) - Constant time complexity.
  */
-void fossil_tofu_erase(fossil_tofu_t *tofu);
+void fossil_tofu_destroy(fossil_tofu_t *tofu);
 
 /**
  * Utility function to check if a given type is valid.
@@ -447,7 +447,7 @@ namespace fossil {
     }
 
     void erase(fossil_tofu_t *tofu) {
-        fossil_tofu_erase(tofu);
+        fossil_tofu_destroy(tofu);
     }
 
     bool is_valid_type(const char *type) {

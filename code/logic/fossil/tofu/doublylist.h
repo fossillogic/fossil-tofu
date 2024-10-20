@@ -50,7 +50,7 @@ fossil_dlist_t* fossil_dlist_create(char* type);
  * @param dlist The doubly linked list to erase.
  * @note        Time complexity: O(n)
  */
-void fossil_dlist_erase(fossil_dlist_t* dlist);
+void fossil_dlist_destroy(fossil_dlist_t* dlist);
 
 /**
  * Insert data into the doubly linked list.
@@ -177,7 +177,7 @@ namespace fossil {
         DoublyList(const std::string& type) : dlist_(fossil_dlist_create(const_cast<char*>(type.c_str()))) {}
 
         ~DoublyList() {
-            fossil_dlist_erase(dlist_);
+            fossil_dlist_destroy(dlist_);
         }
 
         void insert(fossil_tofu_t data) {

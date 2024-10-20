@@ -26,7 +26,7 @@ fossil_dlist_t* fossil_dlist_create(char* type) {
     return dlist;
 }
 
-void fossil_dlist_erase(fossil_dlist_t* dlist) {
+void fossil_dlist_destroy(fossil_dlist_t* dlist) {
     if (!dlist) return;
 
     fossil_dlist_node_t* current = dlist->head;

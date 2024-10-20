@@ -41,9 +41,9 @@ fossil_tofu_arrayof_t fossil_tofu_arrayof_create(char *type, size_t size, ...) {
 }
 
 // Function to destroy arrayof and free allocated memory
-void fossil_tofu_arrayof_erase(fossil_tofu_arrayof_t *arrayof) {
+void fossil_tofu_arrayof_destroy(fossil_tofu_arrayof_t *arrayof) {
     for (size_t i = 0; i < arrayof->size; ++i) {
-        fossil_tofu_erase(&(arrayof->array[i]));
+        fossil_tofu_destroy(&(arrayof->array[i]));
     }
     fossil_tofu_free(arrayof->array);
     arrayof->size = 0;
@@ -85,7 +85,7 @@ bool fossil_tofu_arrayof_is_empty(const fossil_tofu_arrayof_t *arrayof) {
 // Function to clear all elements from the arrayof
 void fossil_tofu_arrayof_clear(fossil_tofu_arrayof_t *arrayof) {
     for (size_t i = 0; i < arrayof->size; ++i) {
-        fossil_tofu_erase(&(arrayof->array[i]));
+        fossil_tofu_destroy(&(arrayof->array[i]));
     }
     arrayof->size = 0;
 }

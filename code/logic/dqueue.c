@@ -26,7 +26,7 @@ fossil_dqueue_t* fossil_dqueue_create(char* type) {
     return dqueue;
 }
 
-void fossil_dqueue_erase(fossil_dqueue_t* dqueue) {
+void fossil_dqueue_destroy(fossil_dqueue_t* dqueue) {
     if (!dqueue) return;
 
     fossil_dqueue_node_t* current = dqueue->front;

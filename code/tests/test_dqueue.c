@@ -32,7 +32,7 @@ FOSSIL_SETUP(struct_dqueue_fixture) {
 }
 
 FOSSIL_TEARDOWN(struct_dqueue_fixture) {
-    fossil_dqueue_erase(mock_dqueue);
+    fossil_dqueue_destroy(mock_dqueue);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -43,7 +43,7 @@ FOSSIL_TEARDOWN(struct_dqueue_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_dqueue_create_and_erase) {
+FOSSIL_TEST(test_dqueue_create_and_destroy) {
     // Check if the deque is created with the expected values
     ASSUME_NOT_CNULL(mock_dqueue);
     ASSUME_ITS_CNULL(mock_dqueue->front);
@@ -145,14 +145,14 @@ FOSSIL_TEST(stress_test_dqueue) {
     // Stop the benchmark
     TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
-    fossil_tofu_erase(&element);
+    fossil_tofu_destroy(&element);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_dqueue_structure_tests) {    
-    ADD_TESTF(test_dqueue_create_and_erase, struct_dqueue_fixture);
+    ADD_TESTF(test_dqueue_create_and_destroy, struct_dqueue_fixture);
     ADD_TESTF(test_dqueue_insert_and_size, struct_dqueue_fixture);
     ADD_TESTF(test_dqueue_remove, struct_dqueue_fixture);
     //ADD_TESTF(test_dqueue_getter_and_setter, struct_dqueue_fixture);

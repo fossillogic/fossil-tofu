@@ -45,7 +45,7 @@ fossil_tofu_arrayof_t fossil_tofu_arrayof_create(char *type, size_t size, ...);
  * @param arrayof A pointer to the fossil_tofu_arrayof_t to be destroyed.
  * @note Time complexity: O(1).
  */
-void fossil_tofu_arrayof_erase(fossil_tofu_arrayof_t *arrayof);
+void fossil_tofu_arrayof_destroy(fossil_tofu_arrayof_t *arrayof);
 
 /**
  * @brief Adds a fossil_tofu_t element to the end of the arrayof.
@@ -114,7 +114,7 @@ namespace fossil {
         ArrayOf(const std::string& type, size_t size, ...) : arrayof_(fossil_tofu_arrayof_create(const_cast<char*>(type.c_str()), size)) {}
 
         ~ArrayOf() {
-            fossil_tofu_arrayof_erase(arrayof_);
+            fossil_tofu_arrayof_destroy(arrayof_);
         }
 
         void add(fossil_tofu_t element) {

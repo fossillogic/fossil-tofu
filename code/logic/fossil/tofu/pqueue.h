@@ -47,7 +47,7 @@ fossil_pqueue_t* fossil_pqueue_create(char* type);
  * @param pqueue The priority queue to erase.
  * @note         Time complexity: O(n)
  */
-void fossil_pqueue_erase(fossil_pqueue_t* pqueue);
+void fossil_pqueue_destroy(fossil_pqueue_t* pqueue);
 
 /**
  * Insert data into the priority queue with the specified priority.
@@ -163,7 +163,7 @@ namespace fossil {
         PQueue(const std::string& type) : pqueue_(fossil_pqueue_create(const_cast<char*>(type.c_str()))) {}
 
         ~PQueue() {
-            fossil_pqueue_erase(pqueue_);
+            fossil_pqueue_destroy(pqueue_);
         }
 
         void insert(fossil_tofu_t data, int32_t priority) {

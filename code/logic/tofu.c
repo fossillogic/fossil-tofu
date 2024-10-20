@@ -347,7 +347,7 @@ void fossil_tofu_print(fossil_tofu_t tofu) {
 }
 
 // Function to destroy fossil_tofu_t and free allocated memory
-void fossil_tofu_erase(fossil_tofu_t *tofu) {
+void fossil_tofu_destroy(fossil_tofu_t *tofu) {
     if (!tofu) {
         return;
     }

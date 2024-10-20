@@ -49,7 +49,7 @@ fossil_queue_t* fossil_queue_create(char* type);
  * @param queue The queue to erase.
  * @note        Time complexity: O(n)
  */
-void fossil_queue_erase(fossil_queue_t* queue);
+void fossil_queue_destroy(fossil_queue_t* queue);
 
 /**
  * Insert data into the queue.
@@ -160,7 +160,7 @@ namespace fossil {
         Queue(const std::string& type) : queue_(fossil_queue_create(const_cast<char*>(type.c_str()))) {}
 
         ~Queue() {
-            fossil_queue_erase(queue_);
+            fossil_queue_destroy(queue_);
         }
 
         void insert(fossil_tofu_t data) {

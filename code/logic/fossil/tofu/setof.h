@@ -48,7 +48,7 @@ fossil_set_t* fossil_set_create(char* type);
  * @param set The set to erase.
  * @note      O(n) - Linear time complexity, where n is the number of elements in the set.
  */
-void fossil_set_erase(fossil_set_t* set);
+void fossil_set_destroy(fossil_set_t* set);
 
 /**
  * Insert data into the set.
@@ -169,7 +169,7 @@ namespace fossil {
         Set(const std::string& type) : set_(fossil_set_create(const_cast<char*>(type.c_str()))) {}
 
         ~Set() {
-            fossil_set_erase(set_);
+            fossil_set_destroy(set_);
         }
 
         void insert(fossil_tofu_t data) {

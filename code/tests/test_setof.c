@@ -32,7 +32,7 @@ FOSSIL_SETUP(struct_set_fixture) {
 }
 
 FOSSIL_TEARDOWN(struct_set_fixture) {
-    fossil_set_erase(mock_set);
+    fossil_set_destroy(mock_set);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -43,7 +43,7 @@ FOSSIL_TEARDOWN(struct_set_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_set_create_and_erase) {
+FOSSIL_TEST(test_set_create_and_destroy) {
     // Check if the set is created with the expected values
     ASSUME_NOT_CNULL(mock_set);
     ASSUME_ITS_CNULL(mock_set->head);
@@ -62,9 +62,9 @@ FOSSIL_TEST(test_set_insert_and_size) {
     // Check if the size is correct
     ASSUME_ITS_EQUAL_SIZE(3, fossil_set_size(mock_set));
 
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 FOSSIL_TEST(test_set_remove) {
@@ -102,10 +102,10 @@ FOSSIL_TEST(test_set_contains) {
     fossil_tofu_t nonExistingElement = fossil_tofu_create("int", "42");
     ASSUME_ITS_FALSE(fossil_set_contains(mock_set, nonExistingElement) == 0);
 
-    fossil_tofu_erase(&nonExistingElement);
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
+    fossil_tofu_destroy(&nonExistingElement);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 // benchmarking cases to capture the true
@@ -127,7 +127,7 @@ FOSSIL_TEST(stress_test_set) {
     // Stop the benchmark
     TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
-    fossil_tofu_erase(&element);
+    fossil_tofu_destroy(&element);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -135,7 +135,7 @@ FOSSIL_TEST(stress_test_set) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_setof_structure_tests) {
     // Set Fixture
-    ADD_TESTF(test_set_create_and_erase, struct_set_fixture);
+    ADD_TESTF(test_set_create_and_destroy, struct_set_fixture);
     ADD_TESTF(test_set_insert_and_size, struct_set_fixture);
     ADD_TESTF(test_set_remove, struct_set_fixture);
     ADD_TESTF(test_set_contains, struct_set_fixture);

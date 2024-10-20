@@ -40,7 +40,7 @@ FOSSIL_TEST(test_fossil_tofu_arrayof_create) {
     ASSUME_ITS_EQUAL_I32(10, array.array[0].value.int_val);
     ASSUME_ITS_EQUAL_I32(20, array.array[1].value.int_val);
     ASSUME_ITS_EQUAL_I32(30, array.array[2].value.int_val);
-    fossil_tofu_arrayof_erase(&array);
+    fossil_tofu_arrayof_destroy(&array);
 }
 
 FOSSIL_TEST(test_fossil_tofu_arrayof_add) {
@@ -52,26 +52,26 @@ FOSSIL_TEST(test_fossil_tofu_arrayof_add) {
     ASSUME_ITS_EQUAL_I32(2, fossil_tofu_arrayof_size(&array));
     ASSUME_ITS_EQUAL_I32(10, array.array[0].value.int_val);
     ASSUME_ITS_EQUAL_I32(20, array.array[1].value.int_val);
-    fossil_tofu_arrayof_erase(&array);
+    fossil_tofu_arrayof_destroy(&array);
 }
 
 FOSSIL_TEST(test_fossil_tofu_arrayof_get) {
     fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 3, "10", "20", "30");
     fossil_tofu_t tofu = fossil_tofu_arrayof_get(&array, 1);
     ASSUME_ITS_EQUAL_I32(20, tofu.value.int_val);
-    fossil_tofu_arrayof_erase(&array);
+    fossil_tofu_arrayof_destroy(&array);
 }
 
 FOSSIL_TEST(test_fossil_tofu_arrayof_size) {
     fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 2, "10", "20");
     ASSUME_ITS_EQUAL_I32(2, fossil_tofu_arrayof_size(&array));
-    fossil_tofu_arrayof_erase(&array);
+    fossil_tofu_arrayof_destroy(&array);
 }
 
 FOSSIL_TEST(test_fossil_tofu_arrayof_is_empty) {
     fossil_tofu_arrayof_t array = fossil_tofu_arrayof_create("int", 0);
     ASSUME_ITS_TRUE(fossil_tofu_arrayof_is_empty(&array));
-    fossil_tofu_arrayof_erase(&array);
+    fossil_tofu_arrayof_destroy(&array);
 }
 
 FOSSIL_TEST(test_fossil_tofu_arrayof_clear) {
@@ -79,7 +79,7 @@ FOSSIL_TEST(test_fossil_tofu_arrayof_clear) {
     fossil_tofu_arrayof_clear(&array);
     ASSUME_ITS_EQUAL_I32(0, fossil_tofu_arrayof_size(&array));
     ASSUME_ITS_TRUE(fossil_tofu_arrayof_is_empty(&array));
-    fossil_tofu_arrayof_erase(&array);
+    fossil_tofu_arrayof_destroy(&array);
 }
 
 // benchmarking cases to capture the true
@@ -92,7 +92,7 @@ FOSSIL_TEST(stress_test_array) {
         fossil_tofu_t tofu = fossil_tofu_create("int", "10");
         fossil_tofu_arrayof_add(&array, tofu);
     }
-    fossil_tofu_arrayof_erase(&array);
+    fossil_tofu_arrayof_destroy(&array);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *

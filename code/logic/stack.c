@@ -25,7 +25,7 @@ fossil_stack_t* fossil_stack_create(char* type) {
     return stack;
 }
 
-void fossil_stack_erase(fossil_stack_t* stack) {
+void fossil_stack_destroy(fossil_stack_t* stack) {
     if (!stack) return;
 
     fossil_stack_node_t* current = stack->top;

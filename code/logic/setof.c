@@ -25,7 +25,7 @@ fossil_set_t* fossil_set_create(char* type) {
     return set;
 }
 
-void fossil_set_erase(fossil_set_t* set) {
+void fossil_set_destroy(fossil_set_t* set) {
     if (!set) return;
 
     fossil_set_node_t* current = set->head;

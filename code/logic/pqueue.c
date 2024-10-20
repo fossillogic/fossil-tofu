@@ -25,7 +25,7 @@ fossil_pqueue_t* fossil_pqueue_create(char* type) {
     return pqueue;
 }
 
-void fossil_pqueue_erase(fossil_pqueue_t* pqueue) {
+void fossil_pqueue_destroy(fossil_pqueue_t* pqueue) {
     if (!pqueue) return;
 
     fossil_pqueue_node_t* current = pqueue->front;
