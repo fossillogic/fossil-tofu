@@ -251,7 +251,11 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
                 fprintf(stderr, "Invalid boolean value\n");
                 tofu.type = FOSSIL_TOFU_TYPE_GHOST;
             } else {
-                tofu.value.bool_val = (uint8_t)atoi(value);
+                if (strcmp(value, "true") == 0) {
+                    tofu.value.bool_val = true;
+                } else {
+                    tofu.value.bool_val = false;
+                }
             }
             break;
         default:
