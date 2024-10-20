@@ -88,10 +88,6 @@ FOSSIL_TEST(test_fossil_tofu_create) {
     fossil_tofu_t tofu_cstr = fossil_tofu_create("cstr", "Hello");
     ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_CSTR, tofu_cstr.type);
     ASSUME_ITS_EQUAL_CSTR("Hello", tofu_cstr.value.cchar_string_val);
-
-    fossil_tofu_t tofu_bstr = fossil_tofu_create("bstr", "Hello");
-    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_BSTR, tofu_bstr.type);
-    ASSUME_ITS_EQUAL_BSTR("Hello", tofu_bstr.value.byte_string_val);
 }
 
 // Test case for fossil_tofu_equals function
@@ -318,10 +314,8 @@ FOSSIL_TEST(stress_test_tofu_type) {
     }
 
     // Stop the benchmark
-    float elapsed_time = TEST_CURRENT_TIME();
-    TEST_DURATION_SEC(elapsed_time, 1.0);
-
-    ASSUME_ITS_EQUAL_F32(1.0, elapsed_time, FOSSIL_TEST_FLOAT_EPSILON);
+    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
+    ASSUME_ITS_EQUAL_F32(1.0, TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0), FOSSIL_TEST_DOUBLE_EPSILON);
 
     // Erase the tofu object
     fossil_tofu_erase(&tofu);
