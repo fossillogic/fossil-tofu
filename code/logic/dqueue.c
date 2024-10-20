@@ -44,7 +44,7 @@ void fossil_dqueue_erase(fossil_dqueue_t* dqueue) {
 int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
     fossil_dqueue_node_t* new_node = (fossil_dqueue_node_t*)fossil_tofu_alloc(sizeof(fossil_dqueue_node_t));
     if (!new_node) {
-        return -1;  // Allocation failed
+        return FOSSIL_TOFU_FAILURE;  // Allocation failed
     }
 
     new_node->data = data;
@@ -62,12 +62,12 @@ int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
         dqueue->rear = new_node;
     }
 
-    return 0;  // Success
+    return FOSSIL_TOFU_SUCCESS;  // Success
 }
 
 int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue, fossil_tofu_t* data) {
     if (fossil_dqueue_is_empty(dqueue)) {
-        return -1;  // Empty queue
+        return FOSSIL_TOFU_FAILURE;  // Empty queue
     }
 
     fossil_dqueue_node_t* node_to_remove = dqueue->front;
@@ -83,18 +83,18 @@ int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue, fossil_tofu_t* data) {
     *data = node_to_remove->data;
     fossil_tofu_free(node_to_remove);
 
-    return 0;  // Success
+    return FOSSIL_TOFU_SUCCESS;  // Success
 }
 
 int32_t fossil_dqueue_search(const fossil_dqueue_t* dqueue, fossil_tofu_t data) {
     fossil_dqueue_node_t* current = dqueue->front;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
-            return 0;  // Found
+            return FOSSIL_TOFU_SUCCESS;  // Found
         }
         current = current->next;
     }
-    return -1;  // Not found
+    return FOSSIL_TOFU_FAILURE;  // Not found
 }
 
 size_t fossil_dqueue_size(const fossil_dqueue_t* dqueue) {
@@ -124,11 +124,11 @@ int32_t fossil_dqueue_setter(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
         if (fossil_tofu_equals(current->data, data)) {
             // Assuming `data` should replace current->data
             current->data = data;  // Update data
-            return 0;  // Success
+            return FOSSIL_TOFU_SUCCESS;  // Success
         }
         current = current->next;
     }
-    return -1;  // Not found
+    return FOSSIL_TOFU_FAILURE;  // Not found
 }
 
 bool fossil_dqueue_not_empty(const fossil_dqueue_t* dqueue) {

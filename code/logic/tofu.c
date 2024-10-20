@@ -520,7 +520,7 @@ int fossil_tofu_actionof_compare(fossil_tofu_t a, fossil_tofu_t b) {
         case FOSSIL_TOFU_TYPE_FLOAT:
             return (a.value.float_val > b.value.float_val) - (a.value.float_val < b.value.float_val);
         default:
-            return 0;
+            return FOSSIL_TOFU_SUCCESS;
     }
 }
 

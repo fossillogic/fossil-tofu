@@ -41,19 +41,19 @@ void fossil_stack_erase(fossil_stack_t* stack) {
 int32_t fossil_stack_insert(fossil_stack_t* stack, fossil_tofu_t data) {
     fossil_stack_node_t* new_node = (fossil_stack_node_t*)fossil_tofu_alloc(sizeof(fossil_stack_node_t));
     if (!new_node) {
-        return -1; // Allocation failed
+        return FOSSIL_TOFU_FAILURE; // Allocation failed
     }
 
     new_node->data = data;
     new_node->next = stack->top;
     stack->top = new_node;
 
-    return 0; // Success
+    return FOSSIL_TOFU_SUCCESS; // Success
 }
 
 int32_t fossil_stack_remove(fossil_stack_t* stack, fossil_tofu_t* data) {
     if (!stack->top) {
-        return -1; // Stack is empty
+        return FOSSIL_TOFU_FAILURE; // Stack is empty
     }
 
     fossil_stack_node_t* top_node = stack->top;
@@ -61,18 +61,18 @@ int32_t fossil_stack_remove(fossil_stack_t* stack, fossil_tofu_t* data) {
     stack->top = top_node->next;
     fossil_tofu_free(top_node);
 
-    return 0; // Success
+    return FOSSIL_TOFU_SUCCESS; // Success
 }
 
 int32_t fossil_stack_search(const fossil_stack_t* stack, fossil_tofu_t data) {
     fossil_stack_node_t* current = stack->top;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
-            return 0; // Found
+            return FOSSIL_TOFU_SUCCESS; // Found
         }
         current = current->next;
     }
-    return -1; // Not found
+    return FOSSIL_TOFU_FAILURE; // Not found
 }
 
 size_t fossil_stack_size(const fossil_stack_t* stack) {
@@ -101,11 +101,11 @@ int32_t fossil_stack_setter(fossil_stack_t* stack, fossil_tofu_t data) {
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
             current->data = data; // Update data
-            return 0; // Success
+            return FOSSIL_TOFU_SUCCESS; // Success
         }
         current = current->next;
     }
-    return -1; // Not found
+    return FOSSIL_TOFU_FAILURE; // Not found
 }
 
 bool fossil_stack_not_empty(const fossil_stack_t* stack) {

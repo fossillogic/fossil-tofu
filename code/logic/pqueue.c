@@ -41,7 +41,7 @@ void fossil_pqueue_erase(fossil_pqueue_t* pqueue) {
 int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority) {
     fossil_pqueue_node_t* new_node = (fossil_pqueue_node_t*)fossil_tofu_alloc(sizeof(fossil_pqueue_node_t));
     if (!new_node) {
-        return -1;  // Allocation failed
+        return FOSSIL_TOFU_FAILURE;  // Allocation failed
     }
 
     new_node->data = data;
@@ -60,12 +60,12 @@ int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_
         current->next = new_node;
     }
 
-    return 0;  // Success
+    return FOSSIL_TOFU_SUCCESS;  // Success
 }
 
 int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, fossil_tofu_t* data, int32_t priority) {
     if (fossil_pqueue_is_empty(pqueue)) {
-        return -1;  // Empty queue
+        return FOSSIL_TOFU_FAILURE;  // Empty queue
     }
 
     fossil_pqueue_node_t* current = pqueue->front;
@@ -77,7 +77,7 @@ int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, fossil_tofu_t* data, int32
     }
 
     if (!current) {
-        return -1;  // Not found
+        return FOSSIL_TOFU_FAILURE;  // Not found
     }
 
     if (prev) {
@@ -89,18 +89,18 @@ int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, fossil_tofu_t* data, int32
     *data = current->data;
     fossil_tofu_free(current);
 
-    return 0;  // Success
+    return FOSSIL_TOFU_SUCCESS;  // Success
 }
 
 int32_t fossil_pqueue_search(const fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority) {
     fossil_pqueue_node_t* current = pqueue->front;
     while (current) {
         if (current->priority == priority && fossil_tofu_equals(current->data, data)) {
-            return 0;  // Found
+            return FOSSIL_TOFU_SUCCESS;  // Found
         }
         current = current->next;
     }
-    return -1;  // Not found
+    return FOSSIL_TOFU_FAILURE;  // Not found
 }
 
 size_t fossil_pqueue_size(const fossil_pqueue_t* pqueue) {
@@ -129,11 +129,11 @@ int32_t fossil_pqueue_setter(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_
     while (current) {
         if (current->priority == priority && fossil_tofu_equals(current->data, data)) {
             current->data = data;  // Update data
-            return 0;  // Success
+            return FOSSIL_TOFU_SUCCESS;  // Success
         }
         current = current->next;
     }
-    return -1;  // Not found
+    return FOSSIL_TOFU_FAILURE;  // Not found
 }
 
 bool fossil_pqueue_not_empty(const fossil_pqueue_t* pqueue) {

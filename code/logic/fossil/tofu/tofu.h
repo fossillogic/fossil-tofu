@@ -61,6 +61,12 @@ extern "C"
 {
 #endif
 
+// Consistent return values for functions in the "tofu" data structure.
+enum {
+    FOSSIL_TOFU_SUCCESS = 0,
+    FOSSIL_TOFU_FAILURE = -1
+};
+
 // Enumerated types for representing various data types in the "tofu" data structure.
 typedef enum {
     FOSSIL_TOFU_TYPE_GHOST, // Ghost type for unknown type.
