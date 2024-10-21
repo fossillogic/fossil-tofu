@@ -38,7 +38,18 @@ fossil_tofu_mapof_t fossil_tofu_mapof_create(const char *type) {
     }
 
     map.keys = (fossil_tofu_t *)fossil_tofu_alloc(map.capacity * sizeof(fossil_tofu_t));
+    if (map.keys == NULL) {
+        fprintf(stderr, "Error: Memory allocation failed for map keys.\n");
+        exit(EXIT_FAILURE);
+    }
+
     map.values = (fossil_tofu_t *)fossil_tofu_alloc(map.capacity * sizeof(fossil_tofu_t));
+    if (map.values == NULL) {
+        fprintf(stderr, "Error: Memory allocation failed for map values.\n");
+        fossil_tofu_free(map.keys);
+        exit(EXIT_FAILURE);
+    }
+
     map.size = 0;
 
     return map;
@@ -48,8 +59,19 @@ fossil_tofu_mapof_t fossil_tofu_mapof_create(const char *type) {
 void fossil_tofu_mapof_add(fossil_tofu_mapof_t *map, fossil_tofu_t key, fossil_tofu_t value) {
     if (map->size >= map->capacity) {
         map->capacity *= 2;
-        map->keys = (fossil_tofu_t *)fossil_tofu_realloc(map->keys, map->capacity * sizeof(fossil_tofu_t));
-        map->values = (fossil_tofu_t *)fossil_tofu_realloc(map->values, map->capacity * sizeof(fossil_tofu_t));
+        fossil_tofu_t *new_keys = (fossil_tofu_t *)fossil_tofu_realloc(map->keys, map->capacity * sizeof(fossil_tofu_t));
+        if (new_keys == NULL) {
+            fprintf(stderr, "Error: Memory reallocation failed for map keys.\n");
+            exit(EXIT_FAILURE);
+        }
+        map->keys = new_keys;
+
+        fossil_tofu_t *new_values = (fossil_tofu_t *)fossil_tofu_realloc(map->values, map->capacity * sizeof(fossil_tofu_t));
+        if (new_values == NULL) {
+            fprintf(stderr, "Error: Memory reallocation failed for map values.\n");
+            exit(EXIT_FAILURE);
+        }
+        map->values = new_values;
     }
     map->keys[map->size] = key;
     map->values[map->size] = value;
@@ -92,27 +114,55 @@ void fossil_tofu_mapof_remove(fossil_tofu_mapof_t *map, fossil_tofu_t key) {
 
 // Function to get the size of the map
 size_t fossil_tofu_mapof_size(fossil_tofu_mapof_t *map) {
+    if (map == NULL) {
+        fprintf(stderr, "Error: Null map pointer in fossil_tofu_mapof_size.\n");
+        exit(EXIT_FAILURE);
+    }
     return map->size;
+}
+
+size_t fossil_tofu_mapof_capacity(fossil_tofu_mapof_t *map) {
+    if (map == NULL) {
+        fprintf(stderr, "Error: Null map pointer in fossil_tofu_mapof_capacity.\n");
+        exit(EXIT_FAILURE);
+    }
+    return map->capacity;
 }
 
 // Function to check if the map is empty
 bool fossil_tofu_mapof_is_empty(fossil_tofu_mapof_t *map) {
+    if (map == NULL) {
+        fprintf(stderr, "Error: Null map pointer in fossil_tofu_mapof_is_empty.\n");
+        exit(EXIT_FAILURE);
+    }
     return map->size == 0;
 }
 
 // Function to clear the map
 void fossil_tofu_mapof_clear(fossil_tofu_mapof_t *map) {
+    if (map == NULL) {
+        fprintf(stderr, "Error: Null map pointer in fossil_tofu_mapof_clear.\n");
+        exit(EXIT_FAILURE);
+    }
     map->size = 0;
 }
 
 // Function to destroy the map and free allocated memory
 void fossil_tofu_mapof_destroy(fossil_tofu_mapof_t *map) {
+    if (map == NULL) {
+        fprintf(stderr, "Error: Null map pointer in fossil_tofu_mapof_destroy.\n");
+        exit(EXIT_FAILURE);
+    }
     fossil_tofu_free(map->keys);
     fossil_tofu_free(map->values);
 }
 
 // Utility function to print the map
 void fossil_tofu_mapof_print(fossil_tofu_mapof_t *map) {
+    if (map == NULL) {
+        fprintf(stderr, "Error: Null map pointer in fossil_tofu_mapof_print.\n");
+        exit(EXIT_FAILURE);
+    }
     for (size_t i = 0; i < map->size; i++) {
         printf("Key: ");
         fossil_tofu_print(map->keys[i]);

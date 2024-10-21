@@ -87,6 +87,15 @@ void fossil_tofu_mapof_remove(fossil_tofu_mapof_t *map, fossil_tofu_t key);
 size_t fossil_tofu_mapof_size(fossil_tofu_mapof_t *map);
 
 /**
+ * @brief Gets the capacity of the map.
+ *
+ * @param map The map to get the capacity of.
+ * @return The capacity of the map.
+ * @note Time complexity: O(1)
+ */
+size_t fossil_tofu_mapof_capacity(fossil_tofu_mapof_t *map);
+
+/**
  * @brief Checks if the map is empty.
  *
  * @param map The map to check.
