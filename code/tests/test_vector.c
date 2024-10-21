@@ -32,7 +32,7 @@ FOSSIL_SETUP(struct_vect_fixture) {
 }
 
 FOSSIL_TEARDOWN(struct_vect_fixture) {
-    fossil_vector_erase(mock_vector);
+    fossil_vector_destroy(mock_vector);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -59,9 +59,9 @@ FOSSIL_TEST(test_vector_push_back) {
     ASSUME_ITS_EQUAL_I32(10, mock_vector->data[1].value.int_val);
     ASSUME_ITS_EQUAL_I32(5, mock_vector->data[2].value.int_val);
 
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 FOSSIL_TEST(test_vector_search) {
@@ -83,10 +83,10 @@ FOSSIL_TEST(test_vector_search) {
     fossil_tofu_t nonExistingElement = fossil_tofu_create("int", "100");
     ASSUME_ITS_EQUAL_I32(-1, fossil_vector_search(mock_vector, nonExistingElement));
 
-    fossil_tofu_erase(&nonExistingElement);
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
+    fossil_tofu_destroy(&nonExistingElement);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 FOSSIL_TEST(test_vector_reverse) {
@@ -107,9 +107,9 @@ FOSSIL_TEST(test_vector_reverse) {
     ASSUME_ITS_EQUAL_I32(10, mock_vector->data[1].value.int_val);
     ASSUME_ITS_EQUAL_I32(42, mock_vector->data[2].value.int_val);
 
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 FOSSIL_TEST(test_vector_size) {
@@ -125,9 +125,9 @@ FOSSIL_TEST(test_vector_size) {
     // Check the size of the vector
     ASSUME_ITS_EQUAL_U32(3, fossil_vector_size(mock_vector));
 
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 // benchmarking cases to capture the true

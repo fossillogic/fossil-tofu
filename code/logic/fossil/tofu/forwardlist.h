@@ -48,7 +48,7 @@ fossil_flist_t* fossil_flist_create(char* type);
  * @param flist The forward list to erase.
  * @complexity  O(n)
  */
-void fossil_flist_erase(fossil_flist_t* flist);
+void fossil_flist_destroy(fossil_flist_t* flist);
 
 /**
  * Insert data into the forward list.
@@ -175,7 +175,7 @@ namespace fossil {
         ForwardList(const std::string& type) : flist_(fossil_flist_create(const_cast<char*>(type.c_str()))) {}
 
         ~ForwardList() {
-            fossil_flist_erase(flist_);
+            fossil_flist_destroy(flist_);
         }
 
         void insert(fossil_tofu_t data) {

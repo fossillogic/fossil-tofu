@@ -32,7 +32,7 @@ FOSSIL_SETUP(struct_stack_fixture) {
 }
 
 FOSSIL_TEARDOWN(struct_stack_fixture) {
-    fossil_stack_erase(mock_stack);
+    fossil_stack_destroy(mock_stack);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -43,7 +43,7 @@ FOSSIL_TEARDOWN(struct_stack_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_stack_create_and_erase) {
+FOSSIL_TEST(test_stack_create_and_destroy) {
     // Check if the stack is created with the expected values
     ASSUME_NOT_CNULL(mock_stack);
     ASSUME_ITS_CNULL(mock_stack->top);
@@ -62,9 +62,9 @@ FOSSIL_TEST(test_stack_insert_and_size) {
     // Check if the size is correct
     ASSUME_ITS_EQUAL_SIZE(3, fossil_stack_size(mock_stack));
 
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 FOSSIL_TEST(test_stack_remove) {
@@ -87,9 +87,9 @@ FOSSIL_TEST(test_stack_remove) {
     // Check if the size is correct
     ASSUME_ITS_EQUAL_SIZE(2, fossil_stack_size(mock_stack));
 
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 // benchmarking cases to capture the true
@@ -111,7 +111,7 @@ FOSSIL_TEST(stress_test_stack) {
     // Stop the benchmark
     TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
-    fossil_tofu_erase(&element);
+    fossil_tofu_destroy(&element);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -120,7 +120,7 @@ FOSSIL_TEST(stress_test_stack) {
 
 FOSSIL_TEST_GROUP(c_stack_structure_tests) {
     // Stack Fixture
-    ADD_TESTF(test_stack_create_and_erase, struct_stack_fixture);
+    ADD_TESTF(test_stack_create_and_destroy, struct_stack_fixture);
     ADD_TESTF(test_stack_insert_and_size, struct_stack_fixture);
     ADD_TESTF(test_stack_remove, struct_stack_fixture);
 

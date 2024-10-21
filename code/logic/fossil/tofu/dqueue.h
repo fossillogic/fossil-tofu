@@ -50,7 +50,7 @@ fossil_dqueue_t* fossil_dqueue_create(char* type);
  * @param dqueue The dynamic queue to erase.
  * @note         Time complexity: O(n)
  */
-void fossil_dqueue_erase(fossil_dqueue_t* dqueue);
+void fossil_dqueue_destroy(fossil_dqueue_t* dqueue);
 
 /**
  * Insert data into the dynamic queue.
@@ -161,7 +161,7 @@ namespace fossil {
         DQueue(const std::string& type) : dqueue_(fossil_dqueue_create(const_cast<char*>(type.c_str()))) {}
 
         ~DQueue() {
-            fossil_dqueue_erase(dqueue_);
+            fossil_dqueue_destroy(dqueue_);
         }
 
         void insert(fossil_tofu_t data) {

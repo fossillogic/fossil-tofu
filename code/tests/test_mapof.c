@@ -34,72 +34,72 @@
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_fossil_tofu_mapof_create) {
-    fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
-    ASSUME_ITS_EQUAL_I32(0, fossil_tofu_mapof_size(&map));
-    fossil_tofu_mapof_erase(&map);
+FOSSIL_TEST(test_fossil_map_create) {
+    fossil_map_t map = fossil_map_create("int");
+    ASSUME_ITS_EQUAL_I32(0, fossil_map_size(&map));
+    fossil_map_destroy(&map);
 }
 
-FOSSIL_TEST(test_fossil_tofu_mapof_add_and_get) {
-    fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
+FOSSIL_TEST(test_fossil_map_add_and_get) {
+    fossil_map_t map = fossil_map_create("int");
     fossil_tofu_t key = fossil_tofu_create("int", "1");
     fossil_tofu_t value = fossil_tofu_create("int", "100");
-    fossil_tofu_mapof_add(&map, key, value);
-    fossil_tofu_t retrieved = fossil_tofu_mapof_get(&map, key);
+    fossil_map_add(&map, key, value);
+    fossil_tofu_t retrieved = fossil_map_get(&map, key);
     ASSUME_ITS_EQUAL_I32(100, retrieved.value.int_val);
-    fossil_tofu_mapof_erase(&map);
+    fossil_map_destroy(&map);
 }
 
-FOSSIL_TEST(test_fossil_tofu_mapof_contains) {
-    fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
+FOSSIL_TEST(test_fossil_map_contains) {
+    fossil_map_t map = fossil_map_create("int");
     fossil_tofu_t key = fossil_tofu_create("int", "1");
     fossil_tofu_t value = fossil_tofu_create("int", "100");
-    fossil_tofu_mapof_add(&map, key, value);
-    ASSUME_ITS_TRUE(fossil_tofu_mapof_contains(&map, key));
-    fossil_tofu_mapof_erase(&map);
+    fossil_map_add(&map, key, value);
+    ASSUME_ITS_TRUE(fossil_map_contains(&map, key));
+    fossil_map_destroy(&map);
 }
 
-FOSSIL_TEST(test_fossil_tofu_mapof_remove) {
-    fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
+FOSSIL_TEST(test_fossil_map_remove) {
+    fossil_map_t map = fossil_map_create("int");
     fossil_tofu_t key = fossil_tofu_create("int", "1");
     fossil_tofu_t value = fossil_tofu_create("int", "100");
-    fossil_tofu_mapof_add(&map, key, value);
-    fossil_tofu_mapof_remove(&map, key);
-    ASSUME_ITS_FALSE(fossil_tofu_mapof_contains(&map, key));
-    fossil_tofu_mapof_erase(&map);
+    fossil_map_add(&map, key, value);
+    fossil_map_remove(&map, key);
+    ASSUME_ITS_FALSE(fossil_map_contains(&map, key));
+    fossil_map_destroy(&map);
 }
 
-FOSSIL_TEST(test_fossil_tofu_mapof_size) {
-    fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
+FOSSIL_TEST(test_fossil_map_size) {
+    fossil_map_t map = fossil_map_create("int");
     fossil_tofu_t key1 = fossil_tofu_create("int", "1");
     fossil_tofu_t value1 = fossil_tofu_create("int", "100");
     fossil_tofu_t key2 = fossil_tofu_create("int", "2");
     fossil_tofu_t value2 = fossil_tofu_create("int", "200");
-    fossil_tofu_mapof_add(&map, key1, value1);
-    fossil_tofu_mapof_add(&map, key2, value2);
-    ASSUME_ITS_EQUAL_I32(2, fossil_tofu_mapof_size(&map));
-    fossil_tofu_mapof_erase(&map);
+    fossil_map_add(&map, key1, value1);
+    fossil_map_add(&map, key2, value2);
+    ASSUME_ITS_EQUAL_I32(2, fossil_map_size(&map));
+    fossil_map_destroy(&map);
 }
 
-FOSSIL_TEST(test_fossil_tofu_mapof_is_empty) {
-    fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
-    ASSUME_ITS_TRUE(fossil_tofu_mapof_is_empty(&map));
+FOSSIL_TEST(test_fossil_map_is_empty) {
+    fossil_map_t map = fossil_map_create("int");
+    ASSUME_ITS_TRUE(fossil_map_is_empty(&map));
     fossil_tofu_t key = fossil_tofu_create("int", "1");
     fossil_tofu_t value = fossil_tofu_create("int", "100");
-    fossil_tofu_mapof_add(&map, key, value);
-    ASSUME_ITS_FALSE(fossil_tofu_mapof_is_empty(&map));
-    fossil_tofu_mapof_erase(&map);
+    fossil_map_add(&map, key, value);
+    ASSUME_ITS_FALSE(fossil_map_is_empty(&map));
+    fossil_map_destroy(&map);
 }
 
-FOSSIL_TEST(test_fossil_tofu_mapof_clear) {
-    fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
+FOSSIL_TEST(test_fossil_map_clear) {
+    fossil_map_t map = fossil_map_create("int");
     fossil_tofu_t key = fossil_tofu_create("int", "1");
     fossil_tofu_t value = fossil_tofu_create("int", "100");
-    fossil_tofu_mapof_add(&map, key, value);
-    fossil_tofu_mapof_clear(&map);
-    ASSUME_ITS_EQUAL_I32(0, fossil_tofu_mapof_size(&map));
-    ASSUME_ITS_TRUE(fossil_tofu_mapof_is_empty(&map));
-    fossil_tofu_mapof_erase(&map);
+    fossil_map_add(&map, key, value);
+    fossil_map_clear(&map);
+    ASSUME_ITS_EQUAL_I32(0, fossil_map_size(&map));
+    ASSUME_ITS_TRUE(fossil_map_is_empty(&map));
+    fossil_map_destroy(&map);
 }
 
 // benchmarking cases to capture the true
@@ -108,7 +108,7 @@ FOSSIL_TEST(test_fossil_tofu_mapof_clear) {
 
 FOSSIL_TEST(stress_test_map) {
     // Create a map object
-    fossil_tofu_mapof_t map = fossil_tofu_mapof_create("int");
+    fossil_map_t map = fossil_map_create("int");
 
     // Start the benchmark
     TEST_BENCHMARK();
@@ -117,15 +117,15 @@ FOSSIL_TEST(stress_test_map) {
     for (size_t i = 0; i < 1000000; i++) {
         fossil_tofu_t key = fossil_tofu_create("int", "1");
         fossil_tofu_t value = fossil_tofu_create("int", "100");
-        fossil_tofu_mapof_add(&map, key, value);
-        fossil_tofu_mapof_remove(&map, key);
+        fossil_map_add(&map, key, value);
+        fossil_map_remove(&map, key);
     }
 
     // Stop the benchmark
     TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
     // Erase the map object
-    fossil_tofu_mapof_erase(&map);
+    fossil_map_destroy(&map);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -133,13 +133,13 @@ FOSSIL_TEST(stress_test_map) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_mapof_structure_tests) {    
     // Generic ToFu MapOf Fixture
-    ADD_TEST(test_fossil_tofu_mapof_create);
-    ADD_TEST(test_fossil_tofu_mapof_add_and_get);
-    ADD_TEST(test_fossil_tofu_mapof_contains);
-    ADD_TEST(test_fossil_tofu_mapof_remove);
-    ADD_TEST(test_fossil_tofu_mapof_size);
-    ADD_TEST(test_fossil_tofu_mapof_is_empty);
-    ADD_TEST(test_fossil_tofu_mapof_clear);
+    ADD_TEST(test_fossil_map_create);
+    ADD_TEST(test_fossil_map_add_and_get);
+    ADD_TEST(test_fossil_map_contains);
+    ADD_TEST(test_fossil_map_remove);
+    ADD_TEST(test_fossil_map_size);
+    ADD_TEST(test_fossil_map_is_empty);
+    ADD_TEST(test_fossil_map_clear);
 
     // Benchmarking
     ADD_TEST(stress_test_map);

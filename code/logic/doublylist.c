@@ -17,6 +17,8 @@
 #include <string.h>
 
 fossil_dlist_t* fossil_dlist_create(char* type) {
+    if (!type) return NULL;  // Error checking for null type
+
     fossil_dlist_t* dlist = (fossil_dlist_t*)fossil_tofu_alloc(sizeof(fossil_dlist_t));
     if (dlist) {
         dlist->head = NULL;
@@ -26,7 +28,7 @@ fossil_dlist_t* fossil_dlist_create(char* type) {
     return dlist;
 }
 
-void fossil_dlist_erase(fossil_dlist_t* dlist) {
+void fossil_dlist_destroy(fossil_dlist_t* dlist) {
     if (!dlist) return;
 
     fossil_dlist_node_t* current = dlist->head;
@@ -63,6 +65,8 @@ int32_t fossil_dlist_insert(fossil_dlist_t* dlist, fossil_tofu_t data) {
 }
 
 int32_t fossil_dlist_remove(fossil_dlist_t* dlist, fossil_tofu_t* data) {
+    if (!dlist || !data) return FOSSIL_TOFU_FAILURE;  // Error checking for null pointers
+
     if (fossil_dlist_is_empty(dlist)) {
         return FOSSIL_TOFU_FAILURE;  // Empty list
     }
@@ -85,6 +89,8 @@ int32_t fossil_dlist_remove(fossil_dlist_t* dlist, fossil_tofu_t* data) {
 }
 
 int32_t fossil_dlist_search(const fossil_dlist_t* dlist, fossil_tofu_t data) {
+    if (!dlist) return FOSSIL_TOFU_FAILURE;  // Error checking for null list
+
     fossil_dlist_node_t* current = dlist->head;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
@@ -142,6 +148,8 @@ void fossil_dlist_reverse_backward(fossil_dlist_t* dlist) {
 }
 
 size_t fossil_dlist_size(const fossil_dlist_t* dlist) {
+    if (!dlist) return 0;  // Error checking for null list
+
     size_t count = 0;
     fossil_dlist_node_t* current = dlist->head;
     while (current) {
@@ -152,6 +160,8 @@ size_t fossil_dlist_size(const fossil_dlist_t* dlist) {
 }
 
 fossil_tofu_t* fossil_dlist_getter(fossil_dlist_t* dlist, fossil_tofu_t data) {
+    if (!dlist) return NULL;  // Error checking for null list
+
     fossil_dlist_node_t* current = dlist->head;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
@@ -163,6 +173,8 @@ fossil_tofu_t* fossil_dlist_getter(fossil_dlist_t* dlist, fossil_tofu_t data) {
 }
 
 int32_t fossil_dlist_setter(fossil_dlist_t* dlist, fossil_tofu_t data) {
+    if (!dlist) return FOSSIL_TOFU_FAILURE;  // Error checking for null list
+
     fossil_dlist_node_t* current = dlist->head;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {

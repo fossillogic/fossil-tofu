@@ -32,7 +32,7 @@ FOSSIL_SETUP(struct_pqueue_fixture) {
 }
 
 FOSSIL_TEARDOWN(struct_pqueue_fixture) {
-    fossil_pqueue_erase(mock_pqueue);
+    fossil_pqueue_destroy(mock_pqueue);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -43,7 +43,7 @@ FOSSIL_TEARDOWN(struct_pqueue_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_pqueue_create_and_erase) {
+FOSSIL_TEST(test_pqueue_create_and_destroy) {
     // Check if the priority queue is created with the expected values
     ASSUME_NOT_CNULL(mock_pqueue);
     ASSUME_ITS_CNULL(mock_pqueue->front);
@@ -116,7 +116,7 @@ FOSSIL_TEST(stress_test_pqueue) {
     // Stop the benchmark
     TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
-    fossil_tofu_erase(&element);
+    fossil_tofu_destroy(&element);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -124,7 +124,7 @@ FOSSIL_TEST(stress_test_pqueue) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_pqueue_structure_tests) {    
     // Priority Queue Fixture
-    ADD_TESTF(test_pqueue_create_and_erase, struct_pqueue_fixture);
+    ADD_TESTF(test_pqueue_create_and_destroy, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_insert_and_size, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_remove, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_not_empty_and_is_empty, struct_pqueue_fixture);

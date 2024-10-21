@@ -26,7 +26,7 @@ typedef struct {
     fossil_tofu_t *array; // Array of fossil_tofu_t elements
     size_t size;          // Current size of the array
     size_t capacity;      // Capacity of the array
-} fossil_tofu_arrayof_t;
+} fossil_array_t;
 
 /**
  * @brief Creates an arrayof with an initial set of elements.
@@ -34,71 +34,98 @@ typedef struct {
  * @param type The type of the elements.
  * @param size The number of initial elements.
  * @param ... The initial values for the elements.
- * @return A newly created fossil_tofu_arrayof_t.
+ * @return A newly created fossil_array_t.
  * @note Time complexity: O(n), where n is the number of initial elements.
  */
-fossil_tofu_arrayof_t fossil_tofu_arrayof_create(char *type, size_t size, ...);
+fossil_array_t fossil_array_create(char *type, size_t size, ...);
 
 /**
  * @brief Destroys the arrayof and frees allocated memory.
  * 
- * @param arrayof A pointer to the fossil_tofu_arrayof_t to be destroyed.
+ * @param arrayof A pointer to the fossil_array_t to be destroyed.
  * @note Time complexity: O(1).
  */
-void fossil_tofu_arrayof_erase(fossil_tofu_arrayof_t *arrayof);
+void fossil_array_destroy(fossil_array_t *arrayof);
 
 /**
  * @brief Adds a fossil_tofu_t element to the end of the arrayof.
  * 
- * @param arrayof A pointer to the fossil_tofu_arrayof_t.
+ * @param arrayof A pointer to the fossil_array_t.
  * @param tofu The fossil_tofu_t element to add.
  * @note Time complexity: O(1) on average, O(n) in the worst case when resizing.
  */
-void fossil_tofu_arrayof_add(fossil_tofu_arrayof_t *arrayof, fossil_tofu_t tofu);
+void fossil_array_add(fossil_array_t *arrayof, fossil_tofu_t tofu);
+
+/**
+ * @brief Adds a fossil_tofu_t element at the specified index in the arrayof.
+ * 
+ * @param arrayof A pointer to the fossil_array_t.
+ * @param index The index at which to add the element.
+ * @param tofu The fossil_tofu_t element to add.
+ * @note Time complexity: O(n) on average, O(n) in the worst case when resizing.
+ */
+void fossil_array_add_at(fossil_array_t *arrayof, size_t index, fossil_tofu_t tofu);
+
+/**
+ * @brief Removes the last element from the arrayof.
+ * 
+ * @param arrayof A pointer to the fossil_array_t.
+ * @note Time complexity: O(1).
+ */
+void fossil_array_remove(fossil_array_t *arrayof, size_t index);
 
 /**
  * @brief Retrieves the fossil_tofu_t element at a specified index.
  * 
- * @param arrayof A pointer to the fossil_tofu_arrayof_t.
+ * @param arrayof A pointer to the fossil_array_t.
  * @param index The index of the element to retrieve.
  * @return The fossil_tofu_t element at the specified index.
  * @note Time complexity: O(1).
  */
-fossil_tofu_t fossil_tofu_arrayof_get(const fossil_tofu_arrayof_t *arrayof, size_t index);
+fossil_tofu_t fossil_array_get(const fossil_array_t *arrayof, size_t index);
+
+/**
+ * @brief Returns the capacity of the arrayof.
+ * 
+ * @param arrayof A pointer to the fossil_array_t.
+ * @return The current capacity of the arrayof.
+ * @note Time complexity: O(1).
+ */
+size_t fossil_array_capacity(const fossil_array_t *arrayof);
 
 /**
  * @brief Returns the current size of the arrayof.
  * 
- * @param arrayof A pointer to the fossil_tofu_arrayof_t.
+ * @param arrayof A pointer to the fossil_array_t.
  * @return The current number of elements in the arrayof.
  * @note Time complexity: O(1).
  */
-size_t fossil_tofu_arrayof_size(const fossil_tofu_arrayof_t *arrayof);
+size_t fossil_array_size(const fossil_array_t *arrayof);
 
 /**
  * @brief Checks if the arrayof is empty.
  * 
- * @param arrayof A pointer to the fossil_tofu_arrayof_t.
+ * @param arrayof A pointer to the fossil_array_t.
  * @return True if the arrayof is empty, false otherwise.
  * @note Time complexity: O(1).
  */
-bool fossil_tofu_arrayof_is_empty(const fossil_tofu_arrayof_t *arrayof);
+bool fossil_array_is_empty(const fossil_array_t *arrayof);
 
 /**
  * @brief Clears all elements from the arrayof.
  * 
- * @param arrayof A pointer to the fossil_tofu_arrayof_t.
+ * @param arrayof A pointer to the fossil_array_t.
  * @note Time complexity: O(n), where n is the number of elements in the array.
  */
-void fossil_tofu_arrayof_clear(fossil_tofu_arrayof_t *arrayof);
+void fossil_array_clear(fossil_array_t *arrayof);
 
 /**
  * @brief Prints all elements of the arrayof.
  * 
- * @param arrayof A pointer to the fossil_tofu_arrayof_t.
+ * @param arrayof A pointer to the fossil_array_t.
  * @note Time complexity: O(n), where n is the number of elements in the array.
  */
-void fossil_tofu_arrayof_print(const fossil_tofu_arrayof_t *arrayof);
+void fossil_array_print(const fossil_array_t *arrayof);
 
 #ifdef __cplusplus
 }
@@ -111,38 +138,46 @@ void fossil_tofu_arrayof_print(const fossil_tofu_arrayof_t *arrayof);
 namespace fossil {
     class ArrayOf {
     public:
-        ArrayOf(const std::string& type, size_t size, ...) : arrayof_(fossil_tofu_arrayof_create(const_cast<char*>(type.c_str()), size)) {}
+        ArrayOf(const std::string& type, size_t size, ...) : arrayof_(fossil_array_create(const_cast<char*>(type.c_str()), size)) {}
 
         ~ArrayOf() {
-            fossil_tofu_arrayof_erase(arrayof_);
+            fossil_array_destroy(arrayof_);
         }
 
         void add(fossil_tofu_t element) {
-            fossil_tofu_arrayof_add(arrayof_, element);
+            fossil_array_add(arrayof_, element);
+        }
+
+        void add_at(size_t index, fossil_tofu_t element) {
+            fossil_array_add_at(arrayof_, index, element);
+        }
+
+        void remove(size_t index) {
+            fossil_array_remove(arrayof_, index);
         }
 
         fossil_tofu_t get(size_t index) {
-            return fossil_tofu_arrayof_get(arrayof_, index);
+            return fossil_array_get(arrayof_, index);
         }
 
         size_t size() {
-            return fossil_tofu_arrayof_size(arrayof_);
+            return fossil_array_size(arrayof_);
         }
 
         bool is_empty() {
-            return fossil_tofu_arrayof_is_empty(arrayof_);
+            return fossil_array_is_empty(arrayof_);
         }
 
         void clear() {
-            fossil_tofu_arrayof_clear(arrayof_);
+            fossil_array_clear(arrayof_);
         }
 
         void print() {
-            fossil_tofu_arrayof_print(arrayof_);
+            fossil_array_print(arrayof_);
         }
 
     private:
-        fossil_tofu_arrayof_t* arrayof_;
+        fossil_array_t* arrayof_;
     };
 }
 #endif

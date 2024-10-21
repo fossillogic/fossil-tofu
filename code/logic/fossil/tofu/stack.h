@@ -47,7 +47,7 @@ fossil_stack_t* fossil_stack_create(char* type);
  * @param stack The stack to erase.
  * @note        Time complexity: O(n)
  */
-void fossil_stack_erase(fossil_stack_t* stack);
+void fossil_stack_destroy(fossil_stack_t* stack);
 
 /**
  * Insert data into the stack.
@@ -168,7 +168,7 @@ namespace fossil {
         Stack(const std::string& type) : stack_(fossil_stack_create(const_cast<char*>(type.c_str()))) {}
 
         ~Stack() {
-            fossil_stack_erase(stack_);
+            fossil_stack_destroy(stack_);
         }
 
         void insert(fossil_tofu_t data) {

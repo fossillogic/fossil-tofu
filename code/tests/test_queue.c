@@ -32,7 +32,7 @@ FOSSIL_SETUP(struct_queue_fixture) {
 }
 
 FOSSIL_TEARDOWN(struct_queue_fixture) {
-    fossil_queue_erase(mock_queue);
+    fossil_queue_destroy(mock_queue);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -43,7 +43,7 @@ FOSSIL_TEARDOWN(struct_queue_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_queue_create_and_erase) {
+FOSSIL_TEST(test_queue_create_and_destroy) {
     // Check if the queue is created with the expected values
     ASSUME_NOT_CNULL(mock_queue);
     ASSUME_ITS_CNULL(mock_queue->front);
@@ -84,10 +84,10 @@ FOSSIL_TEST(test_queue_remove) {
     // Check if the size is correct
     ASSUME_ITS_EQUAL_SIZE(2, fossil_queue_size(mock_queue));
 
-    fossil_tofu_erase(&removedElement);
-    fossil_tofu_erase(&element1);
-    fossil_tofu_erase(&element2);
-    fossil_tofu_erase(&element3);
+    fossil_tofu_destroy(&removedElement);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 FOSSIL_TEST(test_queue_not_empty_and_is_empty) {
@@ -102,7 +102,7 @@ FOSSIL_TEST(test_queue_not_empty_and_is_empty) {
     // Check not empty after insertion
     ASSUME_ITS_FALSE(fossil_queue_is_empty(mock_queue));
 
-    fossil_tofu_erase(&element);
+    fossil_tofu_destroy(&element);
 }
 
 // benchmarking cases to capture the true
@@ -124,7 +124,7 @@ FOSSIL_TEST(stress_test_queue) {
     // Stop the benchmark
     TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
-    fossil_tofu_erase(&element);
+    fossil_tofu_destroy(&element);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -132,7 +132,7 @@ FOSSIL_TEST(stress_test_queue) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_structure_tests) {    
     // Queue Fixture
-    ADD_TESTF(test_queue_create_and_erase, struct_queue_fixture);
+    ADD_TESTF(test_queue_create_and_destroy, struct_queue_fixture);
     ADD_TESTF(test_queue_insert_and_size, struct_queue_fixture);
     ADD_TESTF(test_queue_remove, struct_queue_fixture);
     ADD_TESTF(test_queue_not_empty_and_is_empty, struct_queue_fixture);

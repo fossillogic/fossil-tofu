@@ -31,14 +31,14 @@ FOSSIL_SETUP(struct_dlist_fixture) {
 }
 
 FOSSIL_TEARDOWN(struct_dlist_fixture) {
-    fossil_dlist_erase(mock_dlist);
+    fossil_dlist_destroy(mock_dlist);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Cases
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_dlist_create_and_erase) {
+FOSSIL_TEST(test_dlist_create_and_destroy) {
     // Check if the doubly linked list is created with the expected values
     ASSUME_NOT_CNULL(mock_dlist);
     ASSUME_ITS_CNULL(mock_dlist->head);
@@ -151,7 +151,7 @@ FOSSIL_TEST(stress_test_dlist) {
     // Stop the benchmark
     TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
 
-    fossil_tofu_erase(&element);
+    fossil_tofu_destroy(&element);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -159,7 +159,7 @@ FOSSIL_TEST(stress_test_dlist) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
 FOSSIL_TEST_GROUP(c_dlist_structure_tests) {    
-    ADD_TESTF(test_dlist_create_and_erase, struct_dlist_fixture);
+    ADD_TESTF(test_dlist_create_and_destroy, struct_dlist_fixture);
     ADD_TESTF(test_dlist_insert_and_size, struct_dlist_fixture);
     ADD_TESTF(test_dlist_remove, struct_dlist_fixture);
     ADD_TESTF(test_dlist_reverse_forward, struct_dlist_fixture);

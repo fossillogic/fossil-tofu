@@ -17,16 +17,27 @@
 #include <string.h>
 
 fossil_pqueue_t* fossil_pqueue_create(char* type) {
-    fossil_pqueue_t* pqueue = (fossil_pqueue_t*)fossil_tofu_alloc(sizeof(fossil_pqueue_t));
-    if (pqueue) {
-        pqueue->front = NULL;
-        pqueue->type = type;  // Assuming type is a static string or managed separately
+    if (!type) {
+        fprintf(stderr, "Error: type cannot be NULL\n");
+        return NULL;
     }
+
+    fossil_pqueue_t* pqueue = (fossil_pqueue_t*)fossil_tofu_alloc(sizeof(fossil_pqueue_t));
+    if (!pqueue) {
+        fprintf(stderr, "Error: Memory allocation failed for pqueue\n");
+        return NULL;
+    }
+
+    pqueue->front = NULL;
+    pqueue->type = type;  // Assuming type is a static string or managed separately
     return pqueue;
 }
 
-void fossil_pqueue_erase(fossil_pqueue_t* pqueue) {
-    if (!pqueue) return;
+void fossil_pqueue_destroy(fossil_pqueue_t* pqueue) {
+    if (!pqueue) {
+        fprintf(stderr, "Error: pqueue cannot be NULL\n");
+        return;
+    }
 
     fossil_pqueue_node_t* current = pqueue->front;
     while (current) {
@@ -39,8 +50,14 @@ void fossil_pqueue_erase(fossil_pqueue_t* pqueue) {
 }
 
 int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority) {
+    if (!pqueue) {
+        fprintf(stderr, "Error: pqueue cannot be NULL\n");
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     fossil_pqueue_node_t* new_node = (fossil_pqueue_node_t*)fossil_tofu_alloc(sizeof(fossil_pqueue_node_t));
     if (!new_node) {
+        fprintf(stderr, "Error: Memory allocation failed for new_node\n");
         return FOSSIL_TOFU_FAILURE;  // Allocation failed
     }
 
@@ -64,6 +81,16 @@ int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_
 }
 
 int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, fossil_tofu_t* data, int32_t priority) {
+    if (!pqueue) {
+        fprintf(stderr, "Error: pqueue cannot be NULL\n");
+        return FOSSIL_TOFU_FAILURE;
+    }
+
+    if (!data) {
+        fprintf(stderr, "Error: data cannot be NULL\n");
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     if (fossil_pqueue_is_empty(pqueue)) {
         return FOSSIL_TOFU_FAILURE;  // Empty queue
     }
@@ -93,6 +120,11 @@ int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, fossil_tofu_t* data, int32
 }
 
 int32_t fossil_pqueue_search(const fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority) {
+    if (!pqueue) {
+        fprintf(stderr, "Error: pqueue cannot be NULL\n");
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     fossil_pqueue_node_t* current = pqueue->front;
     while (current) {
         if (current->priority == priority && fossil_tofu_equals(current->data, data)) {
@@ -104,6 +136,11 @@ int32_t fossil_pqueue_search(const fossil_pqueue_t* pqueue, fossil_tofu_t data, 
 }
 
 size_t fossil_pqueue_size(const fossil_pqueue_t* pqueue) {
+    if (!pqueue) {
+        fprintf(stderr, "Error: pqueue cannot be NULL\n");
+        return 0;
+    }
+
     size_t count = 0;
     fossil_pqueue_node_t* current = pqueue->front;
     while (current) {
@@ -114,6 +151,11 @@ size_t fossil_pqueue_size(const fossil_pqueue_t* pqueue) {
 }
 
 fossil_tofu_t* fossil_pqueue_getter(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority) {
+    if (!pqueue) {
+        fprintf(stderr, "Error: pqueue cannot be NULL\n");
+        return NULL;
+    }
+
     fossil_pqueue_node_t* current = pqueue->front;
     while (current) {
         if (current->priority == priority && fossil_tofu_equals(current->data, data)) {
@@ -125,6 +167,11 @@ fossil_tofu_t* fossil_pqueue_getter(fossil_pqueue_t* pqueue, fossil_tofu_t data,
 }
 
 int32_t fossil_pqueue_setter(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority) {
+    if (!pqueue) {
+        fprintf(stderr, "Error: pqueue cannot be NULL\n");
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     fossil_pqueue_node_t* current = pqueue->front;
     while (current) {
         if (current->priority == priority && fossil_tofu_equals(current->data, data)) {
@@ -137,6 +184,10 @@ int32_t fossil_pqueue_setter(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_
 }
 
 bool fossil_pqueue_not_empty(const fossil_pqueue_t* pqueue) {
+    if (!pqueue) {
+        fprintf(stderr, "Error: pqueue cannot be NULL\n");
+        return false;
+    }
     return pqueue->front != NULL;
 }
 
@@ -145,6 +196,10 @@ bool fossil_pqueue_not_cnullptr(const fossil_pqueue_t* pqueue) {
 }
 
 bool fossil_pqueue_is_empty(const fossil_pqueue_t* pqueue) {
+    if (!pqueue) {
+        fprintf(stderr, "Error: pqueue cannot be NULL\n");
+        return true;
+    }
     return pqueue->front == NULL;
 }
 
