@@ -121,14 +121,6 @@ bool fossil_map_is_empty(fossil_map_t *map);
 void fossil_map_clear(fossil_map_t *map);
 
 /**
- * @brief Destroys the map and frees the allocated memory.
- *
- * @param map The map to destroy.
- * @note Time complexity: O(n)
- */
-void fossil_map_destroy(fossil_map_t *map);
-
-/**
  * @brief Prints the contents of the map.
  *
  * @param map The map to print.

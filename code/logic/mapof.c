@@ -55,15 +55,6 @@ fossil_map_t fossil_map_create(const char *type) {
     return map;
 }
 
-void fossil_map_destroy(fossil_map_t *map) {
-    if (map == NULL) {
-        fprintf(stderr, "Error: Null map pointer in fossil_map_destroy.\n");
-        exit(EXIT_FAILURE);
-    }
-    fossil_tofu_free(map->keys);
-    fossil_tofu_free(map->values);
-}
-
 // Function to add a key-value pair to the map
 void fossil_map_add(fossil_map_t *map, fossil_tofu_t key, fossil_tofu_t value) {
     if (map->size >= map->capacity) {
