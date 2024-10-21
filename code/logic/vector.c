@@ -26,7 +26,7 @@ fossil_vector_t* fossil_vector_create(char* type) {
     vector->data = NULL;
     vector->size = 0;
     vector->capacity = 0;
-    vector->type = strdup(type); // Duplicate the type string
+    vector->type = fossil_tofu_strdup(type); // Duplicate the type string
     if (!vector->type) {
         fprintf(stderr, "Error: Memory allocation failed for type string.\n");
         fossil_tofu_free(vector);
