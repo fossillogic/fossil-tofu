@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
 
         footer = """
     FOSSIL_TEST_RUN();
-    return FOSSIL_TEST_destroy();
+    return FOSSIL_TEST_ERASE();
 } // end of func
 """
 
