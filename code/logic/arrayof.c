@@ -19,8 +19,8 @@
 #include <stdio.h>
 
 // Function to create an arrayof with an initial set of elements
-fossil_tofu_arrayof_t fossil_tofu_arrayof_create(char *type, size_t size, ...) {
-    fossil_tofu_arrayof_t arrayof;
+fossil_array_t fossil_array_create(char *type, size_t size, ...) {
+    fossil_array_t arrayof;
     arrayof.size = size;
     arrayof.capacity = size > 0 ? size : 1; // Ensure at least capacity of 1
     arrayof.array = (fossil_tofu_t *)fossil_tofu_alloc(arrayof.capacity * sizeof(fossil_tofu_t));
@@ -41,7 +41,7 @@ fossil_tofu_arrayof_t fossil_tofu_arrayof_create(char *type, size_t size, ...) {
 }
 
 // Function to destroy arrayof and free allocated memory
-void fossil_tofu_arrayof_destroy(fossil_tofu_arrayof_t *arrayof) {
+void fossil_array_destroy(fossil_array_t *arrayof) {
     for (size_t i = 0; i < arrayof->size; ++i) {
         fossil_tofu_destroy(&(arrayof->array[i]));
     }
@@ -51,7 +51,7 @@ void fossil_tofu_arrayof_destroy(fossil_tofu_arrayof_t *arrayof) {
 }
 
 // Function to add a fossil_tofu_t element to the end of the arrayof
-void fossil_tofu_arrayof_add(fossil_tofu_arrayof_t *arrayof, fossil_tofu_t tofu) {
+void fossil_array_add(fossil_array_t *arrayof, fossil_tofu_t tofu) {
     if (arrayof == NULL || arrayof->array == NULL) {
         fprintf(stderr, "Invalid arrayof\n");
         return;
@@ -68,7 +68,7 @@ void fossil_tofu_arrayof_add(fossil_tofu_arrayof_t *arrayof, fossil_tofu_t tofu)
     arrayof->array[arrayof->size++] = tofu;
 }
 
-void fossil_tofu_arrayof_add_at(fossil_tofu_arrayof_t *arrayof, size_t index, fossil_tofu_t tofu) {
+void fossil_array_add_at(fossil_array_t *arrayof, size_t index, fossil_tofu_t tofu) {
     if (arrayof == NULL || arrayof->array == NULL) {
         fprintf(stderr, "Invalid arrayof\n");
         return;
@@ -93,7 +93,7 @@ void fossil_tofu_arrayof_add_at(fossil_tofu_arrayof_t *arrayof, size_t index, fo
     ++arrayof->size;
 }
 
-void fossil_tofu_arrayof_remove(fossil_tofu_arrayof_t *arrayof, size_t index) {
+void fossil_array_remove(fossil_array_t *arrayof, size_t index) {
     if (arrayof == NULL || arrayof->array == NULL) {
         fprintf(stderr, "Invalid arrayof\n");
         return;
@@ -109,7 +109,7 @@ void fossil_tofu_arrayof_remove(fossil_tofu_arrayof_t *arrayof, size_t index) {
     --arrayof->size;
 }
 
-fossil_tofu_t fossil_tofu_arrayof_get(const fossil_tofu_arrayof_t *arrayof, size_t index) {
+fossil_tofu_t fossil_array_get(const fossil_array_t *arrayof, size_t index) {
     if (arrayof == NULL || arrayof->array == NULL) {
         fprintf(stderr, "Invalid arrayof\n");
         exit(EXIT_FAILURE);
@@ -121,7 +121,7 @@ fossil_tofu_t fossil_tofu_arrayof_get(const fossil_tofu_arrayof_t *arrayof, size
     return arrayof->array[index];
 }
 
-size_t fossil_tofu_arrayof_capacity(const fossil_tofu_arrayof_t *arrayof) {
+size_t fossil_array_capacity(const fossil_array_t *arrayof) {
     if (arrayof == NULL) {
         fprintf(stderr, "Invalid arrayof\n");
         return 0;
@@ -129,7 +129,7 @@ size_t fossil_tofu_arrayof_capacity(const fossil_tofu_arrayof_t *arrayof) {
     return arrayof->capacity;
 }
 
-size_t fossil_tofu_arrayof_size(const fossil_tofu_arrayof_t *arrayof) {
+size_t fossil_array_size(const fossil_array_t *arrayof) {
     if (arrayof == NULL) {
         fprintf(stderr, "Invalid arrayof\n");
         return 0;
@@ -137,7 +137,7 @@ size_t fossil_tofu_arrayof_size(const fossil_tofu_arrayof_t *arrayof) {
     return arrayof->size;
 }
 
-bool fossil_tofu_arrayof_is_empty(const fossil_tofu_arrayof_t *arrayof) {
+bool fossil_array_is_empty(const fossil_array_t *arrayof) {
     if (arrayof == NULL) {
         fprintf(stderr, "Invalid arrayof\n");
         return true;
@@ -145,7 +145,7 @@ bool fossil_tofu_arrayof_is_empty(const fossil_tofu_arrayof_t *arrayof) {
     return arrayof->size == 0;
 }
 
-void fossil_tofu_arrayof_clear(fossil_tofu_arrayof_t *arrayof) {
+void fossil_array_clear(fossil_array_t *arrayof) {
     if (arrayof == NULL || arrayof->array == NULL) {
         fprintf(stderr, "Invalid arrayof\n");
         return;
@@ -156,7 +156,7 @@ void fossil_tofu_arrayof_clear(fossil_tofu_arrayof_t *arrayof) {
     arrayof->size = 0;
 }
 
-void fossil_tofu_arrayof_print(const fossil_tofu_arrayof_t *arrayof) {
+void fossil_array_print(const fossil_array_t *arrayof) {
     if (arrayof == NULL || arrayof->array == NULL) {
         fprintf(stderr, "Invalid arrayof\n");
         return;
