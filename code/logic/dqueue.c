@@ -17,12 +17,26 @@
 #include <string.h>
 
 fossil_dqueue_t* fossil_dqueue_create(char* type) {
-    fossil_dqueue_t* dqueue = (fossil_dqueue_t*)fossil_tofu_alloc(sizeof(fossil_dqueue_t));
-    if (dqueue) {
-        dqueue->front = NULL;
-        dqueue->rear = NULL;
-        dqueue->type = fossil_tofu_strdup(type);  // Duplicate the type string to manage its memory
+    if (!type) {
+        fprintf(stderr, "Error: type cannot be NULL\n");
+        return NULL;
     }
+
+    fossil_dqueue_t* dqueue = (fossil_dqueue_t*)fossil_tofu_alloc(sizeof(fossil_dqueue_t));
+    if (!dqueue) {
+        fprintf(stderr, "Error: Memory allocation failed for dqueue\n");
+        return NULL;
+    }
+
+    dqueue->front = NULL;
+    dqueue->rear = NULL;
+    dqueue->type = fossil_tofu_strdup(type);  // Duplicate the type string to manage its memory
+    if (!dqueue->type) {
+        fprintf(stderr, "Error: Memory allocation failed for type string\n");
+        fossil_tofu_free(dqueue);
+        return NULL;
+    }
+
     return dqueue;
 }
 
@@ -42,8 +56,14 @@ void fossil_dqueue_destroy(fossil_dqueue_t* dqueue) {
 }
 
 int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
+    if (!dqueue) {
+        fprintf(stderr, "Error: dqueue cannot be NULL\n");
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     fossil_dqueue_node_t* new_node = (fossil_dqueue_node_t*)fossil_tofu_alloc(sizeof(fossil_dqueue_node_t));
     if (!new_node) {
+        fprintf(stderr, "Error: Memory allocation failed for new node\n");
         return FOSSIL_TOFU_FAILURE;  // Allocation failed
     }
 
@@ -66,6 +86,11 @@ int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
 }
 
 int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue, fossil_tofu_t* data) {
+    if (!dqueue || !data) {
+        fprintf(stderr, "Error: dqueue and data cannot be NULL\n");
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     if (fossil_dqueue_is_empty(dqueue)) {
         return FOSSIL_TOFU_FAILURE;  // Empty queue
     }
@@ -87,6 +112,11 @@ int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue, fossil_tofu_t* data) {
 }
 
 int32_t fossil_dqueue_search(const fossil_dqueue_t* dqueue, fossil_tofu_t data) {
+    if (!dqueue) {
+        fprintf(stderr, "Error: dqueue cannot be NULL\n");
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     fossil_dqueue_node_t* current = dqueue->front;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
@@ -98,6 +128,11 @@ int32_t fossil_dqueue_search(const fossil_dqueue_t* dqueue, fossil_tofu_t data) 
 }
 
 size_t fossil_dqueue_size(const fossil_dqueue_t* dqueue) {
+    if (!dqueue) {
+        fprintf(stderr, "Error: dqueue cannot be NULL\n");
+        return 0;
+    }
+
     size_t count = 0;
     fossil_dqueue_node_t* current = dqueue->front;
     while (current) {
@@ -108,6 +143,11 @@ size_t fossil_dqueue_size(const fossil_dqueue_t* dqueue) {
 }
 
 fossil_tofu_t* fossil_dqueue_getter(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
+    if (!dqueue) {
+        fprintf(stderr, "Error: dqueue cannot be NULL\n");
+        return NULL;
+    }
+
     fossil_dqueue_node_t* current = dqueue->front;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
@@ -119,6 +159,11 @@ fossil_tofu_t* fossil_dqueue_getter(fossil_dqueue_t* dqueue, fossil_tofu_t data)
 }
 
 int32_t fossil_dqueue_setter(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
+    if (!dqueue) {
+        fprintf(stderr, "Error: dqueue cannot be NULL\n");
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     fossil_dqueue_node_t* current = dqueue->front;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
@@ -132,6 +177,10 @@ int32_t fossil_dqueue_setter(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
 }
 
 bool fossil_dqueue_not_empty(const fossil_dqueue_t* dqueue) {
+    if (!dqueue) {
+        fprintf(stderr, "Error: dqueue cannot be NULL\n");
+        return false;
+    }
     return dqueue->front != NULL;
 }
 
@@ -140,6 +189,10 @@ bool fossil_dqueue_not_cnullptr(const fossil_dqueue_t* dqueue) {
 }
 
 bool fossil_dqueue_is_empty(const fossil_dqueue_t* dqueue) {
+    if (!dqueue) {
+        fprintf(stderr, "Error: dqueue cannot be NULL\n");
+        return true;
+    }
     return dqueue->front == NULL;
 }
 

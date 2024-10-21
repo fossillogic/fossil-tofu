@@ -17,16 +17,27 @@
 #include <string.h>
 
 fossil_flist_t* fossil_flist_create(char* type) {
-    fossil_flist_t* flist = (fossil_flist_t*)fossil_tofu_alloc(sizeof(fossil_flist_t));
-    if (flist) {
-        flist->head = NULL;
-        flist->type = type;  // Assuming type is a static string or managed separately
+    if (!type) {
+        fprintf(stderr, "Error: type cannot be NULL\n");
+        return NULL;
     }
+
+    fossil_flist_t* flist = (fossil_flist_t*)fossil_tofu_alloc(sizeof(fossil_flist_t));
+    if (!flist) {
+        fprintf(stderr, "Error: Memory allocation failed for fossil_flist_t\n");
+        return NULL;
+    }
+
+    flist->head = NULL;
+    flist->type = type;  // Assuming type is a static string or managed separately
     return flist;
 }
 
 void fossil_flist_destroy(fossil_flist_t* flist) {
-    if (!flist) return;
+    if (!flist) {
+        fprintf(stderr, "Error: flist cannot be NULL\n");
+        return;
+    }
 
     fossil_flist_node_t* current = flist->head;
     while (current) {
@@ -39,8 +50,14 @@ void fossil_flist_destroy(fossil_flist_t* flist) {
 }
 
 int32_t fossil_flist_insert(fossil_flist_t* flist, fossil_tofu_t data) {
+    if (!flist) {
+        fprintf(stderr, "Error: flist cannot be NULL\n");
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     fossil_flist_node_t* new_node = (fossil_flist_node_t*)fossil_tofu_alloc(sizeof(fossil_flist_node_t));
     if (!new_node) {
+        fprintf(stderr, "Error: Memory allocation failed for fossil_flist_node_t\n");
         return FOSSIL_TOFU_FAILURE;  // Allocation failed
     }
 
@@ -52,6 +69,11 @@ int32_t fossil_flist_insert(fossil_flist_t* flist, fossil_tofu_t data) {
 }
 
 int32_t fossil_flist_remove(fossil_flist_t* flist, fossil_tofu_t* data) {
+    if (!flist || !data) {
+        fprintf(stderr, "Error: flist and data cannot be NULL\n");
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     if (fossil_flist_is_cnullptr(flist)) {
         return FOSSIL_TOFU_FAILURE;  // Empty list
     }
@@ -65,6 +87,11 @@ int32_t fossil_flist_remove(fossil_flist_t* flist, fossil_tofu_t* data) {
 }
 
 int32_t fossil_flist_search(const fossil_flist_t* flist, fossil_tofu_t data) {
+    if (!flist) {
+        fprintf(stderr, "Error: flist cannot be NULL\n");
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     fossil_flist_node_t* current = flist->head;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
@@ -76,6 +103,11 @@ int32_t fossil_flist_search(const fossil_flist_t* flist, fossil_tofu_t data) {
 }
 
 void fossil_flist_reverse_forward(fossil_flist_t* flist) {
+    if (!flist) {
+        fprintf(stderr, "Error: flist cannot be NULL\n");
+        return;
+    }
+
     fossil_flist_node_t* prev = NULL;
     fossil_flist_node_t* current = flist->head;
     fossil_flist_node_t* next = NULL;
@@ -95,6 +127,11 @@ void fossil_flist_reverse_backward(fossil_flist_t* flist) {
 }
 
 size_t fossil_flist_size(const fossil_flist_t* flist) {
+    if (!flist) {
+        fprintf(stderr, "Error: flist cannot be NULL\n");
+        return 0;
+    }
+
     size_t count = 0;
     fossil_flist_node_t* current = flist->head;
     while (current) {
@@ -105,6 +142,11 @@ size_t fossil_flist_size(const fossil_flist_t* flist) {
 }
 
 fossil_tofu_t* fossil_flist_getter(fossil_flist_t* flist, fossil_tofu_t data) {
+    if (!flist) {
+        fprintf(stderr, "Error: flist cannot be NULL\n");
+        return NULL;
+    }
+
     fossil_flist_node_t* current = flist->head;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
@@ -116,6 +158,11 @@ fossil_tofu_t* fossil_flist_getter(fossil_flist_t* flist, fossil_tofu_t data) {
 }
 
 int32_t fossil_flist_setter(fossil_flist_t* flist, fossil_tofu_t data) {
+    if (!flist) {
+        fprintf(stderr, "Error: flist cannot be NULL\n");
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     fossil_flist_node_t* current = flist->head;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
@@ -128,6 +175,10 @@ int32_t fossil_flist_setter(fossil_flist_t* flist, fossil_tofu_t data) {
 }
 
 bool fossil_flist_not_empty(const fossil_flist_t* flist) {
+    if (!flist) {
+        fprintf(stderr, "Error: flist cannot be NULL\n");
+        return false;
+    }
     return flist->head != NULL;
 }
 
@@ -136,6 +187,10 @@ bool fossil_flist_not_cnullptr(const fossil_flist_t* flist) {
 }
 
 bool fossil_flist_is_empty(const fossil_flist_t* flist) {
+    if (!flist) {
+        fprintf(stderr, "Error: flist cannot be NULL\n");
+        return true;
+    }
     return flist->head == NULL;
 }
 
