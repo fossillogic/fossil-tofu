@@ -57,6 +57,24 @@ void fossil_tofu_arrayof_destroy(fossil_tofu_arrayof_t *arrayof);
 void fossil_tofu_arrayof_add(fossil_tofu_arrayof_t *arrayof, fossil_tofu_t tofu);
 
 /**
+ * @brief Adds a fossil_tofu_t element at the specified index in the arrayof.
+ * 
+ * @param arrayof A pointer to the fossil_tofu_arrayof_t.
+ * @param index The index at which to add the element.
+ * @param tofu The fossil_tofu_t element to add.
+ * @note Time complexity: O(n) on average, O(n) in the worst case when resizing.
+ */
+void fossil_tofu_arrayof_add_at(fossil_tofu_arrayof_t *arrayof, size_t index, fossil_tofu_t tofu);
+
+/**
+ * @brief Removes the last element from the arrayof.
+ * 
+ * @param arrayof A pointer to the fossil_tofu_arrayof_t.
+ * @note Time complexity: O(1).
+ */
+void fossil_tofu_arrayof_remove(fossil_tofu_arrayof_t *arrayof, size_t index);
+
+/**
  * @brief Retrieves the fossil_tofu_t element at a specified index.
  * 
  * @param arrayof A pointer to the fossil_tofu_arrayof_t.
@@ -65,6 +83,15 @@ void fossil_tofu_arrayof_add(fossil_tofu_arrayof_t *arrayof, fossil_tofu_t tofu)
  * @note Time complexity: O(1).
  */
 fossil_tofu_t fossil_tofu_arrayof_get(const fossil_tofu_arrayof_t *arrayof, size_t index);
+
+/**
+ * @brief Returns the capacity of the arrayof.
+ * 
+ * @param arrayof A pointer to the fossil_tofu_arrayof_t.
+ * @return The current capacity of the arrayof.
+ * @note Time complexity: O(1).
+ */
+size_t fossil_tofu_arrayof_capacity(const fossil_tofu_arrayof_t *arrayof);
 
 /**
  * @brief Returns the current size of the arrayof.
@@ -119,6 +146,14 @@ namespace fossil {
 
         void add(fossil_tofu_t element) {
             fossil_tofu_arrayof_add(arrayof_, element);
+        }
+
+        void add_at(size_t index, fossil_tofu_t element) {
+            fossil_tofu_arrayof_add_at(arrayof_, index, element);
+        }
+
+        void remove(size_t index) {
+            fossil_tofu_arrayof_remove(arrayof_, index);
         }
 
         fossil_tofu_t get(size_t index) {
