@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-fossil_vector_t* fossil_vector_create(const char* type) {
+fossil_vector_t* fossil_vector_create(char* type) {
     fossil_vector_t* vector = (fossil_vector_t*)fossil_tofu_alloc(sizeof(fossil_vector_t));
     if (!vector) {
         fprintf(stderr, "Error: Memory allocation failed for vector.\n");
