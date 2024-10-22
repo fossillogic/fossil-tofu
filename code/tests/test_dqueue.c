@@ -63,7 +63,7 @@ FOSSIL_TEST(test_dqueue_insert) {
     ASSUME_ITS_EQUAL_I32(42, insertedElement->value.int_val);
 
     fossil_tofu_destroy(&element);
-    fossil_tofu_destroy(&insertedElement);
+    fossil_tofu_destroy(insertedElement);
 }
 
 FOSSIL_TEST(test_dqueue_size) {
