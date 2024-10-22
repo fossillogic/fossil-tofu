@@ -142,40 +142,6 @@ size_t fossil_dqueue_size(const fossil_dqueue_t* dqueue) {
     return count;
 }
 
-fossil_tofu_t* fossil_dqueue_getter(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
-    if (!dqueue) {
-        fprintf(stderr, "Error: dqueue cannot be NULL\n");
-        return NULL;
-    }
-
-    fossil_dqueue_node_t* current = dqueue->front;
-    while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            return &(current->data);  // Return pointer to the found data
-        }
-        current = current->next;
-    }
-    return NULL;  // Not found
-}
-
-int32_t fossil_dqueue_setter(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
-    if (!dqueue) {
-        fprintf(stderr, "Error: dqueue cannot be NULL\n");
-        return FOSSIL_TOFU_FAILURE;
-    }
-
-    fossil_dqueue_node_t* current = dqueue->front;
-    while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            // Assuming `data` should replace current->data
-            current->data = data;  // Update data
-            return FOSSIL_TOFU_SUCCESS;  // Success
-        }
-        current = current->next;
-    }
-    return FOSSIL_TOFU_FAILURE;  // Not found
-}
-
 bool fossil_dqueue_not_empty(const fossil_dqueue_t* dqueue) {
     if (!dqueue) {
         fprintf(stderr, "Error: dqueue cannot be NULL\n");

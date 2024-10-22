@@ -48,18 +48,10 @@ FOSSIL_TEST(test_flist_create_and_destroy) {
     ASSUME_ITS_CNULL(mock_flist->head);
 }
 
-FOSSIL_TEST(test_flist_insert_and_size) {
-    // Insert some elements
-    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
-    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
-    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
-
-    ASSUME_ITS_TRUE(fossil_flist_insert(mock_flist, element1) == 0);
-    ASSUME_ITS_TRUE(fossil_flist_insert(mock_flist, element2) == 0);
-    ASSUME_ITS_TRUE(fossil_flist_insert(mock_flist, element3) == 0);
-
-    // Check if the size is correct
-    ASSUME_ITS_EQUAL_SIZE(3, fossil_flist_size(mock_flist));
+FOSSIL_TEST(test_flist_insert) {
+    // Insert an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+    ASSUME_ITS_TRUE(fossil_flist_insert(mock_flist, element) == 0);
 }
 
 FOSSIL_TEST(test_flist_remove) {
@@ -83,6 +75,36 @@ FOSSIL_TEST(test_flist_remove) {
     ASSUME_ITS_EQUAL_SIZE(2, fossil_flist_size(mock_flist));
 }
 
+FOSSIL_TEST(test_flist_size) {
+    // Insert some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    ASSUME_ITS_TRUE(fossil_flist_insert(mock_flist, element1) == 0);
+    ASSUME_ITS_TRUE(fossil_flist_insert(mock_flist, element2) == 0);
+    ASSUME_ITS_TRUE(fossil_flist_insert(mock_flist, element3) == 0);
+
+    // Check if the size is correct
+    ASSUME_ITS_EQUAL_SIZE(3, fossil_flist_size(mock_flist));
+}
+
+FOSSIL_TEST(test_flist_search) {
+    // Insert an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+    fossil_flist_insert(mock_flist, element);
+
+    // Search for the element
+    ASSUME_ITS_TRUE(fossil_flist_search(mock_flist, element) == 0);
+
+    // Search for a non-existent element
+    fossil_tofu_t nonExistentElement = fossil_tofu_create("int", "100");
+    ASSUME_ITS_TRUE(fossil_flist_search(mock_flist, nonExistentElement) == -1);
+
+    fossil_tofu_destroy(&nonExistentElement);
+    fossil_tofu_destroy(&element);
+}
+
 FOSSIL_TEST(test_flist_reverse_forward) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
@@ -96,18 +118,9 @@ FOSSIL_TEST(test_flist_reverse_forward) {
     // Reverse the linked list forward
     fossil_flist_reverse_forward(mock_flist);
 
-    // Check if the elements are in reverse order
-    fossil_tofu_t* retrievedElement = fossil_flist_getter(mock_flist, element3);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(5, retrievedElement->value.int_val);
-
-    retrievedElement = fossil_flist_getter(mock_flist, element2);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(10, retrievedElement->value.int_val);
-
-    retrievedElement = fossil_flist_getter(mock_flist, element1);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(42, retrievedElement->value.int_val);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 FOSSIL_TEST(test_flist_reverse_backward) {
@@ -123,19 +136,49 @@ FOSSIL_TEST(test_flist_reverse_backward) {
     // Reverse the linked list backward
     fossil_flist_reverse_backward(mock_flist);
 
-    // Check if the elements are in reverse order
-    fossil_tofu_t* retrievedElement = fossil_flist_getter(mock_flist, element3);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(5, retrievedElement->value.int_val);
-
-    retrievedElement = fossil_flist_getter(mock_flist, element2);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(10, retrievedElement->value.int_val);
-
-    retrievedElement = fossil_flist_getter(mock_flist, element1);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(42, retrievedElement->value.int_val);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
+
+FOSSIL_TEST(test_flist_is_empty) {
+    // Check initially empty
+    ASSUME_ITS_TRUE(fossil_flist_is_empty(mock_flist));
+
+    // Insert an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+    fossil_flist_insert(mock_flist, element);
+
+    // Check if the linked list is not empty
+    ASSUME_ITS_FALSE(fossil_flist_is_empty(mock_flist));
+
+    fossil_tofu_destroy(&element);
+}
+
+FOSSIL_TEST(test_flist_not_empty) {
+    // Check initially not empty
+    ASSUME_ITS_FALSE(fossil_flist_not_empty(mock_flist));
+
+    // Insert an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+    fossil_flist_insert(mock_flist, element);
+
+    // Check if the linked list is not empty
+    ASSUME_ITS_TRUE(fossil_flist_not_empty(mock_flist));
+
+    fossil_tofu_destroy(&element);
+}
+
+FOSSIL_TEST(test_flist_is_cnullptr) {
+    // Check initially cnullptr
+    ASSUME_ITS_FALSE(fossil_flist_is_cnullptr(mock_flist));
+}
+
+FOSSIL_TEST(test_flist_not_cnullptr) {
+    // Check initially not cnullptr
+    ASSUME_ITS_TRUE(fossil_flist_not_cnullptr(mock_flist));
+}
+
 
 // benchmarking cases to capture the true
 // performence based on current structures
@@ -164,10 +207,16 @@ FOSSIL_TEST(stress_test_flist) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_flist_structure_tests) {    
     ADD_TESTF(test_flist_create_and_destroy, struct_flist_fixture);
-    ADD_TESTF(test_flist_insert_and_size, struct_flist_fixture);
+    ADD_TESTF(test_flist_insert, struct_flist_fixture);
     ADD_TESTF(test_flist_remove, struct_flist_fixture);
+    ADD_TESTF(test_flist_size, struct_flist_fixture);
+    ADD_TESTF(test_flist_search, struct_flist_fixture);
     ADD_TESTF(test_flist_reverse_forward, struct_flist_fixture);
     ADD_TESTF(test_flist_reverse_backward, struct_flist_fixture);
+    ADD_TESTF(test_flist_is_cnullptr, struct_flist_fixture);
+    ADD_TESTF(test_flist_not_cnullptr, struct_flist_fixture);
+    ADD_TESTF(test_flist_is_empty, struct_flist_fixture);
+    ADD_TESTF(test_flist_not_empty, struct_flist_fixture);
 
     // Benchmarking cases
     ADD_TESTF(stress_test_flist, struct_flist_fixture);

@@ -91,26 +91,6 @@ int32_t fossil_queue_search(const fossil_queue_t* queue, fossil_tofu_t data);
 size_t fossil_queue_size(const fossil_queue_t* queue);
 
 /**
- * Get the data from the queue matching the specified data.
- *
- * @param queue The queue from which to get the data.
- * @param data  The data to search for.
- * @return      A pointer to the matching data, or NULL if not found.
- * @note        Time complexity: O(n)
- */
-fossil_tofu_t* fossil_queue_getter(fossil_queue_t* queue, fossil_tofu_t data);
-
-/**
- * Set data in the queue.
- *
- * @param queue The queue in which to set the data.
- * @param data  The data to set.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int32_t fossil_queue_setter(fossil_queue_t* queue, fossil_tofu_t data);
-
-/**
  * Check if the queue is not empty.
  *
  * @param queue The queue to check.
@@ -179,14 +159,6 @@ namespace fossil {
 
         size_t size() {
             return fossil_queue_size(queue_);
-        }
-
-        fossil_tofu_t* getter(fossil_tofu_t data) {
-            return fossil_queue_getter(queue_, data);
-        }
-
-        void setter(fossil_tofu_t data) {
-            fossil_queue_setter(queue_, data);
         }
 
         bool not_empty() {

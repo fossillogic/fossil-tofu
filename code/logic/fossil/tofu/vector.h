@@ -189,28 +189,6 @@ bool fossil_vector_is_empty(const fossil_vector_t* vector);
 bool fossil_vector_not_empty(const fossil_vector_t* vector);
 
 /**
- * Set the element at the specified index in the vector.
- * 
- * Time complexity: O(1)
- *
- * @param vector The vector in which to set the element.
- * @param index  The index at which to set the element.
- * @param element The element to set.
- */
-void fossil_vector_setter(fossil_vector_t* vector, size_t index, fossil_tofu_t element);
-
-/**
- * Get the element at the specified index in the vector.
- * 
- * Time complexity: O(1)
- *
- * @param vector The vector from which to get the element.
- * @param index  The index from which to get the element.
- * @return       The element at the specified index.
- */
-fossil_tofu_t* fossil_vector_getter(const fossil_vector_t* vector, size_t index);
-
-/**
  * Get the size of the vector.
  * 
  * Time complexity: O(1)
@@ -302,14 +280,6 @@ namespace fossil {
 
         bool not_empty() {
             return fossil_vector_not_empty(vector_);
-        }
-
-        void setter(size_t index, fossil_tofu_t element) {
-            fossil_vector_setter(vector_, index, element);
-        }
-
-        fossil_tofu_t* getter(size_t index) {
-            return fossil_vector_getter(vector_, index);
         }
 
         size_t size() {

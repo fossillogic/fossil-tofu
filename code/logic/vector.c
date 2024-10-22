@@ -43,7 +43,6 @@ void fossil_vector_destroy(fossil_vector_t* vector) {
     vector->data = NULL;
     vector->size = 0;
     vector->capacity = 0;
-    fossil_tofu_free(vector->type); // Free the duplicated type string
     fossil_tofu_free(vector);
 }
 
@@ -262,33 +261,6 @@ bool fossil_vector_not_empty(const fossil_vector_t* vector) {
         return false;
     }
     return vector->size != 0;
-}
-
-void fossil_vector_setter(fossil_vector_t* vector, size_t index, fossil_tofu_t element) {
-    if (!vector) {
-        fprintf(stderr, "Error: Attempt to set an element in a null vector.\n");
-        return;
-    }
-
-    if (index < vector->size) {
-        vector->data[index] = element;
-    } else {
-        fprintf(stderr, "Error: Attempt to set an element at an out-of-bounds index.\n");
-    }
-}
-
-fossil_tofu_t* fossil_vector_getter(const fossil_vector_t* vector, size_t index) {
-    if (!vector) {
-        fprintf(stderr, "Error: Attempt to get an element from a null vector.\n");
-        return NULL;
-    }
-
-    if (index < vector->size) {
-        return &(vector->data[index]);
-    } else {
-        fprintf(stderr, "Error: Attempt to get an element at an out-of-bounds index.\n");
-        return NULL;
-    }
 }
 
 size_t fossil_vector_size(const fossil_vector_t* vector) {

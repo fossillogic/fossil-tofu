@@ -137,39 +137,6 @@ size_t fossil_set_size(const fossil_set_t* set) {
     return count;
 }
 
-fossil_tofu_t* fossil_set_getter(fossil_set_t* set, fossil_tofu_t data) {
-    if (!set) {
-        fprintf(stderr, "Error: set cannot be NULL\n");
-        return NULL;
-    }
-
-    fossil_set_node_t* current = set->head;
-    while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            return &(current->data);  // Return pointer to found data
-        }
-        current = current->next;
-    }
-    return NULL;  // Not found
-}
-
-int32_t fossil_set_setter(fossil_set_t* set, fossil_tofu_t data) {
-    if (!set) {
-        fprintf(stderr, "Error: set cannot be NULL\n");
-        return -1;
-    }
-
-    fossil_set_node_t* current = set->head;
-    while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            current->data = data;  // Update data
-            return FOSSIL_TOFU_SUCCESS;  // Success
-        }
-        current = current->next;
-    }
-    return FOSSIL_TOFU_FAILURE;  // Not found
-}
-
 bool fossil_set_not_empty(const fossil_set_t* set) {
     if (!set) {
         fprintf(stderr, "Error: set cannot be NULL\n");

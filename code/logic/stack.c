@@ -105,37 +105,6 @@ size_t fossil_stack_size(const fossil_stack_t* stack) {
     return count;
 }
 
-fossil_tofu_t* fossil_stack_getter(fossil_stack_t* stack, fossil_tofu_t data) {
-    if (!stack) {
-        return NULL; // Error: stack is NULL
-    }
-
-    fossil_stack_node_t* current = stack->top;
-    while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            return &(current->data); // Return pointer to found data
-        }
-        current = current->next;
-    }
-    return NULL; // Not found
-}
-
-int32_t fossil_stack_setter(fossil_stack_t* stack, fossil_tofu_t data) {
-    if (!stack) {
-        return FOSSIL_TOFU_FAILURE; // Error: stack is NULL
-    }
-
-    fossil_stack_node_t* current = stack->top;
-    while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            current->data = data; // Update data
-            return FOSSIL_TOFU_SUCCESS; // Success
-        }
-        current = current->next;
-    }
-    return FOSSIL_TOFU_FAILURE; // Not found
-}
-
 bool fossil_stack_not_empty(const fossil_stack_t* stack) {
     if (!stack) {
         return false; // Error: stack is NULL

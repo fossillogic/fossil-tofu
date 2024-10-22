@@ -93,18 +93,9 @@ FOSSIL_TEST(test_dlist_reverse_forward) {
     // Reverse the doubly linked list forward
     fossil_dlist_reverse_forward(mock_dlist);
 
-    // Check if the elements are in reverse order
-    fossil_tofu_t* retrievedElement = fossil_dlist_getter(mock_dlist, element3);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(5, retrievedElement->value.int_val);  // Updated to reflect correct order
-
-    retrievedElement = fossil_dlist_getter(mock_dlist, element2);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(10, retrievedElement->value.int_val);
-
-    retrievedElement = fossil_dlist_getter(mock_dlist, element1);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(42, retrievedElement->value.int_val);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 FOSSIL_TEST(test_dlist_reverse_backward) {
@@ -120,18 +111,9 @@ FOSSIL_TEST(test_dlist_reverse_backward) {
     // Reverse the doubly linked list backward
     fossil_dlist_reverse_backward(mock_dlist);
 
-    // Check if the elements are in reverse order
-    fossil_tofu_t* retrievedElement = fossil_dlist_getter(mock_dlist, element3);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(5, retrievedElement->value.int_val);  // Updated to reflect correct order
-
-    retrievedElement = fossil_dlist_getter(mock_dlist, element2);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(10, retrievedElement->value.int_val);
-
-    retrievedElement = fossil_dlist_getter(mock_dlist, element1);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(42, retrievedElement->value.int_val);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 // benchmarking cases to capture the true

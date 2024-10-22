@@ -49,22 +49,14 @@ FOSSIL_TEST(test_stack_create_and_destroy) {
     ASSUME_ITS_CNULL(mock_stack->top);
 }
 
-FOSSIL_TEST(test_stack_insert_and_size) {
-    // Insert some elements
-    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
-    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
-    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+FOSSIL_TEST(test_stack_insert) {
+    // Insert an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
 
-    ASSUME_ITS_TRUE(fossil_stack_insert(mock_stack, element1) == 0);
-    ASSUME_ITS_TRUE(fossil_stack_insert(mock_stack, element2) == 0);
-    ASSUME_ITS_TRUE(fossil_stack_insert(mock_stack, element3) == 0);
+    // Check if the element is inserted correctly
+    ASSUME_ITS_TRUE(fossil_stack_insert(mock_stack, element) == 0);
 
-    // Check if the size is correct
-    ASSUME_ITS_EQUAL_SIZE(3, fossil_stack_size(mock_stack));
-
-    fossil_tofu_destroy(&element1);
-    fossil_tofu_destroy(&element2);
-    fossil_tofu_destroy(&element3);
+    fossil_tofu_destroy(&element);
 }
 
 FOSSIL_TEST(test_stack_remove) {
@@ -90,6 +82,70 @@ FOSSIL_TEST(test_stack_remove) {
     fossil_tofu_destroy(&element1);
     fossil_tofu_destroy(&element2);
     fossil_tofu_destroy(&element3);
+}
+
+FOSSIL_TEST(test_stack_search) {
+    // Insert some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_stack_insert(mock_stack, element1);
+    fossil_stack_insert(mock_stack, element2);
+    fossil_stack_insert(mock_stack, element3);
+
+    // Search for an element
+    fossil_tofu_t searchElement = fossil_tofu_create("int", "10");
+    ASSUME_ITS_TRUE(fossil_stack_search(mock_stack, searchElement) == 0);
+
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
+    fossil_tofu_destroy(&searchElement);
+}
+
+FOSSIL_TEST(test_stack_size) {
+    // Insert some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_stack_insert(mock_stack, element1);
+    fossil_stack_insert(mock_stack, element2);
+    fossil_stack_insert(mock_stack, element3);
+
+    // Check if the size is correct
+    ASSUME_ITS_EQUAL_SIZE(3, fossil_stack_size(mock_stack));
+
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
+}
+
+FOSSIL_TEST(test_stack_is_empty) {
+    // Check if the stack is empty
+    ASSUME_ITS_TRUE(fossil_stack_is_empty(mock_stack));
+}
+
+FOSSIL_TEST(test_stack_not_empty) {
+    // Insert an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+    fossil_stack_insert(mock_stack, element);
+
+    // Check if the stack is not empty
+    ASSUME_ITS_TRUE(fossil_stack_not_empty(mock_stack));
+
+    fossil_tofu_destroy(&element);
+}
+
+FOSSIL_TEST(test_stack_is_cnullptr) {
+    // Check if the stack is not a nullptr
+    ASSUME_ITS_TRUE(fossil_stack_is_cnullptr(mock_stack) == 0);
+}
+
+FOSSIL_TEST(test_stack_not_cnullptr) {
+    // Check if the stack is not a nullptr
+    ASSUME_ITS_TRUE(fossil_stack_not_cnullptr(mock_stack));
 }
 
 // benchmarking cases to capture the true
@@ -121,8 +177,14 @@ FOSSIL_TEST(stress_test_stack) {
 FOSSIL_TEST_GROUP(c_stack_structure_tests) {
     // Stack Fixture
     ADD_TESTF(test_stack_create_and_destroy, struct_stack_fixture);
-    ADD_TESTF(test_stack_insert_and_size, struct_stack_fixture);
+    ADD_TESTF(test_stack_insert, struct_stack_fixture);
     ADD_TESTF(test_stack_remove, struct_stack_fixture);
+    ADD_TESTF(test_stack_search, struct_stack_fixture);
+    ADD_TESTF(test_stack_size, struct_stack_fixture);
+    ADD_TESTF(test_stack_is_empty, struct_stack_fixture);
+    ADD_TESTF(test_stack_not_empty, struct_stack_fixture);
+    ADD_TESTF(test_stack_is_cnullptr, struct_stack_fixture);
+    ADD_TESTF(test_stack_not_cnullptr, struct_stack_fixture);
 
     // Stack Benchmark
     ADD_TESTF(stress_test_stack, struct_stack_fixture);

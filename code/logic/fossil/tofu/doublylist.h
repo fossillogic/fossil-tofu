@@ -108,26 +108,6 @@ void fossil_dlist_reverse_backward(fossil_dlist_t* dlist);
 size_t fossil_dlist_size(const fossil_dlist_t* dlist);
 
 /**
- * Get the data from the doubly linked list matching the specified data.
- *
- * @param dlist The doubly linked list from which to get the data.
- * @param data  The data to search for.
- * @return      A pointer to the matching data.
- * @note        Time complexity: O(n)
- */
-fossil_tofu_t* fossil_dlist_getter(fossil_dlist_t* dlist, fossil_tofu_t data);
-
-/**
- * Set data in the doubly linked list.
- *
- * @param dlist The doubly linked list in which to set the data.
- * @param data  The data to set.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int32_t fossil_dlist_setter(fossil_dlist_t* dlist, fossil_tofu_t data);
-
-/**
  * Check if the doubly linked list is not empty.
  *
  * @param dlist The doubly linked list to check.
@@ -196,14 +176,6 @@ namespace fossil {
 
         size_t size() {
             return fossil_dlist_size(dlist_);
-        }
-
-        fossil_tofu_t* getter(fossil_tofu_t data) {
-            return fossil_dlist_getter(dlist_, data);
-        }
-
-        void setter(fossil_tofu_t data) {
-            fossil_dlist_setter(dlist_, data);
         }
 
         void reverse_forward() {

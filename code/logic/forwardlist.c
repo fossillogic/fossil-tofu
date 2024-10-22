@@ -141,39 +141,6 @@ size_t fossil_flist_size(const fossil_flist_t* flist) {
     return count;
 }
 
-fossil_tofu_t* fossil_flist_getter(fossil_flist_t* flist, fossil_tofu_t data) {
-    if (!flist) {
-        fprintf(stderr, "Error: flist cannot be NULL\n");
-        return NULL;
-    }
-
-    fossil_flist_node_t* current = flist->head;
-    while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            return &(current->data);  // Return pointer to found data
-        }
-        current = current->next;
-    }
-    return NULL;  // Not found
-}
-
-int32_t fossil_flist_setter(fossil_flist_t* flist, fossil_tofu_t data) {
-    if (!flist) {
-        fprintf(stderr, "Error: flist cannot be NULL\n");
-        return FOSSIL_TOFU_FAILURE;
-    }
-
-    fossil_flist_node_t* current = flist->head;
-    while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            current->data = data;  // Update data
-            return FOSSIL_TOFU_SUCCESS;  // Success
-        }
-        current = current->next;
-    }
-    return FOSSIL_TOFU_FAILURE;  // Not found
-}
-
 bool fossil_flist_not_empty(const fossil_flist_t* flist) {
     if (!flist) {
         fprintf(stderr, "Error: flist cannot be NULL\n");
