@@ -164,7 +164,7 @@ FOSSIL_TEST_GROUP(c_pqueue_structure_tests) {
     ADD_TESTF(test_pqueue_remove, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_search, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_size, struct_pqueue_fixture);
-    // ADD_TESTF(test_pqueue_setter_and_getter, struct_pqueue_fixture);
+    ADD_TESTF(test_pqueue_setter_and_getter, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_is_cnullptr, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_not_cnullptr, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_is_empty, struct_pqueue_fixture);

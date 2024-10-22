@@ -246,7 +246,7 @@ FOSSIL_TEST_GROUP(c_flist_structure_tests) {
     ADD_TESTF(test_flist_search, struct_flist_fixture);
     ADD_TESTF(test_flist_reverse_forward, struct_flist_fixture);
     ADD_TESTF(test_flist_reverse_backward, struct_flist_fixture);
-    // ADD_TESTF(test_flist_getter_and_setter, struct_flist_fixture);
+    ADD_TESTF(test_flist_getter_and_setter, struct_flist_fixture);
     ADD_TESTF(test_flist_is_cnullptr, struct_flist_fixture);
     ADD_TESTF(test_flist_not_cnullptr, struct_flist_fixture);
     ADD_TESTF(test_flist_is_empty, struct_flist_fixture);
