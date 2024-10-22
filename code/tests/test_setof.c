@@ -158,7 +158,7 @@ FOSSIL_TEST(test_set_setter_and_getter) {
     fossil_tofu_t* element = fossil_set_getter(mock_set, newElement);
 
     // Check if the element is correct
-    ASSUME_ITS_EQUAL_STRING("100", element->data);
+    ASSUME_ITS_EQUAL_CSTR("100", element->value.string_val);
 
     fossil_tofu_destroy(&newElement);
     fossil_tofu_destroy(&element1);
