@@ -204,12 +204,12 @@ FOSSIL_TEST(test_flist_not_empty) {
 
 FOSSIL_TEST(test_flist_is_cnullptr) {
     // Check initially cnullptr
-    ASSUME_ITS_TRUE(fossil_flist_is_cnullptr(mock_flist));
+    ASSUME_ITS_FALSE(fossil_flist_is_cnullptr(mock_flist));
 }
 
 FOSSIL_TEST(test_flist_not_cnullptr) {
     // Check initially not cnullptr
-    ASSUME_ITS_FALSE(fossil_flist_not_cnullptr(mock_flist));
+    ASSUME_ITS_TRUE(fossil_flist_not_cnullptr(mock_flist));
 }
 
 

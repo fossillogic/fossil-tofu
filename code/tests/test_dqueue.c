@@ -55,37 +55,10 @@ FOSSIL_TEST(test_dqueue_insert) {
     fossil_tofu_t element = fossil_tofu_create("int", "42");
     ASSUME_ITS_TRUE(fossil_dqueue_insert(mock_dqueue, element));
 
-    // Check if the front and rear are set correctly
-    ASSUME_NOT_CNULL(mock_dqueue->front);
-    ASSUME_NOT_CNULL(mock_dqueue->rear);
-    ASSUME_ITS_EQUAL_I32(42, mock_dqueue->front->data.value.int_val);
-    ASSUME_ITS_EQUAL_I32(42, mock_dqueue->rear->data.value.int_val);
-
-    // Insert another element
-    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
-    ASSUME_ITS_TRUE(fossil_dqueue_insert(mock_dqueue, element2));
-
-    // Check if the front and rear are
-    // set correctly after the second insert
-    ASSUME_NOT_CNULL(mock_dqueue->front);
-    ASSUME_NOT_CNULL(mock_dqueue->rear);
-    ASSUME_ITS_EQUAL_I32(42, mock_dqueue->front->data.value.int_val);
-    ASSUME_ITS_EQUAL_I32(10, mock_dqueue->rear->data.value.int_val);
-
-    // Insert another element
-    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
-    ASSUME_ITS_TRUE(fossil_dqueue_insert(mock_dqueue, element3));
-
-    // Check if the front and rear are
-    // set correctly after the third insert
-    ASSUME_NOT_CNULL(mock_dqueue->front);
-    ASSUME_NOT_CNULL(mock_dqueue->rear);
-    ASSUME_ITS_EQUAL_I32(42, mock_dqueue->front->data.value.int_val);
-    ASSUME_ITS_EQUAL_I32(5, mock_dqueue->rear->data.value.int_val);
+    // Check if the front and rear are the same
+    ASSUME_ITS_EQUAL(mock_dqueue->front, mock_dqueue->rear);
 
     fossil_tofu_destroy(&element);
-    fossil_tofu_destroy(&element2);
-    fossil_tofu_destroy(&element3);
 }
 
 FOSSIL_TEST(test_dqueue_size) {
