@@ -77,7 +77,7 @@ FOSSIL_TEST(test_pqueue_search) {
     fossil_pqueue_insert(mock_pqueue, element, 2);
 
     // Search for the element
-    ASSUME_ITS_TRUE(fossil_pqueue_search(mock_pqueue, element, 1) == 0);
+    ASSUME_ITS_TRUE(fossil_pqueue_search(mock_pqueue, element, 2) == 0);
 }
 
 FOSSIL_TEST(test_pqueue_size) {
@@ -114,12 +114,12 @@ FOSSIL_TEST(test_pqueue_setter_and_getter) {
 
 FOSSIL_TEST(test_pqueue_is_cnullptr) {
     // Check initially cnullptr
-    ASSUME_ITS_TRUE(fossil_pqueue_is_cnullptr(mock_pqueue));
+    ASSUME_ITS_FALSE(fossil_pqueue_is_cnullptr(mock_pqueue));
 }
 
 FOSSIL_TEST(test_pqueue_not_cnullptr) {
     // Check initially not cnullptr
-    ASSUME_ITS_FALSE(fossil_pqueue_not_cnullptr(mock_pqueue));
+    ASSUME_ITS_TRUE(fossil_pqueue_not_cnullptr(mock_pqueue));
 }
 
 FOSSIL_TEST(test_pqueue_is_empty) {

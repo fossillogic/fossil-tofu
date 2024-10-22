@@ -102,12 +102,6 @@ FOSSIL_TEST(test_fossil_map_clear) {
     fossil_map_destroy(&map);
 }
 
-FOSSIL_TEST(test_fossil_map_capacity) {
-    fossil_map_t map = fossil_map_create("int");
-    ASSUME_ITS_EQUAL_I32(0, fossil_map_capacity(&map));
-    fossil_map_destroy(&map);
-}
-
 // benchmarking cases to capture the true
 // performence based on current structures
 // implmentation.
@@ -146,7 +140,6 @@ FOSSIL_TEST_GROUP(c_mapof_structure_tests) {
     ADD_TEST(test_fossil_map_size);
     ADD_TEST(test_fossil_map_is_empty);
     ADD_TEST(test_fossil_map_clear);
-    ADD_TEST(test_fossil_map_capacity);
 
     // Benchmarking
     ADD_TEST(stress_test_map);

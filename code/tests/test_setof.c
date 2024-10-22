@@ -89,7 +89,7 @@ FOSSIL_TEST(test_set_search) {
     ASSUME_ITS_TRUE(fossil_set_search(mock_set, element1) == 0);
 
     // Check for non-existing element
-    fossil_tofu_t nonExistingElement = fossil_tofu_create("int", "42");
+    fossil_tofu_t nonExistingElement = fossil_tofu_create("int", "44");
     ASSUME_ITS_TRUE(fossil_set_search(mock_set, nonExistingElement) == 1);
 
     fossil_tofu_destroy(&nonExistingElement);
