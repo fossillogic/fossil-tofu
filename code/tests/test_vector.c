@@ -43,6 +43,27 @@ FOSSIL_TEARDOWN(struct_vect_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
+FOSSIL_TEST(test_vector_push_front) {
+    // Push back some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_vector_push_front(mock_vector, element1);
+    fossil_vector_push_front(mock_vector, element2);
+    fossil_vector_push_front(mock_vector, element3);
+
+    // Check if the elements are added correctly
+    ASSUME_ITS_EQUAL_U32(3, mock_vector->size);
+    ASSUME_ITS_EQUAL_I32(5, mock_vector->data[0].value.int_val);
+    ASSUME_ITS_EQUAL_I32(10, mock_vector->data[1].value.int_val);
+    ASSUME_ITS_EQUAL_I32(42, mock_vector->data[2].value.int_val);
+
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
+}
+
 FOSSIL_TEST(test_vector_push_back) {
     // Push back some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
@@ -62,6 +83,150 @@ FOSSIL_TEST(test_vector_push_back) {
     fossil_tofu_destroy(&element1);
     fossil_tofu_destroy(&element2);
     fossil_tofu_destroy(&element3);
+}
+
+FOSSIL_TEST(test_vector_push_at) {
+    // Push back some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_vector_push_back(mock_vector, element1);
+    fossil_vector_push_back(mock_vector, element2);
+    fossil_vector_push_back(mock_vector, element3);
+
+    // Push at some elements
+    fossil_tofu_t element4 = fossil_tofu_create("int", "100");
+    fossil_vector_push_at(mock_vector, 1, element4);
+
+    // Check if the elements are added correctly
+    ASSUME_ITS_EQUAL_U32(4, mock_vector->size);
+    ASSUME_ITS_EQUAL_I32(42, mock_vector->data[0].value.int_val);
+    ASSUME_ITS_EQUAL_I32(100, mock_vector->data[1].value.int_val);
+    ASSUME_ITS_EQUAL_I32(10, mock_vector->data[2].value.int_val);
+    ASSUME_ITS_EQUAL_I32(5, mock_vector->data[3].value.int_val);
+
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
+    fossil_tofu_destroy(&element4);
+}
+
+FOSSIL_TEST(test_vector_pop_front) {
+    // Push back some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_vector_push_front(mock_vector, element1);
+    fossil_vector_push_front(mock_vector, element2);
+    fossil_vector_push_front(mock_vector, element3);
+
+    // Pop front some elements
+    fossil_vector_pop_front(mock_vector);
+    fossil_vector_pop_front(mock_vector);
+
+    // Check if the elements are removed correctly
+    ASSUME_ITS_EQUAL_U32(1, mock_vector->size);
+    ASSUME_ITS_EQUAL_I32(42, mock_vector->data[0].value.int_val);
+
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
+}
+
+FOSSIL_TEST(test_vector_pop_back) {
+    // Push back some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_vector_push_back(mock_vector, element1);
+    fossil_vector_push_back(mock_vector, element2);
+    fossil_vector_push_back(mock_vector, element3);
+
+    // Pop back some elements
+    fossil_vector_pop_back(mock_vector);
+    fossil_vector_pop_back(mock_vector);
+
+    // Check if the elements are removed correctly
+    ASSUME_ITS_EQUAL_U32(1, mock_vector->size);
+    ASSUME_ITS_EQUAL_I32(42, mock_vector->data[0].value.int_val);
+
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
+}
+
+FOSSIL_TEST(test_vector_pop_at) {
+    // Push back some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_vector_push_back(mock_vector, element1);
+    fossil_vector_push_back(mock_vector, element2);
+    fossil_vector_push_back(mock_vector, element3);
+
+    // Pop at some elements
+    fossil_vector_pop_at(mock_vector, 1);
+
+    // Check if the elements are removed correctly
+    ASSUME_ITS_EQUAL_U32(2, mock_vector->size);
+    ASSUME_ITS_EQUAL_I32(42, mock_vector->data[0].value.int_val);
+    ASSUME_ITS_EQUAL_I32(5, mock_vector->data[1].value.int_val);
+
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
+}
+
+FOSSIL_TEST(test_vector_erase) {
+    // Push back some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_vector_push_back(mock_vector, element1);
+    fossil_vector_push_back(mock_vector, element2);
+    fossil_vector_push_back(mock_vector, element3);
+
+    // Erase some elements
+    fossil_vector_erase(mock_vector, 1);
+
+    // Check if the elements are removed correctly
+    ASSUME_ITS_EQUAL_U32(2, mock_vector->size);
+    ASSUME_ITS_EQUAL_I32(42, mock_vector->data[0].value.int_val);
+    ASSUME_ITS_EQUAL_I32(5, mock_vector->data[1].value.int_val);
+
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
+}
+
+FOSSIL_TEST(test_vector_erase_if) {
+    // Push back some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_vector_push_back(mock_vector, element1);
+    fossil_vector_push_back(mock_vector, element2);
+    fossil_vector_push_back(mock_vector, element3);
+
+    // Erase some elements
+    fossil_tofu_t targetElement = fossil_tofu_create("int", "10");
+    fossil_vector_erase_if(mock_vector, targetElement);
+
+    // Check if the elements are removed correctly
+    ASSUME_ITS_EQUAL_U32(2, mock_vector->size);
+    ASSUME_ITS_EQUAL_I32(42, mock_vector->data[0].value.int_val);
+    ASSUME_ITS_EQUAL_I32(5, mock_vector->data[1].value.int_val);
+
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
+    fossil_tofu_destroy(&targetElement);
 }
 
 FOSSIL_TEST(test_vector_search) {
@@ -130,6 +295,55 @@ FOSSIL_TEST(test_vector_size) {
     fossil_tofu_destroy(&element3);
 }
 
+FOSSIL_TEST(test_vector_is_cullptr) {
+    // Check if the vector is cullptr
+    ASSUME_TRUE(fossil_vector_is_cnullptr(mock_vector));
+}
+
+FOSSIL_TEST(test_vector_not_cullptr) {
+    // Check if the vector is not cullptr
+    ASSUME_TRUE(fossil_vector_not_cnullptr(mock_vector));
+}
+
+FOSSIL_TEST(test_vector_is_empty) {
+    // Check if the vector is empty
+    ASSUME_TRUE(fossil_vector_is_empty(mock_vector));
+}
+
+FOSSIL_TEST(test_vector_not_empty) {
+    // Check if the vector is not empty
+    ASSUME_TRUE(fossil_vector_not_empty(mock_vector));
+}
+
+FOSSIL_TEST(test_vector_is_capacity) {
+    // Check the capacity of the vector
+    ASSUME_ITS_EQUAL_U32(10, mock_vector->capacity);
+}
+
+FOSSIL_TEST(test_vector_is_setter_and_getter) {
+    // Push back some elements
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+
+    fossil_vector_push_back(mock_vector, element1);
+    fossil_vector_push_back(mock_vector, element2);
+    fossil_vector_push_back(mock_vector, element3);
+
+    // Set and get some elements
+    fossil_tofu_t element4 = fossil_tofu_create("int", "100");
+    fossil_vector_setter(mock_vector, 1, element4);
+    fossil_tofu_t* element = fossil_vector_getter(mock_vector, 1);
+
+    // Check if the elements are set and get correctly
+    ASSUME_ITS_EQUAL_I32(100, element->value.int_val);
+
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
+    fossil_tofu_destroy(&element4);
+}
+
 // benchmarking cases to capture the true
 // performence based on current structures
 // implmentation.
@@ -162,10 +376,23 @@ FOSSIL_TEST(stress_test_vector_usage) {
 
 FOSSIL_TEST_GROUP(c_vector_structure_tests) {    
     // Vector Fixture
+    ADD_TESTF(test_vector_push_front, struct_vect_fixture);
     ADD_TESTF(test_vector_push_back, struct_vect_fixture);
+    ADD_TESTF(test_vector_push_at, struct_vect_fixture);
+    ADD_TESTF(test_vector_pop_front, struct_vect_fixture);
+    ADD_TESTF(test_vector_pop_back, struct_vect_fixture);
+    ADD_TESTF(test_vector_pop_at, struct_vect_fixture);
+    ADD_TESTF(test_vector_erase, struct_vect_fixture);
+    ADD_TESTF(test_vector_erase_if, struct_vect_fixture);
     ADD_TESTF(test_vector_search, struct_vect_fixture);
     ADD_TESTF(test_vector_reverse, struct_vect_fixture);
     ADD_TESTF(test_vector_size, struct_vect_fixture);
+    ADD_TESTF(test_vector_is_cullptr, struct_vect_fixture);
+    ADD_TESTF(test_vector_not_cullptr, struct_vect_fixture);
+    ADD_TESTF(test_vector_is_empty, struct_vect_fixture);
+    ADD_TESTF(test_vector_not_empty, struct_vect_fixture);
+    ADD_TESTF(test_vector_is_capacity, struct_vect_fixture);
+    ADD_TESTF(test_vector_is_setter_and_getter, struct_vect_fixture);
 
     // Vector Benchmark
     ADD_TESTF(stress_test_vector_usage, struct_vect_fixture);
