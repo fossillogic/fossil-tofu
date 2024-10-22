@@ -60,7 +60,6 @@ FOSSIL_TEST(test_dqueue_insert) {
     ASSUME_NOT_CNULL(mock_dqueue->rear);
 
     fossil_tofu_destroy(&element);
-    fossil_tofu_destroy(insertedElement);
 }
 
 FOSSIL_TEST(test_dqueue_size) {
