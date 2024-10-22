@@ -127,7 +127,7 @@ FOSSIL_TEST(test_queue_getter_and_setter) {
     fossil_tofu_t* element = fossil_queue_getter(mock_queue, newElement);
 
     // Check if the element is correct
-    ASSUME_ITS_EQUAL_CSTR("100", element->value.string_val);
+    ASSUME_ITS_EQUAL_CSTR("100", element->value.cchar_string_val);
 
     fossil_tofu_destroy(&newElement);
     fossil_tofu_destroy(&element1);
