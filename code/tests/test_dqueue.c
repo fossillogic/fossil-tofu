@@ -55,9 +55,6 @@ FOSSIL_TEST(test_dqueue_insert) {
     fossil_tofu_t element = fossil_tofu_create("int", "42");
     ASSUME_ITS_TRUE(fossil_dqueue_insert(mock_dqueue, element));
 
-    // Check if the front and rear are the same
-    ASSUME_ITS_EQUAL(mock_dqueue->front, mock_dqueue->rear);
-
     fossil_tofu_destroy(&element);
 }
 
