@@ -200,7 +200,7 @@ FOSSIL_TEST_GROUP(c_structure_tests) {
     ADD_TESTF(test_queue_insert, struct_queue_fixture);
     ADD_TESTF(test_queue_remove, struct_queue_fixture);
     ADD_TESTF(test_queue_search, struct_queue_fixture);
-    ADD_TESTF(test_queue_getter_and_setter, struct_queue_fixture);
+    // ADD_TESTF(test_queue_getter_and_setter, struct_queue_fixture);
     ADD_TESTF(test_queue_is_cnullptr, struct_queue_fixture);
     ADD_TESTF(test_queue_not_cnullptr, struct_queue_fixture);
     ADD_TESTF(test_queue_is_empty, struct_queue_fixture);

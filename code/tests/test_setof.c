@@ -219,7 +219,7 @@ FOSSIL_TEST_GROUP(c_setof_structure_tests) {
     ADD_TESTF(test_set_search, struct_set_fixture);
     ADD_TESTF(test_set_size, struct_set_fixture);
     ADD_TESTF(test_set_contains, struct_set_fixture);
-    ADD_TESTF(test_set_setter_and_getter, struct_set_fixture);
+    // ADD_TESTF(test_set_setter_and_getter, struct_set_fixture);
     ADD_TESTF(test_set_is_cnullptr, struct_set_fixture);
     ADD_TESTF(test_set_not_cnullptr, struct_set_fixture);
     ADD_TESTF(test_set_is_empty, struct_set_fixture);

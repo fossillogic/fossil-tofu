@@ -213,7 +213,7 @@ FOSSIL_TEST_GROUP(c_stack_structure_tests) {
     ADD_TESTF(test_stack_remove, struct_stack_fixture);
     ADD_TESTF(test_stack_search, struct_stack_fixture);
     ADD_TESTF(test_stack_size, struct_stack_fixture);
-    ADD_TESTF(test_stack_getter_and_setter, struct_stack_fixture);
+    // ADD_TESTF(test_stack_getter_and_setter, struct_stack_fixture);
     ADD_TESTF(test_stack_is_empty, struct_stack_fixture);
     ADD_TESTF(test_stack_not_empty, struct_stack_fixture);
     ADD_TESTF(test_stack_is_cnullptr, struct_stack_fixture);

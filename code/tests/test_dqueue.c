@@ -50,7 +50,45 @@ FOSSIL_TEST(test_dqueue_create_and_destroy) {
     ASSUME_ITS_CNULL(mock_dqueue->rear);
 }
 
-FOSSIL_TEST(test_dqueue_insert_and_size) {
+FOSSIL_TEST(test_dqueue_insert) {
+    // Insert an element
+    fossil_tofu_t element = fossil_tofu_create("int", "42");
+    ASSUME_ITS_TRUE(fossil_dqueue_insert(mock_dqueue, element));
+
+    // Check if the front and rear are set correctly
+    ASSUME_NOT_CNULL(mock_dqueue->front);
+    ASSUME_NOT_CNULL(mock_dqueue->rear);
+    ASSUME_ITS_EQUAL_I32(42, mock_dqueue->front->data.value.int_val);
+    ASSUME_ITS_EQUAL_I32(42, mock_dqueue->rear->data.value.int_val);
+
+    // Insert another element
+    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
+    ASSUME_ITS_TRUE(fossil_dqueue_insert(mock_dqueue, element2));
+
+    // Check if the front and rear are
+    // set correctly after the second insert
+    ASSUME_NOT_CNULL(mock_dqueue->front);
+    ASSUME_NOT_CNULL(mock_dqueue->rear);
+    ASSUME_ITS_EQUAL_I32(42, mock_dqueue->front->data.value.int_val);
+    ASSUME_ITS_EQUAL_I32(10, mock_dqueue->rear->data.value.int_val);
+
+    // Insert another element
+    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
+    ASSUME_ITS_TRUE(fossil_dqueue_insert(mock_dqueue, element3));
+
+    // Check if the front and rear are
+    // set correctly after the third insert
+    ASSUME_NOT_CNULL(mock_dqueue->front);
+    ASSUME_NOT_CNULL(mock_dqueue->rear);
+    ASSUME_ITS_EQUAL_I32(42, mock_dqueue->front->data.value.int_val);
+    ASSUME_ITS_EQUAL_I32(5, mock_dqueue->rear->data.value.int_val);
+
+    fossil_tofu_destroy(&element);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
+}
+
+FOSSIL_TEST(test_dqueue_size) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -153,9 +191,10 @@ FOSSIL_TEST(stress_test_dqueue) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_dqueue_structure_tests) {    
     ADD_TESTF(test_dqueue_create_and_destroy, struct_dqueue_fixture);
-    ADD_TESTF(test_dqueue_insert_and_size, struct_dqueue_fixture);
+    ADD_TESTF(test_dqueue_insert, struct_dqueue_fixture);
+    ADD_TESTF(test_dqueue_size, struct_dqueue_fixture);
     ADD_TESTF(test_dqueue_remove, struct_dqueue_fixture);
-    //ADD_TESTF(test_dqueue_getter_and_setter, struct_dqueue_fixture);
+    // ADD_TESTF(test_dqueue_getter_and_setter, struct_dqueue_fixture);
     ADD_TESTF(test_dqueue_not_empty_and_is_empty, struct_dqueue_fixture);
 
     // Benchmarking cases
