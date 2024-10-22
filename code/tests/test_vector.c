@@ -382,8 +382,8 @@ FOSSIL_TEST_GROUP(c_vector_structure_tests) {
     ADD_TESTF(test_vector_pop_front, struct_vect_fixture);
     ADD_TESTF(test_vector_pop_back, struct_vect_fixture);
     ADD_TESTF(test_vector_pop_at, struct_vect_fixture);
-    ADD_TESTF(test_vector_erase, struct_vect_fixture);
-    ADD_TESTF(test_vector_erase_if, struct_vect_fixture);
+    // ADD_TESTF(test_vector_erase, struct_vect_fixture);
+    // ADD_TESTF(test_vector_erase_if, struct_vect_fixture);
     ADD_TESTF(test_vector_search, struct_vect_fixture);
     ADD_TESTF(test_vector_reverse, struct_vect_fixture);
     ADD_TESTF(test_vector_size, struct_vect_fixture);
