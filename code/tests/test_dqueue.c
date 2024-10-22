@@ -53,9 +53,17 @@ FOSSIL_TEST(test_dqueue_create_and_destroy) {
 FOSSIL_TEST(test_dqueue_insert) {
     // Insert an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
-    ASSUME_ITS_TRUE(fossil_dqueue_insert(mock_dqueue, element));
+    fossil_dqueue_insert(mock_dqueue, element);
+
+    // Check if the element is inserted
+    fossil_tofu_t* insertedElement = fossil_dqueue_getter(mock_dqueue, element);
+    ASSUME_NOT_CNULL(insertedElement);
+
+    // Check if the value is correct
+    ASSUME_ITS_EQUAL_I32(42, insertedElement->value.int_val);
 
     fossil_tofu_destroy(&element);
+    fossil_tofu_destroy(&insertedElement);
 }
 
 FOSSIL_TEST(test_dqueue_size) {

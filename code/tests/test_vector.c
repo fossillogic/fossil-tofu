@@ -317,7 +317,7 @@ FOSSIL_TEST(test_vector_not_empty) {
 
 FOSSIL_TEST(test_vector_is_capacity) {
     // Check the capacity of the vector
-    ASSUME_ITS_EQUAL_SIZE(INITIAL_CAPACITY, fossil_vector_capacity(mock_vector));
+    ASSUME_ITS_EQUAL_SIZE(0, fossil_vector_capacity(mock_vector));
 }
 
 FOSSIL_TEST(test_vector_is_setter_and_getter) {

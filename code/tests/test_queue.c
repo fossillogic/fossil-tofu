@@ -100,7 +100,7 @@ FOSSIL_TEST(test_queue_search) {
     ASSUME_ITS_TRUE(fossil_queue_search(mock_queue, element3) == 0);
 
     // Check for non-existing element
-    fossil_tofu_t nonExistingElement = fossil_tofu_create("int", "42");
+    fossil_tofu_t nonExistingElement = fossil_tofu_create("int", "44");
     ASSUME_ITS_TRUE(fossil_queue_search(mock_queue, nonExistingElement) == 1);
 
     fossil_tofu_destroy(&nonExistingElement);
