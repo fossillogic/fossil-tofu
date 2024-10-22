@@ -43,7 +43,6 @@ void fossil_vector_destroy(fossil_vector_t* vector) {
     vector->data = NULL;
     vector->size = 0;
     vector->capacity = 0;
-    fossil_tofu_free(vector->type); // Free the duplicated type string
     fossil_tofu_free(vector);
 }
 

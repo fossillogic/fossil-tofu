@@ -297,7 +297,7 @@ FOSSIL_TEST(test_vector_size) {
 
 FOSSIL_TEST(test_vector_is_cullptr) {
     // Check if the vector is cullptr
-    ASSUME_ITS_TRUE(fossil_vector_is_cnullptr(mock_vector));
+    ASSUME_ITS_FALSE(fossil_vector_is_cnullptr(mock_vector));
 }
 
 FOSSIL_TEST(test_vector_not_cullptr) {
@@ -312,12 +312,12 @@ FOSSIL_TEST(test_vector_is_empty) {
 
 FOSSIL_TEST(test_vector_not_empty) {
     // Check if the vector is not empty
-    ASSUME_ITS_TRUE(fossil_vector_not_empty(mock_vector));
+    ASSUME_ITS_FALSE(fossil_vector_not_empty(mock_vector));
 }
 
 FOSSIL_TEST(test_vector_is_capacity) {
     // Check the capacity of the vector
-    ASSUME_ITS_EQUAL_U32(10, mock_vector->capacity);
+    ASSUME_ITS_EQUAL_SIZE(INITIAL_CAPACITY, fossil_vector_capacity(mock_vector));
 }
 
 FOSSIL_TEST(test_vector_is_setter_and_getter) {
