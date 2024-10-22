@@ -104,32 +104,6 @@ FOSSIL_TEST(test_queue_search) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_queue_getter_and_setter) {
-    // Insert some elements
-    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
-    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
-    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
-
-    fossil_queue_insert(mock_queue, element1);
-    fossil_queue_insert(mock_queue, element2);
-    fossil_queue_insert(mock_queue, element3);
-
-    // Set an element
-    fossil_tofu_t newElement = fossil_tofu_create("int", "100");
-    ASSUME_ITS_TRUE(fossil_queue_setter(mock_queue, newElement) == 0);
-
-    // Get the element
-    fossil_tofu_t* element = fossil_queue_getter(mock_queue, newElement);
-
-    // Check if the element is correct
-    ASSUME_ITS_EQUAL_CSTR("100", element->value.cchar_string_val);
-
-    fossil_tofu_destroy(&newElement);
-    fossil_tofu_destroy(&element1);
-    fossil_tofu_destroy(&element2);
-    fossil_tofu_destroy(&element3);
-}
-
 FOSSIL_TEST(test_queue_is_cnullptr) {
     // Check if the queue is a nullptr
     ASSUME_ITS_FALSE(fossil_queue_is_cnullptr(mock_queue));
@@ -195,7 +169,6 @@ FOSSIL_TEST_GROUP(c_structure_tests) {
     ADD_TESTF(test_queue_insert, struct_queue_fixture);
     ADD_TESTF(test_queue_remove, struct_queue_fixture);
     ADD_TESTF(test_queue_search, struct_queue_fixture);
-    ADD_TESTF(test_queue_getter_and_setter, struct_queue_fixture);
     ADD_TESTF(test_queue_is_cnullptr, struct_queue_fixture);
     ADD_TESTF(test_queue_not_cnullptr, struct_queue_fixture);
     ADD_TESTF(test_queue_is_empty, struct_queue_fixture);

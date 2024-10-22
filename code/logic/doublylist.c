@@ -159,34 +159,6 @@ size_t fossil_dlist_size(const fossil_dlist_t* dlist) {
     return count;
 }
 
-fossil_tofu_t* fossil_dlist_getter(fossil_dlist_t* dlist, fossil_tofu_t data) {
-    if (!dlist) return NULL;  // Error checking for null list
-
-    fossil_dlist_node_t* current = dlist->head;
-    while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            return &(current->data);
-        }
-        current = current->next;
-    }
-    return NULL;  // Not found
-}
-
-int32_t fossil_dlist_setter(fossil_dlist_t* dlist, fossil_tofu_t data) {
-    if (!dlist) return FOSSIL_TOFU_FAILURE;  // Error checking for null list
-
-    fossil_dlist_node_t* current = dlist->head;
-    while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            // Ensure to free old data if it was dynamically allocated
-            current->data = data;
-            return FOSSIL_TOFU_SUCCESS;  // Success
-        }
-        current = current->next;
-    }
-    return FOSSIL_TOFU_FAILURE;  // Not found
-}
-
 bool fossil_dlist_not_empty(const fossil_dlist_t* dlist) {
     return (dlist != NULL && dlist->head != NULL);
 }

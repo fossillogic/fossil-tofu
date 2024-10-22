@@ -92,26 +92,6 @@ int32_t fossil_dqueue_search(const fossil_dqueue_t* dqueue, fossil_tofu_t data);
 size_t fossil_dqueue_size(const fossil_dqueue_t* dqueue);
 
 /**
- * Get the data from the dynamic queue matching the specified data.
- *
- * @param dqueue The dynamic queue from which to get the data.
- * @param data   The data to search for.
- * @return       A pointer to the matching data.
- * @note         Time complexity: O(n)
- */
-fossil_tofu_t* fossil_dqueue_getter(fossil_dqueue_t* dqueue, fossil_tofu_t data);
-
-/**
- * Set data in the dynamic queue.
- *
- * @param dqueue The dynamic queue in which to set the data.
- * @param data   The data to set.
- * @return       The error code indicating the success or failure of the operation.
- * @note         Time complexity: O(n)
- */
-int32_t fossil_dqueue_setter(fossil_dqueue_t* dqueue, fossil_tofu_t data);
-
-/**
  * Check if the dynamic queue is not empty.
  *
  * @param dqueue The dynamic queue to check.
@@ -180,14 +160,6 @@ namespace fossil {
 
         size_t size() {
             return fossil_dqueue_size(dqueue_);
-        }
-
-        fossil_tofu_t* getter(fossil_tofu_t data) {
-            return fossil_dqueue_getter(dqueue_, data);
-        }
-
-        void setter(fossil_tofu_t data) {
-            fossil_dqueue_setter(dqueue_, data);
         }
 
         bool not_empty() {

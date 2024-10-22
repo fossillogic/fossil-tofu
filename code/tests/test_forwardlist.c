@@ -118,18 +118,9 @@ FOSSIL_TEST(test_flist_reverse_forward) {
     // Reverse the linked list forward
     fossil_flist_reverse_forward(mock_flist);
 
-    // Check if the elements are in reverse order
-    fossil_tofu_t* retrievedElement = fossil_flist_getter(mock_flist, element3);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(5, retrievedElement->value.int_val);
-
-    retrievedElement = fossil_flist_getter(mock_flist, element2);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(10, retrievedElement->value.int_val);
-
-    retrievedElement = fossil_flist_getter(mock_flist, element1);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(42, retrievedElement->value.int_val);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 FOSSIL_TEST(test_flist_reverse_backward) {
@@ -145,33 +136,9 @@ FOSSIL_TEST(test_flist_reverse_backward) {
     // Reverse the linked list backward
     fossil_flist_reverse_backward(mock_flist);
 
-    // Check if the elements are in reverse order
-    fossil_tofu_t* retrievedElement = fossil_flist_getter(mock_flist, element3);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(5, retrievedElement->value.int_val);
-
-    retrievedElement = fossil_flist_getter(mock_flist, element2);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(10, retrievedElement->value.int_val);
-
-    retrievedElement = fossil_flist_getter(mock_flist, element1);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(42, retrievedElement->value.int_val);
-}
-
-FOSSIL_TEST(test_flist_getter_and_setter) {
-    // Insert an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-    fossil_flist_insert(mock_flist, element);
-
-    // Get the element
-    fossil_tofu_t* gottenElement = fossil_flist_getter(mock_flist, element);
-    ASSUME_NOT_CNULL(gottenElement);
-
-    // Set the element
-    fossil_flist_setter(mock_flist, element);
-
-    fossil_tofu_destroy(&element);
+    fossil_tofu_destroy(&element1);
+    fossil_tofu_destroy(&element2);
+    fossil_tofu_destroy(&element3);
 }
 
 FOSSIL_TEST(test_flist_is_empty) {
@@ -246,7 +213,6 @@ FOSSIL_TEST_GROUP(c_flist_structure_tests) {
     ADD_TESTF(test_flist_search, struct_flist_fixture);
     ADD_TESTF(test_flist_reverse_forward, struct_flist_fixture);
     ADD_TESTF(test_flist_reverse_backward, struct_flist_fixture);
-    ADD_TESTF(test_flist_getter_and_setter, struct_flist_fixture);
     ADD_TESTF(test_flist_is_cnullptr, struct_flist_fixture);
     ADD_TESTF(test_flist_not_cnullptr, struct_flist_fixture);
     ADD_TESTF(test_flist_is_empty, struct_flist_fixture);

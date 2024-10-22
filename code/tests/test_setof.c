@@ -140,32 +140,6 @@ FOSSIL_TEST(test_set_contains) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_set_setter_and_getter) {
-    // Insert some elements
-    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
-    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
-    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
-
-    fossil_set_insert(mock_set, element1);
-    fossil_set_insert(mock_set, element2);
-    fossil_set_insert(mock_set, element3);
-
-    // Set an element
-    fossil_tofu_t newElement = fossil_tofu_create("int", "100");
-    fossil_set_setter(mock_set, newElement);
-
-    // Get the element
-    fossil_tofu_t* element = fossil_set_getter(mock_set, newElement);
-
-    // Check if the element is correct
-    ASSUME_ITS_EQUAL_CSTR("100", element->value.cchar_string_val);
-
-    fossil_tofu_destroy(&newElement);
-    fossil_tofu_destroy(&element1);
-    fossil_tofu_destroy(&element2);
-    fossil_tofu_destroy(&element3);
-}
-
 FOSSIL_TEST(test_set_is_cnullptr) {
     // Check if the set is not a nullptr
     ASSUME_ITS_FALSE(fossil_set_is_cnullptr(mock_set));
@@ -219,7 +193,6 @@ FOSSIL_TEST_GROUP(c_setof_structure_tests) {
     ADD_TESTF(test_set_search, struct_set_fixture);
     ADD_TESTF(test_set_size, struct_set_fixture);
     ADD_TESTF(test_set_contains, struct_set_fixture);
-    // ADD_TESTF(test_set_setter_and_getter, struct_set_fixture);
     ADD_TESTF(test_set_is_cnullptr, struct_set_fixture);
     ADD_TESTF(test_set_not_cnullptr, struct_set_fixture);
     ADD_TESTF(test_set_is_empty, struct_set_fixture);

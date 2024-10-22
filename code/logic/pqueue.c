@@ -150,39 +150,6 @@ size_t fossil_pqueue_size(const fossil_pqueue_t* pqueue) {
     return count;
 }
 
-fossil_tofu_t* fossil_pqueue_getter(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority) {
-    if (!pqueue) {
-        fprintf(stderr, "Error: pqueue cannot be NULL\n");
-        return NULL;
-    }
-
-    fossil_pqueue_node_t* current = pqueue->front;
-    while (current) {
-        if (current->priority == priority && fossil_tofu_equals(current->data, data)) {
-            return &(current->data);  // Return pointer to found data
-        }
-        current = current->next;
-    }
-    return NULL;  // Not found
-}
-
-int32_t fossil_pqueue_setter(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority) {
-    if (!pqueue) {
-        fprintf(stderr, "Error: pqueue cannot be NULL\n");
-        return FOSSIL_TOFU_FAILURE;
-    }
-
-    fossil_pqueue_node_t* current = pqueue->front;
-    while (current) {
-        if (current->priority == priority && fossil_tofu_equals(current->data, data)) {
-            current->data = data;  // Update data
-            return FOSSIL_TOFU_SUCCESS;  // Success
-        }
-        current = current->next;
-    }
-    return FOSSIL_TOFU_FAILURE;  // Not found
-}
-
 bool fossil_pqueue_not_empty(const fossil_pqueue_t* pqueue) {
     if (!pqueue) {
         fprintf(stderr, "Error: pqueue cannot be NULL\n");

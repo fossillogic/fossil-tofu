@@ -94,24 +94,6 @@ FOSSIL_TEST(test_pqueue_size) {
     ASSUME_ITS_EQUAL_SIZE(3, fossil_pqueue_size(mock_pqueue));
 }
 
-FOSSIL_TEST(test_pqueue_setter_and_getter) {
-    // Insert an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-    fossil_pqueue_insert(mock_pqueue, element, 2);
-
-    // Get the element
-    fossil_tofu_t* gottenElement = fossil_pqueue_getter(mock_pqueue, element, 2);
-    ASSUME_NOT_CNULL(gottenElement);
-
-    // Set the element
-    fossil_pqueue_setter(mock_pqueue, element, 2);
-    gottenElement = fossil_pqueue_getter(mock_pqueue, element, 2);
-    ASSUME_NOT_CNULL(gottenElement);
-
-    fossil_tofu_destroy(&element);
-    fossil_tofu_destroy(gottenElement);
-}
-
 FOSSIL_TEST(test_pqueue_is_cnullptr) {
     // Check initially cnullptr
     ASSUME_ITS_FALSE(fossil_pqueue_is_cnullptr(mock_pqueue));
@@ -164,7 +146,6 @@ FOSSIL_TEST_GROUP(c_pqueue_structure_tests) {
     ADD_TESTF(test_pqueue_remove, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_search, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_size, struct_pqueue_fixture);
-    ADD_TESTF(test_pqueue_setter_and_getter, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_is_cnullptr, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_not_cnullptr, struct_pqueue_fixture);
     ADD_TESTF(test_pqueue_is_empty, struct_pqueue_fixture);

@@ -90,26 +90,6 @@ int32_t fossil_set_search(const fossil_set_t* set, fossil_tofu_t data);
 size_t fossil_set_size(const fossil_set_t* set);
 
 /**
- * Get the data from the set matching the specified data.
- *
- * @param set  The set from which to get the data.
- * @param data The data to search for.
- * @return     A pointer to the matching data, or NULL if not found.
- * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
- */
-fossil_tofu_t* fossil_set_getter(fossil_set_t* set, fossil_tofu_t data);
-
-/**
- * Set data in the set.
- *
- * @param set  The set in which to set the data.
- * @param data The data to set.
- * @return     The error code indicating the success or failure of the operation.
- * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
- */
-int32_t fossil_set_setter(fossil_set_t* set, fossil_tofu_t data);
-
-/**
  * Check if the set is not empty.
  *
  * @param set The set to check.
@@ -186,14 +166,6 @@ namespace fossil {
 
         size_t size() {
             return fossil_set_size(set_);
-        }
-
-        fossil_tofu_t* getter(fossil_tofu_t data) {
-            return fossil_set_getter(set_, data);
-        }
-
-        void setter(fossil_tofu_t data) {
-            fossil_set_setter(set_, data);
         }
 
         bool not_empty() {

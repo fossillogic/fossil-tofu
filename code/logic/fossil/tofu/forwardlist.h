@@ -106,26 +106,6 @@ void fossil_flist_reverse_backward(fossil_flist_t* flist);
 size_t fossil_flist_size(const fossil_flist_t* flist);
 
 /**
- * Get the data from the forward list matching the specified data.
- *
- * @param flist The forward list from which to get the data.
- * @param data  The data to search for.
- * @return      A pointer to the matching data.
- * @complexity  O(n)
- */
-fossil_tofu_t* fossil_flist_getter(fossil_flist_t* flist, fossil_tofu_t data);
-
-/**
- * Set data in the forward list.
- *
- * @param flist The forward list in which to set the data.
- * @param data  The data to set.
- * @return      The error code indicating the success or failure of the operation.
- * @complexity  O(n)
- */
-int32_t fossil_flist_setter(fossil_flist_t* flist, fossil_tofu_t data);
-
-/**
  * Check if the forward list is not empty.
  *
  * @param flist The forward list to check.
@@ -194,14 +174,6 @@ namespace fossil {
 
         size_t size() {
             return fossil_flist_size(flist_);
-        }
-
-        fossil_tofu_t* getter(fossil_tofu_t data) {
-            return fossil_flist_getter(flist_, data);
-        }
-
-        void setter(fossil_tofu_t data) {
-            fossil_flist_setter(flist_, data);
         }
 
         void reverse_forward() {

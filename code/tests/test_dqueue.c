@@ -56,11 +56,8 @@ FOSSIL_TEST(test_dqueue_insert) {
     fossil_dqueue_insert(mock_dqueue, element);
 
     // Check if the element is inserted
-    fossil_tofu_t* insertedElement = fossil_dqueue_getter(mock_dqueue, element);
-    ASSUME_NOT_CNULL(insertedElement);
-
-    // Check if the value is correct
-    ASSUME_ITS_EQUAL_I32(42, insertedElement->value.int_val);
+    ASSUME_NOT_CNULL(mock_dqueue->front);
+    ASSUME_NOT_CNULL(mock_dqueue->rear);
 
     fossil_tofu_destroy(&element);
     fossil_tofu_destroy(insertedElement);
@@ -99,26 +96,6 @@ FOSSIL_TEST(test_dqueue_remove) {
 
     // Check if the size is correct
     ASSUME_ITS_EQUAL_SIZE(2, fossil_dqueue_size(mock_dqueue));
-}
-
-FOSSIL_TEST(test_dqueue_getter_and_setter) {
-    // Insert an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-    ASSUME_ITS_TRUE(fossil_dqueue_insert(mock_dqueue, element));
-
-    // Get the value for an element
-    fossil_tofu_t* retrievedElement = fossil_dqueue_getter(mock_dqueue, element);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(42, retrievedElement->value.int_val);
-
-    // Update the value for an element
-    fossil_tofu_t updatedElement = fossil_tofu_create("int", "50");
-    ASSUME_ITS_TRUE(fossil_dqueue_setter(mock_dqueue, updatedElement));
-
-    // Get the updated value for the element
-    retrievedElement = fossil_dqueue_getter(mock_dqueue, updatedElement);
-    ASSUME_NOT_CNULL(retrievedElement);
-    ASSUME_ITS_EQUAL_I32(50, retrievedElement->value.int_val);
 }
 
 FOSSIL_TEST(test_dqueue_not_empty_and_is_empty) {
@@ -172,7 +149,6 @@ FOSSIL_TEST_GROUP(c_dqueue_structure_tests) {
     ADD_TESTF(test_dqueue_insert, struct_dqueue_fixture);
     ADD_TESTF(test_dqueue_size, struct_dqueue_fixture);
     ADD_TESTF(test_dqueue_remove, struct_dqueue_fixture);
-    ADD_TESTF(test_dqueue_getter_and_setter, struct_dqueue_fixture);
     ADD_TESTF(test_dqueue_not_empty_and_is_empty, struct_dqueue_fixture);
 
     // Benchmarking cases

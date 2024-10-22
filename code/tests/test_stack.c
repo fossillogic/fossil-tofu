@@ -122,38 +122,6 @@ FOSSIL_TEST(test_stack_size) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_stack_getter_and_setter) {
-    // Insert some elements
-    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
-    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
-    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
-
-    fossil_stack_insert(mock_stack, element1);
-    fossil_stack_insert(mock_stack, element2);
-    fossil_stack_insert(mock_stack, element3);
-
-    // Get an element
-    fossil_tofu_t searchElement = fossil_tofu_create("int", "10");
-    fossil_tofu_t* foundElement = fossil_stack_getter(mock_stack, searchElement);
-    ASSUME_NOT_CNULL(foundElement);
-    ASSUME_ITS_EQUAL_I32(10, foundElement->value.int_val);
-
-    // Set an element
-    fossil_tofu_t newElement = fossil_tofu_create("int", "100");
-    ASSUME_ITS_TRUE(fossil_stack_setter(mock_stack, newElement) == 0);
-
-    // Check if the element is set correctly
-    fossil_tofu_t* updatedElement = fossil_stack_getter(mock_stack, newElement);
-    ASSUME_NOT_CNULL(updatedElement);
-    ASSUME_ITS_EQUAL_I32(100, updatedElement->value.int_val);
-    
-    fossil_tofu_destroy(&element1);
-    fossil_tofu_destroy(&element2);
-    fossil_tofu_destroy(&element3);
-    fossil_tofu_destroy(&searchElement);
-    fossil_tofu_destroy(&newElement);
-}
-
 FOSSIL_TEST(test_stack_is_empty) {
     // Check if the stack is empty
     ASSUME_ITS_TRUE(fossil_stack_is_empty(mock_stack));
@@ -213,7 +181,6 @@ FOSSIL_TEST_GROUP(c_stack_structure_tests) {
     ADD_TESTF(test_stack_remove, struct_stack_fixture);
     ADD_TESTF(test_stack_search, struct_stack_fixture);
     ADD_TESTF(test_stack_size, struct_stack_fixture);
-    // ADD_TESTF(test_stack_getter_and_setter, struct_stack_fixture);
     ADD_TESTF(test_stack_is_empty, struct_stack_fixture);
     ADD_TESTF(test_stack_not_empty, struct_stack_fixture);
     ADD_TESTF(test_stack_is_cnullptr, struct_stack_fixture);

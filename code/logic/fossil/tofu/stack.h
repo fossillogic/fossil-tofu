@@ -89,26 +89,6 @@ int32_t fossil_stack_search(const fossil_stack_t* stack, fossil_tofu_t data);
 size_t fossil_stack_size(const fossil_stack_t* stack);
 
 /**
- * Get the data from the stack matching the specified data.
- *
- * @param stack The stack from which to get the data.
- * @param data  The data to search for.
- * @return      A pointer to the matching data, or NULL if not found.
- * @note        Time complexity: O(n)
- */
-fossil_tofu_t* fossil_stack_getter(fossil_stack_t* stack, fossil_tofu_t data);
-
-/**
- * Set data in the stack.
- *
- * @param stack The stack in which to set the data.
- * @param data  The data to set.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int32_t fossil_stack_setter(fossil_stack_t* stack, fossil_tofu_t data);
-
-/**
  * Check if the stack is not empty.
  *
  * @param stack The stack to check.
@@ -187,14 +167,6 @@ namespace fossil {
 
         size_t size() {
             return fossil_stack_size(stack_);
-        }
-
-        fossil_tofu_t* getter(fossil_tofu_t data) {
-            return fossil_stack_getter(stack_, data);
-        }
-
-        void setter(fossil_tofu_t data) {
-            fossil_stack_setter(stack_, data);
         }
 
         bool not_empty() {

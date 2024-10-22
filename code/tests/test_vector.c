@@ -320,30 +320,6 @@ FOSSIL_TEST(test_vector_is_capacity) {
     ASSUME_ITS_EQUAL_SIZE(0, fossil_vector_capacity(mock_vector));
 }
 
-FOSSIL_TEST(test_vector_is_setter_and_getter) {
-    // Push back some elements
-    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
-    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
-    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
-
-    fossil_vector_push_back(mock_vector, element1);
-    fossil_vector_push_back(mock_vector, element2);
-    fossil_vector_push_back(mock_vector, element3);
-
-    // Set and get some elements
-    fossil_tofu_t element4 = fossil_tofu_create("int", "100");
-    fossil_vector_setter(mock_vector, 1, element4);
-    fossil_tofu_t* element = fossil_vector_getter(mock_vector, 1);
-
-    // Check if the elements are set and get correctly
-    ASSUME_ITS_EQUAL_I32(100, element->value.int_val);
-
-    fossil_tofu_destroy(&element1);
-    fossil_tofu_destroy(&element2);
-    fossil_tofu_destroy(&element3);
-    fossil_tofu_destroy(&element4);
-}
-
 // benchmarking cases to capture the true
 // performence based on current structures
 // implmentation.
@@ -392,7 +368,6 @@ FOSSIL_TEST_GROUP(c_vector_structure_tests) {
     ADD_TESTF(test_vector_is_empty, struct_vect_fixture);
     ADD_TESTF(test_vector_not_empty, struct_vect_fixture);
     ADD_TESTF(test_vector_is_capacity, struct_vect_fixture);
-    // ADD_TESTF(test_vector_is_setter_and_getter, struct_vect_fixture);
 
     // Vector Benchmark
     ADD_TESTF(stress_test_vector_usage, struct_vect_fixture);

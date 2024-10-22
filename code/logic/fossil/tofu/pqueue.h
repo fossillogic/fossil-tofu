@@ -92,28 +92,6 @@ int32_t fossil_pqueue_search(const fossil_pqueue_t* pqueue, fossil_tofu_t data, 
 size_t fossil_pqueue_size(const fossil_pqueue_t* pqueue);
 
 /**
- * Get the data from the priority queue matching the specified data and priority.
- *
- * @param pqueue   The priority queue from which to get the data.
- * @param data     The data to search for.
- * @param priority The priority of the data.
- * @return         A pointer to the matching data, or NULL if not found.
- * @note           Time complexity: O(n)
- */
-fossil_tofu_t* fossil_pqueue_getter(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority);
-
-/**
- * Set data in the priority queue with the specified priority.
- *
- * @param pqueue   The priority queue in which to set the data.
- * @param data     The data to set.
- * @param priority The priority of the data.
- * @return         The error code indicating the success or failure of the operation.
- * @note           Time complexity: O(n)
- */
-int32_t fossil_pqueue_setter(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority);
-
-/**
  * Check if the priority queue is not empty.
  *
  * @param pqueue The priority queue to check.
@@ -182,14 +160,6 @@ namespace fossil {
 
         size_t size() {
             return fossil_pqueue_size(pqueue_);
-        }
-
-        fossil_tofu_t* getter(fossil_tofu_t data, int32_t priority) {
-            return fossil_pqueue_getter(pqueue_, data, priority);
-        }
-
-        void setter(fossil_tofu_t data, int32_t priority) {
-            fossil_pqueue_setter(pqueue_, data, priority);
         }
 
         bool not_empty() {
