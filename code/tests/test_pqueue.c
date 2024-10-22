@@ -77,7 +77,7 @@ FOSSIL_TEST(test_pqueue_search) {
     fossil_pqueue_insert(mock_pqueue, element, 2);
 
     // Search for the element
-    ASSUME_ITS_TRUE(fossil_pqueue_search(mock_pqueue, element) == 0);
+    ASSUME_ITS_TRUE(fossil_pqueue_search(mock_pqueue, element, 1) == 0);
 }
 
 FOSSIL_TEST(test_pqueue_size) {
