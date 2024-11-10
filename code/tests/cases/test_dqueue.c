@@ -11,9 +11,7 @@
  * Copyright (C) 2024 Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/unittest/framework.h>
-#include <fossil/benchmark/framework.h>
-#include <fossil/unittest/assume.h>
+#include <fossil/test/framework.h>
 
 #include <fossil/tofu/framework.h>
 
@@ -24,14 +22,14 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_FIXTURE(struct_dqueue_fixture);
+FOSSIL_TEST_SUITE(c_dqueue_fixture);
 fossil_dqueue_t* mock_dqueue;
 
-FOSSIL_SETUP(struct_dqueue_fixture) {
+FOSSIL_TEST_SETUP(c_dqueue_fixture) {
     mock_dqueue = fossil_dqueue_create("int");
 }
 
-FOSSIL_TEARDOWN(struct_dqueue_fixture) {
+FOSSIL_TEST_TEARDOWN(c_dqueue_fixture) {
     fossil_dqueue_destroy(mock_dqueue);
 }
 
@@ -43,14 +41,14 @@ FOSSIL_TEARDOWN(struct_dqueue_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_dqueue_create_and_destroy) {
+FOSSIL_TEST_CASE(test_dqueue_create_and_destroy) {
     // Check if the deque is created with the expected values
     ASSUME_NOT_CNULL(mock_dqueue);
     ASSUME_ITS_CNULL(mock_dqueue->front);
     ASSUME_ITS_CNULL(mock_dqueue->rear);
 }
 
-FOSSIL_TEST(test_dqueue_insert) {
+FOSSIL_TEST_CASE(test_dqueue_insert) {
     // Insert an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
     fossil_dqueue_insert(mock_dqueue, element);
@@ -62,7 +60,7 @@ FOSSIL_TEST(test_dqueue_insert) {
     fossil_tofu_destroy(&element);
 }
 
-FOSSIL_TEST(test_dqueue_size) {
+FOSSIL_TEST_CASE(test_dqueue_size) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -76,7 +74,7 @@ FOSSIL_TEST(test_dqueue_size) {
     ASSUME_ITS_EQUAL_SIZE(3, fossil_dqueue_size(mock_dqueue));
 }
 
-FOSSIL_TEST(test_dqueue_remove) {
+FOSSIL_TEST_CASE(test_dqueue_remove) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -97,7 +95,7 @@ FOSSIL_TEST(test_dqueue_remove) {
     ASSUME_ITS_EQUAL_SIZE(2, fossil_dqueue_size(mock_dqueue));
 }
 
-FOSSIL_TEST(test_dqueue_not_empty_and_is_empty) {
+FOSSIL_TEST_CASE(test_dqueue_not_empty_and_is_empty) {
     // Check initially empty
     ASSUME_ITS_FALSE(fossil_dqueue_not_empty(mock_dqueue));
     ASSUME_ITS_TRUE(fossil_dqueue_is_empty(mock_dqueue));
@@ -123,7 +121,7 @@ FOSSIL_TEST(test_dqueue_not_empty_and_is_empty) {
 // performence based on current structures
 // implmentation.
 
-FOSSIL_TEST(stress_test_dqueue) {
+FOSSIL_TEST_CASE(stress_test_dqueue) {
     // Create an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
@@ -144,12 +142,12 @@ FOSSIL_TEST(stress_test_dqueue) {
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_dqueue_structure_tests) {    
-    ADD_TESTF(test_dqueue_create_and_destroy, struct_dqueue_fixture);
-    ADD_TESTF(test_dqueue_insert, struct_dqueue_fixture);
-    ADD_TESTF(test_dqueue_size, struct_dqueue_fixture);
-    ADD_TESTF(test_dqueue_remove, struct_dqueue_fixture);
-    ADD_TESTF(test_dqueue_not_empty_and_is_empty, struct_dqueue_fixture);
+    FOSSIL_TEST_ADD(c_dqueue_fixture, test_dqueue_create_and_destroy);
+    FOSSIL_TEST_ADD(c_dqueue_fixture, test_dqueue_insert);
+    FOSSIL_TEST_ADD(c_dqueue_fixture, test_dqueue_size);
+    FOSSIL_TEST_ADD(c_dqueue_fixture, test_dqueue_remove);
+    FOSSIL_TEST_ADD(c_dqueue_fixture, test_dqueue_not_empty_and_is_empty);
+    FOSSIL_TEST_ADD(c_dqueue_fixture, stress_test_dqueue);
 
-    // Benchmarking cases
-    ADD_TESTF(stress_test_dqueue, struct_dqueue_fixture);
+    FOSSIL_TEST_REGISTER(c_dqueue_fixture);
 } // end of tests

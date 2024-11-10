@@ -11,9 +11,8 @@
  * Copyright (C) 2024 Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/unittest/framework.h>
-#include <fossil/benchmark/framework.h>
-#include <fossil/unittest/assume.h>
+#include <fossil/test/framework.h>
+
 #include "fossil/tofu/framework.h"
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -23,14 +22,14 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_FIXTURE(struct_dlist_fixture);
+FOSSIL_TEST_SUITE(c_dlist_fixture);
 fossil_dlist_t* mock_dlist;
 
-FOSSIL_SETUP(struct_dlist_fixture) {
+FOSSIL_TEST_SETUP(c_dlist_fixture) {
     mock_dlist = fossil_dlist_create("int");
 }
 
-FOSSIL_TEARDOWN(struct_dlist_fixture) {
+FOSSIL_TEST_TEARDOWN(c_dlist_fixture) {
     fossil_dlist_destroy(mock_dlist);
 }
 
@@ -38,14 +37,14 @@ FOSSIL_TEARDOWN(struct_dlist_fixture) {
 // * Fossil Logic Test Cases
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_dlist_create_and_destroy) {
+FOSSIL_TEST_CASE(test_dlist_create_and_destroy) {
     // Check if the doubly linked list is created with the expected values
     ASSUME_NOT_CNULL(mock_dlist);
     ASSUME_ITS_CNULL(mock_dlist->head);
     ASSUME_ITS_CNULL(mock_dlist->tail);
 }
 
-FOSSIL_TEST(test_dlist_insert_and_size) {
+FOSSIL_TEST_CASE(test_dlist_insert_and_size) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -59,7 +58,7 @@ FOSSIL_TEST(test_dlist_insert_and_size) {
     ASSUME_ITS_EQUAL_SIZE(3, fossil_dlist_size(mock_dlist));
 }
 
-FOSSIL_TEST(test_dlist_remove) {
+FOSSIL_TEST_CASE(test_dlist_remove) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -80,7 +79,7 @@ FOSSIL_TEST(test_dlist_remove) {
     ASSUME_ITS_EQUAL_SIZE(2, fossil_dlist_size(mock_dlist));  // Updated expected size to 2
 }
 
-FOSSIL_TEST(test_dlist_reverse_forward) {
+FOSSIL_TEST_CASE(test_dlist_reverse_forward) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -98,7 +97,7 @@ FOSSIL_TEST(test_dlist_reverse_forward) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_dlist_reverse_backward) {
+FOSSIL_TEST_CASE(test_dlist_reverse_backward) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -120,7 +119,7 @@ FOSSIL_TEST(test_dlist_reverse_backward) {
 // performence based on current structures
 // implmentation.
 
-FOSSIL_TEST(stress_test_dlist) {
+FOSSIL_TEST_CASE(stress_test_dlist) {
     // Create an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
@@ -141,11 +140,12 @@ FOSSIL_TEST(stress_test_dlist) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
 FOSSIL_TEST_GROUP(c_dlist_structure_tests) {    
-    ADD_TESTF(test_dlist_create_and_destroy, struct_dlist_fixture);
-    ADD_TESTF(test_dlist_insert_and_size, struct_dlist_fixture);
-    ADD_TESTF(test_dlist_remove, struct_dlist_fixture);
-    ADD_TESTF(test_dlist_reverse_forward, struct_dlist_fixture);
-    ADD_TESTF(test_dlist_reverse_backward, struct_dlist_fixture);
+    FOSSIL_TEST_ADD(c_dlist_fixture, test_dlist_create_and_destroy);
+    FOSSIL_TEST_ADD(c_dlist_fixture, test_dlist_insert_and_size);
+    FOSSIL_TEST_ADD(c_dlist_fixture, test_dlist_remove);
+    FOSSIL_TEST_ADD(c_dlist_fixture, test_dlist_reverse_forward);
+    FOSSIL_TEST_ADD(c_dlist_fixture, test_dlist_reverse_backward);
+    FOSSIL_TEST_ADD(c_dlist_fixture, stress_test_dlist);
 
-    ADD_TESTF(stress_test_dlist, struct_dlist_fixture);
+    FOSSIL_TEST_REGISTER(c_dlist_fixture);
 } // end of tests

@@ -11,9 +11,7 @@
  * Copyright (C) 2024 Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/unittest/framework.h>
-#include <fossil/benchmark/framework.h>
-#include <fossil/unittest/assume.h>
+#include <fossil/test/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -24,14 +22,14 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_FIXTURE(struct_pqueue_fixture);
+FOSSIL_TEST_SUITE(c_pqueue_fixture);
 fossil_pqueue_t* mock_pqueue;
 
-FOSSIL_SETUP(struct_pqueue_fixture) {
+FOSSIL_TEST_SETUP(c_pqueue_fixture) {
     mock_pqueue = fossil_pqueue_create("int");
 }
 
-FOSSIL_TEARDOWN(struct_pqueue_fixture) {
+FOSSIL_TEST_TEARDOWN(c_pqueue_fixture) {
     fossil_pqueue_destroy(mock_pqueue);
 }
 
@@ -43,19 +41,19 @@ FOSSIL_TEARDOWN(struct_pqueue_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_pqueue_create_and_destroy) {
+FOSSIL_TEST_CASE(test_pqueue_create_and_destroy) {
     // Check if the priority queue is created with the expected values
     ASSUME_NOT_CNULL(mock_pqueue);
     ASSUME_ITS_CNULL(mock_pqueue->front);
 }
 
-FOSSIL_TEST(test_pqueue_insert) {
+FOSSIL_TEST_CASE(test_pqueue_insert) {
     // Insert an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
     ASSUME_ITS_TRUE(fossil_pqueue_insert(mock_pqueue, element, 2) == 0);
 }
 
-FOSSIL_TEST(test_pqueue_remove) {
+FOSSIL_TEST_CASE(test_pqueue_remove) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -71,7 +69,7 @@ FOSSIL_TEST(test_pqueue_remove) {
     ASSUME_ITS_TRUE(fossil_pqueue_remove(mock_pqueue, &removedElement, removedPriority));
 }
 
-FOSSIL_TEST(test_pqueue_search) {
+FOSSIL_TEST_CASE(test_pqueue_search) {
     // Insert an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
     fossil_pqueue_insert(mock_pqueue, element, 2);
@@ -80,7 +78,7 @@ FOSSIL_TEST(test_pqueue_search) {
     ASSUME_ITS_TRUE(fossil_pqueue_search(mock_pqueue, element, 2) == 0);
 }
 
-FOSSIL_TEST(test_pqueue_size) {
+FOSSIL_TEST_CASE(test_pqueue_size) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -94,22 +92,22 @@ FOSSIL_TEST(test_pqueue_size) {
     ASSUME_ITS_EQUAL_SIZE(3, fossil_pqueue_size(mock_pqueue));
 }
 
-FOSSIL_TEST(test_pqueue_is_cnullptr) {
+FOSSIL_TEST_CASE(test_pqueue_is_cnullptr) {
     // Check initially cnullptr
     ASSUME_ITS_FALSE(fossil_pqueue_is_cnullptr(mock_pqueue));
 }
 
-FOSSIL_TEST(test_pqueue_not_cnullptr) {
+FOSSIL_TEST_CASE(test_pqueue_not_cnullptr) {
     // Check initially not cnullptr
     ASSUME_ITS_TRUE(fossil_pqueue_not_cnullptr(mock_pqueue));
 }
 
-FOSSIL_TEST(test_pqueue_is_empty) {
+FOSSIL_TEST_CASE(test_pqueue_is_empty) {
     // Check initially empty
     ASSUME_ITS_TRUE(fossil_pqueue_is_empty(mock_pqueue));
 }
 
-FOSSIL_TEST(test_pqueue_not_empty) {
+FOSSIL_TEST_CASE(test_pqueue_not_empty) {
     // Check initially not empty
     ASSUME_ITS_FALSE(fossil_pqueue_not_empty(mock_pqueue));
 }
@@ -118,7 +116,7 @@ FOSSIL_TEST(test_pqueue_not_empty) {
 // performence based on current structures
 // implmentation.
 
-FOSSIL_TEST(stress_test_pqueue) {
+FOSSIL_TEST_CASE(stress_test_pqueue) {
     // Create an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
@@ -141,16 +139,16 @@ FOSSIL_TEST(stress_test_pqueue) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_pqueue_structure_tests) {    
     // Priority Queue Fixture
-    ADD_TESTF(test_pqueue_create_and_destroy, struct_pqueue_fixture);
-    ADD_TESTF(test_pqueue_insert, struct_pqueue_fixture);
-    ADD_TESTF(test_pqueue_remove, struct_pqueue_fixture);
-    ADD_TESTF(test_pqueue_search, struct_pqueue_fixture);
-    ADD_TESTF(test_pqueue_size, struct_pqueue_fixture);
-    ADD_TESTF(test_pqueue_is_cnullptr, struct_pqueue_fixture);
-    ADD_TESTF(test_pqueue_not_cnullptr, struct_pqueue_fixture);
-    ADD_TESTF(test_pqueue_is_empty, struct_pqueue_fixture);
-    ADD_TESTF(test_pqueue_not_empty, struct_pqueue_fixture);
+    FOSSIL_TEST_ADD(c_pqueue_fixture, test_pqueue_create_and_destroy);
+    FOSSIL_TEST_ADD(c_pqueue_fixture, test_pqueue_insert);
+    FOSSIL_TEST_ADD(c_pqueue_fixture, test_pqueue_remove);
+    FOSSIL_TEST_ADD(c_pqueue_fixture, test_pqueue_search);
+    FOSSIL_TEST_ADD(c_pqueue_fixture, test_pqueue_size);
+    FOSSIL_TEST_ADD(c_pqueue_fixture, test_pqueue_is_cnullptr);
+    FOSSIL_TEST_ADD(c_pqueue_fixture, test_pqueue_not_cnullptr);
+    FOSSIL_TEST_ADD(c_pqueue_fixture, test_pqueue_is_empty);
+    FOSSIL_TEST_ADD(c_pqueue_fixture, test_pqueue_not_empty);
+    FOSSIL_TEST_ADD(c_pqueue_fixture, stress_test_pqueue);
 
-    // Benchmarking
-    ADD_TESTF(stress_test_pqueue, struct_pqueue_fixture);
+    FOSSIL_TEST_REGISTER(c_pqueue_fixture);
 } // end of tests

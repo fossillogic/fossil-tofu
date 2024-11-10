@@ -11,9 +11,7 @@
  * Copyright (C) 2024 Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/unittest/framework.h>
-#include <fossil/benchmark/framework.h>
-#include <fossil/unittest/assume.h>
+#include <fossil/test/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -24,14 +22,14 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_FIXTURE(struct_set_fixture);
+FOSSIL_TEST_SUITE(c_set_fixture);
 fossil_set_t* mock_set;
 
-FOSSIL_SETUP(struct_set_fixture) {
+FOSSIL_TEST_SETUP(c_set_fixture) {
     mock_set = fossil_set_create("int");
 }
 
-FOSSIL_TEARDOWN(struct_set_fixture) {
+FOSSIL_TEST_TEARDOWN(c_set_fixture) {
     fossil_set_destroy(mock_set);
 }
 
@@ -43,13 +41,13 @@ FOSSIL_TEARDOWN(struct_set_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_set_create_and_destroy) {
+FOSSIL_TEST_CASE(test_set_create_and_destroy) {
     // Check if the set is created with the expected values
     ASSUME_NOT_CNULL(mock_set);
     ASSUME_ITS_CNULL(mock_set->head);
 }
 
-FOSSIL_TEST(test_set_insert) {
+FOSSIL_TEST_CASE(test_set_insert) {
     // Insert an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
@@ -58,7 +56,7 @@ FOSSIL_TEST(test_set_insert) {
     fossil_tofu_destroy(&element);
 }
 
-FOSSIL_TEST(test_set_remove) {
+FOSSIL_TEST_CASE(test_set_remove) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -75,7 +73,7 @@ FOSSIL_TEST(test_set_remove) {
     ASSUME_ITS_EQUAL_SIZE(2, fossil_set_size(mock_set));
 }
 
-FOSSIL_TEST(test_set_search) {
+FOSSIL_TEST_CASE(test_set_search) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -98,7 +96,7 @@ FOSSIL_TEST(test_set_search) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_set_size) {
+FOSSIL_TEST_CASE(test_set_size) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -116,7 +114,7 @@ FOSSIL_TEST(test_set_size) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_set_contains) {
+FOSSIL_TEST_CASE(test_set_contains) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -140,22 +138,22 @@ FOSSIL_TEST(test_set_contains) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_set_is_cnullptr) {
+FOSSIL_TEST_CASE(test_set_is_cnullptr) {
     // Check if the set is not a nullptr
     ASSUME_ITS_FALSE(fossil_set_is_cnullptr(mock_set));
 }
 
-FOSSIL_TEST(test_set_not_cnullptr) {
+FOSSIL_TEST_CASE(test_set_not_cnullptr) {
     // Check if the set is not a nullptr
     ASSUME_ITS_TRUE(fossil_set_not_cnullptr(mock_set));
 }
 
-FOSSIL_TEST(test_set_is_empty) {
+FOSSIL_TEST_CASE(test_set_is_empty) {
     // Check if the set is empty
     ASSUME_ITS_TRUE(fossil_set_is_empty(mock_set));
 }
 
-FOSSIL_TEST(test_set_not_empty) {
+FOSSIL_TEST_CASE(test_set_not_empty) {
     // Check if the set is empty
     ASSUME_ITS_FALSE(fossil_set_not_empty(mock_set));
 }
@@ -164,7 +162,7 @@ FOSSIL_TEST(test_set_not_empty) {
 // performence based on current structures
 // implmentation.
 
-FOSSIL_TEST(stress_test_set) {
+FOSSIL_TEST_CASE(stress_test_set) {
     // Create an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
@@ -187,17 +185,17 @@ FOSSIL_TEST(stress_test_set) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_setof_structure_tests) {
     // Set Fixture
-    ADD_TESTF(test_set_create_and_destroy, struct_set_fixture);
-    ADD_TESTF(test_set_insert, struct_set_fixture);
-    ADD_TESTF(test_set_remove, struct_set_fixture);
-    ADD_TESTF(test_set_search, struct_set_fixture);
-    ADD_TESTF(test_set_size, struct_set_fixture);
-    ADD_TESTF(test_set_contains, struct_set_fixture);
-    ADD_TESTF(test_set_is_cnullptr, struct_set_fixture);
-    ADD_TESTF(test_set_not_cnullptr, struct_set_fixture);
-    ADD_TESTF(test_set_is_empty, struct_set_fixture);
-    ADD_TESTF(test_set_not_empty, struct_set_fixture);
+    FOSSIL_TEST_ADD(c_set_fixture, test_set_create_and_destroy);
+    FOSSIL_TEST_ADD(c_set_fixture, test_set_insert);
+    FOSSIL_TEST_ADD(c_set_fixture, test_set_remove);
+    FOSSIL_TEST_ADD(c_set_fixture, test_set_search);
+    FOSSIL_TEST_ADD(c_set_fixture, test_set_size);
+    FOSSIL_TEST_ADD(c_set_fixture, test_set_contains);
+    FOSSIL_TEST_ADD(c_set_fixture, test_set_is_cnullptr);
+    FOSSIL_TEST_ADD(c_set_fixture, test_set_not_cnullptr);
+    FOSSIL_TEST_ADD(c_set_fixture, test_set_is_empty);
+    FOSSIL_TEST_ADD(c_set_fixture, test_set_not_empty);
+    FOSSIL_TEST_ADD(c_set_fixture, stress_test_set);
 
-    // Benchmarking
-    ADD_TESTF(stress_test_set, struct_set_fixture);
+    FOSSIL_TEST_REGISTER(c_set_fixture);
 } // end of tests

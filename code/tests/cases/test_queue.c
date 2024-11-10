@@ -11,9 +11,7 @@
  * Copyright (C) 2024 Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/unittest/framework.h>
-#include <fossil/benchmark/framework.h>
-#include <fossil/unittest/assume.h>
+#include <fossil/test/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -24,14 +22,14 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_FIXTURE(struct_queue_fixture);
+FOSSIL_TEST_SUITE(c_queue_fixture);
 fossil_queue_t *mock_queue;
 
-FOSSIL_SETUP(struct_queue_fixture) {
+FOSSIL_TEST_SETUP(c_queue_fixture) {
     mock_queue = fossil_queue_create("int");
 }
 
-FOSSIL_TEARDOWN(struct_queue_fixture) {
+FOSSIL_TEST_TEARDOWN(c_queue_fixture) {
     fossil_queue_destroy(mock_queue);
 }
 
@@ -43,14 +41,14 @@ FOSSIL_TEARDOWN(struct_queue_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_queue_create_and_destroy) {
+FOSSIL_TEST_CASE(test_queue_create_and_destroy) {
     // Check if the queue is created with the expected values
     ASSUME_NOT_CNULL(mock_queue);
     ASSUME_ITS_CNULL(mock_queue->front);
     ASSUME_ITS_CNULL(mock_queue->rear);
 }
 
-FOSSIL_TEST(test_queue_insert) {
+FOSSIL_TEST_CASE(test_queue_insert) {
     // Insert an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
@@ -59,7 +57,7 @@ FOSSIL_TEST(test_queue_insert) {
     fossil_tofu_destroy(&element);
 }
 
-FOSSIL_TEST(test_queue_remove) {
+FOSSIL_TEST_CASE(test_queue_remove) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -85,7 +83,7 @@ FOSSIL_TEST(test_queue_remove) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_queue_search) {
+FOSSIL_TEST_CASE(test_queue_search) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -104,27 +102,27 @@ FOSSIL_TEST(test_queue_search) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_queue_is_cnullptr) {
+FOSSIL_TEST_CASE(test_queue_is_cnullptr) {
     // Check if the queue is a nullptr
     ASSUME_ITS_FALSE(fossil_queue_is_cnullptr(mock_queue));
 }
 
-FOSSIL_TEST(test_queue_not_cnullptr) {
+FOSSIL_TEST_CASE(test_queue_not_cnullptr) {
     // Check if the queue is not a nullptr
     ASSUME_ITS_TRUE(fossil_queue_not_cnullptr(mock_queue));
 }
 
-FOSSIL_TEST(test_queue_is_empty) {
+FOSSIL_TEST_CASE(test_queue_is_empty) {
     // Check if the queue is empty
     ASSUME_ITS_TRUE(fossil_queue_is_empty(mock_queue));
 }
 
-FOSSIL_TEST(test_queue_not_empty) {
+FOSSIL_TEST_CASE(test_queue_not_empty) {
     // Check if the queue is not empty
     ASSUME_ITS_FALSE(fossil_queue_not_empty(mock_queue));
 }
 
-FOSSIL_TEST(test_queue_size) {
+FOSSIL_TEST_CASE(test_queue_size) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -142,7 +140,7 @@ FOSSIL_TEST(test_queue_size) {
 // performence based on current structures
 // implmentation.
 
-FOSSIL_TEST(stress_test_queue) {
+FOSSIL_TEST_CASE(stress_test_queue) {
     // Create an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
@@ -165,16 +163,16 @@ FOSSIL_TEST(stress_test_queue) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_structure_tests) {    
     // Queue Fixture
-    ADD_TESTF(test_queue_create_and_destroy, struct_queue_fixture);
-    ADD_TESTF(test_queue_insert, struct_queue_fixture);
-    ADD_TESTF(test_queue_remove, struct_queue_fixture);
-    ADD_TESTF(test_queue_search, struct_queue_fixture);
-    ADD_TESTF(test_queue_is_cnullptr, struct_queue_fixture);
-    ADD_TESTF(test_queue_not_cnullptr, struct_queue_fixture);
-    ADD_TESTF(test_queue_is_empty, struct_queue_fixture);
-    ADD_TESTF(test_queue_not_empty, struct_queue_fixture);
-    ADD_TESTF(test_queue_size, struct_queue_fixture);
+    FOSSIL_TEST_ADD(c_queue_fixture, test_queue_create_and_destroy);
+    FOSSIL_TEST_ADD(c_queue_fixture, test_queue_insert);
+    FOSSIL_TEST_ADD(c_queue_fixture, test_queue_remove);
+    FOSSIL_TEST_ADD(c_queue_fixture, test_queue_search);
+    FOSSIL_TEST_ADD(c_queue_fixture, test_queue_is_cnullptr);
+    FOSSIL_TEST_ADD(c_queue_fixture, test_queue_not_cnullptr);
+    FOSSIL_TEST_ADD(c_queue_fixture, test_queue_is_empty);
+    FOSSIL_TEST_ADD(c_queue_fixture, test_queue_not_empty);
+    FOSSIL_TEST_ADD(c_queue_fixture, test_queue_size);
+    FOSSIL_TEST_ADD(c_queue_fixture, stress_test_queue);
 
-    // Benchmarking
-    ADD_TESTF(stress_test_queue, struct_queue_fixture);
+    FOSSIL_TEST_REGISTER(c_queue_fixture);
 } // end of tests

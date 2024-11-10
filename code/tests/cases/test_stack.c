@@ -11,9 +11,7 @@
  * Copyright (C) 2024 Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/unittest/framework.h>
-#include <fossil/benchmark/framework.h>
-#include <fossil/unittest/assume.h>
+#include <fossil/test/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -24,14 +22,14 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_FIXTURE(struct_stack_fixture);
+FOSSIL_TEST_SUITE(c_stack_fixture);
 fossil_stack_t* mock_stack;
 
-FOSSIL_SETUP(struct_stack_fixture) {
+FOSSIL_TEST_SETUP(c_stack_fixture) {
     mock_stack = fossil_stack_create("int");
 }
 
-FOSSIL_TEARDOWN(struct_stack_fixture) {
+FOSSIL_TEST_TEARDOWN(c_stack_fixture) {
     fossil_stack_destroy(mock_stack);
 }
 
@@ -43,13 +41,13 @@ FOSSIL_TEARDOWN(struct_stack_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_stack_create_and_destroy) {
+FOSSIL_TEST_CASE(test_stack_create_and_destroy) {
     // Check if the stack is created with the expected values
     ASSUME_NOT_CNULL(mock_stack);
     ASSUME_ITS_CNULL(mock_stack->top);
 }
 
-FOSSIL_TEST(test_stack_insert) {
+FOSSIL_TEST_CASE(test_stack_insert) {
     // Insert an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
@@ -59,7 +57,7 @@ FOSSIL_TEST(test_stack_insert) {
     fossil_tofu_destroy(&element);
 }
 
-FOSSIL_TEST(test_stack_remove) {
+FOSSIL_TEST_CASE(test_stack_remove) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -84,7 +82,7 @@ FOSSIL_TEST(test_stack_remove) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_stack_search) {
+FOSSIL_TEST_CASE(test_stack_search) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -104,7 +102,7 @@ FOSSIL_TEST(test_stack_search) {
     fossil_tofu_destroy(&searchElement);
 }
 
-FOSSIL_TEST(test_stack_size) {
+FOSSIL_TEST_CASE(test_stack_size) {
     // Insert some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -122,12 +120,12 @@ FOSSIL_TEST(test_stack_size) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_stack_is_empty) {
+FOSSIL_TEST_CASE(test_stack_is_empty) {
     // Check if the stack is empty
     ASSUME_ITS_TRUE(fossil_stack_is_empty(mock_stack));
 }
 
-FOSSIL_TEST(test_stack_not_empty) {
+FOSSIL_TEST_CASE(test_stack_not_empty) {
     // Insert an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
     fossil_stack_insert(mock_stack, element);
@@ -138,12 +136,12 @@ FOSSIL_TEST(test_stack_not_empty) {
     fossil_tofu_destroy(&element);
 }
 
-FOSSIL_TEST(test_stack_is_cnullptr) {
+FOSSIL_TEST_CASE(test_stack_is_cnullptr) {
     // Check if the stack is not a nullptr
     ASSUME_ITS_TRUE(fossil_stack_is_cnullptr(mock_stack) == 0);
 }
 
-FOSSIL_TEST(test_stack_not_cnullptr) {
+FOSSIL_TEST_CASE(test_stack_not_cnullptr) {
     // Check if the stack is not a nullptr
     ASSUME_ITS_TRUE(fossil_stack_not_cnullptr(mock_stack));
 }
@@ -152,7 +150,7 @@ FOSSIL_TEST(test_stack_not_cnullptr) {
 // performence based on current structures
 // implmentation.
 
-FOSSIL_TEST(stress_test_stack) {
+FOSSIL_TEST_CASE(stress_test_stack) {
     // Create an element
     fossil_tofu_t element = fossil_tofu_create("int", "42");
 
@@ -176,16 +174,16 @@ FOSSIL_TEST(stress_test_stack) {
 
 FOSSIL_TEST_GROUP(c_stack_structure_tests) {
     // Stack Fixture
-    ADD_TESTF(test_stack_create_and_destroy, struct_stack_fixture);
-    ADD_TESTF(test_stack_insert, struct_stack_fixture);
-    ADD_TESTF(test_stack_remove, struct_stack_fixture);
-    ADD_TESTF(test_stack_search, struct_stack_fixture);
-    ADD_TESTF(test_stack_size, struct_stack_fixture);
-    ADD_TESTF(test_stack_is_empty, struct_stack_fixture);
-    ADD_TESTF(test_stack_not_empty, struct_stack_fixture);
-    ADD_TESTF(test_stack_is_cnullptr, struct_stack_fixture);
-    ADD_TESTF(test_stack_not_cnullptr, struct_stack_fixture);
+    FOSSIL_TEST_ADD(c_stack_fixture, test_stack_create_and_destroy);
+    FOSSIL_TEST_ADD(c_stack_fixture, test_stack_insert);
+    FOSSIL_TEST_ADD(c_stack_fixture, test_stack_remove);
+    FOSSIL_TEST_ADD(c_stack_fixture, test_stack_search);
+    FOSSIL_TEST_ADD(c_stack_fixture, test_stack_size);
+    FOSSIL_TEST_ADD(c_stack_fixture, test_stack_is_empty);
+    FOSSIL_TEST_ADD(c_stack_fixture, test_stack_not_empty);
+    FOSSIL_TEST_ADD(c_stack_fixture, test_stack_is_cnullptr);
+    FOSSIL_TEST_ADD(c_stack_fixture, test_stack_not_cnullptr);
+    FOSSIL_TEST_ADD(c_stack_fixture, stress_test_stack);
 
-    // Stack Benchmark
-    ADD_TESTF(stress_test_stack, struct_stack_fixture);
+    FOSSIL_TEST_REGISTER(c_stack_fixture);
 } // end of tests

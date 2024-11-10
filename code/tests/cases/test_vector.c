@@ -11,9 +11,7 @@
  * Copyright (C) 2024 Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/unittest/framework.h>
-#include <fossil/benchmark/framework.h>
-#include <fossil/unittest/assume.h>
+#include <fossil/test/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -24,14 +22,14 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_FIXTURE(struct_vect_fixture);
+FOSSIL_TEST_SUITE(c_vect_fixture);
 fossil_vector_t* mock_vector;
 
-FOSSIL_SETUP(struct_vect_fixture) {
+FOSSIL_TEST_SETUP(c_vect_fixture) {
     mock_vector = fossil_vector_create("int");
 }
 
-FOSSIL_TEARDOWN(struct_vect_fixture) {
+FOSSIL_TEST_TEARDOWN(c_vect_fixture) {
     fossil_vector_destroy(mock_vector);
 }
 
@@ -43,7 +41,7 @@ FOSSIL_TEARDOWN(struct_vect_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_vector_push_front) {
+FOSSIL_TEST_CASE(test_vector_push_front) {
     // Push back some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -64,7 +62,7 @@ FOSSIL_TEST(test_vector_push_front) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_vector_push_back) {
+FOSSIL_TEST_CASE(test_vector_push_back) {
     // Push back some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -85,7 +83,7 @@ FOSSIL_TEST(test_vector_push_back) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_vector_push_at) {
+FOSSIL_TEST_CASE(test_vector_push_at) {
     // Push back some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -112,7 +110,7 @@ FOSSIL_TEST(test_vector_push_at) {
     fossil_tofu_destroy(&element4);
 }
 
-FOSSIL_TEST(test_vector_pop_front) {
+FOSSIL_TEST_CASE(test_vector_pop_front) {
     // Push back some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -135,7 +133,7 @@ FOSSIL_TEST(test_vector_pop_front) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_vector_pop_back) {
+FOSSIL_TEST_CASE(test_vector_pop_back) {
     // Push back some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -158,7 +156,7 @@ FOSSIL_TEST(test_vector_pop_back) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_vector_pop_at) {
+FOSSIL_TEST_CASE(test_vector_pop_at) {
     // Push back some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -181,7 +179,7 @@ FOSSIL_TEST(test_vector_pop_at) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_vector_erase) {
+FOSSIL_TEST_CASE(test_vector_erase) {
     // Push back some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -204,7 +202,7 @@ FOSSIL_TEST(test_vector_erase) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_vector_erase_if) {
+FOSSIL_TEST_CASE(test_vector_erase_if) {
     // Push back some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -229,7 +227,7 @@ FOSSIL_TEST(test_vector_erase_if) {
     fossil_tofu_destroy(&targetElement);
 }
 
-FOSSIL_TEST(test_vector_search) {
+FOSSIL_TEST_CASE(test_vector_search) {
     // Push back some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -254,7 +252,7 @@ FOSSIL_TEST(test_vector_search) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_vector_reverse) {
+FOSSIL_TEST_CASE(test_vector_reverse) {
     // Push back some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -277,7 +275,7 @@ FOSSIL_TEST(test_vector_reverse) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_vector_size) {
+FOSSIL_TEST_CASE(test_vector_size) {
     // Push back some elements
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -295,27 +293,27 @@ FOSSIL_TEST(test_vector_size) {
     fossil_tofu_destroy(&element3);
 }
 
-FOSSIL_TEST(test_vector_is_cullptr) {
+FOSSIL_TEST_CASE(test_vector_is_cullptr) {
     // Check if the vector is cullptr
     ASSUME_ITS_FALSE(fossil_vector_is_cnullptr(mock_vector));
 }
 
-FOSSIL_TEST(test_vector_not_cullptr) {
+FOSSIL_TEST_CASE(test_vector_not_cullptr) {
     // Check if the vector is not cullptr
     ASSUME_ITS_TRUE(fossil_vector_not_cnullptr(mock_vector));
 }
 
-FOSSIL_TEST(test_vector_is_empty) {
+FOSSIL_TEST_CASE(test_vector_is_empty) {
     // Check if the vector is empty
     ASSUME_ITS_TRUE(fossil_vector_is_empty(mock_vector));
 }
 
-FOSSIL_TEST(test_vector_not_empty) {
+FOSSIL_TEST_CASE(test_vector_not_empty) {
     // Check if the vector is not empty
     ASSUME_ITS_FALSE(fossil_vector_not_empty(mock_vector));
 }
 
-FOSSIL_TEST(test_vector_is_capacity) {
+FOSSIL_TEST_CASE(test_vector_is_capacity) {
     // Check the capacity of the vector
     ASSUME_ITS_EQUAL_SIZE(0, fossil_vector_capacity(mock_vector));
 }
@@ -324,7 +322,7 @@ FOSSIL_TEST(test_vector_is_capacity) {
 // performence based on current structures
 // implmentation.
 
-FOSSIL_TEST(stress_test_vector_usage) {
+FOSSIL_TEST_CASE(stress_test_vector_usage) {
     // setup nodes
     fossil_tofu_t element1 = fossil_tofu_create("int", "42");
     fossil_tofu_t element2 = fossil_tofu_create("int", "10");
@@ -352,23 +350,23 @@ FOSSIL_TEST(stress_test_vector_usage) {
 
 FOSSIL_TEST_GROUP(c_vector_structure_tests) {    
     // Vector Fixture
-    ADD_TESTF(test_vector_push_front, struct_vect_fixture);
-    ADD_TESTF(test_vector_push_back, struct_vect_fixture);
-    ADD_TESTF(test_vector_push_at, struct_vect_fixture);
-    ADD_TESTF(test_vector_pop_front, struct_vect_fixture);
-    ADD_TESTF(test_vector_pop_back, struct_vect_fixture);
-    ADD_TESTF(test_vector_pop_at, struct_vect_fixture);
-    ADD_TESTF(test_vector_erase, struct_vect_fixture);
-    ADD_TESTF(test_vector_erase_if, struct_vect_fixture);
-    ADD_TESTF(test_vector_search, struct_vect_fixture);
-    ADD_TESTF(test_vector_reverse, struct_vect_fixture);
-    ADD_TESTF(test_vector_size, struct_vect_fixture);
-    ADD_TESTF(test_vector_is_cullptr, struct_vect_fixture);
-    ADD_TESTF(test_vector_not_cullptr, struct_vect_fixture);
-    ADD_TESTF(test_vector_is_empty, struct_vect_fixture);
-    ADD_TESTF(test_vector_not_empty, struct_vect_fixture);
-    ADD_TESTF(test_vector_is_capacity, struct_vect_fixture);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_push_front);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_push_back);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_push_at);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_pop_front);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_pop_back);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_pop_at);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_erase);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_erase_if);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_search);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_reverse);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_size);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_is_cullptr);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_not_cullptr);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_is_empty);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_not_empty);
+    FOSSIL_TEST_ADD(c_vect_fixture, test_vector_is_capacity);
+    FOSSIL_TEST_ADD(c_vect_fixture, stress_test_vector_usage);
 
-    // Vector Benchmark
-    ADD_TESTF(stress_test_vector_usage, struct_vect_fixture);
+    FOSSIL_TEST_REGISTER(c_vect_fixture);
 } // end of tests

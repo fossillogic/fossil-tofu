@@ -11,9 +11,7 @@
  * Copyright (C) 2024 Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/unittest/framework.h>
-#include <fossil/benchmark/framework.h>
-#include <fossil/unittest/assume.h>
+#include <fossil/test/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -24,7 +22,15 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-// placeholder for implementation
+FOSSIL_TEST_SUITE(c_map_fixture);
+
+FOSSIL_TEST_SETUP(c_map_fixture) {
+    // Setup the test fixture
+}
+
+FOSSIL_TEST_TEARDOWN(c_map_fixture) {
+    // Teardown the test fixture
+}
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Cases
@@ -34,13 +40,13 @@
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(test_fossil_map_create) {
+FOSSIL_TEST_CASE(test_fossil_map_create) {
     fossil_map_t map = fossil_map_create("int");
     ASSUME_ITS_EQUAL_I32(0, fossil_map_size(&map));
     fossil_map_destroy(&map);
 }
 
-FOSSIL_TEST(test_fossil_map_add_and_get) {
+FOSSIL_TEST_CASE(test_fossil_map_add_and_get) {
     fossil_map_t map = fossil_map_create("int");
     fossil_tofu_t key = fossil_tofu_create("int", "1");
     fossil_tofu_t value = fossil_tofu_create("int", "100");
@@ -50,7 +56,7 @@ FOSSIL_TEST(test_fossil_map_add_and_get) {
     fossil_map_destroy(&map);
 }
 
-FOSSIL_TEST(test_fossil_map_contains) {
+FOSSIL_TEST_CASE(test_fossil_map_contains) {
     fossil_map_t map = fossil_map_create("int");
     fossil_tofu_t key = fossil_tofu_create("int", "1");
     fossil_tofu_t value = fossil_tofu_create("int", "100");
@@ -59,7 +65,7 @@ FOSSIL_TEST(test_fossil_map_contains) {
     fossil_map_destroy(&map);
 }
 
-FOSSIL_TEST(test_fossil_map_remove) {
+FOSSIL_TEST_CASE(test_fossil_map_remove) {
     fossil_map_t map = fossil_map_create("int");
     fossil_tofu_t key = fossil_tofu_create("int", "1");
     fossil_tofu_t value = fossil_tofu_create("int", "100");
@@ -69,7 +75,7 @@ FOSSIL_TEST(test_fossil_map_remove) {
     fossil_map_destroy(&map);
 }
 
-FOSSIL_TEST(test_fossil_map_size) {
+FOSSIL_TEST_CASE(test_fossil_map_size) {
     fossil_map_t map = fossil_map_create("int");
     fossil_tofu_t key1 = fossil_tofu_create("int", "1");
     fossil_tofu_t value1 = fossil_tofu_create("int", "100");
@@ -81,7 +87,7 @@ FOSSIL_TEST(test_fossil_map_size) {
     fossil_map_destroy(&map);
 }
 
-FOSSIL_TEST(test_fossil_map_is_empty) {
+FOSSIL_TEST_CASE(test_fossil_map_is_empty) {
     fossil_map_t map = fossil_map_create("int");
     ASSUME_ITS_TRUE(fossil_map_is_empty(&map));
     fossil_tofu_t key = fossil_tofu_create("int", "1");
@@ -91,7 +97,7 @@ FOSSIL_TEST(test_fossil_map_is_empty) {
     fossil_map_destroy(&map);
 }
 
-FOSSIL_TEST(test_fossil_map_clear) {
+FOSSIL_TEST_CASE(test_fossil_map_clear) {
     fossil_map_t map = fossil_map_create("int");
     fossil_tofu_t key = fossil_tofu_create("int", "1");
     fossil_tofu_t value = fossil_tofu_create("int", "100");
@@ -106,7 +112,7 @@ FOSSIL_TEST(test_fossil_map_clear) {
 // performence based on current structures
 // implmentation.
 
-FOSSIL_TEST(stress_test_map) {
+FOSSIL_TEST_CASE(stress_test_map) {
     // Create a map object
     fossil_map_t map = fossil_map_create("int");
 
@@ -133,14 +139,14 @@ FOSSIL_TEST(stress_test_map) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_mapof_structure_tests) {    
     // Generic ToFu MapOf Fixture
-    ADD_TEST(test_fossil_map_create);
-    ADD_TEST(test_fossil_map_add_and_get);
-    ADD_TEST(test_fossil_map_contains);
-    ADD_TEST(test_fossil_map_remove);
-    ADD_TEST(test_fossil_map_size);
-    ADD_TEST(test_fossil_map_is_empty);
-    ADD_TEST(test_fossil_map_clear);
+    FOSSIL_TEST_ADD(c_map_fixture, test_fossil_map_create);
+    FOSSIL_TEST_ADD(c_map_fixture, test_fossil_map_add_and_get);
+    FOSSIL_TEST_ADD(c_map_fixture, test_fossil_map_contains);
+    FOSSIL_TEST_ADD(c_map_fixture, test_fossil_map_remove);
+    FOSSIL_TEST_ADD(c_map_fixture, test_fossil_map_size);
+    FOSSIL_TEST_ADD(c_map_fixture, test_fossil_map_is_empty);
+    FOSSIL_TEST_ADD(c_map_fixture, test_fossil_map_clear);
+    FOSSIL_TEST_ADD(c_map_fixture, stress_test_map);
 
-    // Benchmarking
-    ADD_TEST(stress_test_map);
+    FOSSIL_TEST_REGISTER(c_map_fixture);
 } // end of tests

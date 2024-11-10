@@ -1,23 +1,21 @@
 if get_option('with_test').enabled()
     run_command(['python3', 'tools' / 'generate-runner.py'], check: true)
 
-    test_src = ['unit_runner.c']
-    test_cubes = [
+    test_c = ['unit_runner.c']
+    test_cases = [
         'arrayof', 'doublylist', 'forwardlist',
         'dqueue', 'mapof', 'pqueue', 'queue',
         'setof', 'stack', 'vector', 'tofu'
     ]
 
-    foreach cube : test_cubes
-        test_src += ['test_' + cube + '.c']
+    foreach cases : test_cases
+        test_c += ['cases' / 'test_' + cases + '.c']
     endforeach
 
-    pizza = executable('runner', test_src,
+    pizza = executable('runner', test_c,
         include_directories: dir,
         dependencies: [
             dependency('fossil-test'),
-            dependency('fossil-mock'),
-            dependency('fossil-mark'),
             fossil_tofu_dep])
 
     test('Pizza Test Run', pizza)
