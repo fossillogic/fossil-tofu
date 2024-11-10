@@ -309,13 +309,25 @@ FOSSIL_TEST_CASE(test_vector_is_empty) {
 }
 
 FOSSIL_TEST_CASE(test_vector_not_empty) {
+    // Push back some elements to make the vector not empty
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_vector_push_back(mock_vector, element1);
+
     // Check if the vector is not empty
     ASSUME_ITS_FALSE(fossil_vector_not_empty(mock_vector));
+
+    fossil_tofu_destroy(&element1);
 }
 
 FOSSIL_TEST_CASE(test_vector_is_capacity) {
+    // Push back some elements to set the capacity
+    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
+    fossil_vector_push_back(mock_vector, element1);
+
     // Check the capacity of the vector
-    ASSUME_ITS_EQUAL_SIZE(0, fossil_vector_capacity(mock_vector));
+    ASSUME_ITS_EQUAL_SIZE(1, fossil_vector_capacity(mock_vector));
+
+    fossil_tofu_destroy(&element1);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *

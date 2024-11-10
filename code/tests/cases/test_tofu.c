@@ -157,6 +157,7 @@ FOSSIL_TEST_CASE(test_fossil_tofu_iteratorof_next) {
     ASSUME_ITS_EQUAL_I32(2, second.value.int_val);
     fossil_tofu_t third = fossil_tofu_iteratorof_next(&iterator);
     ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_GHOST, third.type);
+    ASSUME_ITS_EQUAL_I32(0, third.value.int_val);
 }
 
 FOSSIL_TEST_CASE(test_fossil_tofu_iteratorof_reset) {
@@ -215,7 +216,9 @@ FOSSIL_TEST_CASE(test_filter) {
 
     fossil_tofu_actionof_filter(array, size, tofu_mock_is_even);
 
-    // Assertions using Fossil Test
+    ASSUME_ITS_EQUAL_I32(10, array[0].value.int_val);
+    ASSUME_ITS_EQUAL_I32(20, array[1].value.int_val);
+    ASSUME_ITS_EQUAL_I32(30, array[2].value.int_val);
     ASSUME_ITS_EQUAL_I32(20, array[1].value.int_val);
 }
 
