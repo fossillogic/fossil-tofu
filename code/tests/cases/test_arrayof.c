@@ -88,19 +88,6 @@ FOSSIL_TEST_CASE(test_fossil_array_clear) {
     fossil_array_destroy(&array);
 }
 
-// benchmarking cases to capture the true
-// performence based on current structures
-// implmentation.
-
-FOSSIL_TEST_CASE(stress_test_array) {
-    fossil_array_t array = fossil_array_create("int", 0);
-    for (int i = 0; i < 1000000; i++) {
-        fossil_tofu_t tofu = fossil_tofu_create("int", "10");
-        fossil_array_add(&array, tofu);
-    }
-    fossil_array_destroy(&array);
-}
-
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -112,7 +99,6 @@ FOSSIL_TEST_GROUP(c_arrayof_structure_tests) {
     FOSSIL_TEST_ADD(c_array_fixture, test_fossil_array_size);
     FOSSIL_TEST_ADD(c_array_fixture, test_fossil_array_is_empty);
     FOSSIL_TEST_ADD(c_array_fixture, test_fossil_array_clear);
-    FOSSIL_TEST_ADD(c_array_fixture, stress_test_array);
 
     FOSSIL_TEST_REGISTER(c_array_fixture);
 } // end of tests

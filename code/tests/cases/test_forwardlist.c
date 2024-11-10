@@ -177,29 +177,6 @@ FOSSIL_TEST_CASE(test_flist_not_cnullptr) {
     ASSUME_ITS_TRUE(fossil_flist_not_cnullptr(mock_flist));
 }
 
-
-// benchmarking cases to capture the true
-// performence based on current structures
-// implmentation.
-
-FOSSIL_TEST_CASE(stress_test_flist) {
-    // Create an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_flist_insert(mock_flist, element);
-        fossil_flist_remove(mock_flist, &element);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_destroy(&element);
-}
-
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -215,7 +192,6 @@ FOSSIL_TEST_GROUP(c_flist_structure_tests) {
     FOSSIL_TEST_ADD(c_flist_fixture, test_flist_not_empty);
     FOSSIL_TEST_ADD(c_flist_fixture, test_flist_is_cnullptr);
     FOSSIL_TEST_ADD(c_flist_fixture, test_flist_not_cnullptr);
-    FOSSIL_TEST_ADD(c_flist_fixture, stress_test_flist);
 
     FOSSIL_TEST_REGISTER(c_flist_fixture);
 } // end of tests

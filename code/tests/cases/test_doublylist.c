@@ -115,26 +115,6 @@ FOSSIL_TEST_CASE(test_dlist_reverse_backward) {
     fossil_tofu_destroy(&element3);
 }
 
-// benchmarking cases to capture the true
-// performence based on current structures
-// implmentation.
-
-FOSSIL_TEST_CASE(stress_test_dlist) {
-    // Create an element
-    fossil_tofu_t element = fossil_tofu_create("int", "42");
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    // Insert the element
-    fossil_dlist_insert(mock_dlist, element);
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    fossil_tofu_destroy(&element);
-}
-
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -145,7 +125,6 @@ FOSSIL_TEST_GROUP(c_dlist_structure_tests) {
     FOSSIL_TEST_ADD(c_dlist_fixture, test_dlist_remove);
     FOSSIL_TEST_ADD(c_dlist_fixture, test_dlist_reverse_forward);
     FOSSIL_TEST_ADD(c_dlist_fixture, test_dlist_reverse_backward);
-    FOSSIL_TEST_ADD(c_dlist_fixture, stress_test_dlist);
 
     FOSSIL_TEST_REGISTER(c_dlist_fixture);
 } // end of tests

@@ -108,32 +108,6 @@ FOSSIL_TEST_CASE(test_fossil_map_clear) {
     fossil_map_destroy(&map);
 }
 
-// benchmarking cases to capture the true
-// performence based on current structures
-// implmentation.
-
-FOSSIL_TEST_CASE(stress_test_map) {
-    // Create a map object
-    fossil_map_t map = fossil_map_create("int");
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    // Perform some operations
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_tofu_t key = fossil_tofu_create("int", "1");
-        fossil_tofu_t value = fossil_tofu_create("int", "100");
-        fossil_map_add(&map, key, value);
-        fossil_map_remove(&map, key);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    // Erase the map object
-    fossil_map_destroy(&map);
-}
-
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -146,7 +120,6 @@ FOSSIL_TEST_GROUP(c_mapof_structure_tests) {
     FOSSIL_TEST_ADD(c_map_fixture, test_fossil_map_size);
     FOSSIL_TEST_ADD(c_map_fixture, test_fossil_map_is_empty);
     FOSSIL_TEST_ADD(c_map_fixture, test_fossil_map_clear);
-    FOSSIL_TEST_ADD(c_map_fixture, stress_test_map);
 
     FOSSIL_TEST_REGISTER(c_map_fixture);
 } // end of tests

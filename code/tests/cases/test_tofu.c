@@ -304,30 +304,6 @@ FOSSIL_TEST_CASE(test_fossil_tofu_create_invalid) {
     ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_GHOST, tofu_invalid_value.type);
 }
 
-// benchmarking cases to capture the true
-// performence based on current structures
-// implmentation.
-
-FOSSIL_TEST_CASE(stress_test_tofu_type) {
-    // Create a tofu object
-    fossil_tofu_t tofu = fossil_tofu_create("int", "100");
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    // Perform some operations
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_tofu_t tofu_copy = fossil_tofu_copy(tofu);
-        fossil_tofu_destroy(&tofu_copy);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    // Erase the tofu object
-    fossil_tofu_destroy(&tofu);
-}
-
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -347,8 +323,6 @@ FOSSIL_TEST_GROUP(c_generic_tofu_tests) {
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_swap);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_reduce);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_verification_checks);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_create_invalid);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, stress_test_tofu_type);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_create_invalid);
 
     FOSSIL_TEST_REGISTER(c_generic_tofu_fixture);

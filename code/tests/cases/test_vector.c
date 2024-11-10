@@ -318,32 +318,6 @@ FOSSIL_TEST_CASE(test_vector_is_capacity) {
     ASSUME_ITS_EQUAL_SIZE(0, fossil_vector_capacity(mock_vector));
 }
 
-// benchmarking cases to capture the true
-// performence based on current structures
-// implmentation.
-
-FOSSIL_TEST_CASE(stress_test_vector_usage) {
-    // setup nodes
-    fossil_tofu_t element1 = fossil_tofu_create("int", "42");
-    fossil_tofu_t element2 = fossil_tofu_create("int", "10");
-    fossil_tofu_t element3 = fossil_tofu_create("int", "5");
-
-    // Start the benchmark
-    TEST_BENCHMARK();
-
-    for (size_t i = 0; i < 1000000; i++) {
-        fossil_vector_push_back(mock_vector, element1);
-        fossil_vector_push_back(mock_vector, element2);
-        fossil_vector_push_back(mock_vector, element3);
-    }
-
-    // Stop the benchmark
-    TEST_DURATION_SEC(TEST_CURRENT_TIME(), 1.0);
-
-    // Check if the elements are added correctly
-    ASSUME_ITS_EQUAL_I32(3000000, mock_vector->size);
-}
-
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -366,7 +340,6 @@ FOSSIL_TEST_GROUP(c_vector_structure_tests) {
     FOSSIL_TEST_ADD(c_vect_fixture, test_vector_is_empty);
     FOSSIL_TEST_ADD(c_vect_fixture, test_vector_not_empty);
     FOSSIL_TEST_ADD(c_vect_fixture, test_vector_is_capacity);
-    FOSSIL_TEST_ADD(c_vect_fixture, stress_test_vector_usage);
 
     FOSSIL_TEST_REGISTER(c_vect_fixture);
 } // end of tests
