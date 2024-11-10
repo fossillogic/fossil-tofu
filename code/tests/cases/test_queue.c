@@ -25,11 +25,11 @@
 FOSSIL_TEST_SUITE(c_queue_fixture);
 fossil_queue_t *mock_queue;
 
-FOSSIL_TEST_SETUP(c_queue_fixture) {
+FOSSIL_SETUP(c_queue_fixture) {
     mock_queue = fossil_queue_create("int");
 }
 
-FOSSIL_TEST_TEARDOWN(c_queue_fixture) {
+FOSSIL_TEARDOWN(c_queue_fixture) {
     fossil_queue_destroy(mock_queue);
 }
 

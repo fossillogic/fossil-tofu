@@ -25,11 +25,11 @@
 FOSSIL_TEST_SUITE(c_dlist_fixture);
 fossil_dlist_t* mock_dlist;
 
-FOSSIL_TEST_SETUP(c_dlist_fixture) {
+FOSSIL_SETUP(c_dlist_fixture) {
     mock_dlist = fossil_dlist_create("int");
 }
 
-FOSSIL_TEST_TEARDOWN(c_dlist_fixture) {
+FOSSIL_TEARDOWN(c_dlist_fixture) {
     fossil_dlist_destroy(mock_dlist);
 }
 

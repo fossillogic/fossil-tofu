@@ -24,11 +24,11 @@
 
 FOSSIL_TEST_SUITE(c_array_fixture);
 
-FOSSIL_TEST_SETUP(c_array_fixture) {
+FOSSIL_SETUP(c_array_fixture) {
     // Setup the test fixture
 }
 
-FOSSIL_TEST_TEARDOWN(c_array_fixture) {
+FOSSIL_TEARDOWN(c_array_fixture) {
     // Teardown the test fixture
 }
 

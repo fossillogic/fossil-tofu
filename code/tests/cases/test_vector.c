@@ -25,11 +25,11 @@
 FOSSIL_TEST_SUITE(c_vect_fixture);
 fossil_vector_t* mock_vector;
 
-FOSSIL_TEST_SETUP(c_vect_fixture) {
+FOSSIL_SETUP(c_vect_fixture) {
     mock_vector = fossil_vector_create("int");
 }
 
-FOSSIL_TEST_TEARDOWN(c_vect_fixture) {
+FOSSIL_TEARDOWN(c_vect_fixture) {
     fossil_vector_destroy(mock_vector);
 }
 

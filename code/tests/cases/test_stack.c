@@ -25,11 +25,11 @@
 FOSSIL_TEST_SUITE(c_stack_fixture);
 fossil_stack_t* mock_stack;
 
-FOSSIL_TEST_SETUP(c_stack_fixture) {
+FOSSIL_SETUP(c_stack_fixture) {
     mock_stack = fossil_stack_create("int");
 }
 
-FOSSIL_TEST_TEARDOWN(c_stack_fixture) {
+FOSSIL_TEARDOWN(c_stack_fixture) {
     fossil_stack_destroy(mock_stack);
 }
 

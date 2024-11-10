@@ -25,11 +25,11 @@
 FOSSIL_TEST_SUITE(c_set_fixture);
 fossil_set_t* mock_set;
 
-FOSSIL_TEST_SETUP(c_set_fixture) {
+FOSSIL_SETUP(c_set_fixture) {
     mock_set = fossil_set_create("int");
 }
 
-FOSSIL_TEST_TEARDOWN(c_set_fixture) {
+FOSSIL_TEARDOWN(c_set_fixture) {
     fossil_set_destroy(mock_set);
 }
 

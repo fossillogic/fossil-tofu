@@ -17,11 +17,11 @@
 
 FOSSIL_TEST_SUITE(c_generic_tofu_fixture);
 
-FOSSIL_TEST_SETUP(c_generic_tofu_fixture) {
+FOSSIL_SETUP(c_generic_tofu_fixture) {
     // Setup the test fixture
 }
 
-FOSSIL_TEST_TEARDOWN(c_generic_tofu_fixture) {
+FOSSIL_TEARDOWN(c_generic_tofu_fixture) {
     // Teardown the test fixture
 }
 
