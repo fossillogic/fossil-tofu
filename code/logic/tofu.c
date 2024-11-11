@@ -518,7 +518,7 @@ fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu) {
         case FOSSIL_TOFU_TYPE_INT:
             copy.value.int_val = tofu.value.int_val;
             break;
-        case FOSSIL_TOFU_TYPE_UINT:
+        case FOSSIL_TOFU_TYPE_UINT: // Hex and Octal are also unsigned integers
         case FOSSIL_TOFU_TYPE_HEX:
         case FOSSIL_TOFU_TYPE_OCTAL:
             copy.value.uint_val = tofu.value.uint_val;
@@ -554,6 +554,21 @@ fossil_tofu_t fossil_tofu_move(fossil_tofu_t tofu) {
     fossil_tofu_t moved = tofu;
     tofu.type = FOSSIL_TOFU_TYPE_GHOST;
     return moved;
+}
+
+fossil_tofu_t *fossil_tofu_algorithm_sort(fossil_tofu_t *array, size_t size, bool (*compare)(fossil_tofu_t, fossil_tofu_t)) {
+    if (!array || !compare) return NULL;
+    fossil_tofu_t *sorted = (fossil_tofu_t *)fossil_tofu_alloc(size * sizeof(fossil_tofu_t));
+    if (!sorted) return NULL;
+    memcpy(sorted, array, size * sizeof(fossil_tofu_t));
+    for (size_t i = 0; i < size; i++) {
+        for (size_t j = i + 1; j < size; j++) {
+            if (compare(sorted[j], sorted[i])) {
+                fossil_tofu_algorithm_swap(sorted, i, j);
+            }
+        }
+    }
+    return sorted;
 }
 
 // Function to transform elements in an array
@@ -710,7 +725,7 @@ fossil_tofu_t fossil_tofu_algorithm_average(fossil_tofu_t *array, size_t size) {
 }
 
 // Function to create a new iterator for an array of tofu
-fossil_tofu_iterator_t fossil_tofu_iteratorof_create(fossil_tofu_t *array, size_t size) {
+fossil_tofu_iterator_t fossil_tofu_iterator_create(fossil_tofu_t *array, size_t size) {
     fossil_tofu_iterator_t iterator;
     if (!array || size == 0) {
         fprintf(stderr, "Error: Invalid array or size\n");
@@ -726,7 +741,7 @@ fossil_tofu_iterator_t fossil_tofu_iteratorof_create(fossil_tofu_t *array, size_
 }
 
 // Function to check if the iterator has more elements
-bool fossil_tofu_iteratorof_has_next(fossil_tofu_iterator_t *iterator) {
+bool fossil_tofu_iterator_has_next(fossil_tofu_iterator_t *iterator) {
     if (!iterator || !iterator->array) {
         fprintf(stderr, "Error: Invalid iterator\n");
         return false;
@@ -735,12 +750,12 @@ bool fossil_tofu_iteratorof_has_next(fossil_tofu_iterator_t *iterator) {
 }
 
 // Function to get the next element in the iterator
-fossil_tofu_t fossil_tofu_iteratorof_next(fossil_tofu_iterator_t *iterator) {
+fossil_tofu_t fossil_tofu_iterator_next(fossil_tofu_iterator_t *iterator) {
     if (!iterator || !iterator->array) {
         fprintf(stderr, "Error: Invalid iterator\n");
         return fossil_tofu_create("ghost", ""); // Return a ghost tofu if iterator is invalid
     }
-    if (fossil_tofu_iteratorof_has_next(iterator)) {
+    if (fossil_tofu_iterator_has_next(iterator)) {
         return iterator->array[iterator->current_index++];
     }
     fprintf(stderr, "Error: No more elements in iterator\n");
@@ -748,7 +763,7 @@ fossil_tofu_t fossil_tofu_iteratorof_next(fossil_tofu_iterator_t *iterator) {
 }
 
 // Function to reset the iterator to the beginning
-void fossil_tofu_iteratorof_reset(fossil_tofu_iterator_t *iterator) {
+void fossil_tofu_iterator_reset(fossil_tofu_iterator_t *iterator) {
     if (!iterator) {
         fprintf(stderr, "Error: Invalid iterator\n");
         return;

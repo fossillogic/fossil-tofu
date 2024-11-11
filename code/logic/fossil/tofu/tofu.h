@@ -142,6 +142,14 @@ typedef struct {
 fossil_tofu_t fossil_tofu_create(char* type, char* value);
 
 /**
+ * Function to destroy a `fossil_tofu_t` object and free the allocated memory.
+ *
+ * @param tofu The `fossil_tofu_t` object to be destroyed.
+ * @note O(1) - Constant time complexity.
+ */
+void fossil_tofu_destroy(fossil_tofu_t *tofu);
+
+/**
  * Function to create a `fossil_tofu_t` object based on type and value strings.
  *
  * @param type The type string.
@@ -151,14 +159,6 @@ fossil_tofu_t fossil_tofu_create(char* type, char* value);
  * @note O(1) - Constant time complexity.
  */
 fossil_tofu_t *fossil_tofu_create_blocks(char* type, size_t size, ...);
-
-/**
- * Function to destroy a `fossil_tofu_t` object and free the allocated memory.
- *
- * @param tofu The `fossil_tofu_t` object to be destroyed.
- * @note O(1) - Constant time complexity.
- */
-void fossil_tofu_destroy(fossil_tofu_t *tofu);
 
 /**
  * Function to destroy an array of `fossil_tofu_t` objects and free the allocated memory.
@@ -231,6 +231,17 @@ bool fossil_tofu_compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2);
 // *****************************************************************************
 // Algorithm functions
 // *****************************************************************************
+
+/**
+ * Function to sort elements in an array using a given comparison function.
+ *
+ * @param array The array of elements to be sorted.
+ * @param size The size of the array.
+ * @param compare The comparison function to determine the order of elements.
+ * @return The sorted array.
+ * @note O(n^2) - Quadratic time complexity, where n is the size of the array.
+ */
+fossil_tofu_t *fossil_tofu_algorithm_sort(fossil_tofu_t *array, size_t size, bool (*compare)(fossil_tofu_t, fossil_tofu_t));
 
 /**
  * Transforms elements in an array using a given function.
@@ -382,7 +393,7 @@ fossil_tofu_t fossil_tofu_algorithm_average(fossil_tofu_t *array, size_t size);
  * @return The created iterator.
  * @note O(1) - Constant time complexity.
  */
-fossil_tofu_iterator_t fossil_tofu_iteratorof_create(fossil_tofu_t *array, size_t size);
+fossil_tofu_iterator_t fossil_tofu_iterator_create(fossil_tofu_t *array, size_t size);
 
 /**
  * @brief Function to check if the iterator has more elements.
@@ -393,7 +404,7 @@ fossil_tofu_iterator_t fossil_tofu_iteratorof_create(fossil_tofu_t *array, size_
  * @return true if the iterator has more elements, false otherwise.
  * @note O(1) - Constant time complexity.
  */
-bool fossil_tofu_iteratorof_has_next(fossil_tofu_iterator_t *iterator);
+bool fossil_tofu_iterator_has_next(fossil_tofu_iterator_t *iterator);
 
 /**
  * @brief Function to get the next element in the iterator.
@@ -404,7 +415,7 @@ bool fossil_tofu_iteratorof_has_next(fossil_tofu_iterator_t *iterator);
  * @return The next element in the iterator.
  * @note O(1) - Constant time complexity.
  */
-fossil_tofu_t fossil_tofu_iteratorof_next(fossil_tofu_iterator_t *iterator);
+fossil_tofu_t fossil_tofu_iterator_next(fossil_tofu_iterator_t *iterator);
 
 /**
  * @brief Function to reset the iterator to the beginning.
@@ -414,7 +425,7 @@ fossil_tofu_t fossil_tofu_iteratorof_next(fossil_tofu_iterator_t *iterator);
  * @param iterator The iterator to reset.
  * @note O(1) - Constant time complexity.
  */
-void fossil_tofu_iteratorof_reset(fossil_tofu_iterator_t *iterator);
+void fossil_tofu_iterator_reset(fossil_tofu_iterator_t *iterator);
 
 // *****************************************************************************
 // Memory management functions
