@@ -56,6 +56,13 @@ fossil_tofu_t sum_function(fossil_tofu_t a, fossil_tofu_t b) {
     return a;
 }
 
+bool sum_function_cmp(fossil_tofu_t a, fossil_tofu_t b) {
+    if (a.type == FOSSIL_TOFU_TYPE_INT && b.type == FOSSIL_TOFU_TYPE_INT) {
+        return a.value.int_val == b.value.int_val;
+    }
+    return false;
+}
+
 // Define an accumulation function
 fossil_tofu_t sum(fossil_tofu_t a, fossil_tofu_t b) {
     a.value.int_val += b.value.int_val;
@@ -100,7 +107,7 @@ FOSSIL_TEST_CASE(test_fossil_tofu_create) {
 
 FOSSIL_TEST_CASE(test_fossil_tofu_create_blocks) {
     fossil_tofu_t *tofu_blocks = fossil_tofu_create_blocks("int", 3, "1", "2", "3");
-    ASSUME_ITS_NOT_NULL(tofu_blocks);
+    ASSUME_NOT_CNULL(tofu_blocks);
 
     ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_INT, tofu_blocks[0].type);
     ASSUME_ITS_EQUAL_I64(1, tofu_blocks[0].value.int_val);
@@ -270,7 +277,7 @@ FOSSIL_TEST_CASE(test_sort) {
     fossil_tofu_t array[] = fossil_tofu_create_blocks("int", 3, "30", "10", "20");
     size_t size = sizeof(array) / sizeof(array[0]);
 
-    fossil_tofu_t *sorted = fossil_tofu_algorithm_sort(array, size, sum_function);
+    fossil_tofu_t *sorted = fossil_tofu_algorithm_sort(array, size, sum_function_cmp);
 
     // Assertions using Fossil Test
     ASSUME_ITS_EQUAL_I32(10, sorted[0].value.int_val);
