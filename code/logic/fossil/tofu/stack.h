@@ -42,6 +42,16 @@ typedef struct fossil_stack_t {
 fossil_stack_t* fossil_stack_create(char* type);
 
 /**
+ * Create a new stack with the specified data type and initial capacity.
+ *
+ * @param list_type The type of data the stack will store.
+ * @param size      The initial capacity of the stack.
+ * @return          The created stack.
+ * @note            Time complexity: O(1)
+ */
+fossil_stack_t* fossil_stack_create_blocks(char* type, size_t size, ...)
+
+/**
  * Erase the contents of the stack and free allocated memory.
  *
  * @param stack The stack to erase.
@@ -135,63 +145,6 @@ bool fossil_stack_is_cnullptr(const fossil_stack_t* stack);
 fossil_tofu_t fossil_stack_top(fossil_stack_t* stack, fossil_tofu_t default_value);
 
 #ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class Stack {
-    public:
-        Stack(const std::string& type) : stack_(fossil_stack_create(const_cast<char*>(type.c_str()))) {}
-
-        ~Stack() {
-            fossil_stack_destroy(stack_);
-        }
-
-        void insert(fossil_tofu_t data) {
-            fossil_stack_insert(stack_, data);
-        }
-
-        fossil_tofu_t remove() {
-            fossil_tofu_t data;
-            fossil_stack_remove(stack_, &data);
-            return data;
-        }
-
-        bool search(fossil_tofu_t data) {
-            return fossil_stack_search(stack_, data) == 0;
-        }
-
-        size_t size() {
-            return fossil_stack_size(stack_);
-        }
-
-        bool not_empty() {
-            return fossil_stack_not_empty(stack_);
-        }
-
-        bool not_cnullptr() {
-            return fossil_stack_not_cnullptr(stack_);
-        }
-
-        bool is_empty() {
-            return fossil_stack_is_empty(stack_);
-        }
-
-        bool is_cnullptr() {
-            return fossil_stack_is_cnullptr(stack_);
-        }
-
-        fossil_tofu_t top(fossil_tofu_t default_value) {
-            return fossil_stack_top(stack_, default_value);
-        }
-
-    private:
-        fossil_stack_t* stack_;
-    };
 }
 #endif
 

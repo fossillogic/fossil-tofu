@@ -15,119 +15,86 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
+
+bool fossil_set_node_equals(const fossil_set_node_t* node, fossil_tofu_t data) {
+    return fossil_tofu_equals(node->data, data);
+}
 
 fossil_set_t* fossil_set_create(char* type) {
-    if (!type) {
-        fprintf(stderr, "Error: type cannot be NULL\n");
-        return NULL;
-    }
-
     fossil_set_t* set = (fossil_set_t*)fossil_tofu_alloc(sizeof(fossil_set_t));
-    if (!set) {
-        fprintf(stderr, "Error: Memory allocation failed for fossil_set_t\n");
-        return NULL;
+    if (set) {
+        set->head = NULL;
+        set->type = fossil_tofu_strdup(type);
     }
+    return set;
+}
 
-    set->head = NULL;
-    set->type = type;  // Assuming type is a static string or managed separately
+fossil_set_t* fossil_set_create_blocks(char* type, size_t size, ...) {
+    fossil_set_t* set = fossil_set_create(type);
+    if (!set) return NULL;
+    
+    va_list args;
+    va_start(args, size);
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_t data = va_arg(args, fossil_tofu_t);
+        fossil_set_insert(set, data);
+    }
+    va_end(args);
     return set;
 }
 
 void fossil_set_destroy(fossil_set_t* set) {
-    if (!set) {
-        fprintf(stderr, "Error: set cannot be NULL\n");
-        return;
-    }
-
+    if (!set) return;
     fossil_set_node_t* current = set->head;
     while (current) {
         fossil_set_node_t* next = current->next;
         fossil_tofu_free(current);
         current = next;
     }
-    set->head = NULL;
+    fossil_tofu_free(set->type);
     fossil_tofu_free(set);
 }
 
 int32_t fossil_set_insert(fossil_set_t* set, fossil_tofu_t data) {
-    if (!set) {
-        fprintf(stderr, "Error: set cannot be NULL\n");
-        return -1;
-    }
-
-    if (fossil_set_contains(set, data)) {
-        return FOSSIL_TOFU_FAILURE;  // Duplicate element, insert fails
-    }
+    if (!set) return -1;
+    if (fossil_set_contains(set, data) == 0) return 0;
 
     fossil_set_node_t* new_node = (fossil_set_node_t*)fossil_tofu_alloc(sizeof(fossil_set_node_t));
-    if (!new_node) {
-        fprintf(stderr, "Error: Memory allocation failed for fossil_set_node_t\n");
-        return -2;  // Allocation failed
-    }
-
+    if (!new_node) return -1;
+    
     new_node->data = data;
     new_node->next = set->head;
     set->head = new_node;
-
-    return FOSSIL_TOFU_SUCCESS;  // Success
+    return 0;
 }
 
 int32_t fossil_set_remove(fossil_set_t* set, fossil_tofu_t data) {
-    if (!set) {
-        fprintf(stderr, "Error: set cannot be NULL\n");
-        return -1;
-    }
+    if (!set) return -1;
 
     fossil_set_node_t* current = set->head;
-    fossil_set_node_t* prev = NULL;
-
+    fossil_set_node_t* previous = NULL;
     while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            if (prev) {
-                prev->next = current->next;
+        if (fossil_set_node_equals(current, data)) { // Assuming int_val is a member of the union
+            if (previous) {
+                previous->next = current->next;
             } else {
                 set->head = current->next;
             }
             fossil_tofu_free(current);
-            return FOSSIL_TOFU_SUCCESS;  // Success
+            return 0;
         }
-        prev = current;
+        previous = current;
         current = current->next;
     }
-    return FOSSIL_TOFU_FAILURE;  // Element not found
+    return -1;
 }
 
 int32_t fossil_set_search(const fossil_set_t* set, fossil_tofu_t data) {
-    if (!set) {
-        fprintf(stderr, "Error: set cannot be NULL\n");
-        return -1;
-    }
-
-    fossil_set_node_t* current = set->head;
-    while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            return FOSSIL_TOFU_SUCCESS;  // Found
-        }
-        current = current->next;
-    }
-    return FOSSIL_TOFU_FAILURE;  // Not found
-}
-
-int32_t fossil_set_contains(const fossil_set_t* set, fossil_tofu_t data) {
-    if (!set) {
-        fprintf(stderr, "Error: set cannot be NULL\n");
-        return -1;
-    }
-
-    return fossil_set_search(set, data) == 0;
+    return fossil_set_contains(set, data);
 }
 
 size_t fossil_set_size(const fossil_set_t* set) {
-    if (!set) {
-        fprintf(stderr, "Error: set cannot be NULL\n");
-        return 0;
-    }
-
     size_t count = 0;
     fossil_set_node_t* current = set->head;
     while (current) {
@@ -138,11 +105,7 @@ size_t fossil_set_size(const fossil_set_t* set) {
 }
 
 bool fossil_set_not_empty(const fossil_set_t* set) {
-    if (!set) {
-        fprintf(stderr, "Error: set cannot be NULL\n");
-        return false;
-    }
-    return set->head != NULL;
+    return set && set->head != NULL;
 }
 
 bool fossil_set_not_cnullptr(const fossil_set_t* set) {
@@ -150,9 +113,22 @@ bool fossil_set_not_cnullptr(const fossil_set_t* set) {
 }
 
 bool fossil_set_is_empty(const fossil_set_t* set) {
-    return set == NULL || set->head == NULL;
+    return !fossil_set_not_empty(set);
 }
 
 bool fossil_set_is_cnullptr(const fossil_set_t* set) {
     return set == NULL;
+}
+
+int32_t fossil_set_contains(const fossil_set_t* set, fossil_tofu_t data) {
+    if (!set) return -1;
+    
+    fossil_set_node_t* current = set->head;
+    while (current) {
+        if (fossil_set_node_equals(current, data)) {
+            return 0; // Data found
+        }
+        current = current->next;
+    }
+    return -1; // Data not found
 }

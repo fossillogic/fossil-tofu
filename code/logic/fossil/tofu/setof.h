@@ -43,6 +43,16 @@ typedef struct fossil_set_t {
 fossil_set_t* fossil_set_create(char* type);
 
 /**
+ * Create a new set with the specified data type and initial capacity.
+ *
+ * @param list_type The type of data the set will store.
+ * @param size      The initial capacity of the set.
+ * @return          The created set.
+ * @note            O(n) - Linear time complexity, where n is the number of elements in the set.
+ */
+fossil_set_t* fossil_set_create_blocks(char* type, size_t size, ...);
+
+/**
  * Erase the contents of the set and free allocated memory.
  *
  * @param set The set to erase.
@@ -136,61 +146,6 @@ bool fossil_set_is_cnullptr(const fossil_set_t* set);
 int32_t fossil_set_contains(const fossil_set_t* set, fossil_tofu_t data);
 
 #ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class Set {
-    public:
-        Set(const std::string& type) : set_(fossil_set_create(const_cast<char*>(type.c_str()))) {}
-
-        ~Set() {
-            fossil_set_destroy(set_);
-        }
-
-        void insert(fossil_tofu_t data) {
-            fossil_set_insert(set_, data);
-        }
-
-        void remove(fossil_tofu_t data) {
-            fossil_set_remove(set_, data);
-        }
-
-        int search(fossil_tofu_t data) {
-            return fossil_set_search(set_, data);
-        }
-
-        size_t size() {
-            return fossil_set_size(set_);
-        }
-
-        bool not_empty() {
-            return fossil_set_not_empty(set_);
-        }
-
-        bool not_cnullptr() {
-            return fossil_set_not_cnullptr(set_);
-        }
-
-        bool is_empty() {
-            return fossil_set_is_empty(set_);
-        }
-
-        bool is_cnullptr() {
-            return fossil_set_is_cnullptr(set_);
-        }
-
-        bool contains(fossil_tofu_t data) {
-            return fossil_set_contains(set_, data);
-        }
-
-    private:
-        fossil_set_t* set_;
-    };
 }
 #endif
 

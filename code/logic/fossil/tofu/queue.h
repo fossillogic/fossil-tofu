@@ -44,6 +44,16 @@ typedef struct fossil_queue_t {
 fossil_queue_t* fossil_queue_create(char* type);
 
 /**
+ * Create a new queue with the specified data type and initial capacity.
+ *
+ * @param list_type The type of data the queue will store.
+ * @param size      The initial capacity of the queue.
+ * @return          The created queue.
+ * @note            Time complexity: O(1)
+ */
+fossil_queue_t* fossil_queue_create_blocks(char* type, size_t size, ...);
+
+/**
  * Erase the contents of the queue and free allocated memory.
  *
  * @param queue The queue to erase.
@@ -127,59 +137,6 @@ bool fossil_queue_is_empty(const fossil_queue_t* queue);
 bool fossil_queue_is_cnullptr(const fossil_queue_t* queue);
 
 #ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class Queue {
-    public:
-        Queue(const std::string& type) : queue_(fossil_queue_create(const_cast<char*>(type.c_str()))) {}
-
-        ~Queue() {
-            fossil_queue_destroy(queue_);
-        }
-
-        void insert(fossil_tofu_t data) {
-            fossil_queue_insert(queue_, data);
-        }
-
-        fossil_tofu_t remove() {
-            fossil_tofu_t data;
-            fossil_queue_remove(queue_, &data);
-            return data;
-        }
-
-        bool search(fossil_tofu_t data) {
-            return fossil_queue_search(queue_, data) == 0;
-        }
-
-        size_t size() {
-            return fossil_queue_size(queue_);
-        }
-
-        bool not_empty() {
-            return fossil_queue_not_empty(queue_);
-        }
-
-        bool not_cnullptr() {
-            return fossil_queue_not_cnullptr(queue_);
-        }
-
-        bool is_empty() {
-            return fossil_queue_is_empty(queue_);
-        }
-
-        bool is_cnullptr() {
-            return fossil_queue_is_cnullptr(queue_);
-        }
-
-    private:
-        fossil_queue_t* queue_;
-    };
 }
 #endif
 

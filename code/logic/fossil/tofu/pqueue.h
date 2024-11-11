@@ -42,6 +42,16 @@ typedef struct fossil_pqueue_t {
 fossil_pqueue_t* fossil_pqueue_create(char* type);
 
 /**
+ * Create a new priority queue with the specified data type and initial capacity.
+ *
+ * @param queue_type The type of data the priority queue will store.
+ * @param size       The initial capacity of the priority queue.
+ * @return           The created priority queue.
+ * @note             Time complexity: O(1)
+ */
+fossil_pqueue_t* fossil_pqueue_create_blocks(char* type, size_t size, ...);
+
+/**
  * Erase the contents of the priority queue and free allocated memory.
  *
  * @param pqueue The priority queue to erase.
@@ -128,59 +138,6 @@ bool fossil_pqueue_is_empty(const fossil_pqueue_t* pqueue);
 bool fossil_pqueue_is_cnullptr(const fossil_pqueue_t* pqueue);
 
 #ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class PQueue {
-    public:
-        PQueue(const std::string& type) : pqueue_(fossil_pqueue_create(const_cast<char*>(type.c_str()))) {}
-
-        ~PQueue() {
-            fossil_pqueue_destroy(pqueue_);
-        }
-
-        void insert(fossil_tofu_t data, int32_t priority) {
-            fossil_pqueue_insert(pqueue_, data, priority);
-        }
-
-        fossil_tofu_t remove() {
-            fossil_tofu_t data;
-            fossil_pqueue_remove(pqueue_, &data, 0);
-            return data;
-        }
-
-        bool search(fossil_tofu_t data, int32_t priority) {
-            return fossil_pqueue_search(pqueue_, data, priority) == 0;
-        }
-
-        size_t size() {
-            return fossil_pqueue_size(pqueue_);
-        }
-
-        bool not_empty() {
-            return fossil_pqueue_not_empty(pqueue_);
-        }
-
-        bool not_cnullptr() {
-            return fossil_pqueue_not_cnullptr(pqueue_);
-        }
-
-        bool is_empty() {
-            return fossil_pqueue_is_empty(pqueue_);
-        }
-
-        bool is_cnullptr() {
-            return fossil_pqueue_is_cnullptr(pqueue_);
-        }
-
-    private:
-        fossil_pqueue_t* pqueue_;
-    };
 }
 #endif
 

@@ -15,87 +15,72 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 fossil_stack_t* fossil_stack_create(char* type) {
-    if (!type) {
-        return NULL; // Error: type is NULL
-    }
-
     fossil_stack_t* stack = (fossil_stack_t*)fossil_tofu_alloc(sizeof(fossil_stack_t));
-    if (stack) {
-        stack->type = type; // Assuming type is a static string or managed separately
-        stack->top = NULL;
+    if (!stack) return NULL;
+    stack->type = fossil_tofu_strdup(type);
+    stack->top = NULL;
+    return stack;
+}
+
+fossil_stack_t* fossil_stack_create_blocks(char* type, size_t size, ...) {
+    fossil_stack_t* stack = fossil_stack_create(type);
+    if (!stack) return NULL;
+
+    va_list args;
+    va_start(args, size);
+    for (size_t i = 0; i < size; i++) {
+        fossil_tofu_t element = va_arg(args, fossil_tofu_t);
+        fossil_stack_insert(stack, element);
     }
+    va_end(args);
     return stack;
 }
 
 void fossil_stack_destroy(fossil_stack_t* stack) {
-    if (!stack) return;
-
-    fossil_stack_node_t* current = stack->top;
-    while (current) {
-        fossil_stack_node_t* next = current->next;
-        fossil_tofu_free(current);
-        current = next;
+    while (stack->top) {
+        fossil_stack_node_t* temp = stack->top;
+        stack->top = stack->top->next;
+        fossil_tofu_free(temp);
     }
-    stack->top = NULL;
+    fossil_tofu_free(stack->type);
     fossil_tofu_free(stack);
 }
 
 int32_t fossil_stack_insert(fossil_stack_t* stack, fossil_tofu_t data) {
-    if (!stack) {
-        return FOSSIL_TOFU_FAILURE; // Error: stack is NULL
-    }
-
     fossil_stack_node_t* new_node = (fossil_stack_node_t*)fossil_tofu_alloc(sizeof(fossil_stack_node_t));
-    if (!new_node) {
-        return FOSSIL_TOFU_FAILURE; // Allocation failed
-    }
-
+    if (!new_node) return -1;
     new_node->data = data;
     new_node->next = stack->top;
     stack->top = new_node;
-
-    return FOSSIL_TOFU_SUCCESS; // Success
+    return 0;
 }
 
 int32_t fossil_stack_remove(fossil_stack_t* stack, fossil_tofu_t* data) {
-    if (!stack || !data) {
-        return FOSSIL_TOFU_FAILURE; // Error: stack or data is NULL
-    }
-
-    if (!stack->top) {
-        return FOSSIL_TOFU_FAILURE; // Stack is empty
-    }
-
-    fossil_stack_node_t* top_node = stack->top;
-    *data = top_node->data;
-    stack->top = top_node->next;
-    fossil_tofu_free(top_node);
-
-    return FOSSIL_TOFU_SUCCESS; // Success
+    if (!stack->top) return -1;
+    fossil_stack_node_t* temp = stack->top;
+    *data = temp->data;
+    stack->top = stack->top->next;
+    fossil_tofu_free(temp);
+    return 0;
 }
 
 int32_t fossil_stack_search(const fossil_stack_t* stack, fossil_tofu_t data) {
-    if (!stack) {
-        return FOSSIL_TOFU_FAILURE; // Error: stack is NULL
-    }
-
     fossil_stack_node_t* current = stack->top;
+    size_t index = 0;
     while (current) {
         if (fossil_tofu_equals(current->data, data)) {
-            return FOSSIL_TOFU_SUCCESS; // Found
+            return (int32_t)index;
         }
         current = current->next;
+        index++;
     }
-    return FOSSIL_TOFU_FAILURE; // Not found
+    return -1;
 }
 
 size_t fossil_stack_size(const fossil_stack_t* stack) {
-    if (!stack) {
-        return 0; // Error: stack is NULL
-    }
-
     size_t count = 0;
     fossil_stack_node_t* current = stack->top;
     while (current) {
@@ -106,9 +91,6 @@ size_t fossil_stack_size(const fossil_stack_t* stack) {
 }
 
 bool fossil_stack_not_empty(const fossil_stack_t* stack) {
-    if (!stack) {
-        return false; // Error: stack is NULL
-    }
     return stack->top != NULL;
 }
 
@@ -117,9 +99,6 @@ bool fossil_stack_not_cnullptr(const fossil_stack_t* stack) {
 }
 
 bool fossil_stack_is_empty(const fossil_stack_t* stack) {
-    if (!stack) {
-        return true; // Error: stack is NULL
-    }
     return stack->top == NULL;
 }
 
@@ -128,12 +107,8 @@ bool fossil_stack_is_cnullptr(const fossil_stack_t* stack) {
 }
 
 fossil_tofu_t fossil_stack_top(fossil_stack_t* stack, fossil_tofu_t default_value) {
-    if (!stack) {
-        return default_value; // Error: stack is NULL
+    if (stack->top) {
+        return stack->top->data;
     }
-
-    if (!stack->top) {
-        return default_value; // Stack is empty
-    }
-    return stack->top->data;
+    return default_value;
 }
