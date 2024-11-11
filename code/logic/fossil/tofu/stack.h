@@ -49,7 +49,7 @@ fossil_stack_t* fossil_stack_create(char* type);
  * @return          The created stack.
  * @note            Time complexity: O(1)
  */
-fossil_stack_t* fossil_stack_create_blocks(char* type, size_t size, ...)
+fossil_stack_t* fossil_stack_create_blocks(char* type, size_t size, ...);
 
 /**
  * Erase the contents of the stack and free allocated memory.
