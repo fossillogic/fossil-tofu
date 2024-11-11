@@ -142,12 +142,36 @@ typedef struct {
 fossil_tofu_t fossil_tofu_create(char* type, char* value);
 
 /**
+ * Function to create a `fossil_tofu_t` object based on type and value strings.
+ *
+ * @param type The type string.
+ * @param size The number of values.
+ * @param ... The values.
+ * @return The created `fossil_tofu_t` object.
+ * @note O(1) - Constant time complexity.
+ */
+fossil_tofu_t *fossil_tofu_create_blocks(char* type, size_t size, ...);
+
+/**
  * Function to destroy a `fossil_tofu_t` object and free the allocated memory.
  *
  * @param tofu The `fossil_tofu_t` object to be destroyed.
  * @note O(1) - Constant time complexity.
  */
 void fossil_tofu_destroy(fossil_tofu_t *tofu);
+
+/**
+ * Function to destroy an array of `fossil_tofu_t` objects and free the allocated memory.
+ *
+ * @param tofu_blocks The array of `fossil_tofu_t` objects to be destroyed.
+ * @param size The size of the array.
+ * @note O(n) - Linear time complexity, where n is the size of the array.
+ */
+void fossil_tofu_destroy_blocks(fossil_tofu_t *tofu_blocks, size_t size);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Utility function to print a `fossil_tofu_t` object.
@@ -165,15 +189,6 @@ void fossil_tofu_print(fossil_tofu_t tofu);
  * @note O(n) - Linear time complexity, where n is the number of valid types.
  */
 bool fossil_tofu_is_valid_type(const char *type);
-
-/**
- * Utility function to convert a `fossil_tofu_t` object's type to a string representation.
- *
- * @param type The `fossil_tofu_t` object's type.
- * @return The string representation of the type.
- * @note O(1) - Constant time complexity.
- */
-const char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
 
 /**
  * Utility function to check if two `fossil_tofu_t` objects are equal.
@@ -195,6 +210,15 @@ bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2);
 fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu);
 
 /**
+ * Utility function to move a `fossil_tofu_t` object.
+ *
+ * @param tofu The `fossil_tofu_t` object to be moved.
+ * @return The moved `fossil_tofu_t` object.
+ * @note O(1) - Constant time complexity.
+ */
+fossil_tofu_t fossil_tofu_move(fossil_tofu_t tofu);
+
+/**
  * Utility function to compare two `fossil_tofu_t` objects.
  *
  * @param tofu1 The first `fossil_tofu_t` object.
@@ -203,6 +227,10 @@ fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu);
  * @note O(1) - Constant time complexity.
  */
 bool fossil_tofu_compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2);
+
+// *****************************************************************************
+// Algorithm functions
+// *****************************************************************************
 
 /**
  * Transforms elements in an array using a given function.
@@ -339,6 +367,10 @@ fossil_tofu_t fossil_tofu_algorithm_summary(fossil_tofu_t *array, size_t size, f
  * @note O(n) - Linear time complexity, where n is the size of the array.
  */
 fossil_tofu_t fossil_tofu_algorithm_average(fossil_tofu_t *array, size_t size);
+
+// *****************************************************************************
+// Iterator functions
+// *****************************************************************************
 
 /**
  * @brief Function to create a new iterator for an array of tofu.
