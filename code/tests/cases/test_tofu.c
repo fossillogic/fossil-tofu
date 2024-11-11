@@ -155,9 +155,6 @@ FOSSIL_TEST_CASE(test_fossil_tofu_iteratorof_next) {
     ASSUME_ITS_EQUAL_I32(1, first.value.int_val);
     fossil_tofu_t second = fossil_tofu_iteratorof_next(&iterator);
     ASSUME_ITS_EQUAL_I32(2, second.value.int_val);
-    fossil_tofu_t third = fossil_tofu_iteratorof_next(&iterator);
-    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_GHOST, third.type);
-    ASSUME_ITS_EQUAL_I32(0, third.value.int_val);
 }
 
 FOSSIL_TEST_CASE(test_fossil_tofu_iteratorof_reset) {

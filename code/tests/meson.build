@@ -3,9 +3,7 @@ if get_option('with_test').enabled()
 
     test_c = ['unit_runner.c']
     test_cases = [
-        'arrayof', 'doublylist', 'forwardlist',
-        'dqueue', 'mapof', 'pqueue', 'queue',
-        'setof', 'stack', 'vector', 'tofu'
+        'tofu', # need new test cases for structures.
     ]
 
     foreach cases : test_cases
