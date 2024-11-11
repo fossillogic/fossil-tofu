@@ -106,7 +106,6 @@ typedef union {
 typedef struct {
     fossil_tofu_type_t type;
     fossil_tofu_value_t value;
-    bool is_cached;    // Flag to track if value is cached
     fossil_tofu_value_t cached_value; // Cached value for memorization
 } fossil_tofu_t;
 
@@ -136,12 +135,12 @@ typedef void * tofu_memory_t;
 fossil_tofu_t fossil_tofu_create(char* type, char* value);
 
 /**
- * Memorization (caching) function for a `fossil_tofu_t` object.
+ * Function to destroy a `fossil_tofu_t` object and free the allocated memory.
  *
- * @param tofu The `fossil_tofu_t` object to be memorized.
+ * @param tofu The `fossil_tofu_t` object to be destroyed.
  * @note O(1) - Constant time complexity.
  */
-void fossil_tofu_memorize(fossil_tofu_t *tofu);
+void fossil_tofu_destroy(fossil_tofu_t *tofu);
 
 /**
  * Utility function to print a `fossil_tofu_t` object.
@@ -150,14 +149,6 @@ void fossil_tofu_memorize(fossil_tofu_t *tofu);
  * @note O(1) - Constant time complexity.
  */
 void fossil_tofu_print(fossil_tofu_t tofu);
-
-/**
- * Function to destroy a `fossil_tofu_t` object and free the allocated memory.
- *
- * @param tofu The `fossil_tofu_t` object to be destroyed.
- * @note O(1) - Constant time complexity.
- */
-void fossil_tofu_destroy(fossil_tofu_t *tofu);
 
 /**
  * Utility function to check if a given type is valid.

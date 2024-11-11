@@ -163,7 +163,6 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
     fossil_tofu_type_t tofu_type = string_to_tofu_type(type);
     fossil_tofu_t tofu;
     tofu.type = tofu_type;
-    tofu.is_cached = false;
 
     switch (tofu_type) {
         case FOSSIL_TOFU_TYPE_INT:
@@ -267,14 +266,6 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
     return tofu;
 }
 
-// Memorization (caching) function for fossil_tofu_t
-void fossil_tofu_memorize(fossil_tofu_t *tofu) {
-    if (!tofu->is_cached) {
-        tofu->cached_value = tofu->value;
-        tofu->is_cached = true;
-    }
-}
-
 // Utility function to print fossil_tofu_t
 void fossil_tofu_print(fossil_tofu_t tofu) {
     const char *type_str = fossil_tofu_type_to_string(tofu.type);
@@ -372,7 +363,6 @@ void fossil_tofu_destroy(fossil_tofu_t *tofu) {
             break;
     }
     tofu->type = FOSSIL_TOFU_TYPE_GHOST;
-    tofu->is_cached = false;
 }
 
 // Utility function to convert fossil_tofu_type_t to string representation
@@ -489,7 +479,6 @@ bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
 // Utility function to copy a fossil_tofu_t object
 fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu) {
     fossil_tofu_t copy = tofu;
-    copy.is_cached = false; // Reset the cached state in the copy
     
     switch (tofu.type) {
         case FOSSIL_TOFU_TYPE_BSTR:
