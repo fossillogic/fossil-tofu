@@ -274,7 +274,7 @@ FOSSIL_TEST_CASE(test_swap) {
 }
 
 FOSSIL_TEST_CASE(test_sort) {
-    fossil_tofu_t *array = fossil_tofu_create_blocks("int", 3, {"30", "10", "20"});
+    fossil_tofu_t *array = fossil_tofu_create_blocks("int", 3, "30", "10", "20");
     size_t size = 3;
 
     fossil_tofu_t *sorted = fossil_tofu_algorithm_sort(array, size, sum_function_cmp);
