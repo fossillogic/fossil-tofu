@@ -126,7 +126,7 @@ void fossil_vector_pop_at(fossil_vector_t* vector, size_t index);
  *
  * @param vector The vector from which to remove all elements.
  */
-void fossil_vector_erase(fossil_vector_t* vector, size_t index);
+void fossil_vector_erase(fossil_vector_t* vector);
 
 /**
  * Remove all elements from the vector that match the target element.
