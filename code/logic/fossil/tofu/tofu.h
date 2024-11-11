@@ -61,6 +61,10 @@ extern "C"
 {
 #endif
 
+// *****************************************************************************
+// Type definitions
+// *****************************************************************************
+
 // Consistent return values for functions in the "tofu" data structure.
 enum {
     FOSSIL_TOFU_SUCCESS = 0,
@@ -71,7 +75,15 @@ enum {
 typedef enum {
     FOSSIL_TOFU_TYPE_GHOST, // Ghost type for unknown type.
     FOSSIL_TOFU_TYPE_INT,
+    FOSSIL_TOFU_TYPE_I8,
+    FOSSIL_TOFU_TYPE_I16,
+    FOSSIL_TOFU_TYPE_I32,
+    FOSSIL_TOFU_TYPE_I64,
     FOSSIL_TOFU_TYPE_UINT,
+    FOSSIL_TOFU_TYPE_U8,
+    FOSSIL_TOFU_TYPE_U16,
+    FOSSIL_TOFU_TYPE_U32,
+    FOSSIL_TOFU_TYPE_U64,
     FOSSIL_TOFU_TYPE_HEX,
     FOSSIL_TOFU_TYPE_OCTAL,
     FOSSIL_TOFU_TYPE_FLOAT,
@@ -106,7 +118,6 @@ typedef union {
 typedef struct {
     fossil_tofu_type_t type;
     fossil_tofu_value_t value;
-    fossil_tofu_value_t cached_value; // Cached value for memorization
 } fossil_tofu_t;
 
 // Struct for iterator
@@ -114,15 +125,11 @@ typedef struct {
     fossil_tofu_t *array;
     size_t size;
     size_t current_index;
-} fossil_tofu_iteratorof_t;
+} fossil_tofu_iterator_t;
 
-/**
- * @brief Allocate memory.
- * 
- * @param size Size of the memory to allocate.
- * @return Pointer to the allocated memory.
- */
-typedef void * tofu_memory_t;
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
 
 /**
  * Function to create a `fossil_tofu_t` object based on type and value strings.
@@ -205,7 +212,7 @@ bool fossil_tofu_compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2);
  * @param func The function to be applied to each element.
  * @note O(n) - Linear time complexity, where n is the size of the array.
  */
-void fossil_tofu_actionof_transform(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t));
+void fossil_tofu_algorithm_transform(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t));
 
 /**
  * Accumulates elements in an array using a given function and initial value.
@@ -217,7 +224,7 @@ void fossil_tofu_actionof_transform(fossil_tofu_t *array, size_t size, fossil_to
  * @return The accumulated value.
  * @note O(n) - Linear time complexity, where n is the size of the array.
  */
-fossil_tofu_t fossil_tofu_actionof_accumulate(fossil_tofu_t *array, size_t size, fossil_tofu_t init, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t));
+fossil_tofu_t fossil_tofu_algorithm_accumulate(fossil_tofu_t *array, size_t size, fossil_tofu_t init, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t));
 
 /**
  * Filters elements in an array based on a given predicate function.
@@ -228,7 +235,7 @@ fossil_tofu_t fossil_tofu_actionof_accumulate(fossil_tofu_t *array, size_t size,
  * @return The number of elements that pass the filter.
  * @note O(n) - Linear time complexity, where n is the size of the array.
  */
-size_t fossil_tofu_actionof_filter(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t));
+size_t fossil_tofu_algorithm_filter(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t));
 
 /**
  * Searches for an element in an array using a given key and comparison function.
@@ -240,7 +247,7 @@ size_t fossil_tofu_actionof_filter(fossil_tofu_t *array, size_t size, bool (*pre
  * @return A pointer to the first occurrence of the key in the array, or NULL if not found.
  * @note O(n) - Linear time complexity, where n is the size of the array.
  */
-fossil_tofu_t* fossil_tofu_actionof_search(fossil_tofu_t *array, size_t size, fossil_tofu_t key, bool (*compare)(fossil_tofu_t, fossil_tofu_t));
+fossil_tofu_t* fossil_tofu_algorithm_search(fossil_tofu_t *array, size_t size, fossil_tofu_t key, bool (*compare)(fossil_tofu_t, fossil_tofu_t));
 
 /**
  * Reverses the order of elements in an array.
@@ -249,7 +256,7 @@ fossil_tofu_t* fossil_tofu_actionof_search(fossil_tofu_t *array, size_t size, fo
  * @param size The size of the array.
  * @note O(n) - Linear time complexity, where n is the size of the array.
  */
-void fossil_tofu_actionof_reverse(fossil_tofu_t *array, size_t size);
+void fossil_tofu_algorithm_reverse(fossil_tofu_t *array, size_t size);
 
 /**
  * Swaps two elements in an array.
@@ -259,7 +266,7 @@ void fossil_tofu_actionof_reverse(fossil_tofu_t *array, size_t size);
  * @param index2 The index of the second element to be swapped.
  * @note O(1) - Constant time complexity.
  */
-void fossil_tofu_actionof_swap(fossil_tofu_t *array, size_t index1, size_t index2);
+void fossil_tofu_algorithm_swap(fossil_tofu_t *array, size_t index1, size_t index2);
 
 /**
  * Compares two elements.
@@ -269,7 +276,7 @@ void fossil_tofu_actionof_swap(fossil_tofu_t *array, size_t index1, size_t index
  * @return A negative value if a is less than b, a positive value if a is greater than b, or zero if they are equal.
  * @note O(1) - Constant time complexity.
  */
-int fossil_tofu_actionof_compare(fossil_tofu_t a, fossil_tofu_t b);
+int fossil_tofu_algorithm_compare(fossil_tofu_t a, fossil_tofu_t b);
 
 /**
  * Reduces elements in an array using a given function.
@@ -280,7 +287,7 @@ int fossil_tofu_actionof_compare(fossil_tofu_t a, fossil_tofu_t b);
  * @return The reduced value.
  * @note O(n) - Linear time complexity, where n is the size of the array.
  */
-fossil_tofu_t fossil_tofu_actionof_reduce(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t));
+fossil_tofu_t fossil_tofu_algorithm_reduce(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t));
 
 /**
  * Shuffles elements in an array randomly.
@@ -289,7 +296,7 @@ fossil_tofu_t fossil_tofu_actionof_reduce(fossil_tofu_t *array, size_t size, fos
  * @param size The size of the array.
  * @note O(n) - Linear time complexity, where n is the size of the array.
  */
-void fossil_tofu_actionof_shuffle(fossil_tofu_t *array, size_t size);
+void fossil_tofu_algorithm_shuffle(fossil_tofu_t *array, size_t size);
 
 /**
  * Applies a function to each element in an array.
@@ -299,7 +306,7 @@ void fossil_tofu_actionof_shuffle(fossil_tofu_t *array, size_t size);
  * @param func The function to be applied to each element.
  * @note O(n) - Linear time complexity, where n is the size of the array.
  */
-void fossil_tofu_actionof_for_each(fossil_tofu_t *array, size_t size, void (*func)(fossil_tofu_t));
+void fossil_tofu_algorithm_for_each(fossil_tofu_t *array, size_t size, void (*func)(fossil_tofu_t));
 
 /**
  * Partitions elements in an array based on a given predicate function.
@@ -310,7 +317,7 @@ void fossil_tofu_actionof_for_each(fossil_tofu_t *array, size_t size, void (*fun
  * @return The index of the first element in the second partition.
  * @note O(n) - Linear time complexity, where n is the size of the array.
  */
-size_t fossil_tofu_actionof_partition(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t));
+size_t fossil_tofu_algorithm_partition(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t));
 
 /**
  * Calculates the summary of elements in an array using a given function.
@@ -321,7 +328,7 @@ size_t fossil_tofu_actionof_partition(fossil_tofu_t *array, size_t size, bool (*
  * @return The calculated summary.
  * @note O(n) - Linear time complexity, where n is the size of the array.
  */
-fossil_tofu_t fossil_tofu_actionof_summary(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t));
+fossil_tofu_t fossil_tofu_algorithm_summary(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t));
 
 /**
  * Calculates the average of elements in an array.
@@ -331,7 +338,7 @@ fossil_tofu_t fossil_tofu_actionof_summary(fossil_tofu_t *array, size_t size, fo
  * @return The calculated average.
  * @note O(n) - Linear time complexity, where n is the size of the array.
  */
-fossil_tofu_t fossil_tofu_actionof_average(fossil_tofu_t *array, size_t size);
+fossil_tofu_t fossil_tofu_algorithm_average(fossil_tofu_t *array, size_t size);
 
 /**
  * @brief Function to create a new iterator for an array of tofu.
@@ -343,7 +350,7 @@ fossil_tofu_t fossil_tofu_actionof_average(fossil_tofu_t *array, size_t size);
  * @return The created iterator.
  * @note O(1) - Constant time complexity.
  */
-fossil_tofu_iteratorof_t fossil_tofu_iteratorof_create(fossil_tofu_t *array, size_t size);
+fossil_tofu_iterator_t fossil_tofu_iteratorof_create(fossil_tofu_t *array, size_t size);
 
 /**
  * @brief Function to check if the iterator has more elements.
@@ -354,7 +361,7 @@ fossil_tofu_iteratorof_t fossil_tofu_iteratorof_create(fossil_tofu_t *array, siz
  * @return true if the iterator has more elements, false otherwise.
  * @note O(1) - Constant time complexity.
  */
-bool fossil_tofu_iteratorof_has_next(fossil_tofu_iteratorof_t *iterator);
+bool fossil_tofu_iteratorof_has_next(fossil_tofu_iterator_t *iterator);
 
 /**
  * @brief Function to get the next element in the iterator.
@@ -365,7 +372,7 @@ bool fossil_tofu_iteratorof_has_next(fossil_tofu_iteratorof_t *iterator);
  * @return The next element in the iterator.
  * @note O(1) - Constant time complexity.
  */
-fossil_tofu_t fossil_tofu_iteratorof_next(fossil_tofu_iteratorof_t *iterator);
+fossil_tofu_t fossil_tofu_iteratorof_next(fossil_tofu_iterator_t *iterator);
 
 /**
  * @brief Function to reset the iterator to the beginning.
@@ -375,7 +382,19 @@ fossil_tofu_t fossil_tofu_iteratorof_next(fossil_tofu_iteratorof_t *iterator);
  * @param iterator The iterator to reset.
  * @note O(1) - Constant time complexity.
  */
-void fossil_tofu_iteratorof_reset(fossil_tofu_iteratorof_t *iterator);
+void fossil_tofu_iteratorof_reset(fossil_tofu_iterator_t *iterator);
+
+// *****************************************************************************
+// Memory management functions
+// *****************************************************************************
+
+/**
+ * @brief Allocate memory.
+ * 
+ * @param size Size of the memory to allocate.
+ * @return Pointer to the allocated memory.
+ */
+typedef void * tofu_memory_t;
 
 /**
  * @brief Allocate memory.
@@ -415,178 +434,6 @@ char* fossil_tofu_strdup(const char* str);
 
 #ifdef __cplusplus
 }
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-
-    namespace tofu {
-
-    fossil_tofu_t create(std::string type, std::string value) {
-        return fossil_tofu_create(type.c_str(), value.c_str());
-    }
-
-    void memorize(fossil_tofu_t *tofu) {
-        fossil_tofu_memorize(tofu);
-    }
-
-    void print(fossil_tofu_t tofu) {
-        fossil_tofu_print(tofu);
-    }
-
-    void erase(fossil_tofu_t *tofu) {
-        fossil_tofu_destroy(tofu);
-    }
-
-    bool is_valid_type(const char *type) {
-        return fossil_tofu_is_valid_type(type);
-    }
-
-    const char* type_to_string(fossil_tofu_type_t type) {
-        return fossil_tofu_type_to_string(type);
-    }
-
-    bool equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
-        return fossil_tofu_equals(tofu1, tofu2);
-    }
-
-    fossil_tofu_t copy(fossil_tofu_t tofu) {
-        return fossil_tofu_copy(tofu);
-    }
-
-    bool compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2) {
-        return fossil_tofu_compare(tofu1, tofu2);
-    }
-
-    void actionof_transform(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t)) {
-        fossil_tofu_actionof_transform(array, size, func);
-    }
-
-    fossil_tofu_t actionof_accumulate(fossil_tofu_t *array, size_t size, fossil_tofu_t init, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t)) {
-        return fossil_tofu_actionof_accumulate(array, size, init, func);
-    }
-
-    size_t actionof_filter(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t)) {
-        return fossil_tofu_actionof_filter(array, size, pred);
-    }
-
-    fossil_tofu_t* actionof_search(fossil_tofu_t *array, size_t size, fossil_tofu_t key, bool (*compare)(fossil_tofu_t, fossil_tofu_t)) {
-        return fossil_tofu_actionof_search(array, size, key, compare);
-    }
-
-    void actionof_reverse(fossil_tofu_t *array, size_t size) {
-        fossil_tofu_actionof_reverse(array, size);
-    }
-
-    void actionof_swap(fossil_tofu_t *array, size_t index1, size_t index2) {
-        fossil_tofu_actionof_swap(array, index1, index2);
-    }
-
-    int actionof_compare(fossil_tofu_t a, fossil_tofu_t b) {
-        return fossil_tofu_actionof_compare(a, b);
-    }
-
-    fossil_tofu_t actionof_reduce(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t)) {
-        return fossil_tofu_actionof_reduce(array, size, func);
-    }
-
-    void actionof_shuffle(fossil_tofu_t *array, size_t size) {
-        fossil_tofu_actionof_shuffle(array, size);
-    }
-
-    void actionof_for_each(fossil_tofu_t *array, size_t size, void (*func)(fossil_tofu_t)) {
-        fossil_tofu_actionof_for_each(array, size, func);
-    }
-
-    size_t actionof_partition(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t)) {
-        return fossil_tofu_actionof_partition(array, size, pred);
-    }
-
-    fossil_tofu_t actionof_summary(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t)) {
-        return fossil_tofu_actionof_summary(array, size, func);
-    }
-
-    fossil_tofu_t actionof_average(fossil_tofu_t *array, size_t size) {
-        return fossil_tofu_actionof_average(array, size);
-    }
-
-    fossil_tofu_iteratorof_t iteratorof_create(fossil_tofu_t *array, size_t size) {
-        return fossil_tofu_iteratorof_create(array, size);
-    }
-
-    bool iteratorof_has_next(fossil_tofu_iteratorof_t *iterator) {
-        return fossil_tofu_iteratorof_has_next(iterator);
-    }
-
-    fossil_tofu_t iteratorof_next(fossil_tofu_iteratorof_t *iterator) {
-        return fossil_tofu_iteratorof_next(iterator);
-    }
-
-    void iteratorof_reset(fossil_tofu_iteratorof_t *iterator) {
-        fossil_tofu_iteratorof_reset(iterator);
-    }
-
-    char* strdup(std::string str) {
-        return fossil_tofu_strdup(str.c_str());
-    }
-
-    } // namespace tofu
-
-
-    class ToFu {
-    public:
-        ToFu(fossil_tofu_t *array, size_t size) : array_(array), size_(size) {}
-
-        size_t filter(bool (*pred)(fossil_tofu_t)) {
-            return fossil::tofu::actionof_filter(array_, size_, pred);
-        }
-
-        fossil_tofu_t* search(fossil_tofu_t key, bool (*compare)(fossil_tofu_t, fossil_tofu_t)) {
-            return fossil::tofu::actionof_search(array_, size_, key, compare);
-        }
-
-        void swap(size_t index1, size_t index2) {
-            fossil::tofu::actionof_swap(array_, index1, index2);
-        }
-
-        int compare(fossil_tofu_t a, fossil_tofu_t b) {
-            return fossil::tofu::actionof_compare(a, b);
-        }
-
-        fossil_tofu_t reduce(fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t)) {
-            return fossil::tofu::actionof_reduce(array_, size_, func);
-        }
-
-        void shuffle() {
-            fossil::tofu::actionof_shuffle(array_, size_);
-        }
-
-        void for_each(void (*func)(fossil_tofu_t)) {
-            fossil::tofu::actionof_for_each(array_, size_, func);
-        }
-
-        size_t partition(bool (*pred)(fossil_tofu_t)) {
-            return fossil::tofu::actionof_partition(array_, size_, pred);
-        }
-
-        fossil_tofu_t summary(fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t)) {
-            return fossil::tofu::actionof_summary(array_, size_, func);
-        }
-
-        fossil_tofu_t average() {
-            return fossil::tofu::actionof_average(array_, size_);
-        }
-
-    private:
-        fossil_tofu_t *array_;
-        size_t size_;
-    };
-
-} // namespace fossil
-
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */
