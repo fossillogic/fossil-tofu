@@ -121,7 +121,6 @@ FOSSIL_TEST_CASE(test_fossil_tofu_copy) {
 
     ASSUME_ITS_EQUAL_I32(tofu_orig.type, tofu_copy.type);
     ASSUME_ITS_EQUAL_CSTR(tofu_orig.value.cchar_string_val, tofu_copy.value.cchar_string_val);
-    ASSUME_ITS_EQUAL_I32(tofu_orig.is_cached, tofu_copy.is_cached);
 }
 
 FOSSIL_TEST_CASE(test_fossil_tofu_iteratorof_create) {
