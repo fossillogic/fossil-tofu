@@ -233,17 +233,6 @@ bool fossil_tofu_compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2);
 // *****************************************************************************
 
 /**
- * Function to sort elements in an array using a given comparison function.
- *
- * @param array The array of elements to be sorted.
- * @param size The size of the array.
- * @param compare The comparison function to determine the order of elements.
- * @return The sorted array.
- * @note O(n^2) - Quadratic time complexity, where n is the size of the array.
- */
-fossil_tofu_t *fossil_tofu_algorithm_sort(fossil_tofu_t *array, size_t size, bool (*compare)(fossil_tofu_t, fossil_tofu_t));
-
-/**
  * Transforms elements in an array using a given function.
  *
  * @param array The array of elements to be transformed.

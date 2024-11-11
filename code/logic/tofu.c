@@ -556,21 +556,6 @@ fossil_tofu_t fossil_tofu_move(fossil_tofu_t tofu) {
     return moved;
 }
 
-fossil_tofu_t *fossil_tofu_algorithm_sort(fossil_tofu_t *array, size_t size, bool (*compare)(fossil_tofu_t, fossil_tofu_t)) {
-    if (!array || !compare) return NULL;
-    fossil_tofu_t *sorted = (fossil_tofu_t *)fossil_tofu_alloc(size * sizeof(fossil_tofu_t));
-    if (!sorted) return NULL;
-    memcpy(sorted, array, size * sizeof(fossil_tofu_t));
-    for (size_t i = 0; i < size; i++) {
-        for (size_t j = i + 1; j < size; j++) {
-            if (compare(sorted[j], sorted[i])) {
-                fossil_tofu_algorithm_swap(sorted, i, j);
-            }
-        }
-    }
-    return sorted;
-}
-
 // Function to transform elements in an array
 void fossil_tofu_algorithm_transform(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t)) {
     if (!array || !func) return;

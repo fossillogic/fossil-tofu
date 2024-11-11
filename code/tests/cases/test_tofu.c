@@ -56,13 +56,6 @@ fossil_tofu_t sum_function(fossil_tofu_t a, fossil_tofu_t b) {
     return a;
 }
 
-bool sum_function_cmp(fossil_tofu_t a, fossil_tofu_t b) {
-    if (a.type == FOSSIL_TOFU_TYPE_INT && b.type == FOSSIL_TOFU_TYPE_INT) {
-        return a.value.int_val == b.value.int_val;
-    }
-    return false;
-}
-
 // Define an accumulation function
 fossil_tofu_t sum(fossil_tofu_t a, fossil_tofu_t b) {
     a.value.int_val += b.value.int_val;
@@ -273,21 +266,6 @@ FOSSIL_TEST_CASE(test_swap) {
     ASSUME_ITS_EQUAL_I32(10, array[2].value.int_val);
 }
 
-FOSSIL_TEST_CASE(test_sort) {
-    fossil_tofu_t *array = fossil_tofu_create_blocks("int", 3, "30", "10", "20");
-    size_t size = 3;
-
-    fossil_tofu_t *sorted = fossil_tofu_algorithm_sort(array, size, sum_function_cmp);
-
-    // Assertions using Fossil Test
-    ASSUME_ITS_EQUAL_I32(10, sorted[0].value.int_val);
-    ASSUME_ITS_EQUAL_I32(20, sorted[1].value.int_val);
-    ASSUME_ITS_EQUAL_I32(30, sorted[2].value.int_val);
-
-    fossil_tofu_destroy_blocks(sorted, size);
-    fossil_tofu_destroy_blocks(array, size);
-}
-
 // Test for reduce function
 FOSSIL_TEST_CASE(test_reduce) {
     fossil_tofu_t array[] = {
@@ -360,7 +338,6 @@ FOSSIL_TEST_GROUP(c_generic_tofu_tests) {
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_reverse);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_swap);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_reduce);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_sort);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_verification_checks);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_create_invalid);
 
