@@ -41,6 +41,17 @@ typedef struct {
 fossil_vector_t* fossil_vector_create(char* type);
 
 /**
+ * Create a new vector with the specified expected type and initial capacity.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param expected_type The expected type of elements in the vector.
+ * @param capacity      The initial capacity of the vector.
+ * @return              The created vector.
+ */
+fossil_vector_t* fossil_vector_create_blocks(char* type, size_t size, ...);
+
+/**
  * Erase the contents of the vector and free allocated memory.
  * 
  * Time complexity: O(n)
@@ -218,85 +229,6 @@ size_t fossil_vector_capacity(const fossil_vector_t* vector);
 void fossil_vector_peek(const fossil_vector_t* vector);
 
 #ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class Vector {
-    public:
-        Vector(const std::string& type) : vector_(fossil_vector_create(const_cast<char*>(type.c_str()))) {}
-
-        ~Vector() {
-            fossil_vector_destroy(vector_);
-        }
-
-        void push_back(fossil_tofu_t element) {
-            fossil_vector_push_back(vector_, element);
-        }
-
-        void push_front(fossil_tofu_t element) {
-            fossil_vector_push_front(vector_, element);
-        }
-
-        void push_at(size_t index, fossil_tofu_t element) {
-            fossil_vector_push_at(vector_, index, element);
-        }
-
-        void pop_back() {
-            fossil_vector_pop_back(vector_);
-        }
-
-        void pop_front() {
-            fossil_vector_pop_front(vector_);
-        }
-
-        void pop_at(size_t index) {
-            fossil_vector_pop_at(vector_, index);
-        }
-
-        int search(fossil_tofu_t target) {
-            return fossil_vector_search(vector_, target);
-        }
-
-        void reverse() {
-            fossil_vector_reverse(vector_);
-        }
-
-        bool is_cnullptr() {
-            return fossil_vector_is_cnullptr(vector_);
-        }
-
-        bool not_cnullptr() {
-            return fossil_vector_not_cnullptr(vector_);
-        }
-
-        bool is_empty() {
-            return fossil_vector_is_empty(vector_);
-        }
-
-        bool not_empty() {
-            return fossil_vector_not_empty(vector_);
-        }
-
-        size_t size() {
-            return fossil_vector_size(vector_);
-        }
-
-        size_t capacity() {
-            return fossil_vector_capacity(vector_);
-        }
-
-        void peek() {
-            fossil_vector_peek(vector_);
-        }
-
-    private:
-        fossil_vector_t* vector_;
-    };
 }
 #endif
 
