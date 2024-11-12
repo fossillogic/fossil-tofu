@@ -18,25 +18,34 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-// Function to create an arrayof with an initial set of elements
-fossil_array_t fossil_array_create(char *type, size_t size, ...) {
+fossil_array_t fossil_array_create_container(char *type) {
     fossil_array_t arrayof;
-    arrayof.size = size;
-    arrayof.capacity = size > 0 ? size : 1; // Ensure at least capacity of 1
-    arrayof.array = (fossil_tofu_t *)fossil_tofu_alloc(arrayof.capacity * sizeof(fossil_tofu_t));
+    arrayof.array = (fossil_tofu_t *)fossil_tofu_alloc(10 * sizeof(fossil_tofu_t));
     if (arrayof.array == NULL) {
         fprintf(stderr, "Memory allocation failed for arrayof\n");
         exit(EXIT_FAILURE);
     }
+    arrayof.size = 0;
+    arrayof.capacity = 10;
+    return arrayof;
+}
 
+fossil_array_t fossil_array_create_with(char *type, size_t size, ...) {
+    fossil_array_t arrayof;
+    arrayof.array = (fossil_tofu_t *)fossil_tofu_alloc(size * sizeof(fossil_tofu_t));
+    if (arrayof.array == NULL) {
+        fprintf(stderr, "Memory allocation failed for arrayof\n");
+        exit(EXIT_FAILURE);
+    }
+    arrayof.size = 0;
+    arrayof.capacity = size;
     va_list args;
     va_start(args, size);
     for (size_t i = 0; i < size; ++i) {
-        fossil_tofu_t element = fossil_tofu_create(type, va_arg(args, char*));
-        arrayof.array[i] = element;
+        arrayof.array[i] = va_arg(args, fossil_tofu_t);
+        ++arrayof.size;
     }
     va_end(args);
-
     return arrayof;
 }
 

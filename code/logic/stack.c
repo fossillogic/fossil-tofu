@@ -17,7 +17,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-fossil_stack_t* fossil_stack_create(char* type) {
+fossil_stack_t* fossil_stack_create_container(char* type) {
     fossil_stack_t* stack = (fossil_stack_t*)fossil_tofu_alloc(sizeof(fossil_stack_t));
     if (!stack) return NULL;
     stack->type = fossil_tofu_strdup(type);
@@ -25,8 +25,8 @@ fossil_stack_t* fossil_stack_create(char* type) {
     return stack;
 }
 
-fossil_stack_t* fossil_stack_create_blocks(char* type, size_t size, ...) {
-    fossil_stack_t* stack = fossil_stack_create(type);
+fossil_stack_t* fossil_stack_create_with(char* type, size_t size, ...) {
+    fossil_stack_t* stack = fossil_stack_create_container(type);
     if (!stack) return NULL;
 
     va_list args;

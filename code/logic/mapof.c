@@ -15,63 +15,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 // Function to create a new map with a given type instead of capacity
-fossil_map_t fossil_map_create(const char *type) {
+fossil_map_t fossil_map_create_container(const char *type) {
     fossil_map_t map;
-
-    // Validate if the provided type is supported
-    if (!fossil_tofu_is_valid_type(type)) {
-        fprintf(stderr, "Error: Invalid type '%s' for map creation.\n", type);
-        exit(EXIT_FAILURE);
-    }
-
-    // Assign an initial capacity based on type
-    if (strcmp(type, "int") == 0 || strcmp(type, "uint") == 0) {
-        map.capacity = 10;
-    } else if (strcmp(type, "cstr") == 0 || strcmp(type, "bstr") == 0 || strcmp(type, "wstr") == 0) {
-        map.capacity = 20;
-    } else if (strcmp(type, "float") == 0 || strcmp(type, "double") == 0) {
-        map.capacity = 15;
-    } else {
-        map.capacity = 5;
-    }
-
-    map.keys = (fossil_tofu_t *)fossil_tofu_alloc(map.capacity * sizeof(fossil_tofu_t));
+    map.keys = (fossil_tofu_t *)fossil_tofu_alloc(10 * sizeof(fossil_tofu_t));
     if (map.keys == NULL) {
         fprintf(stderr, "Error: Memory allocation failed for map keys.\n");
         exit(EXIT_FAILURE);
     }
-
-    map.values = (fossil_tofu_t *)fossil_tofu_alloc(map.capacity * sizeof(fossil_tofu_t));
+    map.values = (fossil_tofu_t *)fossil_tofu_alloc(10 * sizeof(fossil_tofu_t));
     if (map.values == NULL) {
         fprintf(stderr, "Error: Memory allocation failed for map values.\n");
         fossil_tofu_free(map.keys);
         exit(EXIT_FAILURE);
     }
-
     map.size = 0;
+    map.capacity = 10;
+    map.type = fossil_tofu_strdup(type);
+    return map;
+}
 
+fossil_map_t fossil_map_create_with(const char *type, size_t size, ...) {
+    fossil_map_t map = fossil_map_create_container(type);
+
+    va_list args;
+    va_start(args, size);
+    for (size_t i = 0; i < size; ++i) {
+        map.keys[i] = va_arg(args, fossil_tofu_t);
+        map.values[i] = va_arg(args, fossil_tofu_t);
+        ++map.size;
+    }
+    va_end(args);
+    map.type = fossil_tofu_strdup(type);
     return map;
 }
 
 // Function to add a key-value pair to the map
 void fossil_map_add(fossil_map_t *map, fossil_tofu_t key, fossil_tofu_t value) {
-    if (map->size >= map->capacity) {
+    if (map->size == map->capacity) {
         map->capacity *= 2;
-        fossil_tofu_t *new_keys = (fossil_tofu_t *)fossil_tofu_realloc(map->keys, map->capacity * sizeof(fossil_tofu_t));
-        if (new_keys == NULL) {
-            fprintf(stderr, "Error: Memory reallocation failed for map keys.\n");
-            exit(EXIT_FAILURE);
-        }
-        map->keys = new_keys;
-
-        fossil_tofu_t *new_values = (fossil_tofu_t *)fossil_tofu_realloc(map->values, map->capacity * sizeof(fossil_tofu_t));
-        if (new_values == NULL) {
-            fprintf(stderr, "Error: Memory reallocation failed for map values.\n");
-            exit(EXIT_FAILURE);
-        }
-        map->values = new_values;
+        map->keys = fossil_tofu_realloc(map->keys, map->capacity * sizeof(fossil_tofu_t));
+        map->values = fossil_tofu_realloc(map->values, map->capacity * sizeof(fossil_tofu_t));
     }
     map->keys[map->size] = key;
     map->values[map->size] = value;
@@ -85,7 +71,7 @@ fossil_tofu_t fossil_map_get(fossil_map_t *map, fossil_tofu_t key) {
             return map->values[i];
         }
     }
-    return fossil_tofu_create("ghost", "");
+    return fossil_tofu_create("ghost", NULL);
 }
 
 // Function to check if a key exists in the map
@@ -107,7 +93,7 @@ void fossil_map_remove(fossil_map_t *map, fossil_tofu_t key) {
                 map->values[j] = map->values[j + 1];
             }
             map->size--;
-            return;
+            break;
         }
     }
 }

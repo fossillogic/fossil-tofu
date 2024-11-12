@@ -17,7 +17,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-fossil_pqueue_t* fossil_pqueue_create(char* type) {
+fossil_pqueue_t* fossil_pqueue_create_container(char* type) {
     fossil_pqueue_t* pqueue = (fossil_pqueue_t*)fossil_tofu_alloc(sizeof(fossil_pqueue_t));
     if (!pqueue) return NULL;
     pqueue->front = NULL;
@@ -25,8 +25,8 @@ fossil_pqueue_t* fossil_pqueue_create(char* type) {
     return pqueue;
 }
 
-fossil_pqueue_t* fossil_pqueue_create_blocks(char* type, size_t size, ...) {
-    fossil_pqueue_t* pqueue = fossil_pqueue_create(type);
+fossil_pqueue_t* fossil_pqueue_create_with(char* type, size_t size, ...) {
+    fossil_pqueue_t* pqueue = fossil_pqueue_create_container(type);
     if (!pqueue) return NULL;
 
     va_list args;

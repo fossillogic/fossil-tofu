@@ -21,7 +21,7 @@ bool fossil_set_node_equals(const fossil_set_node_t* node, fossil_tofu_t data) {
     return fossil_tofu_equals(node->data, data);
 }
 
-fossil_set_t* fossil_set_create(char* type) {
+fossil_set_t* fossil_set_create_container(char* type) {
     fossil_set_t* set = (fossil_set_t*)fossil_tofu_alloc(sizeof(fossil_set_t));
     if (set) {
         set->head = NULL;
@@ -30,8 +30,8 @@ fossil_set_t* fossil_set_create(char* type) {
     return set;
 }
 
-fossil_set_t* fossil_set_create_blocks(char* type, size_t size, ...) {
-    fossil_set_t* set = fossil_set_create(type);
+fossil_set_t* fossil_set_create_with(char* type, size_t size, ...) {
+    fossil_set_t* set = fossil_set_create_container(type);
     if (!set) return NULL;
     
     va_list args;

@@ -15,8 +15,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
-fossil_dlist_t* fossil_dlist_create(char* type) {
+fossil_dlist_t* fossil_dlist_create_container(char* type) {
     if (!type) return NULL;  // Error checking for null type
 
     fossil_dlist_t* dlist = (fossil_dlist_t*)fossil_tofu_alloc(sizeof(fossil_dlist_t));
@@ -25,6 +26,22 @@ fossil_dlist_t* fossil_dlist_create(char* type) {
         dlist->tail = NULL;
         dlist->type = type;  // Ensure type is managed appropriately
     }
+    return dlist;
+}
+
+fossil_dlist_t* fossil_dlist_create_with(char* type, size_t size, ...) {
+    fossil_dlist_t* dlist = fossil_dlist_create_container(type);
+    if (!dlist) return NULL;
+
+    va_list args;
+    va_start(args, size);
+
+    for (size_t i = 0; i < size; ++i) {
+        fossil_tofu_t data = va_arg(args, fossil_tofu_t);
+        fossil_dlist_insert(dlist, data);
+    }
+
+    va_end(args);
     return dlist;
 }
 

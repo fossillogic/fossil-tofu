@@ -15,8 +15,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
-fossil_flist_t* fossil_flist_create(char* type) {
+fossil_flist_t* fossil_flist_create_container(char* type) {
     if (!type) {
         fprintf(stderr, "Error: type cannot be NULL\n");
         return NULL;
@@ -30,6 +31,24 @@ fossil_flist_t* fossil_flist_create(char* type) {
 
     flist->head = NULL;
     flist->type = type;  // Assuming type is a static string or managed separately
+    return flist;
+}
+
+fossil_flist_t* fossil_flist_create_with(char* type, size_t size, ...) {
+    fossil_flist_t* flist = fossil_flist_create_container(type);
+    if (!flist) {
+        return NULL;
+    }
+
+    va_list args;
+    va_start(args, size);
+
+    for (size_t i = 0; i < size; ++i) {
+        fossil_tofu_t data = va_arg(args, fossil_tofu_t);
+        fossil_flist_insert(flist, data);
+    }
+
+    va_end(args);
     return flist;
 }
 

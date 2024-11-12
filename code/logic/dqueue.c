@@ -15,8 +15,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
-fossil_dqueue_t* fossil_dqueue_create(char* type) {
+fossil_dqueue_t* fossil_dqueue_create_container(char* type) {
     if (!type) {
         fprintf(stderr, "Error: type cannot be NULL\n");
         return NULL;
@@ -37,6 +38,24 @@ fossil_dqueue_t* fossil_dqueue_create(char* type) {
         return NULL;
     }
 
+    return dqueue;
+}
+
+fossil_dqueue_t* fossil_dqueue_create_with(char* type, size_t size, ...) {
+    fossil_dqueue_t* dqueue = fossil_dqueue_create_container(type);
+    if (!dqueue) {
+        return NULL;
+    }
+
+    va_list args;
+    va_start(args, size);
+
+    for (size_t i = 0; i < size; ++i) {
+        fossil_tofu_t data = va_arg(args, fossil_tofu_t);
+        fossil_dqueue_insert(dqueue, data);
+    }
+
+    va_end(args);
     return dqueue;
 }
 

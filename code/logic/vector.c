@@ -17,7 +17,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-fossil_vector_t* fossil_vector_create(char* type) {
+fossil_vector_t* fossil_vector_create_container(char* type) {
     fossil_vector_t* vector = (fossil_vector_t*)fossil_tofu_alloc(sizeof(fossil_vector_t));
     vector->data = (fossil_tofu_t*)fossil_tofu_alloc(INITIAL_CAPACITY * sizeof(fossil_tofu_t));
     vector->size = 0;
@@ -26,8 +26,8 @@ fossil_vector_t* fossil_vector_create(char* type) {
     return vector;
 }
 
-fossil_vector_t* fossil_vector_create_blocks(char* type, size_t size, ...) {
-    fossil_vector_t* vector = fossil_vector_create(type);
+fossil_vector_t* fossil_vector_create_with(char* type, size_t size, ...) {
+    fossil_vector_t* vector = fossil_vector_create_container(type);
     va_list args;
     va_start(args, size);
     for (size_t i = 0; i < size; ++i) {

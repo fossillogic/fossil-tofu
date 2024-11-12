@@ -17,7 +17,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-fossil_queue_t* fossil_queue_create(char* type) {
+fossil_queue_t* fossil_queue_create_container(char* type) {
     fossil_queue_t* queue = (fossil_queue_t*)fossil_tofu_alloc(sizeof(fossil_queue_t));
     if (!queue) return NULL;
     queue->front = NULL;
@@ -26,8 +26,8 @@ fossil_queue_t* fossil_queue_create(char* type) {
     return queue;
 }
 
-fossil_queue_t* fossil_queue_create_blocks(char* type, size_t size, ...) {
-    fossil_queue_t* queue = fossil_queue_create(type);
+fossil_queue_t* fossil_queue_create_with(char* type, size_t size, ...) {
+    fossil_queue_t* queue = fossil_queue_create_container(type);
     if (!queue) return NULL;
 
     va_list args;
@@ -59,7 +59,7 @@ void fossil_queue_destroy(fossil_queue_t* queue) {
 int32_t fossil_queue_insert(fossil_queue_t* queue, fossil_tofu_t data) {
     if (!queue) return -1;
 
-    fossil_queue_node_t* node = (fossil_queue_node_t*)malloc(sizeof(fossil_queue_node_t));
+    fossil_queue_node_t* node = (fossil_queue_node_t*)fossil_tofu_alloc(sizeof(fossil_queue_node_t));
     if (!node) return -1;
 
     node->data = data;
