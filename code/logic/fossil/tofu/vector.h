@@ -41,17 +41,6 @@ typedef struct {
 fossil_vector_t* fossil_vector_create_container(char* type);
 
 /**
- * Create a new vector with the specified expected type and initial capacity.
- * 
- * Time complexity: O(1)
- *
- * @param expected_type The expected type of elements in the vector.
- * @param capacity      The initial capacity of the vector.
- * @return              The created vector.
- */
-fossil_vector_t* fossil_vector_create_with(char* type, size_t size, ...);
-
-/**
  * Erase the contents of the vector and free allocated memory.
  * 
  * Time complexity: O(n)
@@ -68,7 +57,7 @@ void fossil_vector_destroy(fossil_vector_t* vector);
  * @param vector  The vector to which the element will be added.
  * @param element The element to add.
  */
-void fossil_vector_push_back(fossil_vector_t* vector, fossil_tofu_t element);
+void fossil_vector_push_back(fossil_vector_t* vector, char *element);
 
 /**
  * Add an element to the front of the vector.
@@ -78,7 +67,7 @@ void fossil_vector_push_back(fossil_vector_t* vector, fossil_tofu_t element);
  * @param vector  The vector to which the element will be added.
  * @param element The element to add.
  */
-void fossil_vector_push_front(fossil_vector_t* vector, fossil_tofu_t element);
+void fossil_vector_push_front(fossil_vector_t* vector, char *element);
 
 /**
  * Add an element at the specified index in the vector.
@@ -89,7 +78,7 @@ void fossil_vector_push_front(fossil_vector_t* vector, fossil_tofu_t element);
  * @param index   The index at which to add the element.
  * @param element The element to add.
  */
-void fossil_vector_push_at(fossil_vector_t* vector, size_t index, fossil_tofu_t element);
+void fossil_vector_push_at(fossil_vector_t* vector, size_t index, char *element);
 
 /**
  * Remove the last element from the vector.

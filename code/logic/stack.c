@@ -25,20 +25,6 @@ fossil_stack_t* fossil_stack_create_container(char* type) {
     return stack;
 }
 
-fossil_stack_t* fossil_stack_create_with(char* type, size_t size, ...) {
-    fossil_stack_t* stack = fossil_stack_create_container(type);
-    if (!stack) return NULL;
-
-    va_list args;
-    va_start(args, size);
-    for (size_t i = 0; i < size; i++) {
-        fossil_tofu_t element = va_arg(args, fossil_tofu_t);
-        fossil_stack_insert(stack, element);
-    }
-    va_end(args);
-    return stack;
-}
-
 void fossil_stack_destroy(fossil_stack_t* stack) {
     while (stack->top) {
         fossil_stack_node_t* temp = stack->top;
@@ -49,16 +35,16 @@ void fossil_stack_destroy(fossil_stack_t* stack) {
     fossil_tofu_free(stack);
 }
 
-int32_t fossil_stack_insert(fossil_stack_t* stack, fossil_tofu_t data) {
+int32_t fossil_stack_insert(fossil_stack_t* stack, char *data) {
     fossil_stack_node_t* new_node = (fossil_stack_node_t*)fossil_tofu_alloc(sizeof(fossil_stack_node_t));
     if (!new_node) return -1;
-    new_node->data = data;
+    new_node->data = fossil_tofu_create(stack->type, data);
     new_node->next = stack->top;
     stack->top = new_node;
     return 0;
 }
 
-int32_t fossil_stack_remove(fossil_stack_t* stack, fossil_tofu_t* data) {
+int32_t fossil_stack_remove(fossil_stack_t* stack, fossil_tofu_t *data) {
     if (!stack->top) return -1;
     fossil_stack_node_t* temp = stack->top;
     *data = temp->data;

@@ -26,18 +26,6 @@ fossil_vector_t* fossil_vector_create_container(char* type) {
     return vector;
 }
 
-fossil_vector_t* fossil_vector_create_with(char* type, size_t size, ...) {
-    fossil_vector_t* vector = fossil_vector_create_container(type);
-    va_list args;
-    va_start(args, size);
-    for (size_t i = 0; i < size; ++i) {
-        fossil_tofu_t element = va_arg(args, fossil_tofu_t);
-        fossil_vector_push_back(vector, element);
-    }
-    va_end(args);
-    return vector;
-}
-
 void fossil_vector_destroy(fossil_vector_t* vector) {
     if (vector) {
         for (size_t i = 0; i < vector->size; ++i) {
@@ -49,32 +37,34 @@ void fossil_vector_destroy(fossil_vector_t* vector) {
     }
 }
 
-void fossil_vector_push_back(fossil_vector_t* vector, fossil_tofu_t element) {
+void fossil_vector_push_back(fossil_vector_t* vector, char *element) {
     if (vector->size == vector->capacity) {
         vector->capacity *= 2;
         vector->data = fossil_tofu_realloc(vector->data, vector->capacity * sizeof(fossil_tofu_t));
     }
-    vector->data[vector->size++] = fossil_tofu_copy(element);
+    vector->data[vector->size++] = fossil_tofu_create(vector->type, element);
 }
 
-void fossil_vector_push_front(fossil_vector_t* vector, fossil_tofu_t element) {
+void fossil_vector_push_front(fossil_vector_t* vector, char *element) {
     if (vector->size == vector->capacity) {
         vector->capacity *= 2;
         vector->data = fossil_tofu_realloc(vector->data, vector->capacity * sizeof(fossil_tofu_t));
     }
     memmove(&vector->data[1], &vector->data[0], vector->size * sizeof(fossil_tofu_t));
-    vector->data[0] = fossil_tofu_copy(element);
+    vector->data[0] = fossil_tofu_create(vector->type, element);
     vector->size++;
 }
 
-void fossil_vector_push_at(fossil_vector_t* vector, size_t index, fossil_tofu_t element) {
-    if (index > vector->size) return;
+void fossil_vector_push_at(fossil_vector_t* vector, size_t index, char *element) {
+    if (index > vector->size) {
+        return;
+    }
     if (vector->size == vector->capacity) {
         vector->capacity *= 2;
         vector->data = fossil_tofu_realloc(vector->data, vector->capacity * sizeof(fossil_tofu_t));
     }
     memmove(&vector->data[index + 1], &vector->data[index], (vector->size - index) * sizeof(fossil_tofu_t));
-    vector->data[index] = fossil_tofu_copy(element);
+    vector->data[index] = fossil_tofu_create(vector->type, element);
     vector->size++;
 }
 

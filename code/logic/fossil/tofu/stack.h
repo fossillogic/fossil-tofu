@@ -42,16 +42,6 @@ typedef struct fossil_stack_t {
 fossil_stack_t* fossil_stack_create_container(char* type);
 
 /**
- * Create a new stack with the specified data type and initial capacity.
- *
- * @param list_type The type of data the stack will store.
- * @param size      The initial capacity of the stack.
- * @return          The created stack.
- * @note            Time complexity: O(1)
- */
-fossil_stack_t* fossil_stack_create_with(char* type, size_t size, ...);
-
-/**
  * Erase the contents of the stack and free allocated memory.
  *
  * @param stack The stack to erase.
@@ -67,7 +57,7 @@ void fossil_stack_destroy(fossil_stack_t* stack);
  * @return      The error code indicating the success or failure of the operation.
  * @note        Time complexity: O(1)
  */
-int32_t fossil_stack_insert(fossil_stack_t* stack, fossil_tofu_t data);
+int32_t fossil_stack_insert(fossil_stack_t* stack, char *data);
 
 /**
  * Remove data from the stack.
