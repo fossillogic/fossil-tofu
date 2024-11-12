@@ -39,7 +39,7 @@ typedef struct fossil_pqueue_t {
  * @return           The created priority queue.
  * @note             Time complexity: O(1)
  */
-fossil_pqueue_t* fossil_pqueue_create(char* type);
+fossil_pqueue_t* fossil_pqueue_create_container(char* type);
 
 /**
  * Create a new priority queue with the specified data type and initial capacity.
@@ -49,7 +49,7 @@ fossil_pqueue_t* fossil_pqueue_create(char* type);
  * @return           The created priority queue.
  * @note             Time complexity: O(1)
  */
-fossil_pqueue_t* fossil_pqueue_create_blocks(char* type, size_t size, ...);
+fossil_pqueue_t* fossil_pqueue_create_with(char* type, size_t size, ...);
 
 /**
  * Erase the contents of the priority queue and free allocated memory.

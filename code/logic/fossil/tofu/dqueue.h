@@ -42,7 +42,17 @@ typedef struct fossil_dqueue_t {
  * @return          The created dynamic queue.
  * @note            Time complexity: O(1)
  */
-fossil_dqueue_t* fossil_dqueue_create(char* type);
+fossil_dqueue_t* fossil_dqueue_create_container(char* type);
+
+/**
+ * Create a new dynamic queue with the specified data type and initial capacity.
+ *
+ * @param list_type The type of data the dynamic queue will store.
+ * @param size      The initial capacity of the dynamic queue.
+ * @return          The created dynamic queue.
+ * @note            Time complexity: O(1)
+ */
+fossil_dqueue_t* fossil_dqueue_create_with(char* type, size_t size, ...);
 
 /**
  * Erase the contents of the dynamic queue and free allocated memory.
@@ -138,7 +148,7 @@ bool fossil_dqueue_is_cnullptr(const fossil_dqueue_t* dqueue);
 namespace fossil {
     class DQueue {
     public:
-        DQueue(const std::string& type) : dqueue_(fossil_dqueue_create(const_cast<char*>(type.c_str()))) {}
+        DQueue(const std::string& type) : dqueue_(fossil_dqueue_create_container(const_cast<char*>(type.c_str()))) {}
 
         ~DQueue() {
             fossil_dqueue_destroy(dqueue_);

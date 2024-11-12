@@ -41,7 +41,7 @@ typedef struct fossil_queue_t {
  * @return          The created queue.
  * @note            Time complexity: O(1)
  */
-fossil_queue_t* fossil_queue_create(char* type);
+fossil_queue_t* fossil_queue_create_container(char* type);
 
 /**
  * Create a new queue with the specified data type and initial capacity.
@@ -51,7 +51,7 @@ fossil_queue_t* fossil_queue_create(char* type);
  * @return          The created queue.
  * @note            Time complexity: O(1)
  */
-fossil_queue_t* fossil_queue_create_blocks(char* type, size_t size, ...);
+fossil_queue_t* fossil_queue_create_with(char* type, size_t size, ...);
 
 /**
  * Erase the contents of the queue and free allocated memory.

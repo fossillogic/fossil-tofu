@@ -32,12 +32,21 @@ typedef struct {
  * @brief Creates an arrayof with an initial set of elements.
  * 
  * @param type The type of the elements.
+ * @return The created arrayof.
+ * @note Time complexity: O(1)
+ */
+fossil_array_t fossil_array_create_container(char *type);
+
+/**
+ * @brief Creates an arrayof with an initial set of elements.
+ * 
+ * @param type The type of the elements.
  * @param size The number of initial elements.
  * @param ... The initial values for the elements.
  * @return A newly created fossil_array_t.
  * @note Time complexity: O(n), where n is the number of initial elements.
  */
-fossil_array_t fossil_array_create(char *type, size_t size, ...);
+fossil_array_t fossil_array_create_with(char *type, size_t size, ...);
 
 /**
  * @brief Destroys the arrayof and frees allocated memory.
@@ -138,7 +147,7 @@ void fossil_array_print(const fossil_array_t *arrayof);
 namespace fossil {
     class ArrayOf {
     public:
-        ArrayOf(const std::string& type, size_t size, ...) : arrayof_(fossil_array_create(const_cast<char*>(type.c_str()), size)) {}
+        ArrayOf(const std::string& type, size_t size, ...) : arrayof_(fossil_array_create_container(const_cast<char*>(type.c_str()), size)) {}
 
         ~ArrayOf() {
             fossil_array_destroy(arrayof_);

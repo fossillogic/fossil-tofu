@@ -42,7 +42,17 @@ typedef struct fossil_dlist_t {
  * @return          The created doubly linked list.
  * @note            Time complexity: O(1)
  */
-fossil_dlist_t* fossil_dlist_create(char* type);
+fossil_dlist_t* fossil_dlist_create_container(char* type);
+
+/**
+ * Create a new doubly linked list with the specified data type and initial capacity.
+ *
+ * @param list_type The type of data the doubly linked list will store.
+ * @param size      The initial capacity of the doubly linked list.
+ * @return          The created doubly linked list.
+ * @note            Time complexity: O(1)
+ */
+fossil_dlist_t* fossil_dlist_create_with(char* type, size_t size, ...);
 
 /**
  * Erase the contents of the doubly linked list and free allocated memory.
@@ -154,7 +164,7 @@ bool fossil_dlist_is_cnullptr(const fossil_dlist_t* dlist);
 namespace fossil {
     class DoublyList {
     public:
-        DoublyList(const std::string& type) : dlist_(fossil_dlist_create(const_cast<char*>(type.c_str()))) {}
+        DoublyList(const std::string& type) : dlist_(fossil_dlist_create_container(const_cast<char*>(type.c_str()))) {}
 
         ~DoublyList() {
             fossil_dlist_destroy(dlist_);

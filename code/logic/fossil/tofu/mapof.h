@@ -27,6 +27,7 @@ typedef struct {
     fossil_tofu_t *values;
     size_t size;
     size_t capacity;
+    char *type;
 } fossil_map_t;
 
 /**
@@ -36,7 +37,17 @@ typedef struct {
  * @return The created map.
  * @note Time complexity: O(1)
  */
-fossil_map_t fossil_map_create(const char *type);
+fossil_map_t fossil_map_create_container(const char *type);
+
+/**
+ * @brief Creates a new map with a given type and initial capacity.
+ *
+ * @param type The type of the map.
+ * @param size The initial capacity of the map.
+ * @return The created map.
+ * @note Time complexity: O(1)
+ */
+fossil_map_t fossil_map_create_with(const char *type, size_t size, ...);
 
 /**
  * @brief Destroys the map and frees the allocated memory.
@@ -129,57 +140,6 @@ void fossil_map_clear(fossil_map_t *map);
 void fossil_map_print(fossil_map_t *map);
 
 #ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class Map {
-    public:
-        Map(const std::string &type) : map_(fossil_map_create(type.c_str())) {}
-
-        ~Map() {
-            fossil_map_destroy(&map_);
-        }
-
-        void add(fossil_tofu_t key, fossil_tofu_t value) {
-            fossil_map_add(&map_, key, value);
-        }
-
-        fossil_tofu_t get(fossil_tofu_t key) {
-            return fossil_map_get(&map_, key);
-        }
-
-        bool contains(fossil_tofu_t key) {
-            return fossil_map_contains(&map_, key);
-        }
-
-        void remove(fossil_tofu_t key) {
-            fossil_map_remove(&map_, key);
-        }
-
-        size_t size() {
-            return fossil_map_size(&map_);
-        }
-
-        bool is_empty() {
-            return fossil_map_is_empty(&map_);
-        }
-
-        void clear() {
-            fossil_map_clear(&map_);
-        }
-
-        void print() {
-            fossil_map_print(&map_);
-        }
-
-    private:
-        fossil_map_t map_;
-    };
 }
 #endif
 

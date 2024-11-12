@@ -40,7 +40,17 @@ typedef struct fossil_flist_t {
  * @return          The created forward list.
  * @complexity      O(1)
  */
-fossil_flist_t* fossil_flist_create(char* type);
+fossil_flist_t* fossil_flist_create_container(char* type);
+
+/**
+ * Create a new forward list with the specified data type and initial capacity.
+ *
+ * @param list_type The type of data the forward list will store.
+ * @param size      The initial capacity of the forward list.
+ * @return          The created forward list.
+ * @complexity      O(1)
+ */
+fossil_flist_t* fossil_flist_create_with(char* type, size_t size, ...);
 
 /**
  * Erase the contents of the forward list and free allocated memory.
@@ -142,67 +152,6 @@ bool fossil_flist_is_empty(const fossil_flist_t* flist);
 bool fossil_flist_is_cnullptr(const fossil_flist_t* flist);
 
 #ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class ForwardList {
-    public:
-        ForwardList(const std::string& type) : flist_(fossil_flist_create(const_cast<char*>(type.c_str()))) {}
-
-        ~ForwardList() {
-            fossil_flist_destroy(flist_);
-        }
-
-        void insert(fossil_tofu_t data) {
-            fossil_flist_insert(flist_, data);
-        }
-
-        fossil_tofu_t remove() {
-            fossil_tofu_t data;
-            fossil_flist_remove(flist_, &data);
-            return data;
-        }
-
-        bool search(fossil_tofu_t data) {
-            return fossil_flist_search(flist_, data) == 0;
-        }
-
-        size_t size() {
-            return fossil_flist_size(flist_);
-        }
-
-        void reverse_forward() {
-            fossil_flist_reverse_forward(flist_);
-        }
-
-        void reverse_backward() {
-            fossil_flist_reverse_backward(flist_);
-        }
-
-        bool not_empty() {
-            return fossil_flist_not_empty(flist_);
-        }
-
-        bool not_cnullptr() {
-            return fossil_flist_not_cnullptr(flist_);
-        }
-
-        bool is_empty() {
-            return fossil_flist_is_empty(flist_);
-        }
-
-        bool is_cnullptr() {
-            return fossil_flist_is_cnullptr(flist_);
-        }
-
-    private:
-        fossil_flist_t* flist_;
-    };
 }
 #endif
 

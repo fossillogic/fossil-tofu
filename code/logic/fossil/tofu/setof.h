@@ -40,7 +40,7 @@ typedef struct fossil_set_t {
  * @return          The created set.
  * @note            O(1) - Constant time complexity.
  */
-fossil_set_t* fossil_set_create(char* type);
+fossil_set_t* fossil_set_create_container(char* type);
 
 /**
  * Create a new set with the specified data type and initial capacity.
@@ -50,7 +50,7 @@ fossil_set_t* fossil_set_create(char* type);
  * @return          The created set.
  * @note            O(n) - Linear time complexity, where n is the number of elements in the set.
  */
-fossil_set_t* fossil_set_create_blocks(char* type, size_t size, ...);
+fossil_set_t* fossil_set_create_with(char* type, size_t size, ...);
 
 /**
  * Erase the contents of the set and free allocated memory.

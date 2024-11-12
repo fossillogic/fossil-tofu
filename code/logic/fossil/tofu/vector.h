@@ -38,7 +38,7 @@ typedef struct {
  * @param expected_type The expected type of elements in the vector.
  * @return              The created vector.
  */
-fossil_vector_t* fossil_vector_create(char* type);
+fossil_vector_t* fossil_vector_create_container(char* type);
 
 /**
  * Create a new vector with the specified expected type and initial capacity.
@@ -49,7 +49,7 @@ fossil_vector_t* fossil_vector_create(char* type);
  * @param capacity      The initial capacity of the vector.
  * @return              The created vector.
  */
-fossil_vector_t* fossil_vector_create_blocks(char* type, size_t size, ...);
+fossil_vector_t* fossil_vector_create_with(char* type, size_t size, ...);
 
 /**
  * Erase the contents of the vector and free allocated memory.
