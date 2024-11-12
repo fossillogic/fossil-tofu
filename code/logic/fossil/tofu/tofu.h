@@ -95,7 +95,8 @@ typedef enum {
     FOSSIL_TOFU_TYPE_CCHAR,
     FOSSIL_TOFU_TYPE_WCHAR,
     FOSSIL_TOFU_TYPE_BOOL,
-    FOSSIL_TOFU_TYPE_SIZE
+    FOSSIL_TOFU_TYPE_SIZE,
+    FOSSIL_TOFU_TYPE_ANY
 } fossil_tofu_type_t;
 
 // Union for holding different types of values
@@ -112,12 +113,21 @@ typedef union {
     uint16_t uchar_val; // for byte types
     size_t size_val; // for size types
     uint8_t bool_val; // for bool types
+    void *any_val; // for any type, to mimic C++ std::any
 } fossil_tofu_value_t;
+
+// Struct for tofu attributes
+typedef struct {
+    char* name; // Name of the attribute
+    char* description; // Description of the attribute
+    char* id; // Unique identifier for the attribute
+} fossil_tofu_attribute_t;
 
 // Struct for tofu
 typedef struct {
     fossil_tofu_type_t type;
     fossil_tofu_value_t value;
+    fossil_tofu_attribute_t attribute;
 } fossil_tofu_t;
 
 // Struct for iterator
@@ -465,6 +475,72 @@ void fossil_tofu_free(tofu_memory_t ptr);
 char* fossil_tofu_strdup(const char* str);
 
 #ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
+
+namespace fossil {
+
+template<typename T>
+class Tofu {
+public:
+    Tofu() : type(FOSSIL_TOFU_TYPE_GHOST), value{} {}
+
+    explicit Tofu(fossil_tofu_type_t type, T val) : type(type) {
+        setValue(val);
+    }
+
+    ~Tofu() = default;
+
+    fossil_tofu_type_t get_type() const {
+        return type;
+    }
+
+    T get_value() const {
+        return value;
+    }
+
+    void set_value(T val) {
+        value = val;
+    }
+
+    bool operator==(const Tofu& other) const {
+        return type == other.type && value == other.value;
+    }
+
+    bool operator!=(const Tofu& other) const {
+        return !(*this == other);
+    }
+
+private:
+    fossil_tofu_type_t type;
+    T value;
+};
+
+template<typename T>
+class TofuIterator {
+public:
+    TofuIterator(Tofu<T>* array, size_t size) : array(array), size(size), currentIndex(0) {}
+
+    bool has_next() const {
+        return currentIndex < size;
+    }
+
+    Tofu<T> next() {
+        return array[currentIndex++];
+    }
+
+    void reset() {
+        currentIndex = 0;
+    }
+
+private:
+    Tofu<T>* array;
+    size_t size;
+    size_t currentIndex;
+};
+
 }
 #endif
 

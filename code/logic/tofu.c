@@ -31,7 +31,7 @@ static const char *tofu_type_strings[] = {
     "uint", "u8", "u16", "u32", "u64", 
     "hex", "octal", "float", "double",
     "bstr", "wstr", "cstr", "bchar",
-    "cchar", "wchar", "bool", "size"
+    "cchar", "wchar", "bool", "size", "any"
 };
 
 // Function to check if a string represents a valid integer
@@ -251,10 +251,16 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
                 }
             }
             break;
+        case FOSSIL_TOFU_TYPE_ANY: // any is void *
+            tofu.value.any_val = (void *)value;
+            break;
         default:
             tofu.type = FOSSIL_TOFU_TYPE_GHOST;
             break;
     }
+    tofu.attribute.name = NULL;
+    tofu.attribute.description = NULL;
+    tofu.attribute.id = NULL;
 
     return tofu;
 }
@@ -389,6 +395,9 @@ void fossil_tofu_print(fossil_tofu_t tofu) {
         case FOSSIL_TOFU_TYPE_BOOL:
             printf("%s", tofu.value.bool_val ? "true" : "false");
             break;
+        case FOSSIL_TOFU_TYPE_ANY:
+            printf("%p", tofu.value.any_val);
+            break;
         default:
             printf("unknown");
             break;
@@ -440,6 +449,8 @@ bool fossil_tofu_compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2) {
             return tofu1->value.size_val == tofu2->value.size_val;
         case FOSSIL_TOFU_TYPE_BOOL:
             return tofu1->value.bool_val == tofu2->value.bool_val;
+        case FOSSIL_TOFU_TYPE_ANY:
+            return tofu1->value.any_val == tofu2->value.any_val;
         default:
             return false;
     }
@@ -487,6 +498,8 @@ bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
             return tofu1.value.size_val == tofu2.value.size_val;
         case FOSSIL_TOFU_TYPE_BOOL:
             return tofu1.value.bool_val == tofu2.value.bool_val;
+        case FOSSIL_TOFU_TYPE_ANY:
+            return tofu1.value.any_val == tofu2.value.any_val;
         default:
             return false;
     }
@@ -543,6 +556,9 @@ fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu) {
             break;
         case FOSSIL_TOFU_TYPE_BOOL:
             copy.value.bool_val = tofu.value.bool_val;
+            break;
+        case FOSSIL_TOFU_TYPE_ANY:
+            copy.value.any_val = tofu.value.any_val;
             break;
         default:
             break;
@@ -644,6 +660,8 @@ int fossil_tofu_algorithm_compare(fossil_tofu_t a, fossil_tofu_t b) {
             return (a.value.size_val > b.value.size_val) - (a.value.size_val < b.value.size_val);
         case FOSSIL_TOFU_TYPE_BOOL:
             return (a.value.bool_val > b.value.bool_val) - (a.value.bool_val < b.value.bool_val);
+        case FOSSIL_TOFU_TYPE_ANY:
+            return (a.value.any_val > b.value.any_val) - (a.value.any_val < b.value.any_val);
         default:
             return 0; // Consider equal for unknown types
     }
