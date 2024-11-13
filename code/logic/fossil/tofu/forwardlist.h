@@ -64,11 +64,10 @@ int32_t fossil_flist_insert(fossil_flist_t* flist, char *data);
  * Remove data from the forward list.
  *
  * @param flist The forward list to remove data from.
- * @param data  A pointer to store the removed data.
  * @return      The error code indicating the success or failure of the operation.
  * @complexity  O(1)
  */
-int32_t fossil_flist_remove(fossil_flist_t* flist, char *data);
+int32_t fossil_flist_remove(fossil_flist_t* flist);
 
 /**
  * Reverse the forward list in the forward direction.

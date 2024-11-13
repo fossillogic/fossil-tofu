@@ -66,11 +66,10 @@ int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, char *data);
  * Remove data from the dynamic queue.
  *
  * @param dqueue The dynamic queue to remove data from.
- * @param data   A pointer to store the removed data.
  * @return       The error code indicating the success or failure of the operation.
  * @note         Time complexity: O(1)
  */
-int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue, char *data);
+int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue);
 
 /**
  * Get the size of the dynamic queue.

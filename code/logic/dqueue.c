@@ -72,7 +72,7 @@ int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, char *data) {
     return 0;
 }
 
-int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue, char *data) {
+int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue) {
     if (!dqueue || !dqueue->front) {
         return -1;
     }

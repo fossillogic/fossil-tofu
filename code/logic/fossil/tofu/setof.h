@@ -68,7 +68,7 @@ int32_t fossil_set_insert(fossil_set_t* set, char *data);
  * @return     The error code indicating the success or failure of the operation.
  * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
  */
-int32_t fossil_set_remove(fossil_set_t* set, char *data);
+int32_t fossil_set_remove(fossil_set_t* set);
 
 /**
  * Get the size of the set.

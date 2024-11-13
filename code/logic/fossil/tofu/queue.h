@@ -65,11 +65,10 @@ int32_t fossil_queue_insert(fossil_queue_t* queue, char *data);
  * Remove data from the queue.
  *
  * @param queue The queue to remove data from.
- * @param data  The data to remove.
  * @return      The error code indicating the success or failure of the operation.
  * @note        Time complexity: O(1)
  */
-int32_t fossil_queue_remove(fossil_queue_t* queue, char *data);
+int32_t fossil_queue_remove(fossil_queue_t* queue);
 
 /**
  * Get the size of the queue.

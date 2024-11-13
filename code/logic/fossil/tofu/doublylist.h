@@ -66,11 +66,10 @@ int32_t fossil_dlist_insert(fossil_dlist_t* dlist, char *data);
  * Remove data from the doubly linked list.
  *
  * @param dlist The doubly linked list to remove data from.
- * @param data  A pointer to store the removed data.
  * @return      The error code indicating the success or failure of the operation.
  * @note        Time complexity: O(1)
  */
-int32_t fossil_dlist_remove(fossil_dlist_t* dlist, char *data);
+int32_t fossil_dlist_remove(fossil_dlist_t* dlist);
 
 /**
  * Reverse the doubly linked list in the forward direction.

@@ -73,7 +73,7 @@ int32_t fossil_flist_insert(fossil_flist_t* flist, char *data) {
     return 0;
 }
 
-int32_t fossil_flist_remove(fossil_flist_t* flist, char *data) {
+int32_t fossil_flist_remove(fossil_flist_t* flist) {
     if (!flist || !flist->head) {
         return -1;
     }

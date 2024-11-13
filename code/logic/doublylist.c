@@ -78,7 +78,7 @@ int32_t fossil_dlist_insert(fossil_dlist_t* dlist, char *data) {
     return 0;
 }
 
-int32_t fossil_dlist_remove(fossil_dlist_t* dlist, char *data) {
+int32_t fossil_dlist_remove(fossil_dlist_t* dlist) {
     if (!dlist || !dlist->head) {
         return -1;
     }

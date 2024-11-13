@@ -55,8 +55,8 @@ int32_t fossil_stack_insert(fossil_stack_t* stack, char *data) {
     return 0;
 }
 
-int32_t fossil_stack_remove(fossil_stack_t* stack, char *data) {
-    if (!stack || !data) {
+int32_t fossil_stack_remove(fossil_stack_t* stack) {
+    if (!stack) {
         fprintf(stderr, "Error: Invalid stack or data\n");
         return -1;
     }

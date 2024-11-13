@@ -63,11 +63,10 @@ int32_t fossil_stack_insert(fossil_stack_t* stack, char *data);
  * Remove data from the stack.
  *
  * @param stack       The stack to remove data from.
- * @param[out] data   A pointer to store the removed data.
  * @return            The error code indicating the success or failure of the operation.
  * @note              Time complexity: O(1)
  */
-int32_t fossil_stack_remove(fossil_stack_t* stack, char *data);
+int32_t fossil_stack_remove(fossil_stack_t* stack);
 
 /**
  * Get the size of the stack.

@@ -83,29 +83,31 @@ int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, char *data, int32_t priori
     return 0;
 }
 
-int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, char *data, int32_t priority) {
-    if (!pqueue || !pqueue->front) {
+int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, int32_t priority) {
+    if (!pqueue) {
         return -1;
     }
 
     fossil_pqueue_node_t* current = pqueue->front;
     fossil_pqueue_node_t* previous = NULL;
-    while (current) {
-        if (current->priority == priority && !strcmp(current->data.attribute.name, data)) {
-            if (previous) {
-                previous->next = current->next;
-            } else {
-                pqueue->front = current->next;
-            }
-            fossil_tofu_destroy(&current->data);
-            fossil_tofu_free(current);
-            return 0;
-        }
+    while (current && current->priority != priority) {
         previous = current;
         current = current->next;
     }
 
-    return -1;
+    if (!current) {
+        return -1;
+    }
+
+    if (previous) {
+        previous->next = current->next;
+    } else {
+        pqueue->front = current->next;
+    }
+
+    fossil_tofu_destroy(&current->data);
+    fossil_tofu_free(current);
+    return 0;
 }
 
 size_t fossil_pqueue_size(const fossil_pqueue_t* pqueue) {

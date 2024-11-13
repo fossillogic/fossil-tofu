@@ -104,6 +104,12 @@ void fossil_vector_pop_at(fossil_vector_t* vector, size_t index) {
     vector->size--;
 }
 
+int32_t fossil_vector_remove(fossil_vector_t* vector) {
+    if (!vector || vector->size == 0) return -1;
+    fossil_tofu_destroy(&vector->data[--vector->size]);
+    return 0;
+}
+
 void fossil_vector_erase(fossil_vector_t* vector) {
     if (!vector) return;
     for (size_t i = 0; i < vector->size; i++) {

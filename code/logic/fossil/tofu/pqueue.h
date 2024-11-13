@@ -64,12 +64,11 @@ int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, char *data, int32_t priori
  * Remove data from the priority queue.
  *
  * @param pqueue   The priority queue to remove data from.
- * @param data     The data to remove.
  * @param priority The priority of the data.
  * @return         The error code indicating the success or failure of the operation.
  * @note           Time complexity: O(1)
  */
-int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, char *data, int32_t priority);
+int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, int32_t priority);
 
 /**
  * Get the size of the priority queue.
