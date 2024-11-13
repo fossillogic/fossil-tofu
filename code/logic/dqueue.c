@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+extern const char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
+
 fossil_dqueue_t* fossil_dqueue_create_container(char* type) {
     fossil_dqueue_t* dqueue = (fossil_dqueue_t*)fossil_tofu_alloc(sizeof(fossil_dqueue_t));
     if (!dqueue) {

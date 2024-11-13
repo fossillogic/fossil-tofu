@@ -310,7 +310,6 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
             tofu.attribute.id = NULL;
             break;
     }
-
     return tofu;
 }
 

@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+extern const char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
+
 fossil_tuple_t fossil_tuple_create(char *type) {
     fossil_tuple_t tuple;
     tuple.elements = (fossil_tofu_t*)fossil_tofu_alloc(sizeof(fossil_tofu_t));

@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+extern const char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
+
 fossil_stack_t* fossil_stack_create_container(char* type) {
     fossil_stack_t* stack = (fossil_stack_t*)fossil_tofu_alloc(sizeof(fossil_stack_t));
     if (!stack) {
