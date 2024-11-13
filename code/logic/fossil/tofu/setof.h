@@ -43,16 +43,6 @@ typedef struct fossil_set_t {
 fossil_set_t* fossil_set_create_container(char* type);
 
 /**
- * Create a new set with the specified data type and initial capacity.
- *
- * @param list_type The type of data the set will store.
- * @param size      The initial capacity of the set.
- * @return          The created set.
- * @note            O(n) - Linear time complexity, where n is the number of elements in the set.
- */
-fossil_set_t* fossil_set_create_with(char* type, size_t size, ...);
-
-/**
  * Erase the contents of the set and free allocated memory.
  *
  * @param set The set to erase.
@@ -68,7 +58,7 @@ void fossil_set_destroy(fossil_set_t* set);
  * @return     The error code indicating the success or failure of the operation.
  * @note       O(1) - Constant time complexity.
  */
-int32_t fossil_set_insert(fossil_set_t* set, fossil_tofu_t data);
+int32_t fossil_set_insert(fossil_set_t* set, char *data);
 
 /**
  * Remove data from the set.
@@ -78,17 +68,7 @@ int32_t fossil_set_insert(fossil_set_t* set, fossil_tofu_t data);
  * @return     The error code indicating the success or failure of the operation.
  * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
  */
-int32_t fossil_set_remove(fossil_set_t* set, fossil_tofu_t data);
-
-/**
- * Search for data in the set.
- *
- * @param set  The set to search.
- * @param data The data to search for.
- * @return     The error code indicating the success or failure of the operation.
- * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
- */
-int32_t fossil_set_search(const fossil_set_t* set, fossil_tofu_t data);
+int32_t fossil_set_remove(fossil_set_t* set, char *data);
 
 /**
  * Get the size of the set.
@@ -143,7 +123,7 @@ bool fossil_set_is_cnullptr(const fossil_set_t* set);
  * @return     True if the set contains the element, false otherwise.
  * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
  */
-int32_t fossil_set_contains(const fossil_set_t* set, fossil_tofu_t data);
+int32_t fossil_set_contains(const fossil_set_t* set, char *data);
 
 #ifdef __cplusplus
 }

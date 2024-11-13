@@ -36,7 +36,7 @@ typedef struct {
  * @return The created tuple.
  * @note Time complexity: O(1)
  */
-fossil_tuple_t fossil_tuple_create(size_t size);
+fossil_tuple_t fossil_tuple_create(char *type);
 
 /**
  * @brief Destroys the tuple and frees the allocated memory.
@@ -53,7 +53,7 @@ void fossil_tuple_destroy(fossil_tuple_t *tuple);
  * @param element The element to add.
  * @note Time complexity: O(1) on average, O(n) in the worst case due to resizing.
  */
-void fossil_tuple_add(fossil_tuple_t *tuple, fossil_tofu_t element);
+void fossil_tuple_add(fossil_tuple_t *tuple, char *element);
 
 /**
  * @brief Gets the element at the specified index from the tuple.

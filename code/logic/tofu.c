@@ -174,6 +174,9 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
                 tofu.type = FOSSIL_TOFU_TYPE_GHOST;
             } else {
                 tofu.value.int_val = atoll(value);
+                tofu.attribute.name = "Signed Integer";
+                tofu.attribute.description = "A signed integer value";
+                tofu.attribute.id = "int";
             }
             break;
         case FOSSIL_TOFU_TYPE_UINT:
@@ -181,6 +184,9 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
                 tofu.type = FOSSIL_TOFU_TYPE_GHOST;
             } else {
                 tofu.value.uint_val = strtoull(value, NULL, 10);
+                tofu.attribute.name = "Unsigned Integer";
+                tofu.attribute.description = "An unsigned integer value";
+                tofu.attribute.id = "uint";
             }
             break;
         case FOSSIL_TOFU_TYPE_HEX:
@@ -188,6 +194,9 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
                 tofu.type = FOSSIL_TOFU_TYPE_GHOST;
             } else {
                 tofu.value.uint_val = parse_hexadecimal(value);
+                tofu.attribute.name = "Hexadecimal";
+                tofu.attribute.description = "A hexadecimal value";
+                tofu.attribute.id = "hex";
             }
             break;
         case FOSSIL_TOFU_TYPE_OCTAL:
@@ -195,6 +204,9 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
                 tofu.type = FOSSIL_TOFU_TYPE_GHOST;
             } else {
                 tofu.value.uint_val = parse_octal(value);
+                tofu.attribute.name = "Octal";
+                tofu.attribute.description = "An octal value";
+                tofu.attribute.id = "octal";
             }
             break;
         case FOSSIL_TOFU_TYPE_FLOAT:
@@ -202,6 +214,9 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
                 tofu.type = FOSSIL_TOFU_TYPE_GHOST;
             } else {
                 tofu.value.float_val = strtof(value, NULL);
+                tofu.attribute.name = "Float";
+                tofu.attribute.description = "A single-precision floating point value";
+                tofu.attribute.id = "float";
             }
             break;
         case FOSSIL_TOFU_TYPE_DOUBLE:
@@ -209,36 +224,64 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
                 tofu.type = FOSSIL_TOFU_TYPE_GHOST;
             } else {
                 tofu.value.double_val = strtod(value, NULL);
+                tofu.attribute.name = "Double";
+                tofu.attribute.description = "A double-precision floating point value";
+                tofu.attribute.id = "double";
             }
             break;
         case FOSSIL_TOFU_TYPE_BSTR:
             tofu.value.uchar_string_val = (uint16_t *)fossil_tofu_alloc((strlen(value) + 1) * sizeof(uint16_t));
+
             if (!tofu.value.uchar_string_val) {
                 tofu.type = FOSSIL_TOFU_TYPE_GHOST;
+                tofu.value.wchar_string_val = custom_wcsdup((wchar_t *)value);
+                if (!tofu.value.wchar_string_val) {
+                    tofu.value.cchar_string_val = fossil_tofu_strdup(value);
+                    if (!tofu.value.cchar_string_val) {
+                        tofu.type = FOSSIL_TOFU_TYPE_GHOST;
+                    }
+                }
+                strcpy((char *)tofu.value.uchar_string_val, value);
+            }
+            tofu.attribute.name = "Byte String";
+            tofu.attribute.description = "A byte string value";
+            tofu.attribute.id = "bstr";
+            break;
+        case FOSSIL_TOFU_TYPE_WSTR:
             tofu.value.wchar_string_val = custom_wcsdup((wchar_t *)value);
             if (!tofu.value.wchar_string_val) {
+                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
+            }
+            tofu.attribute.name = "Wide String";
+            tofu.attribute.description = "A wide string value";
+            tofu.attribute.id = "wstr";
+            break;
+        case FOSSIL_TOFU_TYPE_CSTR:
             tofu.value.cchar_string_val = fossil_tofu_strdup(value);
             if (!tofu.value.cchar_string_val) {
                 tofu.type = FOSSIL_TOFU_TYPE_GHOST;
             }
-            }
-                strcpy((char *)tofu.value.uchar_string_val, value);
-            }
-            break;
-        case FOSSIL_TOFU_TYPE_WSTR:
-            tofu.value.wchar_string_val = custom_wcsdup((wchar_t *)value);
-            break;
-        case FOSSIL_TOFU_TYPE_CSTR:
-            tofu.value.cchar_string_val = fossil_tofu_strdup(value);
+            tofu.attribute.name = "C String";
+            tofu.attribute.description = "A C string value";
+            tofu.attribute.id = "cstr";
             break;
         case FOSSIL_TOFU_TYPE_BCHAR:
             tofu.value.uchar_val = (uint16_t)value[0];
+            tofu.attribute.name = "Byte";
+            tofu.attribute.description = "A byte value";
+            tofu.attribute.id = "bchar";
             break;
         case FOSSIL_TOFU_TYPE_CCHAR:
             tofu.value.cchar_val = value[0];
+            tofu.attribute.name = "Char";
+            tofu.attribute.description = "A character value";
+            tofu.attribute.id = "cchar";
             break;
         case FOSSIL_TOFU_TYPE_WCHAR:
             tofu.value.wchar_val = ((wchar_t *)value)[0];
+            tofu.attribute.name = "Wide Char";
+            tofu.attribute.description = "A wide character value";
+            tofu.attribute.id = "wchar";
             break;
         case FOSSIL_TOFU_TYPE_BOOL:
             if (!is_valid_bool(value)) {
@@ -250,17 +293,23 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
                     tofu.value.bool_val = false;
                 }
             }
+            tofu.attribute.name = "Boolean";
+            tofu.attribute.description = "A boolean value";
+            tofu.attribute.id = "bool";
             break;
         case FOSSIL_TOFU_TYPE_ANY: // any is void *
             tofu.value.any_val = (void *)value;
+            tofu.attribute.name = "Any";
+            tofu.attribute.description = "A generic value";
+            tofu.attribute.id = "any";
             break;
         default:
             tofu.type = FOSSIL_TOFU_TYPE_GHOST;
+            tofu.attribute.name = NULL;
+            tofu.attribute.description = NULL;
+            tofu.attribute.id = NULL;
             break;
     }
-    tofu.attribute.name = NULL;
-    tofu.attribute.description = NULL;
-    tofu.attribute.id = NULL;
 
     return tofu;
 }
@@ -505,6 +554,64 @@ bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
     }
 }
 
+bool fossil_tofu_equal_type(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
+    return tofu1.type == tofu2.type;
+}
+
+bool fossil_tofu_equal_value(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
+    if (tofu1.type != tofu2.type) {
+        return false;
+    }
+
+    switch (tofu1.type) {
+        case FOSSIL_TOFU_TYPE_INT:
+            return tofu1.value.int_val == tofu2.value.int_val;
+        case FOSSIL_TOFU_TYPE_UINT:
+        case FOSSIL_TOFU_TYPE_HEX:
+        case FOSSIL_TOFU_TYPE_OCTAL:
+            return tofu1.value.uint_val == tofu2.value.uint_val;
+        case FOSSIL_TOFU_TYPE_FLOAT:
+            return tofu1.value.float_val == tofu2.value.float_val;
+        case FOSSIL_TOFU_TYPE_DOUBLE:
+            return tofu1.value.double_val == tofu2.value.double_val;
+        case FOSSIL_TOFU_TYPE_BSTR:
+            if (!tofu1.value.uchar_string_val || !tofu2.value.uchar_string_val) {
+                return false;
+            }
+            return strcmp((char*)tofu1.value.uchar_string_val, (char*)tofu2.value.uchar_string_val) == 0;
+        case FOSSIL_TOFU_TYPE_WSTR:
+            if (!tofu1.value.wchar_string_val || !tofu2.value.wchar_string_val) {
+                return false;
+            }
+            return wcscmp(tofu1.value.wchar_string_val, tofu2.value.wchar_string_val) == 0;
+        case FOSSIL_TOFU_TYPE_CSTR:
+            if (!tofu1.value.cchar_string_val || !tofu2.value.cchar_string_val) {
+                return false;
+            }
+            return strcmp(tofu1.value.cchar_string_val, tofu2.value.cchar_string_val) == 0;
+        case FOSSIL_TOFU_TYPE_BCHAR:
+            return tofu1.value.uchar_val == tofu2.value.uchar_val;
+        case FOSSIL_TOFU_TYPE_CCHAR:
+            return tofu1.value.cchar_val == tofu2.value.cchar_val;
+        case FOSSIL_TOFU_TYPE_WCHAR:
+            return tofu1.value.wchar_val == tofu2.value.wchar_val;
+        case FOSSIL_TOFU_TYPE_SIZE:
+            return tofu1.value.size_val == tofu2.value.size_val;
+        case FOSSIL_TOFU_TYPE_BOOL:
+            return tofu1.value.bool_val == tofu2.value.bool_val;
+        case FOSSIL_TOFU_TYPE_ANY:
+            return tofu1.value.any_val == tofu2.value.any_val;
+        default:
+            return false;
+    }
+}
+
+bool fossil_tofu_equal_attribute(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
+    return strcmp(tofu1.attribute.name, tofu2.attribute.name) == 0 &&
+           strcmp(tofu1.attribute.description, tofu2.attribute.description) == 0 &&
+           strcmp(tofu1.attribute.id, tofu2.attribute.id) == 0;
+}
+
 // Utility function to copy a fossil_tofu_t object
 fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu) {
     fossil_tofu_t copy = tofu;
@@ -725,6 +832,19 @@ fossil_tofu_t fossil_tofu_algorithm_average(fossil_tofu_t *array, size_t size) {
     fossil_tofu_t sum = fossil_tofu_algorithm_reduce(array, size, fossil_tofu_algorithm_average_helper);
     sum.value.double_val /= size;
     return sum;
+}
+
+void fossil_tofu_algorithm_sort(fossil_tofu_t *array, size_t size) {
+    if (!array) return;
+    for (size_t i = 1; i < size; i++) {
+        fossil_tofu_t key = array[i];
+        size_t j = i;
+        while (j > 0 && fossil_tofu_algorithm_compare(array[j - 1], key) > 0) {
+            array[j] = array[j - 1];
+            j--;
+        }
+        array[j] = key;
+    }
 }
 
 // Function to create a new iterator for an array of tofu

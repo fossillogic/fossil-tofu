@@ -15,74 +15,88 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
 
-fossil_tuple_t fossil_tuple_create(size_t size) {
+fossil_tuple_t fossil_tuple_create(char *type) {
     fossil_tuple_t tuple;
-    tuple.elements = (fossil_tofu_t*)malloc(size * sizeof(fossil_tofu_t));
+    tuple.elements = (fossil_tofu_t*)fossil_tofu_alloc(sizeof(fossil_tofu_t));
+    if (!tuple.elements) {
+        fprintf(stderr, "Error: Memory allocation failed\n");
+        return tuple;
+    }
     tuple.element_count = 0;
-    tuple.capacity = size;
-    tuple.type = NULL;  // Set a type if needed
+    tuple.capacity = 1;
+    tuple.type = fossil_tofu_strdup(type);
     return tuple;
 }
 
 void fossil_tuple_destroy(fossil_tuple_t *tuple) {
-    if (tuple->elements) {
-        free(tuple->elements);
+    if (!tuple) return;
+    for (size_t i = 0; i < tuple->element_count; i++) {
+        fossil_tofu_destroy(&tuple->elements[i]);
     }
-    if (tuple->type) {
-        free(tuple->type);
-    }
-    tuple->elements = NULL;
-    tuple->element_count = 0;
-    tuple->capacity = 0;
+    fossil_tofu_free(tuple->elements);
+    fossil_tofu_free(tuple->type);
 }
 
-void fossil_tuple_add(fossil_tuple_t *tuple, fossil_tofu_t element) {
+void fossil_tuple_add(fossil_tuple_t *tuple, char *element) {
+    if (!tuple) return;
     if (tuple->element_count == tuple->capacity) {
+        fossil_tofu_t* new_elements = (fossil_tofu_t*)fossil_tofu_realloc(tuple->elements, 2 * tuple->capacity * sizeof(fossil_tofu_t));
+        if (!new_elements) return;
+        tuple->elements = new_elements;
         tuple->capacity *= 2;
-        tuple->elements = (fossil_tofu_t*)realloc(tuple->elements, tuple->capacity * sizeof(fossil_tofu_t));
     }
-    tuple->elements[tuple->element_count++] = element;
+    tuple->elements[tuple->element_count++] = fossil_tofu_create(fossil_tofu_type_to_string(tuple->type), element);
 }
 
-fossil_tofu_t* fossil_tuple_get(fossil_tuple_t *tuple, size_t index) {
-    if (index >= tuple->element_count) {
-        return NULL;
+fossil_tofu_t fossil_tuple_get(fossil_tuple_t *tuple, size_t index) {
+    if (!tuple || index >= tuple->element_count) {
+        fprintf(stderr, "Error: Invalid tuple or index out of bounds\n");
+        return fossil_tofu_create("ghost", ""); // Return a ghost tofu if tuple is invalid or index is out of bounds
     }
-    return &tuple->elements[index];
+    return tuple->elements[index];
 }
 
 void fossil_tuple_remove(fossil_tuple_t *tuple, size_t index) {
-    if (index < tuple->element_count) {
-        for (size_t i = index; i < tuple->element_count - 1; i++) {
-            tuple->elements[i] = tuple->elements[i + 1];
-        }
-        tuple->element_count--;
+    if (!tuple || index >= tuple->element_count) return;
+    fossil_tofu_destroy(&tuple->elements[index]);
+    for (size_t i = index; i < tuple->element_count - 1; i++) {
+        tuple->elements[i] = tuple->elements[i + 1];
     }
+    tuple->element_count--;
 }
 
 size_t fossil_tuple_size(fossil_tuple_t *tuple) {
-    return tuple->element_count;
+    return tuple ? tuple->element_count : 0;
 }
 
 size_t fossil_tuple_capacity(fossil_tuple_t *tuple) {
-    return tuple->capacity;
+    return tuple ? tuple->capacity : 0;
 }
 
 bool fossil_tuple_is_empty(fossil_tuple_t *tuple) {
-    return tuple->element_count == 0;
+    return tuple ? tuple->element_count == 0 : true;
 }
 
 void fossil_tuple_clear(fossil_tuple_t *tuple) {
+    if (!tuple) return;
+    for (size_t i = 0; i < tuple->element_count; i++) {
+        fossil_tofu_destroy(&tuple->elements[i]);
+    }
     tuple->element_count = 0;
 }
 
 void fossil_tuple_print(fossil_tuple_t *tuple) {
-    printf("Tuple contains %zu elements:\n", tuple->element_count);
-    for (size_t i = 0; i < tuple->element_count; i++) {
-        // Assuming a function fossil_tofu_print() exists to print a fossil_tofu_t element
-        fossil_tofu_print(tuple->elements[i]);
+    if (!tuple) {
+        fprintf(stderr, "Error: Invalid tuple\n");
+        return;
     }
-    printf("\n");
+    printf("Tuple (%s) [", tuple->type);
+    for (size_t i = 0; i < tuple->element_count; i++) {
+        fossil_tofu_print(tuple->elements[i]);
+        if (i < tuple->element_count - 1) {
+            printf(", ");
+        }
+    }
+    printf("]\n");
 }

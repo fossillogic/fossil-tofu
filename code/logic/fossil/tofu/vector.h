@@ -17,8 +17,7 @@
 #include "tofu.h"
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 #define INITIAL_CAPACITY 10
@@ -116,37 +115,6 @@ void fossil_vector_pop_at(fossil_vector_t* vector, size_t index);
  * @param vector The vector from which to remove all elements.
  */
 void fossil_vector_erase(fossil_vector_t* vector);
-
-/**
- * Remove all elements from the vector that match the target element.
- * 
- * Time complexity: O(n)
- *
- * @param vector The vector from which to remove elements.
- * @param target The element to remove.
- */
-void fossil_vector_erase_if(fossil_vector_t* vector, fossil_tofu_t target);
-
-
-/**
- * Search for a target element in the vector.
- * 
- * Time complexity: O(n)
- *
- * @param vector The vector to search.
- * @param target The element to search for.
- * @return       The index of the target element, or -1 if not found.
- */
-int fossil_vector_search(const fossil_vector_t* vector, fossil_tofu_t target);
-
-/**
- * Reverse the order of elements in the vector.
- * 
- * Time complexity: O(n)
- *
- * @param vector The vector to reverse.
- */
-void fossil_vector_reverse(fossil_vector_t* vector);
 
 /**
  * Check if the vector is a null pointer.

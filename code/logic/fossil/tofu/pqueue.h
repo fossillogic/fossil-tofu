@@ -42,16 +42,6 @@ typedef struct fossil_pqueue_t {
 fossil_pqueue_t* fossil_pqueue_create_container(char* type);
 
 /**
- * Create a new priority queue with the specified data type and initial capacity.
- *
- * @param queue_type The type of data the priority queue will store.
- * @param size       The initial capacity of the priority queue.
- * @return           The created priority queue.
- * @note             Time complexity: O(1)
- */
-fossil_pqueue_t* fossil_pqueue_create_with(char* type, size_t size, ...);
-
-/**
  * Erase the contents of the priority queue and free allocated memory.
  *
  * @param pqueue The priority queue to erase.
@@ -68,7 +58,7 @@ void fossil_pqueue_destroy(fossil_pqueue_t* pqueue);
  * @return         The error code indicating the success or failure of the operation.
  * @note           Time complexity: O(n)
  */
-int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority);
+int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, char *data, int32_t priority);
 
 /**
  * Remove data from the priority queue.
@@ -79,18 +69,7 @@ int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_
  * @return         The error code indicating the success or failure of the operation.
  * @note           Time complexity: O(1)
  */
-int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, fossil_tofu_t* data, int32_t priority);
-
-/**
- * Search for data in the priority queue.
- *
- * @param pqueue   The priority queue to search.
- * @param data     The data to search for.
- * @param priority The priority of the data.
- * @return         The error code indicating the success or failure of the operation.
- * @note           Time complexity: O(n)
- */
-int32_t fossil_pqueue_search(const fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority);
+int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, char *data, int32_t priority);
 
 /**
  * Get the size of the priority queue.

@@ -67,17 +67,7 @@ int32_t fossil_stack_insert(fossil_stack_t* stack, char *data);
  * @return            The error code indicating the success or failure of the operation.
  * @note              Time complexity: O(1)
  */
-int32_t fossil_stack_remove(fossil_stack_t* stack, fossil_tofu_t* data);
-
-/**
- * Search for data in the stack.
- *
- * @param stack The stack to search.
- * @param data  The data to search for.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int32_t fossil_stack_search(const fossil_stack_t* stack, fossil_tofu_t data);
+int32_t fossil_stack_remove(fossil_stack_t* stack, char *data);
 
 /**
  * Get the size of the stack.
@@ -128,11 +118,10 @@ bool fossil_stack_is_cnullptr(const fossil_stack_t* stack);
  * Get the top element of the stack.
  *
  * @param stack         The stack to get the top element from.
- * @param default_value The default value to return if the stack is empty.
  * @return              The top element of the stack or the default value if the stack is empty.
  * @note                Time complexity: O(1)
  */
-fossil_tofu_t fossil_stack_top(fossil_stack_t* stack, fossil_tofu_t default_value);
+fossil_tofu_t fossil_stack_top(fossil_stack_t* stack);
 
 #ifdef __cplusplus
 }

@@ -211,6 +211,36 @@ bool fossil_tofu_is_valid_type(const char *type);
 bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2);
 
 /**
+ * Utility function to check if two `fossil_tofu_t` objects are equal in value.
+ *
+ * @param tofu1 The first `fossil_tofu_t` object.
+ * @param tofu2 The second `fossil_tofu_t` object.
+ * @return `true` if the objects are equal in value, `false` otherwise.
+ * @note O(1) - Constant time complexity.
+ */
+bool fossil_tofu_equal_type(fossil_tofu_t tofu1, fossil_tofu_t tofu2);
+
+/**
+ * Utility function to check if two `fossil_tofu_t` objects are equal in attribute.
+ *
+ * @param tofu1 The first `fossil_tofu_t` object.
+ * @param tofu2 The second `fossil_tofu_t` object.
+ * @return `true` if the objects are equal in attribute, `false` otherwise.
+ * @note O(1) - Constant time complexity.
+ */
+bool fossil_tofu_equal_value(fossil_tofu_t tofu1, fossil_tofu_t tofu2);
+
+/**
+ * Utility function to check if two `fossil_tofu_t` objects are equal in attribute.
+ *
+ * @param tofu1 The first `fossil_tofu_t` object.
+ * @param tofu2 The second `fossil_tofu_t` object.
+ * @return `true` if the objects are equal in attribute, `false` otherwise.
+ * @note O(1) - Constant time complexity.
+ */
+bool fossil_tofu_equal_attribute(fossil_tofu_t tofu1, fossil_tofu_t tofu2);
+
+/**
  * Utility function to copy a `fossil_tofu_t` object.
  *
  * @param tofu The `fossil_tofu_t` object to be copied.
@@ -377,6 +407,15 @@ fossil_tofu_t fossil_tofu_algorithm_summary(fossil_tofu_t *array, size_t size, f
  * @note O(n) - Linear time complexity, where n is the size of the array.
  */
 fossil_tofu_t fossil_tofu_algorithm_average(fossil_tofu_t *array, size_t size);
+
+/**
+ * Sorts elements in an array using insertion sort algorithm.
+ *
+ * @param array The array of elements to be sorted.
+ * @param size The size of the array.
+ * @note O(n^2) - Quadratic time complexity, where n is the size of the array.
+ */
+void fossil_tofu_algorithm_sort(fossil_tofu_t *array, size_t size);
 
 // *****************************************************************************
 // Iterator functions

@@ -44,16 +44,6 @@ typedef struct fossil_queue_t {
 fossil_queue_t* fossil_queue_create_container(char* type);
 
 /**
- * Create a new queue with the specified data type and initial capacity.
- *
- * @param list_type The type of data the queue will store.
- * @param size      The initial capacity of the queue.
- * @return          The created queue.
- * @note            Time complexity: O(1)
- */
-fossil_queue_t* fossil_queue_create_with(char* type, size_t size, ...);
-
-/**
  * Erase the contents of the queue and free allocated memory.
  *
  * @param queue The queue to erase.
@@ -69,7 +59,7 @@ void fossil_queue_destroy(fossil_queue_t* queue);
  * @return      The error code indicating the success or failure of the operation.
  * @note        Time complexity: O(1)
  */
-int32_t fossil_queue_insert(fossil_queue_t* queue, fossil_tofu_t data);
+int32_t fossil_queue_insert(fossil_queue_t* queue, char *data);
 
 /**
  * Remove data from the queue.
@@ -79,17 +69,7 @@ int32_t fossil_queue_insert(fossil_queue_t* queue, fossil_tofu_t data);
  * @return      The error code indicating the success or failure of the operation.
  * @note        Time complexity: O(1)
  */
-int32_t fossil_queue_remove(fossil_queue_t* queue, fossil_tofu_t* data);
-
-/**
- * Search for data in the queue.
- *
- * @param queue The queue to search.
- * @param data  The data to search for.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int32_t fossil_queue_search(const fossil_queue_t* queue, fossil_tofu_t data);
+int32_t fossil_queue_remove(fossil_queue_t* queue, char *data);
 
 /**
  * Get the size of the queue.

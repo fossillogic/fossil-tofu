@@ -45,16 +45,6 @@ typedef struct fossil_dlist_t {
 fossil_dlist_t* fossil_dlist_create_container(char* type);
 
 /**
- * Create a new doubly linked list with the specified data type and initial capacity.
- *
- * @param list_type The type of data the doubly linked list will store.
- * @param size      The initial capacity of the doubly linked list.
- * @return          The created doubly linked list.
- * @note            Time complexity: O(1)
- */
-fossil_dlist_t* fossil_dlist_create_with(char* type, size_t size, ...);
-
-/**
  * Erase the contents of the doubly linked list and free allocated memory.
  *
  * @param dlist The doubly linked list to erase.
@@ -70,7 +60,7 @@ void fossil_dlist_destroy(fossil_dlist_t* dlist);
  * @return      The error code indicating the success or failure of the operation.
  * @note        Time complexity: O(1)
  */
-int32_t fossil_dlist_insert(fossil_dlist_t* dlist, fossil_tofu_t data);
+int32_t fossil_dlist_insert(fossil_dlist_t* dlist, char *data);
 
 /**
  * Remove data from the doubly linked list.
@@ -80,17 +70,7 @@ int32_t fossil_dlist_insert(fossil_dlist_t* dlist, fossil_tofu_t data);
  * @return      The error code indicating the success or failure of the operation.
  * @note        Time complexity: O(1)
  */
-int32_t fossil_dlist_remove(fossil_dlist_t* dlist, fossil_tofu_t* data);
-
-/**
- * Search for data in the doubly linked list.
- *
- * @param dlist The doubly linked list to search.
- * @param data  The data to search for.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int32_t fossil_dlist_search(const fossil_dlist_t* dlist, fossil_tofu_t data);
+int32_t fossil_dlist_remove(fossil_dlist_t* dlist, char *data);
 
 /**
  * Reverse the doubly linked list in the forward direction.
@@ -154,67 +134,6 @@ bool fossil_dlist_is_empty(const fossil_dlist_t* dlist);
 bool fossil_dlist_is_cnullptr(const fossil_dlist_t* dlist);
 
 #ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class DoublyList {
-    public:
-        DoublyList(const std::string& type) : dlist_(fossil_dlist_create_container(const_cast<char*>(type.c_str()))) {}
-
-        ~DoublyList() {
-            fossil_dlist_destroy(dlist_);
-        }
-
-        void insert(fossil_tofu_t data) {
-            fossil_dlist_insert(dlist_, data);
-        }
-
-        fossil_tofu_t remove() {
-            fossil_tofu_t data;
-            fossil_dlist_remove(dlist_, &data);
-            return data;
-        }
-
-        int search(fossil_tofu_t data) {
-            return fossil_dlist_search(dlist_, data);
-        }
-
-        size_t size() {
-            return fossil_dlist_size(dlist_);
-        }
-
-        void reverse_forward() {
-            fossil_dlist_reverse_forward(dlist_);
-        }
-
-        void reverse_backward() {
-            fossil_dlist_reverse_backward(dlist_);
-        }
-
-        bool not_empty() {
-            return fossil_dlist_not_empty(dlist_);
-        }
-
-        bool not_cnullptr() {
-            return fossil_dlist_not_cnullptr(dlist_);
-        }
-
-        bool is_empty() {
-            return fossil_dlist_is_empty(dlist_);
-        }
-
-        bool is_cnullptr() {
-            return fossil_dlist_is_cnullptr(dlist_);
-        }
-
-    private:
-        fossil_dlist_t* dlist_;
-    };
 }
 #endif
 
