@@ -371,7 +371,7 @@ void fossil_tofu_destroy_blocks(fossil_tofu_t *tofu_blocks, size_t size) {
 }
 
 // Utility function to convert fossil_tofu_type_t to string representation
-const char* fossil_tofu_type_to_string(fossil_tofu_type_t type) {
+char* fossil_tofu_type_to_string(fossil_tofu_type_t type) {
     if (type >= 0 && type < FOSSIL_TOFU_TYPE_BOOL) {
         return tofu_type_strings[type];
     } else {

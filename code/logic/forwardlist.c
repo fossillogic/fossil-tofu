@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern const char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
+extern char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
 
 fossil_flist_t* fossil_flist_create_container(char* type) {
     fossil_flist_t* flist = (fossil_flist_t*)fossil_tofu_alloc(sizeof(fossil_flist_t));
