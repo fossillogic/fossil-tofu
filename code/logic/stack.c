@@ -16,8 +16,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
-
 fossil_stack_t* fossil_stack_create_container(char* type) {
     fossil_stack_t* stack = (fossil_stack_t*)fossil_tofu_alloc(sizeof(fossil_stack_t));
     if (!stack) {
@@ -51,7 +49,7 @@ int32_t fossil_stack_insert(fossil_stack_t* stack, char *data) {
         fprintf(stderr, "Error: Memory allocation failed\n");
         return -1;
     }
-    node->data = fossil_tofu_create(fossil_tofu_type_to_string(stack->type), data);
+    node->data = fossil_tofu_create(stack->type, data);
     node->next = stack->top;
     stack->top = node;
     return 0;

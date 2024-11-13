@@ -16,8 +16,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
-
 fossil_queue_t* fossil_queue_create_container(char* type) {
     fossil_queue_t* queue = (fossil_queue_t*)fossil_tofu_alloc(sizeof(fossil_queue_t));
     if (!queue) {
@@ -56,7 +54,7 @@ int32_t fossil_queue_insert(fossil_queue_t* queue, char *data) {
         if (!queue->front) {
             return -1;
         }
-        queue->front->data = fossil_tofu_create(fossil_tofu_type_to_string(queue->type), data);
+        queue->front->data = fossil_tofu_create(queue->type, data);
         queue->front->next = NULL;
         queue->rear = queue->front;
         return 0;
@@ -66,7 +64,7 @@ int32_t fossil_queue_insert(fossil_queue_t* queue, char *data) {
     if (!queue->rear->next) {
         return -1;
     }
-    queue->rear->next->data = fossil_tofu_create(fossil_tofu_type_to_string(queue->type), data);
+    queue->rear->next->data = fossil_tofu_create(queue->type, data);
     queue->rear->next->next = NULL;
     queue->rear = queue->rear->next;
     return 0;
@@ -80,7 +78,7 @@ int32_t fossil_queue_remove(fossil_queue_t* queue, char *data) {
     fossil_queue_node_t* current = queue->front;
     fossil_queue_node_t* previous = NULL;
     while (current) {
-        if (fossil_tofu_equal_value(current->data, fossil_tofu_create(fossil_tofu_type_to_string(queue->type), data))) {
+        if (fossil_tofu_equal_value(current->data, fossil_tofu_create(queue->type, data))) {
             if (current == queue->front) {
                 queue->front = current->next;
             } else {

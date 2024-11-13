@@ -16,8 +16,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
-
 fossil_dqueue_t* fossil_dqueue_create_container(char* type) {
     fossil_dqueue_t* dqueue = (fossil_dqueue_t*)fossil_tofu_alloc(sizeof(fossil_dqueue_t));
     if (!dqueue) {
@@ -56,7 +54,7 @@ int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, char *data) {
         if (!dqueue->front) {
             return -1;
         }
-        dqueue->front->data = fossil_tofu_create(fossil_tofu_type_to_string(dqueue->type), data);
+        dqueue->front->data = fossil_tofu_create(dqueue->type, data);
         dqueue->front->prev = NULL;
         dqueue->front->next = NULL;
         dqueue->rear = dqueue->front;
@@ -67,7 +65,7 @@ int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, char *data) {
     if (!dqueue->rear->next) {
         return -1;
     }
-    dqueue->rear->next->data = fossil_tofu_create(fossil_tofu_type_to_string(dqueue->type), data);
+    dqueue->rear->next->data = fossil_tofu_create(dqueue->type, data);
     dqueue->rear->next->prev = dqueue->rear;
     dqueue->rear->next->next = NULL;
     dqueue->rear = dqueue->rear->next;

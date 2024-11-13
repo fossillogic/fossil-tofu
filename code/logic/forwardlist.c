@@ -16,8 +16,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
-
 fossil_flist_t* fossil_flist_create_container(char* type) {
     fossil_flist_t* flist = (fossil_flist_t*)fossil_tofu_alloc(sizeof(fossil_flist_t));
     if (!flist) {
@@ -55,7 +53,7 @@ int32_t fossil_flist_insert(fossil_flist_t* flist, char *data) {
         if (!flist->head) {
             return -1;
         }
-        flist->head->data = fossil_tofu_create(fossil_tofu_type_to_string(flist->type), data);
+        flist->head->data = fossil_tofu_create(flist->type, data);
         flist->head->next = NULL;
         return 0;
     }
@@ -70,7 +68,7 @@ int32_t fossil_flist_insert(fossil_flist_t* flist, char *data) {
         return -1;
     }
 
-    current->next->data = fossil_tofu_create(fossil_tofu_type_to_string(flist->type), data);
+    current->next->data = fossil_tofu_create(flist->type, data);
     current->next->next = NULL;
     return 0;
 }

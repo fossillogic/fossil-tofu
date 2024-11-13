@@ -16,8 +16,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
-
 fossil_tuple_t fossil_tuple_create(char *type) {
     fossil_tuple_t tuple;
     tuple.elements = (fossil_tofu_t*)fossil_tofu_alloc(sizeof(fossil_tofu_t));
@@ -48,7 +46,7 @@ void fossil_tuple_add(fossil_tuple_t *tuple, char *element) {
         tuple->elements = new_elements;
         tuple->capacity *= 2;
     }
-    tuple->elements[tuple->element_count++] = fossil_tofu_create(fossil_tofu_type_to_string(tuple->type), element);
+    tuple->elements[tuple->element_count++] = fossil_tofu_create(tuple->type, element);
 }
 
 fossil_tofu_t fossil_tuple_get(fossil_tuple_t *tuple, size_t index) {

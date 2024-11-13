@@ -16,8 +16,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern char* fossil_tofu_type_to_string(fossil_tofu_type_t type);
-
 fossil_vector_t* fossil_vector_create_container(char* type) {
     fossil_vector_t* vector = (fossil_vector_t*)fossil_tofu_alloc(sizeof(fossil_vector_t));
     if (!vector) return NULL;
@@ -50,7 +48,7 @@ void fossil_vector_push_back(fossil_vector_t* vector, char *element) {
         vector->data = new_data;
         vector->capacity *= 2;
     }
-    vector->data[vector->size++] = fossil_tofu_create(fossil_tofu_type_to_string(vector->type), element);
+    vector->data[vector->size++] = fossil_tofu_create(vector->type, element);
 }
 
 void fossil_vector_push_front(fossil_vector_t* vector, char *element) {
@@ -64,7 +62,7 @@ void fossil_vector_push_front(fossil_vector_t* vector, char *element) {
     for (size_t i = vector->size; i > 0; i--) {
         vector->data[i] = vector->data[i - 1];
     }
-    vector->data[0] = fossil_tofu_create(fossil_tofu_type_to_string(vector->type), element);
+    vector->data[0] = fossil_tofu_create(vector->type, element);
     vector->size++;
 }
 
@@ -79,7 +77,7 @@ void fossil_vector_push_at(fossil_vector_t* vector, size_t index, char *element)
     for (size_t i = vector->size; i > index; i--) {
         vector->data[i] = vector->data[i - 1];
     }
-    vector->data[index] = fossil_tofu_create(fossil_tofu_type_to_string(vector->type), element);
+    vector->data[index] = fossil_tofu_create(vector->type, element);
     vector->size++;
 }
 
