@@ -53,7 +53,7 @@ int32_t fossil_set_insert(fossil_set_t* set, char *data) {
         if (!set->head) {
             return -1;
         }
-        set->head->data = fossil_tofu_create(set->type, data);
+        set->head->data = fossil_tofu_create(fossil_tofu_type_to_string(set->type), data);
         set->head->next = NULL;
         return 0;
     }
@@ -67,7 +67,7 @@ int32_t fossil_set_insert(fossil_set_t* set, char *data) {
     if (!current->next) {
         return -1;
     }
-    current->next->data = fossil_tofu_create(set->type, data);
+    current->next->data = fossil_tofu_create(fossil_tofu_type_to_string(set->type), data);
     current->next->next = NULL;
     return 0;
 }
@@ -78,7 +78,7 @@ int32_t fossil_set_remove(fossil_set_t* set, char *data) {
     }
 
     fossil_set_node_t* current = set->head;
-    if (fossil_tofu_equal_value(current->data, fossil_tofu_create(set->type, data))) {
+    if (fossil_tofu_equal_value(current->data, fossil_tofu_create(fossil_tofu_type_to_string(set->type), data))) {
         set->head = current->next;
         fossil_tofu_destroy(&current->data);
         fossil_tofu_free(current);
@@ -86,7 +86,7 @@ int32_t fossil_set_remove(fossil_set_t* set, char *data) {
     }
 
     while (current->next) {
-        if (fossil_tofu_equal_value(current->next->data, fossil_tofu_create(set->type, data))) {
+        if (fossil_tofu_equal_value(current->next->data, fossil_tofu_create(fossil_tofu_type_to_string(set->type), data))) {
             fossil_set_node_t* temp = current->next;
             current->next = current->next->next;
             fossil_tofu_destroy(&temp->data);

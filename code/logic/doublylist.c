@@ -55,7 +55,7 @@ int32_t fossil_dlist_insert(fossil_dlist_t* dlist, char *data) {
         if (!dlist->head) {
             return -1;
         }
-        dlist->head->data = fossil_tofu_create(dlist->type, data);
+        dlist->head->data = fossil_tofu_create(fossil_tofu_type_to_string(dlist->type), data);
         dlist->head->prev = NULL;
         dlist->head->next = NULL;
         dlist->tail = dlist->head;
@@ -72,7 +72,7 @@ int32_t fossil_dlist_insert(fossil_dlist_t* dlist, char *data) {
         return -1;
     }
 
-    current->next->data = fossil_tofu_create(dlist->type, data);
+    current->next->data = fossil_tofu_create(fossil_tofu_type_to_string(dlist->type), data);
     current->next->prev = current;
     current->next->next = NULL;
     dlist->tail = current->next;
