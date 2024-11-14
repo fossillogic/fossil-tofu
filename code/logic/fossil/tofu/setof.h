@@ -115,16 +115,6 @@ bool fossil_set_is_empty(const fossil_set_t* set);
  */
 bool fossil_set_is_cnullptr(const fossil_set_t* set);
 
-/**
- * Check if the set contains a specific element.
- *
- * @param set  The set to check.
- * @param data The data to search for.
- * @return     True if the set contains the element, false otherwise.
- * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
- */
-int32_t fossil_set_contains(const fossil_set_t* set, char *data);
-
 #ifdef __cplusplus
 }
 #endif

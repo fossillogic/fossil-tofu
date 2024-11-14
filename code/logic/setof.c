@@ -114,19 +114,3 @@ bool fossil_set_is_empty(const fossil_set_t* set) {
 bool fossil_set_is_cnullptr(const fossil_set_t* set) {
     return set == NULL;
 }
-
-int32_t fossil_set_contains(const fossil_set_t* set, char *data) {
-    if (!set) {
-        return -1;
-    }
-
-    fossil_set_node_t* current = set->head;
-    while (current) {
-        if (fossil_tofu_compare(&current->data, data) == 0) {
-            return 0;
-        }
-        current = current->next;
-    }
-
-    return -1;
-}
