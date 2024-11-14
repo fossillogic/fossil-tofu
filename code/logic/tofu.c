@@ -262,31 +262,31 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
     switch (tofu.type) {
         case FOSSIL_TOFU_TYPE_INT:
             tofu.value.int_val = atoll(value);
-            tofu.attribute.name = "Integer";
+            tofu.attribute.name = "Signed Integer";
             tofu.attribute.description = "A signed integer value";
             tofu.attribute.id = "int";
             break;
         case FOSSIL_TOFU_TYPE_I8:
             tofu.value.int8_val = (int8_t)atoll(value);
-            tofu.attribute.name = "8-bit Integer";
+            tofu.attribute.name = "Signed 8-bit Integer";
             tofu.attribute.description = "An 8-bit signed integer value";
             tofu.attribute.id = "i8";
             break;
         case FOSSIL_TOFU_TYPE_I16:
             tofu.value.int16_val = (int16_t)atoll(value);
-            tofu.attribute.name = "16-bit Integer";
+            tofu.attribute.name = "Signed 16-bit Integer";
             tofu.attribute.description = "A 16-bit signed integer value";
             tofu.attribute.id = "i16";
             break;
         case FOSSIL_TOFU_TYPE_I32:
             tofu.value.int32_val = (int32_t)atoll(value);
-            tofu.attribute.name = "32-bit Integer";
+            tofu.attribute.name = "Signed 32-bit Integer";
             tofu.attribute.description = "A 32-bit signed integer value";
             tofu.attribute.id = "i32";
             break;
         case FOSSIL_TOFU_TYPE_I64:
             tofu.value.int64_val = atoll(value);
-            tofu.attribute.name = "64-bit Integer";
+            tofu.attribute.name = "Signed 64-bit Integer";
             tofu.attribute.description = "A 64-bit signed integer value";
             tofu.attribute.id = "i64";
             break;
@@ -298,25 +298,25 @@ fossil_tofu_t fossil_tofu_create(char *type, char *value) {
             break;
         case FOSSIL_TOFU_TYPE_U8:
             tofu.value.uint8_val = (uint8_t)atoll(value);
-            tofu.attribute.name = "8-bit Unsigned Integer";
+            tofu.attribute.name = "Unsigned 8-bit Integer";
             tofu.attribute.description = "An 8-bit unsigned integer value";
             tofu.attribute.id = "u8";
             break;
         case FOSSIL_TOFU_TYPE_U16:
             tofu.value.uint16_val = (uint16_t)atoll(value);
-            tofu.attribute.name = "16-bit Unsigned Integer";
+            tofu.attribute.name = "Unsigned 16-bit Integer";
             tofu.attribute.description = "A 16-bit unsigned integer value";
             tofu.attribute.id = "u16";
             break;
         case FOSSIL_TOFU_TYPE_U32:
             tofu.value.uint32_val = (uint32_t)atoll(value);
-            tofu.attribute.name = "32-bit Unsigned Integer";
+            tofu.attribute.name = "Unsigned 32-bit Integer";
             tofu.attribute.description = "A 32-bit unsigned integer value";
             tofu.attribute.id = "u32";
             break;
         case FOSSIL_TOFU_TYPE_U64:
             tofu.value.uint64_val = atoll(value);
-            tofu.attribute.name = "64-bit Unsigned Integer";
+            tofu.attribute.name = "Unsigned 64-bit Integer";
             tofu.attribute.description = "A 64-bit unsigned integer value";
             tofu.attribute.id = "u64";
             break;
