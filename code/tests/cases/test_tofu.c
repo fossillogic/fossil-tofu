@@ -40,102 +40,102 @@ FOSSIL_TEARDOWN(c_generic_tofu_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST_CASE(test_create_destroy) {
+FOSSIL_TEST_CASE(c_test_create_destroy) {
     fossil_tofu_t tofu = fossil_tofu_create("i32", "42");
-    FOSSIL_ASSERT(tofu.type == FOSSIL_TOFU_TYPE_I32);
-    FOSSIL_ASSERT(strcmp(tofu.value.data, "42") == 0);
+    ASSUME_ITS_TRUE(tofu.type == FOSSIL_TOFU_TYPE_I32);
+    ASSUME_ITS_EQUAL_CSTR(tofu.value.data, "42");
     fossil_tofu_destroy(&tofu);
 }
 
-FOSSIL_TEST_CASE(test_set_get_value) {
+FOSSIL_TEST_CASE(c_test_set_get_value) {
     fossil_tofu_t tofu = fossil_tofu_create("i32", "42");
-    FOSSIL_ASSERT(fossil_tofu_set_value(&tofu, "84") == FOSSIL_TOFU_SUCCESS);
-    FOSSIL_ASSERT(strcmp(fossil_tofu_get_value(&tofu), "84") == 0);
+    ASSUME_ITS_TRUE(fossil_tofu_set_value(&tofu, "84") == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&tofu), "84");
     fossil_tofu_destroy(&tofu);
 }
 
-FOSSIL_TEST_CASE(test_mutability) {
+FOSSIL_TEST_CASE(c_test_mutability) {
     fossil_tofu_t tofu = fossil_tofu_create("i32", "42");
-    FOSSIL_ASSERT(fossil_tofu_is_mutable(&tofu) == true);
-    FOSSIL_ASSERT(fossil_tofu_set_mutable(&tofu, false) == FOSSIL_TOFU_SUCCESS);
-    FOSSIL_ASSERT(fossil_tofu_is_mutable(&tofu) == false);
+    ASSUME_ITS_TRUE(fossil_tofu_is_mutable(&tofu) == true);
+    ASSUME_ITS_TRUE(fossil_tofu_set_mutable(&tofu, false) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(fossil_tofu_is_mutable(&tofu) == false);
     fossil_tofu_destroy(&tofu);
 }
 
-FOSSIL_TEST_CASE(test_set_get_attribute) {
+FOSSIL_TEST_CASE(c_test_set_get_attribute) {
     fossil_tofu_t tofu = fossil_tofu_create("i32", "42");
-    FOSSIL_ASSERT(fossil_tofu_set_attribute(&tofu, "Test Attribute", "Test Description", "test_id") == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(fossil_tofu_set_attribute(&tofu, "Test Attribute", "Test Description", "c_test_id") == FOSSIL_TOFU_SUCCESS);
     const fossil_tofu_attribute_t* attr = fossil_tofu_get_attribute(&tofu);
-    FOSSIL_ASSERT(strcmp(attr->name, "Test Attribute") == 0);
-    FOSSIL_ASSERT(strcmp(attr->description, "Test Description") == 0);
-    FOSSIL_ASSERT(strcmp(attr->id, "test_id") == 0);
+    ASSUME_ITS_EQUAL_CSTR(attr->name, "Test Attribute");
+    ASSUME_ITS_EQUAL_CSTR(attr->description, "Test Description");
+    ASSUME_ITS_EQUAL_CSTR(attr->id, "c_test_id");
     fossil_tofu_destroy(&tofu);
 }
 
-FOSSIL_TEST_CASE(test_equals) {
+FOSSIL_TEST_CASE(c_test_equals) {
     fossil_tofu_t tofu1 = fossil_tofu_create("i32", "42");
     fossil_tofu_t tofu2 = fossil_tofu_create("i32", "42");
-    FOSSIL_ASSERT(fossil_tofu_equals(&tofu1, &tofu2) == true);
+    ASSUME_ITS_TRUE(fossil_tofu_equals(&tofu1, &tofu2) == true);
     fossil_tofu_destroy(&tofu1);
     fossil_tofu_destroy(&tofu2);
 }
 
-FOSSIL_TEST_CASE(test_copy) {
+FOSSIL_TEST_CASE(c_test_copy) {
     fossil_tofu_t tofu1 = fossil_tofu_create("i32", "42");
     fossil_tofu_t tofu2;
-    FOSSIL_ASSERT(fossil_tofu_copy(&tofu2, &tofu1) == FOSSIL_TOFU_SUCCESS);
-    FOSSIL_ASSERT(fossil_tofu_equals(&tofu1, &tofu2) == true);
+    ASSUME_ITS_TRUE(fossil_tofu_copy(&tofu2, &tofu1) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(fossil_tofu_equals(&tofu1, &tofu2) == true);
     fossil_tofu_destroy(&tofu1);
     fossil_tofu_destroy(&tofu2);
 }
 
-FOSSIL_TEST_CASE(test_algorithm_compare) {
+FOSSIL_TEST_CASE(c_test_algorithm_compare) {
     fossil_tofu_t tofu1 = fossil_tofu_create("i32", "42");
     fossil_tofu_t tofu2 = fossil_tofu_create("i32", "84");
-    FOSSIL_ASSERT(fossil_tofu_algorithm_compare(&tofu1, &tofu2) < 0);
+    ASSUME_ITS_TRUE(fossil_tofu_algorithm_compare(&tofu1, &tofu2) < 0);
     fossil_tofu_destroy(&tofu1);
     fossil_tofu_destroy(&tofu2);
 }
 
-FOSSIL_TEST_CASE(test_algorithm_search) {
+FOSSIL_TEST_CASE(c_test_algorithm_search) {
     fossil_tofu_t array[3] = {
         fossil_tofu_create("i32", "42"),
         fossil_tofu_create("i32", "84"),
         fossil_tofu_create("i32", "126")
     };
     fossil_tofu_t tofu = fossil_tofu_create("i32", "84");
-    FOSSIL_ASSERT(fossil_tofu_algorithm_search(array, 3, &tofu) == 1);
+    ASSUME_ITS_TRUE(fossil_tofu_algorithm_search(array, 3, &tofu) == 1);
     for (int i = 0; i < 3; i++) {
         fossil_tofu_destroy(&array[i]);
     }
     fossil_tofu_destroy(&tofu);
 }
 
-FOSSIL_TEST_CASE(test_algorithm_sort) {
+FOSSIL_TEST_CASE(c_test_algorithm_sort) {
     fossil_tofu_t array[3] = {
         fossil_tofu_create("i32", "126"),
         fossil_tofu_create("i32", "42"),
         fossil_tofu_create("i32", "84")
     };
-    FOSSIL_ASSERT(fossil_tofu_algorithm_sort(array, 3, true) == FOSSIL_TOFU_SUCCESS);
-    FOSSIL_ASSERT(strcmp(array[0].value.data, "42") == 0);
-    FOSSIL_ASSERT(strcmp(array[1].value.data, "84") == 0);
-    FOSSIL_ASSERT(strcmp(array[2].value.data, "126") == 0);
+    ASSUME_ITS_TRUE(fossil_tofu_algorithm_sort(array, 3, true) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_EQUAL_CSTR(array[0].value.data, "42");
+    ASSUME_ITS_EQUAL_CSTR(array[1].value.data, "84");
+    ASSUME_ITS_EQUAL_CSTR(array[2].value.data, "126");
     for (int i = 0; i < 3; i++) {
         fossil_tofu_destroy(&array[i]);
     }
 }
 
-FOSSIL_TEST_CASE(test_algorithm_reverse) {
+FOSSIL_TEST_CASE(c_test_algorithm_reverse) {
     fossil_tofu_t array[3] = {
         fossil_tofu_create("i32", "42"),
         fossil_tofu_create("i32", "84"),
         fossil_tofu_create("i32", "126")
     };
-    FOSSIL_ASSERT(fossil_tofu_algorithm_reverse(array, 3) == FOSSIL_TOFU_SUCCESS);
-    FOSSIL_ASSERT(strcmp(array[0].value.data, "126") == 0);
-    FOSSIL_ASSERT(strcmp(array[1].value.data, "84") == 0);
-    FOSSIL_ASSERT(strcmp(array[2].value.data, "42") == 0);
+    ASSUME_ITS_TRUE(fossil_tofu_algorithm_reverse(array, 3) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_EQUAL_CSTR(array[0].value.data, "126");
+    ASSUME_ITS_EQUAL_CSTR(array[1].value.data, "84");
+    ASSUME_ITS_EQUAL_CSTR(array[2].value.data, "42");
     for (int i = 0; i < 3; i++) {
         fossil_tofu_destroy(&array[i]);
     }
@@ -146,16 +146,16 @@ FOSSIL_TEST_CASE(test_algorithm_reverse) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_generic_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_create_destroy);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_set_get_value);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_mutability);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_set_get_attribute);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_equals);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_copy);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_algorithm_compare);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_algorithm_search);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_algorithm_sort);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_algorithm_reverse);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_create_destroy);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_set_get_value);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_mutability);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_set_get_attribute);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_equals);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_copy);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_algorithm_compare);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_algorithm_search);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_algorithm_sort);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_algorithm_reverse);
 
     FOSSIL_TEST_REGISTER(c_generic_tofu_fixture);
 } // end of tests
