@@ -371,19 +371,17 @@ void fossil_tofu_destroy_blocks(fossil_tofu_t *tofu_blocks, size_t size) {
 }
 
 // Utility function to convert fossil_tofu_type_t to string representation
-char* fossil_tofu_type_to_string(fossil_tofu_type_t type) {
-    if (type >= 0 && type < FOSSIL_TOFU_TYPE_BOOL) {
-        return tofu_type_strings[type];
-    } else {
-        return "unknown";
+const char *fossil_tofu_type_to_string(fossil_tofu_type_t type) {
+    if (type < 0 || type >= FOSSIL_TOFU_TYPE_SIZE) {
+        return NULL;
     }
+    return (char *)tofu_type_strings[type];
 }
 
 // Utility function to print fossil_tofu_t
 void fossil_tofu_print(fossil_tofu_t tofu) {
     const char *type_str = fossil_tofu_type_to_string(tofu.type);
     if (!type_str) {
-        fprintf(stderr, "Error: Invalid tofu type\n");
         return;
     }
 
