@@ -250,12 +250,10 @@ bool fossil_tofu_is_valid_info(const char *info) {
 fossil_tofu_t fossil_tofu_create(char *type, char *value) {
     fossil_tofu_t tofu = {0};
     if (!type || !value) {
-        fprintf(stderr, "Error: NULL pointer passed to fossil_tofu_create\n");
         return tofu;
     }
 
     if (!fossil_tofu_is_valid_type(type)) {
-        fprintf(stderr, "Error: Invalid tofu type string '%s'\n", type);
         return tofu;
     }
 
@@ -456,7 +454,6 @@ void fossil_tofu_print(fossil_tofu_t tofu) {
     printf("Type: %s, Value: ", type_str);
     switch (tofu.type) {
         case FOSSIL_TOFU_TYPE_INT:
-        case FOSSIL_TOFU_TYPE_I64:
             printf("%" PRId64, tofu.value.int_val);
             break;
         case FOSSIL_TOFU_TYPE_I8:
@@ -468,8 +465,10 @@ void fossil_tofu_print(fossil_tofu_t tofu) {
         case FOSSIL_TOFU_TYPE_I32:
             printf("%" PRId32, tofu.value.int32_val);
             break;
+        case FOSSIL_TOFU_TYPE_I64:
+            printf("%" PRId64, tofu.value.int64_val);
+            break;
         case FOSSIL_TOFU_TYPE_UINT:
-        case FOSSIL_TOFU_TYPE_U64:
             printf("%" PRIu64, tofu.value.uint_val);
             break;
         case FOSSIL_TOFU_TYPE_U8:
@@ -480,6 +479,9 @@ void fossil_tofu_print(fossil_tofu_t tofu) {
             break;
         case FOSSIL_TOFU_TYPE_U32:
             printf("%" PRIu32, tofu.value.uint32_val);
+            break;
+        case FOSSIL_TOFU_TYPE_U64:
+            printf("%" PRIu64, tofu.value.uint64_val);
             break;
         case FOSSIL_TOFU_TYPE_HEX:
             printf("0x%" PRIX64, tofu.value.uint_val);
@@ -552,8 +554,8 @@ bool fossil_tofu_equal_type(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
         fossil_tofu_is_valid_info(tofu2.attribute.description)) {
         return false;
     }
-    if (fossil_tofu_is_valid_type(fossil_tofu_type_to_string(tofu1.type)) &&
-        fossil_tofu_is_valid_type(fossil_tofu_type_to_string(tofu2.type))) {
+    if (fossil_tofu_is_valid_type(tofu1.attribute.id) &&
+        fossil_tofu_is_valid_type(tofu2.attribute.id)) {
         return false;
     }
     return tofu1.type == tofu2.type;
@@ -572,15 +574,32 @@ bool fossil_tofu_equal_value(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
         fossil_tofu_is_valid_info(tofu2.attribute.description)) {
         return false;
     }
-    if (fossil_tofu_is_valid_type(fossil_tofu_type_to_string(tofu1.type)) &&
-        fossil_tofu_is_valid_type(fossil_tofu_type_to_string(tofu2.type))) {
+    if (fossil_tofu_is_valid_type(tofu1.attribute.id) &&
+        fossil_tofu_is_valid_type(tofu2.attribute.id)) {
         return false;
     }
 
     switch (tofu1.type) {
         case FOSSIL_TOFU_TYPE_INT:
             return tofu1.value.int_val == tofu2.value.int_val;
+        case FOSSIL_TOFU_TYPE_I8:
+            return tofu1.value.int8_val == tofu2.value.int8_val;
+        case FOSSIL_TOFU_TYPE_I16:
+            return tofu1.value.int16_val == tofu2.value.int16_val;
+        case FOSSIL_TOFU_TYPE_I32:
+            return tofu1.value.int32_val == tofu2.value.int32_val;
+        case FOSSIL_TOFU_TYPE_I64:
+            return tofu1.value.int64_val == tofu2.value.int64_val;
         case FOSSIL_TOFU_TYPE_UINT:
+            return tofu1.value.uint_val == tofu2.value.uint_val;
+        case FOSSIL_TOFU_TYPE_U8:
+            return tofu1.value.uint8_val == tofu2.value.uint8_val;
+        case FOSSIL_TOFU_TYPE_U16:
+            return tofu1.value.uint16_val == tofu2.value.uint16_val;
+        case FOSSIL_TOFU_TYPE_U32:
+            return tofu1.value.uint32_val == tofu2.value.uint32_val;
+        case FOSSIL_TOFU_TYPE_U64:
+            return tofu1.value.uint64_val == tofu2.value.uint64_val;
         case FOSSIL_TOFU_TYPE_HEX:
         case FOSSIL_TOFU_TYPE_OCTAL:
             return tofu1.value.uint_val == tofu2.value.uint_val;
@@ -633,8 +652,8 @@ bool fossil_tofu_equal_attribute(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
         fossil_tofu_is_valid_info(tofu2.attribute.description)) {
         return false;
     }
-    if (fossil_tofu_is_valid_type(fossil_tofu_type_to_string(tofu1.type)) &&
-        fossil_tofu_is_valid_type(fossil_tofu_type_to_string(tofu2.type))) {
+    if (fossil_tofu_is_valid_type(tofu1.attribute.id) &&
+        fossil_tofu_is_valid_type(tofu2.attribute.id)) {
         return false;
     }
     return strcmp(tofu1.attribute.name, tofu2.attribute.name) == 0 &&
