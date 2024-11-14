@@ -35,13 +35,10 @@ enum {
 
 // Enumerated types for representing various data types in the "tofu" data structure.
 typedef enum {
-    FOSSIL_TOFU_TYPE_GHOST, // Ghost type for unknown type.
-    FOSSIL_TOFU_TYPE_INT,
     FOSSIL_TOFU_TYPE_I8,
     FOSSIL_TOFU_TYPE_I16,
     FOSSIL_TOFU_TYPE_I32,
     FOSSIL_TOFU_TYPE_I64,
-    FOSSIL_TOFU_TYPE_UINT,
     FOSSIL_TOFU_TYPE_U8,
     FOSSIL_TOFU_TYPE_U16,
     FOSSIL_TOFU_TYPE_U32,
@@ -50,10 +47,8 @@ typedef enum {
     FOSSIL_TOFU_TYPE_OCTAL,
     FOSSIL_TOFU_TYPE_FLOAT,
     FOSSIL_TOFU_TYPE_DOUBLE,
-    FOSSIL_TOFU_TYPE_BSTR,
     FOSSIL_TOFU_TYPE_WSTR,
     FOSSIL_TOFU_TYPE_CSTR,
-    FOSSIL_TOFU_TYPE_BCHAR,
     FOSSIL_TOFU_TYPE_CCHAR,
     FOSSIL_TOFU_TYPE_WCHAR,
     FOSSIL_TOFU_TYPE_BOOL,
@@ -61,30 +56,9 @@ typedef enum {
     FOSSIL_TOFU_TYPE_ANY
 } fossil_tofu_type_t;
 
-// Union for holding different types of values
-typedef union {
-    int64_t int_val; // for signed int types
-    int8_t int8_val; // for signed int types
-    int16_t int16_val; // for signed int types
-    int32_t int32_val; // for signed int types
-    int64_t int64_val; // for signed int types
-    uint64_t uint_val; // for unsigned int types
-    uint8_t uint8_val; // for unsigned int types
-    uint16_t uint16_val; // for unsigned int types
-    uint32_t uint32_val; // for unsigned int types
-    uint64_t uint64_val; // for unsigned int types
-    double double_val; // for double types
-    float float_val; // for float types
-    uint16_t *uchar_string_val; // for byte string types
-    wchar_t *wchar_string_val; // for wide string types
-    char *cchar_string_val; // for C string type
-    char cchar_val; // for char types
-    wchar_t wchar_val; // for wide char types
-    uint16_t uchar_val; // for byte types
-    size_t size_val; // for size types
-    uint8_t bool_val; // for bool types
-    void *any_val; // for any type, to mimic C++ std::any
-    void *ghost_val; // for ghost type
+typedef struct {
+    char *data;
+    bool mutable;
 } fossil_tofu_value_t;
 
 // Struct for tofu attributes
@@ -102,7 +76,7 @@ typedef struct {
 } fossil_tofu_t;
 
 // *****************************************************************************
-// Function prototypes
+// Managment functions
 // *****************************************************************************
 
 /**
@@ -128,245 +102,232 @@ void fossil_tofu_destroy(fossil_tofu_t *tofu);
 // *****************************************************************************
 
 /**
- * Utility function to print a `fossil_tofu_t` object.
+ * Function to set the value of a `fossil_tofu_t` object.
  *
- * @param tofu The `fossil_tofu_t` object to be printed.
+ * @param tofu Pointer to the `fossil_tofu_t` object.
+ * @param value The value string to be set.
+ * @return `FOSSIL_TOFU_SUCCESS` on success, `FOSSIL_TOFU_FAILURE` on failure.
  * @note O(1) - Constant time complexity.
  */
-void fossil_tofu_print(fossil_tofu_t tofu);
+int fossil_tofu_set_value(fossil_tofu_t *tofu, char *value);
 
 /**
- * Utility function to check if a given type is valid.
+ * Function to get the value of a `fossil_tofu_t` object as a string.
  *
- * @param type The type string to be checked.
- * @return `true` if the type is valid, `false` otherwise.
- * @note O(n) - Linear time complexity, where n is the number of valid types.
+ * @param tofu The `fossil_tofu_t` object.
+ * @return The value string or `NULL` if the object is invalid.
+ * @note O(1) - Constant time complexity.
  */
-bool fossil_tofu_is_valid_type(const char *type);
+char* fossil_tofu_get_value(const fossil_tofu_t *tofu);
 
 /**
- * Utility function to check if two `fossil_tofu_t` objects are equal in value.
+ * Function to check if the `fossil_tofu_t` object is mutable.
+ *
+ * @param tofu The `fossil_tofu_t` object.
+ * @return `true` if mutable, `false` otherwise.
+ * @note O(1) - Constant time complexity.
+ */
+bool fossil_tofu_is_mutable(const fossil_tofu_t *tofu);
+
+/**
+ * Function to set the mutability of the `fossil_tofu_t` object.
+ *
+ * @param tofu Pointer to the `fossil_tofu_t` object.
+ * @param mutable The mutability flag to be set (`true` for mutable, `false` for immutable).
+ * @return `FOSSIL_TOFU_SUCCESS` on success, `FOSSIL_TOFU_FAILURE` on failure.
+ * @note O(1) - Constant time complexity.
+ */
+int fossil_tofu_set_mutable(fossil_tofu_t *tofu, bool mutable);
+
+/**
+ * Function to get the type of a `fossil_tofu_t` object.
+ *
+ * @param tofu The `fossil_tofu_t` object.
+ * @return The type identifier as a `fossil_tofu_type_t` enum value.
+ * @note O(1) - Constant time complexity.
+ */
+fossil_tofu_type_t fossil_tofu_get_type(const fossil_tofu_t *tofu);
+
+/**
+ * Function to get the type name string of a `fossil_tofu_t` object.
+ *
+ * @param type The type identifier.
+ * @return The type name string or `NULL` if invalid.
+ * @note O(1) - Constant time complexity.
+ */
+const char* fossil_tofu_type_name(fossil_tofu_type_t type);
+
+/**
+ * Function to get the description of a `fossil_tofu_t` object type.
+ *
+ * @param type The type identifier.
+ * @return The description string or `NULL` if invalid.
+ * @note O(1) - Constant time complexity.
+ */
+const char* fossil_tofu_type_info(fossil_tofu_type_t type);
+
+/**
+ * Function to display the details of a `fossil_tofu_t` object.
+ *
+ * @param tofu The `fossil_tofu_t` object to display.
+ * @note O(1) - Constant time complexity.
+ */
+void fossil_tofu_display(const fossil_tofu_t *tofu);
+
+/**
+ * Function to validate if a string corresponds to a valid `fossil_tofu_type_t`.
+ *
+ * @param type_str The type string to validate (e.g., "i8", "float").
+ * @return The corresponding `fossil_tofu_type_t` value if valid, `FOSSIL_TOFU_FAILURE` otherwise.
+ * @note O(n) - Linear time complexity based on the number of types.
+ */
+fossil_tofu_type_t fossil_tofu_validate_type(const char *type_str);
+
+/**
+ * Function to set an attribute for the `fossil_tofu_t` object.
+ *
+ * @param tofu Pointer to the `fossil_tofu_t` object.
+ * @param name The attribute name.
+ * @param description The attribute description.
+ * @param id The unique identifier for the attribute.
+ * @return `FOSSIL_TOFU_SUCCESS` on success, `FOSSIL_TOFU_FAILURE` on failure.
+ * @note O(1) - Constant time complexity.
+ */
+int fossil_tofu_set_attribute(fossil_tofu_t *tofu, const char *name, const char *description, const char *id);
+
+/**
+ * Function to get the attribute of the `fossil_tofu_t` object.
+ *
+ * @param tofu The `fossil_tofu_t` object.
+ * @return A pointer to the `fossil_tofu_attribute_t` struct or `NULL` if invalid.
+ * @note O(1) - Constant time complexity.
+ */
+const fossil_tofu_attribute_t* fossil_tofu_get_attribute(const fossil_tofu_t *tofu);
+
+/**
+ * Function to compare two `fossil_tofu_t` objects for equality.
  *
  * @param tofu1 The first `fossil_tofu_t` object.
  * @param tofu2 The second `fossil_tofu_t` object.
- * @return `true` if the objects are equal in value, `false` otherwise.
+ * @return `true` if the objects are equal, `false` otherwise.
  * @note O(1) - Constant time complexity.
  */
-bool fossil_tofu_equal_type(fossil_tofu_t tofu1, fossil_tofu_t tofu2);
+bool fossil_tofu_equals(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2);
 
 /**
- * Utility function to check if two `fossil_tofu_t` objects are equal in attribute.
+ * Function to copy a `fossil_tofu_t` object.
  *
- * @param tofu1 The first `fossil_tofu_t` object.
- * @param tofu2 The second `fossil_tofu_t` object.
- * @return `true` if the objects are equal in attribute, `false` otherwise.
+ * @param dest Pointer to the destination `fossil_tofu_t` object.
+ * @param src The source `fossil_tofu_t` object to copy from.
+ * @return `FOSSIL_TOFU_SUCCESS` on success, `FOSSIL_TOFU_FAILURE` on failure.
  * @note O(1) - Constant time complexity.
  */
-bool fossil_tofu_equal_value(fossil_tofu_t tofu1, fossil_tofu_t tofu2);
-
-/**
- * Utility function to check if two `fossil_tofu_t` objects are equal in attribute.
- *
- * @param tofu1 The first `fossil_tofu_t` object.
- * @param tofu2 The second `fossil_tofu_t` object.
- * @return `true` if the objects are equal in attribute, `false` otherwise.
- * @note O(1) - Constant time complexity.
- */
-bool fossil_tofu_equal_attribute(fossil_tofu_t tofu1, fossil_tofu_t tofu2);
-
-/**
- * Utility function to copy a `fossil_tofu_t` object.
- *
- * @param tofu The `fossil_tofu_t` object to be copied.
- * @return The copied `fossil_tofu_t` object.
- * @note O(1) - Constant time complexity.
- */
-fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu);
-
-/**
- * Utility function to move a `fossil_tofu_t` object.
- *
- * @param tofu The `fossil_tofu_t` object to be moved.
- * @return The moved `fossil_tofu_t` object.
- * @note O(1) - Constant time complexity.
- */
-fossil_tofu_t fossil_tofu_move(fossil_tofu_t tofu);
-
-/**
- * Utility function to get the name of a `fossil_tofu_t` object.
- *
- * @param tofu The `fossil_tofu_t` object.
- * @return The name of the `fossil_tofu_t` object.
- * @note O(1) - Constant time complexity.
- */
-const char *fossil_tofu_get_name(fossil_tofu_t tofu);
-
-/**
- * Utility function to get the info of a `fossil_tofu_t` object.
- *
- * @param tofu The `fossil_tofu_t` object.
- * @return The info of the `fossil_tofu_t` object.
- * @note O(1) - Constant time complexity.
- */
-const char *fossil_tofu_get_info(fossil_tofu_t tofu);
-
-/**
- * Utility function to get the ID of a `fossil_tofu_t` object.
- *
- * @param tofu The `fossil_tofu_t` object.
- * @return The ID of the `fossil_tofu_t` object.
- * @note O(1) - Constant time complexity.
- */
-const char *fossil_tofu_get_id(fossil_tofu_t tofu);
+int fossil_tofu_copy(fossil_tofu_t *dest, const fossil_tofu_t *src);
 
 // *****************************************************************************
 // Algorithm functions
 // *****************************************************************************
 
 /**
- * Transforms elements in an array using a given function.
+ * Function to compare two `fossil_tofu_t` objects.
  *
- * @param array The array of elements to be transformed.
- * @param size The size of the array.
- * @param func The function to be applied to each element.
- * @note O(n) - Linear time complexity, where n is the size of the array.
+ * @param tofu1 The first `fossil_tofu_t` object.
+ * @param tofu2 The second `fossil_tofu_t` object.
+ * @return A negative value if tofu1 < tofu2, 0 if tofu1 == tofu2, or a positive value if tofu1 > tofu2.
  */
-void fossil_tofu_algorithm_transform(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t));
+int fossil_tofu_algorithm_compare(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2);
 
 /**
- * Accumulates elements in an array using a given function and initial value.
+ * Function to search for a `fossil_tofu_t` object in an array of `fossil_tofu_t` objects.
  *
- * @param array The array of elements to be accumulated.
- * @param size The size of the array.
- * @param init The initial value for accumulation.
- * @param func The function to be applied to each element during accumulation.
- * @return The accumulated value.
- * @note O(n) - Linear time complexity, where n is the size of the array.
+ * @param array The array of `fossil_tofu_t` objects.
+ * @param size The number of elements in the array.
+ * @param tofu The `fossil_tofu_t` object to search for.
+ * @return The index of the tofu object if found, or -1 if not found.
  */
-fossil_tofu_t fossil_tofu_algorithm_accumulate(fossil_tofu_t *array, size_t size, fossil_tofu_t init, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t));
+int fossil_tofu_algorithm_search(const fossil_tofu_t *array, size_t size, const fossil_tofu_t *tofu);
 
 /**
- * Filters elements in an array based on a given predicate function.
+ * Function to sort an array of `fossil_tofu_t` objects based on their values.
  *
- * @param array The array of elements to be filtered.
- * @param size The size of the array.
- * @param pred The predicate function to determine whether an element should be included in the filtered result.
- * @return The number of elements that pass the filter.
- * @note O(n) - Linear time complexity, where n is the size of the array.
+ * @param array The array of `fossil_tofu_t` objects.
+ * @param size The number of elements in the array.
+ * @param ascending A boolean flag to indicate sorting order: `true` for ascending, `false` for descending.
+ * @return `FOSSIL_TOFU_SUCCESS` if sorting is successful, or `FOSSIL_TOFU_FAILURE` if an error occurs.
  */
-size_t fossil_tofu_algorithm_filter(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t));
+int fossil_tofu_algorithm_sort(fossil_tofu_t *array, size_t size, bool ascending);
 
 /**
- * Searches for an element in an array using a given key and comparison function.
+ * Function to transform an array of `fossil_tofu_t` objects using a given transformation function.
  *
- * @param array The array of elements to be searched.
- * @param size The size of the array.
- * @param key The key to search for.
- * @param compare The comparison function to determine equality between elements.
- * @return A pointer to the first occurrence of the key in the array, or NULL if not found.
- * @note O(n) - Linear time complexity, where n is the size of the array.
+ * @param array The array of `fossil_tofu_t` objects.
+ * @param size The number of elements in the array.
+ * @param transform_fn A function pointer to a transformation function that modifies `fossil_tofu_t` objects.
+ * @return `FOSSIL_TOFU_SUCCESS` if transformation is successful, or `FOSSIL_TOFU_FAILURE` if an error occurs.
  */
-fossil_tofu_t* fossil_tofu_algorithm_search(fossil_tofu_t *array, size_t size, fossil_tofu_t key, bool (*compare)(fossil_tofu_t, fossil_tofu_t));
+int fossil_tofu_algorithm_transform(fossil_tofu_t *array, size_t size, int (*transform_fn)(fossil_tofu_t *tofu));
 
 /**
- * Reverses the order of elements in an array.
+ * Function to accumulate a value from an array of `fossil_tofu_t` objects based on a given accumulation function.
  *
- * @param array The array of elements to be reversed.
- * @param size The size of the array.
- * @note O(n) - Linear time complexity, where n is the size of the array.
+ * @param array The array of `fossil_tofu_t` objects.
+ * @param size The number of elements in the array.
+ * @param accumulate_fn A function pointer to an accumulation function that processes `fossil_tofu_t` objects.
+ * @param initial The initial value to start the accumulation.
+ * @return The accumulated result.
  */
-void fossil_tofu_algorithm_reverse(fossil_tofu_t *array, size_t size);
+void* fossil_tofu_algorithm_accumulate(const fossil_tofu_t *array, size_t size, void* (*accumulate_fn)(const fossil_tofu_t *tofu, void *accum), void* initial);
 
 /**
- * Swaps two elements in an array.
+ * Function to filter an array of `fossil_tofu_t` objects based on a given filtering function.
  *
- * @param array The array containing the elements to be swapped.
- * @param index1 The index of the first element to be swapped.
- * @param index2 The index of the second element to be swapped.
- * @note O(1) - Constant time complexity.
+ * @param array The array of `fossil_tofu_t` objects.
+ * @param size The number of elements in the array.
+ * @param filter_fn A function pointer to a filtering function that returns `true` if the tofu should be kept, or `false` if it should be excluded.
+ * @param result The filtered result, which will be populated with the matching tofu objects.
+ * @param result_size A pointer to a size variable that will hold the number of filtered elements.
+ * @return `FOSSIL_TOFU_SUCCESS` if filtering is successful, or `FOSSIL_TOFU_FAILURE` if an error occurs.
  */
-void fossil_tofu_algorithm_swap(fossil_tofu_t *array, size_t index1, size_t index2);
+int fossil_tofu_algorithm_filter(const fossil_tofu_t *array, size_t size, bool (*filter_fn)(const fossil_tofu_t *tofu), fossil_tofu_t **result, size_t *result_size);
 
 /**
- * Compares two elements.
+ * Function to reverse an array of `fossil_tofu_t` objects.
  *
- * @param a The first element to be compared.
- * @param b The second element to be compared.
- * @return A negative value if a is less than b, a positive value if a is greater than b, or zero if they are equal.
- * @note O(1) - Constant time complexity.
+ * @param array The array of `fossil_tofu_t` objects.
+ * @param size The number of elements in the array.
+ * @return `FOSSIL_TOFU_SUCCESS` if reversal is successful, or `FOSSIL_TOFU_FAILURE` if an error occurs.
  */
-int fossil_tofu_algorithm_compare(fossil_tofu_t a, fossil_tofu_t b);
+int fossil_tofu_algorithm_reverse(fossil_tofu_t *array, size_t size);
 
 /**
- * Reduces elements in an array using a given function.
+ * Function to find the minimum `fossil_tofu_t` object from an array based on a given comparison function.
  *
- * @param array The array of elements to be reduced.
- * @param size The size of the array.
- * @param func The function to be applied to each pair of elements during reduction.
- * @return The reduced value.
- * @note O(n) - Linear time complexity, where n is the size of the array.
+ * @param array The array of `fossil_tofu_t` objects.
+ * @param size The number of elements in the array.
+ * @param compare_fn A function pointer to a comparison function to determine the minimum.
+ * @return A pointer to the minimum `fossil_tofu_t` object.
  */
-fossil_tofu_t fossil_tofu_algorithm_reduce(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t));
+fossil_tofu_t* fossil_tofu_algorithm_min(const fossil_tofu_t *array, size_t size, int (*compare_fn)(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2));
 
 /**
- * Shuffles elements in an array randomly.
+ * Function to find the maximum `fossil_tofu_t` object from an array based on a given comparison function.
  *
- * @param array The array of elements to be shuffled.
- * @param size The size of the array.
- * @note O(n) - Linear time complexity, where n is the size of the array.
+ * @param array The array of `fossil_tofu_t` objects.
+ * @param size The number of elements in the array.
+ * @param compare_fn A function pointer to a comparison function to determine the maximum.
+ * @return A pointer to the maximum `fossil_tofu_t` object.
  */
-void fossil_tofu_algorithm_shuffle(fossil_tofu_t *array, size_t size);
+fossil_tofu_t* fossil_tofu_algorithm_max(const fossil_tofu_t *array, size_t size, int (*compare_fn)(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2));
 
 /**
- * Applies a function to each element in an array.
+ * Function to calculate the sum of numerical values in an array of `fossil_tofu_t` objects.
  *
- * @param array The array of elements to apply the function to.
- * @param size The size of the array.
- * @param func The function to be applied to each element.
- * @note O(n) - Linear time complexity, where n is the size of the array.
+ * @param array The array of `fossil_tofu_t` objects.
+ * @param size The number of elements in the array.
+ * @param sum_fn A function pointer to a sum function that calculates the sum based on tofu values.
+ * @return The sum result.
  */
-void fossil_tofu_algorithm_for_each(fossil_tofu_t *array, size_t size, void (*func)(fossil_tofu_t));
-
-/**
- * Partitions elements in an array based on a given predicate function.
- *
- * @param array The array of elements to be partitioned.
- * @param size The size of the array.
- * @param pred The predicate function to determine the partitioning condition.
- * @return The index of the first element in the second partition.
- * @note O(n) - Linear time complexity, where n is the size of the array.
- */
-size_t fossil_tofu_algorithm_partition(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t));
-
-/**
- * Calculates the summary of elements in an array using a given function.
- *
- * @param array The array of elements to calculate the summary for.
- * @param size The size of the array.
- * @param func The function to be applied to each pair of elements during calculation.
- * @return The calculated summary.
- * @note O(n) - Linear time complexity, where n is the size of the array.
- */
-fossil_tofu_t fossil_tofu_algorithm_summary(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t));
-
-/**
- * Calculates the average of elements in an array.
- *
- * @param array The array of elements to calculate the average for.
- * @param size The size of the array.
- * @return The calculated average.
- * @note O(n) - Linear time complexity, where n is the size of the array.
- */
-fossil_tofu_t fossil_tofu_algorithm_average(fossil_tofu_t *array, size_t size);
-
-/**
- * Sorts elements in an array using insertion sort algorithm.
- *
- * @param array The array of elements to be sorted.
- * @param size The size of the array.
- * @note O(n^2) - Quadratic time complexity, where n is the size of the array.
- */
-void fossil_tofu_algorithm_sort(fossil_tofu_t *array, size_t size);
+void* fossil_tofu_algorithm_sum(const fossil_tofu_t *array, size_t size, void* (*sum_fn)(const fossil_tofu_t *tofu));
 
 // *****************************************************************************
 // Memory management functions
