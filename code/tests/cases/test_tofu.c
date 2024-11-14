@@ -230,16 +230,16 @@ FOSSIL_TEST_CASE(test_fossil_verification_checks) {
 
     // Create an invalid type (force invalid assumption check)
     fossil_tofu_t tofu_invalid = fossil_tofu_create("int", "abc");  // invalid integer
-    ASSUME_ITS_FALSE(fossil_tofu_equals(tofu_int, tofu_invalid));   // this should fail, catch
+    ASSUME_ITS_FALSE(fossil_tofu_equal_value(tofu_int, tofu_invalid));   // this should fail, catch
 
     // Test verification failure for mismatching types
     fossil_tofu_t tofu_float = fossil_tofu_create("float", "3.14");
-    ASSUME_ITS_FALSE(fossil_tofu_equals(tofu_int, tofu_float));
+    ASSUME_ITS_FALSE(fossil_tofu_equal_value(tofu_int, tofu_float));
 
     // Add more cases to trigger assertion failures and validate xassume behavior
     fossil_tofu_t tofu_bstr = fossil_tofu_create("bstr", "hello");
     ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_BSTR, tofu_bstr.type); // expected to pass
-    ASSUME_ITS_FALSE(fossil_tofu_equals(tofu_float, tofu_bstr));  // this check must succeed
+    ASSUME_ITS_FALSE(fossil_tofu_equal_value(tofu_float, tofu_bstr));  // this check must succeed
 
     // Check for invalid tofu types
     fossil_tofu_t tofu_ghost = fossil_tofu_create("ghost", "invisible");
