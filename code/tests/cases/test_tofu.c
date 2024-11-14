@@ -489,7 +489,7 @@ FOSSIL_TEST_CASE(test_fossil_tofu_algorithm_compare) {
     ASSUME_ITS_LESS_THAN_I32(0, comparison);
 
     comparison = fossil_tofu_algorithm_compare(tofu2, tofu1);
-    ASSUME_ITS_GREATER_THAN_I32(0, comparison);
+    ASSUME_ITS_MORE_THAN_I32(0, comparison);
 
     comparison = fossil_tofu_algorithm_compare(tofu1, tofu1);
     ASSUME_ITS_EQUAL_I32(0, comparison);
@@ -645,7 +645,7 @@ FOSSIL_TEST_CASE(test_compare_different_types) {
     ASSUME_ITS_LESS_THAN_I32(0, comparison);
 
     comparison = fossil_tofu_algorithm_compare(tofu2, tofu1);
-    ASSUME_ITS_GREATER_THAN_I32(0, comparison);
+    ASSUME_ITS_MORE_THAN_I32(0, comparison);
 
     fossil_tofu_t tofu3 = fossil_tofu_create("double", "10.0");
     comparison = fossil_tofu_algorithm_compare(tofu1, tofu3);
