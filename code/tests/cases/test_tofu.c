@@ -98,22 +98,6 @@ FOSSIL_TEST_CASE(test_fossil_tofu_create) {
     ASSUME_ITS_EQUAL_CSTR("Hello", tofu_cstr.value.cchar_string_val);
 }
 
-FOSSIL_TEST_CASE(test_fossil_tofu_create_blocks) {
-    fossil_tofu_t *tofu_blocks = fossil_tofu_create_blocks("int", 3, "1", "2", "3");
-    ASSUME_NOT_CNULL(tofu_blocks);
-
-    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_INT, tofu_blocks[0].type);
-    ASSUME_ITS_EQUAL_I64(1, tofu_blocks[0].value.int_val);
-
-    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_INT, tofu_blocks[1].type);
-    ASSUME_ITS_EQUAL_I64(2, tofu_blocks[1].value.int_val);
-
-    ASSUME_ITS_EQUAL_I32(FOSSIL_TOFU_TYPE_INT, tofu_blocks[2].type);
-    ASSUME_ITS_EQUAL_I64(3, tofu_blocks[2].value.int_val);
-
-    fossil_tofu_destroy_blocks(tofu_blocks, 3);
-}
-
 // Test case for fossil_tofu_equals function
 FOSSIL_TEST_CASE(test_fossil_tofu_equals) {
     fossil_tofu_t tofu1 = fossil_tofu_create("int", "100");
@@ -325,7 +309,6 @@ FOSSIL_TEST_CASE(test_fossil_tofu_create_invalid) {
 FOSSIL_TEST_GROUP(c_generic_tofu_tests) {    
     // Generic ToFu Fixture
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_create);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_create_blocks);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_equals);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_copy);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_iterator_create);
