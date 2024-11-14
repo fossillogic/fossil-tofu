@@ -111,19 +111,42 @@ fossil_tofu_type_t fossil_tofu_validate_type(const char *type_str) {
 fossil_tofu_t fossil_tofu_create(char* type, char* value) {
     fossil_tofu_t tofu;
     fossil_tofu_type_t type_enum = fossil_tofu_validate_type(type);
-    if (type_enum > FOSSIL_TOFU_TYPE_ANY || type_enum < 0) {
+
+    // Validate type and handle failure
+    if (type_enum < FOSSIL_TOFU_TYPE_I8 || type_enum > FOSSIL_TOFU_TYPE_ANY) {
         fprintf(stderr, "Invalid type: %s\n", type);
         tofu.type = FOSSIL_TOFU_TYPE_ANY;
     } else {
         tofu.type = type_enum;
     }
 
+    // Initialize data and check for memory allocation failure
     tofu.value.data = fossil_tofu_strdup(value);
-    tofu.value.mutable = true;
+    if (tofu.value.data == NULL) {
+        fprintf(stderr, "Memory allocation failed for value.data\n");
+        tofu.type = FOSSIL_TOFU_TYPE_ANY; // Set to a safe state if allocation fails
+    } else {
+        tofu.value.mutable = true;
+    }
 
+    // Allocate memory for attributes and check for failures
     tofu.attribute.name = fossil_tofu_strdup(_TOFU_TYPE_NAME[tofu.type]);
+    if (tofu.attribute.name == NULL) {
+        fprintf(stderr, "Memory allocation failed for attribute.name\n");
+        tofu.type = FOSSIL_TOFU_TYPE_ANY; // Set to a safe state if allocation fails
+    }
+
     tofu.attribute.description = fossil_tofu_strdup(_TOFU_TYPE_INFO[tofu.type]);
+    if (tofu.attribute.description == NULL) {
+        fprintf(stderr, "Memory allocation failed for attribute.description\n");
+        tofu.type = FOSSIL_TOFU_TYPE_ANY; // Set to a safe state if allocation fails
+    }
+
     tofu.attribute.id = fossil_tofu_strdup(_TOFU_TYPE_ID[tofu.type]);
+    if (tofu.attribute.id == NULL) {
+        fprintf(stderr, "Memory allocation failed for attribute.id\n");
+        tofu.type = FOSSIL_TOFU_TYPE_ANY; // Set to a safe state if allocation fails
+    }
 
     return tofu;
 }
@@ -235,7 +258,7 @@ int fossil_tofu_copy(fossil_tofu_t *dest, const fossil_tofu_t *src) {
 // *****************************************************************************
 
 int fossil_tofu_algorithm_compare(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2) {
-    if (tofu1 == NULL || tofu2 == NULL) return 0;
+    if (tofu1 == NULL || tofu2 == NULL || tofu1->value.data == NULL || tofu2->value.data == NULL) return 0;
 
     if (tofu1->type != tofu2->type) {
         return (int)tofu1->type - (int)tofu2->type;
@@ -259,12 +282,15 @@ int fossil_tofu_algorithm_search(const fossil_tofu_t *array, size_t size, const 
 int fossil_tofu_algorithm_sort(fossil_tofu_t *array, size_t size, bool ascending) {
     if (array == NULL || size == 0) return FOSSIL_TOFU_FAILURE;
 
-    fossil_tofu_t temp;
+    // Perform sorting using bubble-sort style
     for (size_t i = 0; i < size - 1; i++) {
         for (size_t j = i + 1; j < size; j++) {
             int cmp = fossil_tofu_algorithm_compare(&array[i], &array[j]);
+
+            // Determine if we need to swap based on ascending/descending order
             if ((ascending && cmp > 0) || (!ascending && cmp < 0)) {
-                temp = array[i];
+                // Swap entire `fossil_tofu_t` elements
+                fossil_tofu_t temp = array[i];
                 array[i] = array[j];
                 array[j] = temp;
             }
