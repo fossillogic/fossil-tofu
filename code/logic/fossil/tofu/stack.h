@@ -21,6 +21,10 @@ extern "C"
 {
 #endif
 
+// *****************************************************************************
+// Type definitions
+// *****************************************************************************
+
 // Stack structure
 typedef struct fossil_stack_node_t {
     fossil_tofu_t data; // Data stored in the stack node

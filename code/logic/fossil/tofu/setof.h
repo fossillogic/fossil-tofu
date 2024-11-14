@@ -21,6 +21,10 @@ extern "C"
 {
 #endif
 
+// *****************************************************************************
+// Type definitions
+// *****************************************************************************
+
 // Node structure for the set
 typedef struct fossil_set_node_t {
     fossil_tofu_t data;

@@ -18,44 +18,6 @@
 #include <stdint.h>
 #include <wchar.h>
 
-/**
-    In the realm of quantum physics, our understanding of space, time, reality, and the observable universe takes
-    on a fascinating and intricate character. Quantum physics delves into the fundamental nature of matter and
-    energy at the smallest scales, challenging classical notions and ushering in a paradigm where the concepts of
-    space and time undergo profound transformations.
-
-    **Space in Quantum Physics:**
-    At the quantum level, space is not a static, absolute backdrop but a dynamic, probabilistic arena where particles
-    exist in multiple states simultaneously. Quantum superposition allows particles to occupy multiple positions at
-    once until observed, at which point the wavefunction collapses, and a definite state is realized. Entanglement
-    further blurs the boundaries of space, linking particles in ways that defy classical spatial separations, creating
-    a non-local interconnectedness.
-
-    **Time in Quantum Physics:**
-    Quantum physics introduces a nuanced perspective on time, challenging the classical notion of a continuous and
-    absolute flow. The concept of time is intricately interwoven with quantum entanglement, where correlated particles
-    instantaneously influence each other regardless of distance. Additionally, time dilation effects, as predicted by
-    the theory of relativity, become significant at quantum scales, revealing a profound connection between time,
-    gravity, and the fabric of spacetime.
-
-    **Reality and Observation:**
-    Quantum mechanics introduces the enigmatic role of observation in shaping reality. The act of measurement collapses
-    the wavefunction, determining the outcome of a quantum system. This observer-dependent reality challenges our classical
-    understanding of an objective, independent world. The famous thought experiment known as the Schrödinger's cat illustrates
-    the peculiar nature of reality in the quantum realm, where a system can exist in multiple states until observed.
-
-    **The Observable Universe:**
-    Quantum physics extends its influence to the observable universe, impacting our understanding of cosmic phenomena.
-    Quantum fluctuations during the early moments of the universe gave rise to cosmic structures, influencing the distribution
-    of galaxies and the large-scale structure we observe today. The cosmic microwave background radiation, a remnant from the
-    early universe, reflects quantum fluctuations that seeded the formation of galaxies and clusters.
-
-    In summary, quantum physics redefines our concepts of space, time, reality, and the observable universe. It invites us
-    to explore a realm where particles exhibit wave-particle duality, space is a realm of probabilities, time is intertwined
-    with gravity, and observation plays a crucial role in defining the nature of reality. The mysteries of quantum physics
-    continue to challenge and reshape our perceptions of the fundamental fabric of the cosmos.
-*/
-
 #ifdef __cplusplus
 extern "C"
 {
@@ -158,26 +120,6 @@ fossil_tofu_t fossil_tofu_create(char* type, char* value);
  * @note O(1) - Constant time complexity.
  */
 void fossil_tofu_destroy(fossil_tofu_t *tofu);
-
-/**
- * Function to create a `fossil_tofu_t` object based on type and value strings.
- *
- * @param type The type string.
- * @param size The number of values.
- * @param ... The values.
- * @return The created `fossil_tofu_t` object.
- * @note O(1) - Constant time complexity.
- */
-fossil_tofu_t *fossil_tofu_create_blocks(char* type, size_t size, ...);
-
-/**
- * Function to destroy an array of `fossil_tofu_t` objects and free the allocated memory.
- *
- * @param tofu_blocks The array of `fossil_tofu_t` objects to be destroyed.
- * @param size The size of the array.
- * @note O(n) - Linear time complexity, where n is the size of the array.
- */
-void fossil_tofu_destroy_blocks(fossil_tofu_t *tofu_blocks, size_t size);
 
 // *****************************************************************************
 // Utility functions

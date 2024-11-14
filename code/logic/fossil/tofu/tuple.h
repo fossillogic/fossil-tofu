@@ -21,6 +21,10 @@ extern "C"
 {
 #endif
 
+// *****************************************************************************
+// Type definitions
+// *****************************************************************************
+
 // Define a tuple to hold multiple ToFu elements
 typedef struct {
     fossil_tofu_t* elements;  // Dynamic array of ToFu elements in the tuple

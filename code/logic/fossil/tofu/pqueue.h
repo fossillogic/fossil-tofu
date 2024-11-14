@@ -21,6 +21,10 @@ extern "C"
 {
 #endif
 
+// *****************************************************************************
+// Type definitions
+// *****************************************************************************
+
 typedef struct fossil_pqueue_node_t {
     fossil_tofu_t data;
     int32_t priority;

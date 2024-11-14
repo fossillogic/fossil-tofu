@@ -21,6 +21,10 @@ extern "C"
 {
 #endif
 
+// *****************************************************************************
+// Type definitions
+// *****************************************************************************
+
 // Node structure for the doubly linked list
 typedef struct fossil_dlist_node_t {
     fossil_tofu_t data;

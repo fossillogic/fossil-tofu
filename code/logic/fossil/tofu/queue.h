@@ -21,6 +21,10 @@ extern "C"
 {
 #endif
 
+// *****************************************************************************
+// Type definitions
+// *****************************************************************************
+
 // Node structure for the queue
 typedef struct fossil_queue_node_t {
     fossil_tofu_t data;
