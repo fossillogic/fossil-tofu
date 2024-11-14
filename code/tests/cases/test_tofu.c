@@ -102,16 +102,16 @@ FOSSIL_TEST_CASE(test_fossil_tofu_create) {
 FOSSIL_TEST_CASE(test_fossil_tofu_equals) {
     fossil_tofu_t tofu1 = fossil_tofu_create("int", "100");
     fossil_tofu_t tofu2 = fossil_tofu_create("int", "100");
-    ASSUME_ITS_TRUE(fossil_tofu_equals(tofu1, tofu2));
+    ASSUME_ITS_TRUE(fossil_tofu_equal_value(tofu1, tofu2));
 
     fossil_tofu_t tofu3 = fossil_tofu_create("float", "3.14");
     fossil_tofu_t tofu4 = fossil_tofu_create("float", "3.14");
-    ASSUME_ITS_FALSE(fossil_tofu_equals(tofu1, tofu3));
-    ASSUME_ITS_TRUE(fossil_tofu_equals(tofu3, tofu4));
+    ASSUME_ITS_FALSE(fossil_tofu_equal_value(tofu1, tofu3));
+    ASSUME_ITS_TRUE(fossil_tofu_equal_value(tofu3, tofu4));
 
     fossil_tofu_t tofu5 = fossil_tofu_create("cstr", "Hello");
     fossil_tofu_t tofu6 = fossil_tofu_create("cstr", "Hello");
-    ASSUME_ITS_TRUE(fossil_tofu_equals(tofu5, tofu6));
+    ASSUME_ITS_TRUE(fossil_tofu_equal_value(tofu5, tofu6));
 }
 
 // Test case for fossil_tofu_copy function
@@ -121,50 +121,6 @@ FOSSIL_TEST_CASE(test_fossil_tofu_copy) {
 
     ASSUME_ITS_EQUAL_I32(tofu_orig.type, tofu_copy.type);
     ASSUME_ITS_EQUAL_CSTR(tofu_orig.value.cchar_string_val, tofu_copy.value.cchar_string_val);
-}
-
-FOSSIL_TEST_CASE(test_fossil_tofu_iterator_create) {
-    fossil_tofu_t array[2] = {
-        fossil_tofu_create("int", "1"),
-        fossil_tofu_create("int", "2")
-    };
-    fossil_tofu_iterator_t iterator = fossil_tofu_iterator_create(array, 2);
-    ASSUME_ITS_EQUAL_I32(0, iterator.current_index);
-    ASSUME_ITS_EQUAL_I32(2, iterator.size);
-}
-
-FOSSIL_TEST_CASE(test_fossil_tofu_iterator_has_next) {
-    fossil_tofu_t array[2] = {
-        fossil_tofu_create("int", "1"),
-        fossil_tofu_create("int", "2")
-    };
-    fossil_tofu_iterator_t iterator = fossil_tofu_iterator_create(array, 2);
-    ASSUME_ITS_TRUE(fossil_tofu_iterator_has_next(&iterator));
-    iterator.current_index = 2;
-    ASSUME_ITS_FALSE(fossil_tofu_iterator_has_next(&iterator));
-}
-
-FOSSIL_TEST_CASE(test_fossil_tofu_iterator_next) {
-    fossil_tofu_t array[2] = {
-        fossil_tofu_create("int", "1"),
-        fossil_tofu_create("int", "2")
-    };
-    fossil_tofu_iterator_t iterator = fossil_tofu_iterator_create(array, 2);
-    fossil_tofu_t first = fossil_tofu_iterator_next(&iterator);
-    ASSUME_ITS_EQUAL_I32(1, first.value.int_val);
-    fossil_tofu_t second = fossil_tofu_iterator_next(&iterator);
-    ASSUME_ITS_EQUAL_I32(2, second.value.int_val);
-}
-
-FOSSIL_TEST_CASE(test_fossil_tofu_iterator_reset) {
-    fossil_tofu_t array[2] = {
-        fossil_tofu_create("int", "1"),
-        fossil_tofu_create("int", "2")
-    };
-    fossil_tofu_iterator_t iterator = fossil_tofu_iterator_create(array, 2);
-    fossil_tofu_iterator_next(&iterator);
-    fossil_tofu_iterator_reset(&iterator);
-    ASSUME_ITS_EQUAL_I32(0, iterator.current_index);
 }
 
 // Test for transform function
@@ -311,10 +267,6 @@ FOSSIL_TEST_GROUP(c_generic_tofu_tests) {
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_create);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_equals);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_copy);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_iterator_create);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_iterator_has_next);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_iterator_next);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_fossil_tofu_iterator_reset);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_transform);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_accumulate);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, test_filter);

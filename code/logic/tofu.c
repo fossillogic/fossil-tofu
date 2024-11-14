@@ -25,28 +25,77 @@
 
 // Lookup table for valid strings corresponding to each tofu type.
 static char *_TOFU_TYPE_ID[] = {
-    "ghost", "int", "uint", "hex",
-    "octal", "float", "double",
-    "bstr", "wstr", "cstr",
-    "bchar", "cchar", "wchar",
-    "bool", "size", "any"
+    "ghost",
+    "int",
+    "i8", "i16", "i32", "i64",
+    "uint",
+    "u8", "u16", "u32", "u64",
+    "hex",
+    "octal",
+    "float",
+    "double",
+    "bstr",
+    "wstr",
+    "cstr",
+    "bchar",
+    "cchar",
+    "wchar",
+    "bool",
+    "size",
+    "any"
 };
 
 static char *_TOFU_TYPE_NAME[] = {
-    "Ghost", "Signed Integer", "Unsigned Integer",
-    "Hexadecimal", "Octal", "Float", "Double",
-    "Byte String", "Wide String", "C String",
-    "Byte", "Char", "Wide Char",
-    "Boolean", "Size", "Any"
+    "Ghost",
+    "Signed Integer",
+    "Signed 8-bit Integer",
+    "Signed 16-bit Integer",
+    "Signed 32-bit Integer",
+    "Signed 64-bit Integer",
+    "Unsigned Integer",
+    "Unsigned 8-bit Integer",
+    "Unsigned 16-bit Integer",
+    "Unsigned 32-bit Integer",
+    "Unsigned 64-bit Integer",
+    "Hexadecimal", "Octal",
+    "Float",
+    "Double",
+    "Byte String",
+    "Wide String",
+    "C String",
+    "Byte",
+    "Char",
+    "Wide Char",
+    "Boolean",
+    "Size",
+    "Any"
 };
 
 static char *_TOFU_TYPE_INFO[] = {
-    "Unknown type", "A signed integer value", "An unsigned integer value",
-    "A hexadecimal value", "An octal value", "A single-precision floating point value",
-    "A double-precision floating point value", "A byte string value",
-    "A wide string value", "A C string value", "A byte value",
-    "A character value", "A wide character value", "A boolean value",
-    "A size value", "A generic value"
+    "Unknown type",
+    "A signed integer value",
+    "An 8-bit signed integer value",
+    "A 16-bit signed integer value",
+    "A 32-bit signed integer value",
+    "A 64-bit signed integer value",
+    "An unsigned integer value",
+    "An 8-bit unsigned integer value",
+    "A 16-bit unsigned integer value",
+    "A 32-bit unsigned integer value",
+    "A 64-bit unsigned integer value",
+    "A hexadecimal value",
+    "An octal value",
+    "A single-precision floating point value",
+    "A double-precision floating point value",
+    "A byte string value",
+    "A wide string value",
+    "A C string value",
+    "A byte value",
+    "A character value",
+    "A wide character value",
+    "A boolean value",
+    "A size value",
+    "A generic value"
 };
 
 // Function to check if a string represents a valid integer
@@ -177,106 +226,185 @@ bool fossil_tofu_is_valid_type(const char *type) {
     return false;
 }
 
+bool fossil_tofu_is_valid_name(const char *name) {
+    size_t num_types = sizeof(_TOFU_TYPE_NAME) / sizeof(_TOFU_TYPE_NAME[0]);
+    for (size_t i = 0; i < num_types; i++) {
+        if (strcmp(name, _TOFU_TYPE_NAME[i]) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool fossil_tofu_is_valid_info(const char *info) {
+    size_t num_types = sizeof(_TOFU_TYPE_INFO) / sizeof(_TOFU_TYPE_INFO[0]);
+    for (size_t i = 0; i < num_types; i++) {
+        if (strcmp(info, _TOFU_TYPE_INFO[i]) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // Function to create fossil_tofu_t based on type and value strings with validation checks
 fossil_tofu_t fossil_tofu_create(char *type, char *value) {
-    fossil_tofu_type_t tofu_type = string_to_tofu_type(type);
-    fossil_tofu_t tofu;
-    tofu.type = tofu_type;
+    fossil_tofu_t tofu = {0};
+    if (!type || !value) {
+        fprintf(stderr, "Error: NULL pointer passed to fossil_tofu_create\n");
+        return tofu;
+    }
 
-    switch (tofu_type) {
+    if (!fossil_tofu_is_valid_type(type)) {
+        fprintf(stderr, "Error: Invalid tofu type string '%s'\n", type);
+        return tofu;
+    }
+
+    tofu.type = string_to_tofu_type(type);
+
+    switch (tofu.type) {
         case FOSSIL_TOFU_TYPE_INT:
             tofu.value.int_val = atoll(value);
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_INT];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_INT];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_INT];
+            tofu.attribute.name = "Integer";
+            tofu.attribute.description = "A signed integer value";
+            tofu.attribute.id = "int";
+            break;
+        case FOSSIL_TOFU_TYPE_I8:
+            tofu.value.int8_val = (int8_t)atoll(value);
+            tofu.attribute.name = "8-bit Integer";
+            tofu.attribute.description = "An 8-bit signed integer value";
+            tofu.attribute.id = "i8";
+            break;
+        case FOSSIL_TOFU_TYPE_I16:
+            tofu.value.int16_val = (int16_t)atoll(value);
+            tofu.attribute.name = "16-bit Integer";
+            tofu.attribute.description = "A 16-bit signed integer value";
+            tofu.attribute.id = "i16";
+            break;
+        case FOSSIL_TOFU_TYPE_I32:
+            tofu.value.int32_val = (int32_t)atoll(value);
+            tofu.attribute.name = "32-bit Integer";
+            tofu.attribute.description = "A 32-bit signed integer value";
+            tofu.attribute.id = "i32";
+            break;
+        case FOSSIL_TOFU_TYPE_I64:
+            tofu.value.int64_val = atoll(value);
+            tofu.attribute.name = "64-bit Integer";
+            tofu.attribute.description = "A 64-bit signed integer value";
+            tofu.attribute.id = "i64";
             break;
         case FOSSIL_TOFU_TYPE_UINT:
-            tofu.value.uint_val = strtoull(value, NULL, 10);
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_UINT];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_UINT];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_UINT];
+            tofu.value.uint_val = atoll(value);
+            tofu.attribute.name = "Unsigned Integer";
+            tofu.attribute.description = "An unsigned integer value";
+            tofu.attribute.id = "uint";
+            break;
+        case FOSSIL_TOFU_TYPE_U8:
+            tofu.value.uint8_val = (uint8_t)atoll(value);
+            tofu.attribute.name = "8-bit Unsigned Integer";
+            tofu.attribute.description = "An 8-bit unsigned integer value";
+            tofu.attribute.id = "u8";
+            break;
+        case FOSSIL_TOFU_TYPE_U16:
+            tofu.value.uint16_val = (uint16_t)atoll(value);
+            tofu.attribute.name = "16-bit Unsigned Integer";
+            tofu.attribute.description = "A 16-bit unsigned integer value";
+            tofu.attribute.id = "u16";
+            break;
+        case FOSSIL_TOFU_TYPE_U32:
+            tofu.value.uint32_val = (uint32_t)atoll(value);
+            tofu.attribute.name = "32-bit Unsigned Integer";
+            tofu.attribute.description = "A 32-bit unsigned integer value";
+            tofu.attribute.id = "u32";
+            break;
+        case FOSSIL_TOFU_TYPE_U64:
+            tofu.value.uint64_val = atoll(value);
+            tofu.attribute.name = "64-bit Unsigned Integer";
+            tofu.attribute.description = "A 64-bit unsigned integer value";
+            tofu.attribute.id = "u64";
             break;
         case FOSSIL_TOFU_TYPE_HEX:
             tofu.value.uint_val = parse_hexadecimal(value);
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_HEX];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_HEX];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_HEX];
+            tofu.attribute.name = "Hexadecimal";
+            tofu.attribute.description = "A hexadecimal value";
+            tofu.attribute.id = "hex";
             break;
         case FOSSIL_TOFU_TYPE_OCTAL:
             tofu.value.uint_val = parse_octal(value);
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_OCTAL];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_OCTAL];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_OCTAL];
+            tofu.attribute.name = "Octal";
+            tofu.attribute.description = "An octal value";
+            tofu.attribute.id = "octal";
             break;
         case FOSSIL_TOFU_TYPE_FLOAT:
-            tofu.value.float_val = strtof(value, NULL);
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_FLOAT];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_FLOAT];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_FLOAT];
+            tofu.value.float_val = atof(value);
+            tofu.attribute.name = "Float";
+            tofu.attribute.description = "A single-precision floating point value";
+            tofu.attribute.id = "float";
             break;
         case FOSSIL_TOFU_TYPE_DOUBLE:
-            tofu.value.double_val = strtod(value, NULL);
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_DOUBLE];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_DOUBLE];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_DOUBLE];
+            tofu.value.double_val = atof(value);
+            tofu.attribute.name = "Double";
+            tofu.attribute.description = "A double-precision floating point value";
+            tofu.attribute.id = "double";
             break;
         case FOSSIL_TOFU_TYPE_BSTR:
             tofu.value.uchar_string_val = (uint16_t *)fossil_tofu_strdup(value);
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_BSTR];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_BSTR];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_BSTR];
+            tofu.attribute.name = "Byte String";
+            tofu.attribute.description = "A byte string value";
+            tofu.attribute.id = "bstr";
             break;
         case FOSSIL_TOFU_TYPE_WSTR:
-            tofu.value.wchar_string_val = custom_wcsdup((wchar_t *)value);
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_WSTR];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_WSTR];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_WSTR];
+            tofu.value.wchar_string_val = custom_wcsdup((const wchar_t *)value);
+            tofu.attribute.name = "Wide String";
+            tofu.attribute.description = "A wide string value";
+            tofu.attribute.id = "wstr";
             break;
         case FOSSIL_TOFU_TYPE_CSTR:
             tofu.value.cchar_string_val = fossil_tofu_strdup(value);
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_CSTR];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_CSTR];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_CSTR];
+            tofu.attribute.name = "C String";
+            tofu.attribute.description = "A C string value";
+            tofu.attribute.id = "cstr";
             break;
         case FOSSIL_TOFU_TYPE_BCHAR:
-            tofu.value.uchar_val = (uint16_t)value[0];
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_BCHAR];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_BCHAR];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_BCHAR];
+            tofu.value.uchar_val = (uint8_t)value[0];
+            tofu.attribute.name = "Byte";
+            tofu.attribute.description = "A byte value";
+            tofu.attribute.id = "bchar";
             break;
         case FOSSIL_TOFU_TYPE_CCHAR:
             tofu.value.cchar_val = value[0];
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_CCHAR];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_CCHAR];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_CCHAR];
+            tofu.attribute.name = "Char";
+            tofu.attribute.description = "A character value";
+            tofu.attribute.id = "cchar";
             break;
         case FOSSIL_TOFU_TYPE_WCHAR:
-            tofu.value.wchar_val = ((wchar_t *)value)[0];
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_WCHAR];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_WCHAR];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_WCHAR];
+            tofu.value.wchar_val = (wchar_t)value[0];
+            tofu.attribute.name = "Wide Char";
+            tofu.attribute.description = "A wide character value";
+            tofu.attribute.id = "wchar";
+            break;
+        case FOSSIL_TOFU_TYPE_SIZE:
+            tofu.value.size_val = (size_t)atoll(value);
+            tofu.attribute.name = "Size";
+            tofu.attribute.description = "A size value";
+            tofu.attribute.id = "size";
             break;
         case FOSSIL_TOFU_TYPE_BOOL:
-            if (strcmp(value, "true") == 0) {
-                tofu.value.bool_val = true;
-            } else if (strcmp(value, "false") == 0) {
-                tofu.value.bool_val = false;
-            }
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_BOOL];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_BOOL];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_BOOL];
+            tofu.value.bool_val = strcmp(value, "true") == 0;
+            tofu.attribute.name = "Boolean";
+            tofu.attribute.description = "A boolean value";
+            tofu.attribute.id = "bool";
             break;
-        case FOSSIL_TOFU_TYPE_ANY: // any is void *
+        case FOSSIL_TOFU_TYPE_ANY:
             tofu.value.any_val = (void *)value;
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_ANY];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_ANY];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_ANY];
+            tofu.attribute.name = "Any";
+            tofu.attribute.description = "A generic value";
+            tofu.attribute.id = "any";
             break;
         default:
-            tofu.type = FOSSIL_TOFU_TYPE_GHOST;
-            tofu.attribute.name = _TOFU_TYPE_NAME[FOSSIL_TOFU_TYPE_GHOST];
-            tofu.attribute.description = _TOFU_TYPE_INFO[FOSSIL_TOFU_TYPE_GHOST];
-            tofu.attribute.id = _TOFU_TYPE_ID[FOSSIL_TOFU_TYPE_GHOST];
+            tofu.value.ghost_val = NULL;
+            tofu.attribute.name = "Ghost";
+            tofu.attribute.description = "Spooky ghost type";
+            tofu.attribute.id = "ghost";
             break;
     }
     return tofu;
@@ -328,10 +456,30 @@ void fossil_tofu_print(fossil_tofu_t tofu) {
     printf("Type: %s, Value: ", type_str);
     switch (tofu.type) {
         case FOSSIL_TOFU_TYPE_INT:
+        case FOSSIL_TOFU_TYPE_I64:
             printf("%" PRId64, tofu.value.int_val);
             break;
+        case FOSSIL_TOFU_TYPE_I8:
+            printf("%" PRId8, tofu.value.int8_val);
+            break;
+        case FOSSIL_TOFU_TYPE_I16:
+            printf("%" PRId16, tofu.value.int16_val);
+            break;
+        case FOSSIL_TOFU_TYPE_I32:
+            printf("%" PRId32, tofu.value.int32_val);
+            break;
         case FOSSIL_TOFU_TYPE_UINT:
+        case FOSSIL_TOFU_TYPE_U64:
             printf("%" PRIu64, tofu.value.uint_val);
+            break;
+        case FOSSIL_TOFU_TYPE_U8:
+            printf("%" PRIu8, tofu.value.uint8_val);
+            break;
+        case FOSSIL_TOFU_TYPE_U16:
+            printf("%" PRIu16, tofu.value.uint16_val);
+            break;
+        case FOSSIL_TOFU_TYPE_U32:
+            printf("%" PRIu32, tofu.value.uint32_val);
             break;
         case FOSSIL_TOFU_TYPE_HEX:
             printf("0x%" PRIX64, tofu.value.uint_val);
@@ -391,112 +539,41 @@ void fossil_tofu_print(fossil_tofu_t tofu) {
     printf("\n");
 }
 
-// Utility function to compare two fossil_tofu_t objects
-bool fossil_tofu_compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2) {
-    if (!tofu1 || !tofu2) {
-        fprintf(stderr, "Error: Null pointer passed to fossil_tofu_compare\n");
-        return false;
-    }
-    if (tofu1->type != tofu2->type) return false;
-
-    switch (tofu1->type) {
-        case FOSSIL_TOFU_TYPE_INT:
-            return tofu1->value.int_val == tofu2->value.int_val;
-        case FOSSIL_TOFU_TYPE_UINT:
-        case FOSSIL_TOFU_TYPE_HEX:
-        case FOSSIL_TOFU_TYPE_OCTAL:
-            return tofu1->value.uint_val == tofu2->value.uint_val;
-        case FOSSIL_TOFU_TYPE_FLOAT:
-            return tofu1->value.float_val == tofu2->value.float_val;
-        case FOSSIL_TOFU_TYPE_DOUBLE:
-            return tofu1->value.double_val == tofu2->value.double_val;
-        case FOSSIL_TOFU_TYPE_BSTR:
-            if (!tofu1->value.uchar_string_val || !tofu2->value.uchar_string_val) {
-                return false;
-            }
-            return strcmp((char*)tofu1->value.uchar_string_val, (char*)tofu2->value.uchar_string_val) == 0;
-        case FOSSIL_TOFU_TYPE_WSTR:
-            if (!tofu1->value.wchar_string_val || !tofu2->value.wchar_string_val) {
-                return false;
-            }
-            return wcscmp(tofu1->value.wchar_string_val, tofu2->value.wchar_string_val) == 0;
-        case FOSSIL_TOFU_TYPE_CSTR:
-            if (!tofu1->value.cchar_string_val || !tofu2->value.cchar_string_val) {
-                return false;
-            }
-            return strcmp(tofu1->value.cchar_string_val, tofu2->value.cchar_string_val) == 0;
-        case FOSSIL_TOFU_TYPE_BCHAR:
-            return tofu1->value.uchar_val == tofu2->value.uchar_val;
-        case FOSSIL_TOFU_TYPE_CCHAR:
-            return tofu1->value.cchar_val == tofu2->value.cchar_val;
-        case FOSSIL_TOFU_TYPE_WCHAR:
-            return tofu1->value.wchar_val == tofu2->value.wchar_val;
-        case FOSSIL_TOFU_TYPE_SIZE:
-            return tofu1->value.size_val == tofu2->value.size_val;
-        case FOSSIL_TOFU_TYPE_BOOL:
-            return tofu1->value.bool_val == tofu2->value.bool_val;
-        case FOSSIL_TOFU_TYPE_ANY:
-            return tofu1->value.any_val == tofu2->value.any_val;
-        default:
-            return false;
-    }
-}
-
-// Utility function to check if two fossil_tofu_t objects are equal
-bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
+bool fossil_tofu_equal_type(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
     if (tofu1.type != tofu2.type) {
         return false;
     }
 
-    switch (tofu1.type) {
-        case FOSSIL_TOFU_TYPE_INT:
-            return tofu1.value.int_val == tofu2.value.int_val;
-        case FOSSIL_TOFU_TYPE_UINT:
-        case FOSSIL_TOFU_TYPE_HEX:
-        case FOSSIL_TOFU_TYPE_OCTAL:
-            return tofu1.value.uint_val == tofu2.value.uint_val;
-        case FOSSIL_TOFU_TYPE_FLOAT:
-            return tofu1.value.float_val == tofu2.value.float_val;
-        case FOSSIL_TOFU_TYPE_DOUBLE:
-            return tofu1.value.double_val == tofu2.value.double_val;
-        case FOSSIL_TOFU_TYPE_BSTR:
-            if (!tofu1.value.uchar_string_val || !tofu2.value.uchar_string_val) {
-                return false;
-            }
-            return strcmp((char*)tofu1.value.uchar_string_val, (char*)tofu2.value.uchar_string_val) == 0;
-        case FOSSIL_TOFU_TYPE_WSTR:
-            if (!tofu1.value.wchar_string_val || !tofu2.value.wchar_string_val) {
-                return false;
-            }
-            return wcscmp(tofu1.value.wchar_string_val, tofu2.value.wchar_string_val) == 0;
-        case FOSSIL_TOFU_TYPE_CSTR:
-            if (!tofu1.value.cchar_string_val || !tofu2.value.cchar_string_val) {
-                return false;
-            }
-            return strcmp(tofu1.value.cchar_string_val, tofu2.value.cchar_string_val) == 0;
-        case FOSSIL_TOFU_TYPE_BCHAR:
-            return tofu1.value.uchar_val == tofu2.value.uchar_val;
-        case FOSSIL_TOFU_TYPE_CCHAR:
-            return tofu1.value.cchar_val == tofu2.value.cchar_val;
-        case FOSSIL_TOFU_TYPE_WCHAR:
-            return tofu1.value.wchar_val == tofu2.value.wchar_val;
-        case FOSSIL_TOFU_TYPE_SIZE:
-            return tofu1.value.size_val == tofu2.value.size_val;
-        case FOSSIL_TOFU_TYPE_BOOL:
-            return tofu1.value.bool_val == tofu2.value.bool_val;
-        case FOSSIL_TOFU_TYPE_ANY:
-            return tofu1.value.any_val == tofu2.value.any_val;
-        default:
-            return false;
+    if (fossil_tofu_is_valid_name(tofu1.attribute.name) &&
+        fossil_tofu_is_valid_name(tofu2.attribute.name)) {
+        return false;
     }
-}
-
-bool fossil_tofu_equal_type(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
+    if (fossil_tofu_is_valid_info(tofu1.attribute.description) &&
+        fossil_tofu_is_valid_info(tofu2.attribute.description)) {
+        return false;
+    }
+    if (fossil_tofu_is_valid_type(fossil_tofu_type_to_string(tofu1.type)) &&
+        fossil_tofu_is_valid_type(fossil_tofu_type_to_string(tofu2.type))) {
+        return false;
+    }
     return tofu1.type == tofu2.type;
 }
 
 bool fossil_tofu_equal_value(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
     if (tofu1.type != tofu2.type) {
+        return false;
+    }
+
+    if (fossil_tofu_is_valid_name(tofu1.attribute.name) &&
+        fossil_tofu_is_valid_name(tofu2.attribute.name)) {
+        return false;
+    }
+    if (fossil_tofu_is_valid_info(tofu1.attribute.description) &&
+        fossil_tofu_is_valid_info(tofu2.attribute.description)) {
+        return false;
+    }
+    if (fossil_tofu_is_valid_type(fossil_tofu_type_to_string(tofu1.type)) &&
+        fossil_tofu_is_valid_type(fossil_tofu_type_to_string(tofu2.type))) {
         return false;
     }
 
@@ -544,6 +621,22 @@ bool fossil_tofu_equal_value(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
 }
 
 bool fossil_tofu_equal_attribute(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
+    if (tofu1.type != tofu2.type) {
+        return false;
+    }
+
+    if (fossil_tofu_is_valid_name(tofu1.attribute.name) &&
+        fossil_tofu_is_valid_name(tofu2.attribute.name)) {
+        return false;
+    }
+    if (fossil_tofu_is_valid_info(tofu1.attribute.description) &&
+        fossil_tofu_is_valid_info(tofu2.attribute.description)) {
+        return false;
+    }
+    if (fossil_tofu_is_valid_type(fossil_tofu_type_to_string(tofu1.type)) &&
+        fossil_tofu_is_valid_type(fossil_tofu_type_to_string(tofu2.type))) {
+        return false;
+    }
     return strcmp(tofu1.attribute.name, tofu2.attribute.name) == 0 &&
            strcmp(tofu1.attribute.description, tofu2.attribute.description) == 0 &&
            strcmp(tofu1.attribute.id, tofu2.attribute.id) == 0;
@@ -614,6 +707,27 @@ fossil_tofu_t fossil_tofu_move(fossil_tofu_t tofu) {
     fossil_tofu_t moved = tofu;
     tofu.type = FOSSIL_TOFU_TYPE_GHOST;
     return moved;
+}
+
+const char *fossil_tofu_get_name(fossil_tofu_t tofu) {
+    if (fossil_tofu_is_valid_name(tofu.attribute.name)) {
+        return NULL;
+    }
+    return tofu.attribute.name;
+}
+
+const char *fossil_tofu_get_info(fossil_tofu_t tofu) {
+    if (fossil_tofu_is_valid_info(tofu.attribute.description)) {
+        return NULL;
+    }
+    return tofu.attribute.description;
+}
+
+const char *fossil_tofu_get_id(fossil_tofu_t tofu) {
+    if (fossil_tofu_is_valid_type(fossil_tofu_type_to_string(tofu.type))) {
+        return NULL;
+    }
+    return tofu.attribute.id;
 }
 
 // Function to transform elements in an array
@@ -782,53 +896,6 @@ void fossil_tofu_algorithm_sort(fossil_tofu_t *array, size_t size) {
         }
         array[j] = key;
     }
-}
-
-// Function to create a new iterator for an array of tofu
-fossil_tofu_iterator_t fossil_tofu_iterator_create(fossil_tofu_t *array, size_t size) {
-    fossil_tofu_iterator_t iterator;
-    if (!array || size == 0) {
-        fprintf(stderr, "Error: Invalid array or size\n");
-        iterator.array = NULL;
-        iterator.size = 0;
-        iterator.current_index = 0;
-    } else {
-        iterator.array = array;
-        iterator.size = size;
-        iterator.current_index = 0;
-    }
-    return iterator;
-}
-
-// Function to check if the iterator has more elements
-bool fossil_tofu_iterator_has_next(fossil_tofu_iterator_t *iterator) {
-    if (!iterator || !iterator->array) {
-        fprintf(stderr, "Error: Invalid iterator\n");
-        return false;
-    }
-    return iterator->current_index < iterator->size;
-}
-
-// Function to get the next element in the iterator
-fossil_tofu_t fossil_tofu_iterator_next(fossil_tofu_iterator_t *iterator) {
-    if (!iterator || !iterator->array) {
-        fprintf(stderr, "Error: Invalid iterator\n");
-        return fossil_tofu_create("ghost", ""); // Return a ghost tofu if iterator is invalid
-    }
-    if (fossil_tofu_iterator_has_next(iterator)) {
-        return iterator->array[iterator->current_index++];
-    }
-    fprintf(stderr, "Error: No more elements in iterator\n");
-    return fossil_tofu_create("ghost", ""); // Return a ghost tofu if no more elements
-}
-
-// Function to reset the iterator to the beginning
-void fossil_tofu_iterator_reset(fossil_tofu_iterator_t *iterator) {
-    if (!iterator) {
-        fprintf(stderr, "Error: Invalid iterator\n");
-        return;
-    }
-    iterator->current_index = 0;
 }
 
 /**

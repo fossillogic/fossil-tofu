@@ -37,7 +37,15 @@ enum {
 typedef enum {
     FOSSIL_TOFU_TYPE_GHOST, // Ghost type for unknown type.
     FOSSIL_TOFU_TYPE_INT,
+    FOSSIL_TOFU_TYPE_I8,
+    FOSSIL_TOFU_TYPE_I16,
+    FOSSIL_TOFU_TYPE_I32,
+    FOSSIL_TOFU_TYPE_I64,
     FOSSIL_TOFU_TYPE_UINT,
+    FOSSIL_TOFU_TYPE_U8,
+    FOSSIL_TOFU_TYPE_U16,
+    FOSSIL_TOFU_TYPE_U32,
+    FOSSIL_TOFU_TYPE_U64,
     FOSSIL_TOFU_TYPE_HEX,
     FOSSIL_TOFU_TYPE_OCTAL,
     FOSSIL_TOFU_TYPE_FLOAT,
@@ -56,7 +64,15 @@ typedef enum {
 // Union for holding different types of values
 typedef union {
     int64_t int_val; // for signed int types
+    int8_t int8_val; // for signed int types
+    int16_t int16_val; // for signed int types
+    int32_t int32_val; // for signed int types
+    int64_t int64_val; // for signed int types
     uint64_t uint_val; // for unsigned int types
+    uint8_t uint8_val; // for unsigned int types
+    uint16_t uint16_val; // for unsigned int types
+    uint32_t uint32_val; // for unsigned int types
+    uint64_t uint64_val; // for unsigned int types
     double double_val; // for double types
     float float_val; // for float types
     uint16_t *uchar_string_val; // for byte string types
@@ -68,6 +84,7 @@ typedef union {
     size_t size_val; // for size types
     uint8_t bool_val; // for bool types
     void *any_val; // for any type, to mimic C++ std::any
+    void *ghost_val; // for ghost type
 } fossil_tofu_value_t;
 
 // Struct for tofu attributes
@@ -83,13 +100,6 @@ typedef struct {
     fossil_tofu_value_t value;
     fossil_tofu_attribute_t attribute;
 } fossil_tofu_t;
-
-// Struct for iterator
-typedef struct {
-    fossil_tofu_t *array;
-    size_t size;
-    size_t current_index;
-} fossil_tofu_iterator_t;
 
 // *****************************************************************************
 // Function prototypes
@@ -133,16 +143,6 @@ void fossil_tofu_print(fossil_tofu_t tofu);
  * @note O(n) - Linear time complexity, where n is the number of valid types.
  */
 bool fossil_tofu_is_valid_type(const char *type);
-
-/**
- * Utility function to check if two `fossil_tofu_t` objects are equal.
- *
- * @param tofu1 The first `fossil_tofu_t` object.
- * @param tofu2 The second `fossil_tofu_t` object.
- * @return `true` if the objects are equal, `false` otherwise.
- * @note O(1) - Constant time complexity.
- */
-bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2);
 
 /**
  * Utility function to check if two `fossil_tofu_t` objects are equal in value.
@@ -193,14 +193,31 @@ fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu);
 fossil_tofu_t fossil_tofu_move(fossil_tofu_t tofu);
 
 /**
- * Utility function to compare two `fossil_tofu_t` objects.
+ * Utility function to get the name of a `fossil_tofu_t` object.
  *
- * @param tofu1 The first `fossil_tofu_t` object.
- * @param tofu2 The second `fossil_tofu_t` object.
- * @return `true` if the objects are equal, `false` otherwise.
+ * @param tofu The `fossil_tofu_t` object.
+ * @return The name of the `fossil_tofu_t` object.
  * @note O(1) - Constant time complexity.
  */
-bool fossil_tofu_compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2);
+const char *fossil_tofu_get_name(fossil_tofu_t tofu);
+
+/**
+ * Utility function to get the info of a `fossil_tofu_t` object.
+ *
+ * @param tofu The `fossil_tofu_t` object.
+ * @return The info of the `fossil_tofu_t` object.
+ * @note O(1) - Constant time complexity.
+ */
+const char *fossil_tofu_get_info(fossil_tofu_t tofu);
+
+/**
+ * Utility function to get the ID of a `fossil_tofu_t` object.
+ *
+ * @param tofu The `fossil_tofu_t` object.
+ * @return The ID of the `fossil_tofu_t` object.
+ * @note O(1) - Constant time complexity.
+ */
+const char *fossil_tofu_get_id(fossil_tofu_t tofu);
 
 // *****************************************************************************
 // Algorithm functions
@@ -350,54 +367,6 @@ fossil_tofu_t fossil_tofu_algorithm_average(fossil_tofu_t *array, size_t size);
  * @note O(n^2) - Quadratic time complexity, where n is the size of the array.
  */
 void fossil_tofu_algorithm_sort(fossil_tofu_t *array, size_t size);
-
-// *****************************************************************************
-// Iterator functions
-// *****************************************************************************
-
-/**
- * @brief Function to create a new iterator for an array of tofu.
- *
- * This function creates a new iterator for the given array of tofu with the specified size.
- *
- * @param array The array of tofu.
- * @param size The size of the array.
- * @return The created iterator.
- * @note O(1) - Constant time complexity.
- */
-fossil_tofu_iterator_t fossil_tofu_iterator_create(fossil_tofu_t *array, size_t size);
-
-/**
- * @brief Function to check if the iterator has more elements.
- *
- * This function checks if the iterator has more elements to iterate over.
- *
- * @param iterator The iterator to check.
- * @return true if the iterator has more elements, false otherwise.
- * @note O(1) - Constant time complexity.
- */
-bool fossil_tofu_iterator_has_next(fossil_tofu_iterator_t *iterator);
-
-/**
- * @brief Function to get the next element in the iterator.
- *
- * This function returns the next element in the iterator and advances the iterator to the next position.
- *
- * @param iterator The iterator.
- * @return The next element in the iterator.
- * @note O(1) - Constant time complexity.
- */
-fossil_tofu_t fossil_tofu_iterator_next(fossil_tofu_iterator_t *iterator);
-
-/**
- * @brief Function to reset the iterator to the beginning.
- *
- * This function resets the iterator to the beginning, allowing iteration from the start again.
- *
- * @param iterator The iterator to reset.
- * @note O(1) - Constant time complexity.
- */
-void fossil_tofu_iterator_reset(fossil_tofu_iterator_t *iterator);
 
 // *****************************************************************************
 // Memory management functions
