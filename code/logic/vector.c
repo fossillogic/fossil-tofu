@@ -141,10 +141,3 @@ size_t fossil_vector_size(const fossil_vector_t* vector) {
 size_t fossil_vector_capacity(const fossil_vector_t* vector) {
     return vector->capacity;
 }
-
-void fossil_vector_peek(const fossil_vector_t* vector) {
-    if (!vector) return;
-    for (size_t i = 0; i < vector->size; i++) {
-        fossil_tofu_print(vector->data[i]);
-    }
-}

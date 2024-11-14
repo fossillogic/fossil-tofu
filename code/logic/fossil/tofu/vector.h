@@ -198,15 +198,6 @@ size_t fossil_vector_size(const fossil_vector_t* vector);
  */
 size_t fossil_vector_capacity(const fossil_vector_t* vector);
 
-/**
- * Display the contents of the vector.
- * 
- * Time complexity: O(n)
- *
- * @param vector The vector to peek into.
- */
-void fossil_vector_peek(const fossil_vector_t* vector);
-
 // *****************************************************************************
 // Algorithm functions
 // *****************************************************************************

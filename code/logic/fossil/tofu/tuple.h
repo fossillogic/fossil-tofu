@@ -121,14 +121,6 @@ bool fossil_tuple_is_empty(fossil_tuple_t *tuple);
  */
 void fossil_tuple_clear(fossil_tuple_t *tuple);
 
-/**
- * @brief Prints the contents of the tuple.
- *
- * @param tuple The tuple to print.
- * @note Time complexity: O(n)
- */
-void fossil_tuple_print(fossil_tuple_t *tuple);
-
 // *****************************************************************************
 // Algorithm functions
 // *****************************************************************************

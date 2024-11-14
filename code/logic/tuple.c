@@ -85,18 +85,3 @@ void fossil_tuple_clear(fossil_tuple_t *tuple) {
     }
     tuple->element_count = 0;
 }
-
-void fossil_tuple_print(fossil_tuple_t *tuple) {
-    if (!tuple) {
-        fprintf(stderr, "Error: Invalid tuple\n");
-        return;
-    }
-    printf("Tuple (%s) [", tuple->type);
-    for (size_t i = 0; i < tuple->element_count; i++) {
-        fossil_tofu_print(tuple->elements[i]);
-        if (i < tuple->element_count - 1) {
-            printf(", ");
-        }
-    }
-    printf("]\n");
-}
