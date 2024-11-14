@@ -380,7 +380,7 @@ FOSSIL_TEST_CASE(test_fossil_tofu_algorithm_search) {
     fossil_tofu_t key = fossil_tofu_create("int", "20");
 
     fossil_tofu_t *result = fossil_tofu_algorithm_search(array, size, key, fossil_tofu_equal_value);
-    ASSUME_ITS_NOT_NULL(result);
+    ASSUME_NOT_CNULL(result);
     ASSUME_ITS_EQUAL_I32(20, result->value.int_val);
 }
 
