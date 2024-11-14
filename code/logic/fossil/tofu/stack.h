@@ -32,6 +32,10 @@ typedef struct fossil_stack_t {
     fossil_stack_node_t* top; // Pointer to the top node of the stack
 } fossil_stack_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * Create a new stack with the specified data type.
  *
@@ -48,6 +52,10 @@ fossil_stack_t* fossil_stack_create_container(char* type);
  * @note        Time complexity: O(n)
  */
 void fossil_stack_destroy(fossil_stack_t* stack);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Insert data into the stack.
@@ -121,6 +129,10 @@ bool fossil_stack_is_cnullptr(const fossil_stack_t* stack);
  * @note                Time complexity: O(1)
  */
 fossil_tofu_t fossil_stack_top(fossil_stack_t* stack);
+
+// *****************************************************************************
+// Algorithm functions
+// *****************************************************************************
 
 #ifdef __cplusplus
 }

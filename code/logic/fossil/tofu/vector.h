@@ -29,6 +29,10 @@ typedef struct {
     char* type;
 } fossil_vector_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * Create a new vector with the specified expected type.
  * 
@@ -47,6 +51,10 @@ fossil_vector_t* fossil_vector_create_container(char* type);
  * @param vector The vector to erase.
  */
 void fossil_vector_destroy(fossil_vector_t* vector);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Add an element to the end of the vector.
@@ -194,6 +202,10 @@ size_t fossil_vector_capacity(const fossil_vector_t* vector);
  * @param vector The vector to peek into.
  */
 void fossil_vector_peek(const fossil_vector_t* vector);
+
+// *****************************************************************************
+// Algorithm functions
+// *****************************************************************************
 
 #ifdef __cplusplus
 }

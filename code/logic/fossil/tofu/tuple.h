@@ -29,6 +29,10 @@ typedef struct {
     char* type;               // Expected type of elements in the tuple
 } fossil_tuple_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * @brief Creates a new tuple with a given initial capacity.
  *
@@ -45,6 +49,10 @@ fossil_tuple_t fossil_tuple_create(char *type);
  * @note Time complexity: O(n)
  */
 void fossil_tuple_destroy(fossil_tuple_t *tuple);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * @brief Adds an element to the tuple.
@@ -116,6 +124,10 @@ void fossil_tuple_clear(fossil_tuple_t *tuple);
  * @note Time complexity: O(n)
  */
 void fossil_tuple_print(fossil_tuple_t *tuple);
+
+// *****************************************************************************
+// Algorithm functions
+// *****************************************************************************
 
 #ifdef __cplusplus
 }

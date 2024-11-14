@@ -33,6 +33,10 @@ typedef struct fossil_set_t {
     char* type;
 } fossil_set_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * Create a new set with the specified data type.
  *
@@ -49,6 +53,10 @@ fossil_set_t* fossil_set_create_container(char* type);
  * @note      O(n) - Linear time complexity, where n is the number of elements in the set.
  */
 void fossil_set_destroy(fossil_set_t* set);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Insert data into the set.
@@ -114,6 +122,10 @@ bool fossil_set_is_empty(const fossil_set_t* set);
  * @note      O(1) - Constant time complexity.
  */
 bool fossil_set_is_cnullptr(const fossil_set_t* set);
+
+// *****************************************************************************
+// Algorithm functions
+// *****************************************************************************
 
 #ifdef __cplusplus
 }

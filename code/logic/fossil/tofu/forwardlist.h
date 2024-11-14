@@ -33,6 +33,10 @@ typedef struct fossil_flist_t {
     char* type;
 } fossil_flist_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * Create a new forward list with the specified data type.
  *
@@ -49,6 +53,10 @@ fossil_flist_t* fossil_flist_create_container(char* type);
  * @complexity  O(n)
  */
 void fossil_flist_destroy(fossil_flist_t* flist);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Insert data into the forward list.
@@ -129,6 +137,10 @@ bool fossil_flist_is_empty(const fossil_flist_t* flist);
  * @complexity  O(1)
  */
 bool fossil_flist_is_cnullptr(const fossil_flist_t* flist);
+
+// *****************************************************************************
+// Algorithm functions
+// *****************************************************************************
 
 #ifdef __cplusplus
 }

@@ -35,6 +35,10 @@ typedef struct fossil_dlist_t {
     char* type;
 } fossil_dlist_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * Create a new doubly linked list with the specified data type.
  *
@@ -51,6 +55,10 @@ fossil_dlist_t* fossil_dlist_create_container(char* type);
  * @note        Time complexity: O(n)
  */
 void fossil_dlist_destroy(fossil_dlist_t* dlist);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Insert data into the doubly linked list.
@@ -131,6 +139,10 @@ bool fossil_dlist_is_empty(const fossil_dlist_t* dlist);
  * @note        Time complexity: O(1)
  */
 bool fossil_dlist_is_cnullptr(const fossil_dlist_t* dlist);
+
+// *****************************************************************************
+// Algorithm functions
+// *****************************************************************************
 
 #ifdef __cplusplus
 }

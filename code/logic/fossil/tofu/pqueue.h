@@ -32,6 +32,10 @@ typedef struct fossil_pqueue_t {
     char* type;
 } fossil_pqueue_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * Create a new priority queue with the specified data type.
  *
@@ -48,6 +52,10 @@ fossil_pqueue_t* fossil_pqueue_create_container(char* type);
  * @note         Time complexity: O(n)
  */
 void fossil_pqueue_destroy(fossil_pqueue_t* pqueue);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Insert data into the priority queue with the specified priority.
@@ -114,6 +122,10 @@ bool fossil_pqueue_is_empty(const fossil_pqueue_t* pqueue);
  * @note         Time complexity: O(1)
  */
 bool fossil_pqueue_is_cnullptr(const fossil_pqueue_t* pqueue);
+
+// *****************************************************************************
+// Algorithm functions
+// *****************************************************************************
 
 #ifdef __cplusplus
 }

@@ -34,6 +34,10 @@ typedef struct fossil_queue_t {
     char* type;
 } fossil_queue_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * Create a new queue with the specified data type.
  *
@@ -50,6 +54,10 @@ fossil_queue_t* fossil_queue_create_container(char* type);
  * @note        Time complexity: O(n)
  */
 void fossil_queue_destroy(fossil_queue_t* queue);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Insert data into the queue.
@@ -114,6 +122,10 @@ bool fossil_queue_is_empty(const fossil_queue_t* queue);
  * @note        Time complexity: O(1)
  */
 bool fossil_queue_is_cnullptr(const fossil_queue_t* queue);
+
+// *****************************************************************************
+// Algorithm functions
+// *****************************************************************************
 
 #ifdef __cplusplus
 }

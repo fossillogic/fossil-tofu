@@ -35,6 +35,10 @@ typedef struct fossil_dqueue_t {
     char *type;
 } fossil_dqueue_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * Create a new dynamic queue with the specified data type.
  *
@@ -51,6 +55,10 @@ fossil_dqueue_t* fossil_dqueue_create_container(char* type);
  * @note         Time complexity: O(n)
  */
 void fossil_dqueue_destroy(fossil_dqueue_t* dqueue);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Insert data into the dynamic queue.
@@ -115,6 +123,10 @@ bool fossil_dqueue_is_empty(const fossil_dqueue_t* dqueue);
  * @note         Time complexity: O(1)
  */
 bool fossil_dqueue_is_cnullptr(const fossil_dqueue_t* dqueue);
+
+// *****************************************************************************
+// Algorithm functions
+// *****************************************************************************
 
 #ifdef __cplusplus
 }
