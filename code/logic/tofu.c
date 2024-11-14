@@ -24,7 +24,7 @@
 #include <time.h>
 
 // Lookup table for valid strings corresponding to each tofu type.
-static const char *_TOFU_TYPE_ID[] = {
+static char *_TOFU_TYPE_ID[] = {
     "ghost", "int", "uint", "hex",
     "octal", "float", "double",
     "bstr", "wstr", "cstr",
@@ -32,7 +32,7 @@ static const char *_TOFU_TYPE_ID[] = {
     "bool", "size", "any"
 };
 
-static const char *_TOFU_TYPE_NAME[] = {
+static char *_TOFU_TYPE_NAME[] = {
     "Ghost", "Signed Integer", "Unsigned Integer",
     "Hexadecimal", "Octal", "Float", "Double",
     "Byte String", "Wide String", "C String",
@@ -40,7 +40,7 @@ static const char *_TOFU_TYPE_NAME[] = {
     "Boolean", "Size", "Any"
 };
 
-static const char *_TOFU_TYPE_INFO[] = {
+static char *_TOFU_TYPE_INFO[] = {
     "Unknown type", "A signed integer value", "An unsigned integer value",
     "A hexadecimal value", "An octal value", "A single-precision floating point value",
     "A double-precision floating point value", "A byte string value",
