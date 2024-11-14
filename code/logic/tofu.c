@@ -93,12 +93,15 @@ static char *_TOFU_TYPE_INFO[] = {
 };
 
 fossil_tofu_type_t fossil_tofu_validate_type(const char *type_str) {
-    for (int i = 0; i < sizeof(_TOFU_TYPE_ID) / sizeof(_TOFU_TYPE_ID[0]); ++i) {
+    if (type_str == NULL) return FOSSIL_TOFU_TYPE_ANY;
+
+    for (size_t i = 0; i < sizeof(_TOFU_TYPE_ID) / sizeof(_TOFU_TYPE_ID[0]); i++) {
         if (strcmp(type_str, _TOFU_TYPE_ID[i]) == 0) {
             return (fossil_tofu_type_t)i;
         }
     }
-    return FOSSIL_TOFU_FAILURE;
+
+    return FOSSIL_TOFU_TYPE_ANY;
 }
 
 // *****************************************************************************
@@ -108,7 +111,7 @@ fossil_tofu_type_t fossil_tofu_validate_type(const char *type_str) {
 fossil_tofu_t fossil_tofu_create(char* type, char* value) {
     fossil_tofu_t tofu;
     fossil_tofu_type_t type_enum = fossil_tofu_validate_type(type);
-    if (type_enum == FOSSIL_TOFU_FAILURE) {
+    if (type_enum > FOSSIL_TOFU_TYPE_ANY || type_enum < 0) {
         fprintf(stderr, "Invalid type: %s\n", type);
         tofu.type = FOSSIL_TOFU_TYPE_ANY;
     } else {
