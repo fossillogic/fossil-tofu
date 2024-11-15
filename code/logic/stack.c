@@ -134,7 +134,7 @@ int fossil_stack_algorithm_search(fossil_stack_t* stack, char *element) {
     size_t index = 0;
     fossil_stack_node_t* current = stack->top;
     while (current != NULL) {
-        if (fossil_tofu_compare(&current->data, element) == 0) {
+        if (fossil_tofu_equals(&current->data, element) == 0) {
             return index;
         }
         current = current->next;
@@ -151,7 +151,7 @@ int fossil_stack_algorithm_sort(fossil_stack_t* stack) {
     while (current != NULL) {
         fossil_stack_node_t* temp = current->next;
         while (temp != NULL) {
-            if (fossil_tofu_compare(&current->data, &temp->data) > 0) {
+            if (fossil_tofu_equals(&current->data, &temp->data) > 0) {
                 fossil_tofu_t temp_data = current->data;
                 current->data = temp->data;
                 temp->data = temp_data;

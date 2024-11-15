@@ -68,7 +68,7 @@ int32_t fossil_set_remove(fossil_set_t* set) {
     fossil_set_node_t* current = set->head;
     fossil_set_node_t* prev = NULL;
     while (current != NULL) {
-        if (fossil_tofu_compare(&current->data, set->type) == 0) {
+        if (fossil_tofu_equals(&current->data, set->type) == 0) {
             if (prev == NULL) {
                 set->head = current->next;
             } else {
@@ -121,7 +121,7 @@ int fossil_set_algorithm_search(fossil_set_t* set, char *element) {
     size_t index = 0;
     fossil_set_node_t* current = set->head;
     while (current != NULL) {
-        if (fossil_tofu_compare(&current->data, element) == 0) {
+        if (fossil_tofu_equals(&current->data, element) == 0) {
             return index;
         }
         index++;
@@ -138,7 +138,7 @@ int fossil_set_algorithm_sort(fossil_set_t* set) {
     while (current != NULL) {
         fossil_set_node_t* next = current->next;
         while (next != NULL) {
-            if (fossil_tofu_compare(&current->data, &next->data) > 0) {
+            if (fossil_tofu_equals(&current->data, &next->data) > 0) {
                 fossil_tofu_t temp = current->data;
                 current->data = next->data;
                 next->data = temp;

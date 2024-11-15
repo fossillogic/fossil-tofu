@@ -155,7 +155,7 @@ int32_t fossil_vector_remove(fossil_vector_t* vector) {
         return FOSSIL_TOFU_FAILURE;
     }
     for (size_t i = 0; i < vector->size; i++) {
-        if (fossil_tofu_compare(&vector->data[i], vector->type) == 0) {
+        if (fossil_tofu_equals(&vector->data[i], vector->type) == 0) {
             fossil_vector_pop_at(vector, i);
             return FOSSIL_TOFU_SUCCESS;
         }
@@ -210,7 +210,7 @@ int fossil_vector_algorithm_search(const fossil_vector_t* vector, char *element)
         return FOSSIL_TOFU_FAILURE;
     }
     for (size_t i = 0; i < vector->size; i++) {
-        if (fossil_tofu_compare(&vector->data[i], element) == 0) {
+        if (fossil_tofu_equals(&vector->data[i], element) == 0) {
             return i;
         }
     }
@@ -227,7 +227,7 @@ int fossil_vector_algorithm_sort(fossil_vector_t* vector) {
     }
     for (size_t i = 0; i < vector->size; i++) {
         for (size_t j = i + 1; j < vector->size; j++) {
-            if (fossil_tofu_compare(&vector->data[i], &vector->data[j]) > 0) {
+            if (fossil_tofu_equals(&vector->data[i], &vector->data[j]) > 0) {
                 *temp = vector->data[i];
                 vector->data[i] = vector->data[j];
                 vector->data[j] = *temp;

@@ -121,7 +121,7 @@ int fossil_tuple_algorithm_search(fossil_tuple_t* tuple, char *element) {
         return FOSSIL_TOFU_FAILURE;
     }
     for (size_t i = 0; i < tuple->element_count; i++) {
-        if (fossil_tofu_compare(&tuple->elements[i], element) == 0) {
+        if (fossil_tofu_equals(&tuple->elements[i], element) == 0) {
             return i;
         }
     }

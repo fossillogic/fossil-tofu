@@ -115,7 +115,7 @@ int fossil_queue_algorithm_search(fossil_queue_t* queue, char *element) {
     size_t index = 0;
     fossil_queue_node_t* current = queue->front;
     while (current != NULL) {
-        if (fossil_tofu_compare(&current->data, element) == 0) {
+        if (fossil_tofu_equals(&current->data, element) == 0) {
             return index;
         }
         index++;
@@ -132,7 +132,7 @@ int fossil_queue_algorithm_sort(fossil_queue_t* queue) {
     while (current != NULL) {
         fossil_queue_node_t* temp = current->next;
         while (temp != NULL) {
-            if (fossil_tofu_compare(&current->data, &temp->data) > 0) {
+            if (fossil_tofu_equals(&current->data, &temp->data) > 0) {
                 fossil_tofu_t swap = current->data;
                 current->data = temp->data;
                 temp->data = swap;
