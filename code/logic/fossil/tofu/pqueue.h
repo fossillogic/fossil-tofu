@@ -50,7 +50,7 @@ typedef struct fossil_pqueue_t {
 fossil_pqueue_t* fossil_pqueue_create_container(char* type);
 
 /**
- * Erase the contents of the priority queue and free allocated memory.
+ * Erase the contents of the priority queue and fossil_tofu_free allocated memory.
  *
  * @param pqueue The priority queue to erase.
  * @note         Time complexity: O(n)
@@ -131,7 +131,178 @@ bool fossil_pqueue_is_cnullptr(const fossil_pqueue_t* pqueue);
 // Algorithm functions
 // *****************************************************************************
 
+/**
+ * Search for an element in the queue.
+ *
+ * @param pqueue   The queue to search in.
+ * @param element The element to search for.
+ * @return        The index of the element if found, or -1 if not found.
+ * @note          Time complexity: O(n)
+ */
+int fossil_pqueue_algorithm_search(fossil_pqueue_t* pqueue, char *element);
+
+/**
+ * Sort the queue in ascending order.
+ *
+ * @param pqueue The queue to sort.
+ * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(n^2)
+ */
+int fossil_pqueue_algorithm_sort(fossil_pqueue_t* pqueue);
+
+/**
+ * Reverse the order of the elements in the queue.
+ *
+ * @param pqueue The queue to reverse.
+ * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(n)
+ */
+int fossil_pqueue_algorithm_reverse(fossil_pqueue_t* pqueue);
+
 #ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
+#include <string>
+
+namespace fossil {
+
+/**
+ * Create a new priority queue with the specified data type.
+ *
+ * @param type The type of data the priority queue will store.
+ * @return     The created priority queue.
+ * @note       Time complexity: O(1)
+ */
+fossil_pqueue_t* pqueue_create_container(const std::string& type) {
+    return fossil_pqueue_create_container(const_cast<char*>(type.c_str()));
+}
+
+/**
+ * Erase the contents of the priority queue and free allocated memory.
+ *
+ * @param pqueue The priority queue to erase.
+ * @note         Time complexity: O(n)
+ */
+void pqueue_destroy(fossil_pqueue_t* pqueue) {
+    fossil_pqueue_destroy(pqueue);
+}
+
+/**
+ * Insert data into the priority queue with the specified priority.
+ *
+ * @param pqueue   The priority queue to insert data into.
+ * @param data     The data to insert.
+ * @param priority The priority of the data.
+ * @return         The error code indicating the success or failure of the operation.
+ * @note           Time complexity: O(n)
+ */
+int32_t pqueue_insert(fossil_pqueue_t* pqueue, const std::string& data, int32_t priority) {
+    return fossil_pqueue_insert(pqueue, const_cast<char*>(data.c_str()), priority);
+}
+
+/**
+ * Remove data from the priority queue.
+ *
+ * @param pqueue   The priority queue to remove data from.
+ * @param priority The priority of the data.
+ * @return         The error code indicating the success or failure of the operation.
+ * @note           Time complexity: O(1)
+ */
+int32_t pqueue_remove(fossil_pqueue_t* pqueue, int32_t priority) {
+    return fossil_pqueue_remove(pqueue, priority);
+}
+
+/**
+ * Get the size of the priority queue.
+ *
+ * @param pqueue The priority queue for which to get the size.
+ * @return       The size of the priority queue.
+ * @note         Time complexity: O(1)
+ */
+size_t pqueue_size(const fossil_pqueue_t* pqueue) {
+    return fossil_pqueue_size(pqueue);
+}
+
+/**
+ * Check if the priority queue is not empty.
+ *
+ * @param pqueue The priority queue to check.
+ * @return       True if the priority queue is not empty, false otherwise.
+ * @note         Time complexity: O(1)
+ */
+bool pqueue_not_empty(const fossil_pqueue_t* pqueue) {
+    return fossil_pqueue_not_empty(pqueue);
+}
+
+/**
+ * Check if the priority queue is not a null pointer.
+ *
+ * @param pqueue The priority queue to check.
+ * @return       True if the priority queue is not a null pointer, false otherwise.
+ * @note         Time complexity: O(1)
+ */
+bool pqueue_not_cnullptr(const fossil_pqueue_t* pqueue) {
+    return fossil_pqueue_not_cnullptr(pqueue);
+}
+
+/**
+ * Check if the priority queue is empty.
+ *
+ * @param pqueue The priority queue to check.
+ * @return       True if the priority queue is empty, false otherwise.
+ * @note         Time complexity: O(1)
+ */
+bool pqueue_is_empty(const fossil_pqueue_t* pqueue) {
+    return fossil_pqueue_is_empty(pqueue);
+}
+
+/**
+ * Check if the priority queue is a null pointer.
+ *
+ * @param pqueue The priority queue to check.
+ * @return       True if the priority queue is a null pointer, false otherwise.
+ * @note         Time complexity: O(1)
+ */
+bool pqueue_is_cnullptr(const fossil_pqueue_t* pqueue) {
+    return fossil_pqueue_is_cnullptr(pqueue);
+}
+
+/**
+ * Search for an element in the queue.
+ *
+ * @param pqueue   The queue to search in.
+ * @param element The element to search for.
+ * @return        The index of the element if found, or -1 if not found.
+ * @note          Time complexity: O(n)
+ */
+int pqueue_algorithm_search(fossil_pqueue_t* pqueue, const std::string& element) {
+    return fossil_pqueue_algorithm_search(pqueue, const_cast<char*>(element.c_str()));
+}
+
+/**
+ * Sort the queue in ascending order.
+ *
+ * @param pqueue The queue to sort.
+ * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(n^2)
+ */
+int pqueue_algorithm_sort(fossil_pqueue_t* pqueue) {
+    return fossil_pqueue_algorithm_sort(pqueue);
+}
+
+/**
+ * Reverse the order of the elements in the queue.
+ *
+ * @param pqueue The queue to reverse.
+ * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(n)
+ */
+int pqueue_algorithm_reverse(fossil_pqueue_t* pqueue) {
+    return fossil_pqueue_algorithm_reverse(pqueue);
+}
+
 }
 #endif
 

@@ -18,6 +18,8 @@
 #include <stdint.h>
 #include <wchar.h>
 
+#define INITIAL_CAPACITY 10
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -90,7 +92,7 @@ typedef struct {
 fossil_tofu_t fossil_tofu_create(char* type, char* value);
 
 /**
- * Function to destroy a `fossil_tofu_t` object and free the allocated memory.
+ * Function to destroy a `fossil_tofu_t` object and fossil_tofu_free the allocated memory.
  *
  * @param tofu The `fossil_tofu_t` object to be destroyed.
  * @note O(1) - Constant time complexity.
@@ -363,7 +365,7 @@ tofu_memory_t fossil_tofu_realloc(tofu_memory_t ptr, size_t size);
 /**
  * @brief Free memory.
  * 
- * @param ptr Pointer to the memory to free.
+ * @param ptr Pointer to the memory to fossil_tofu_free.
  * @note O(1) - Constant time complexity.
  */
 void fossil_tofu_free(tofu_memory_t ptr);
@@ -403,7 +405,7 @@ fossil_tofu_t tofu_create(std::string type, std::string value) {
 }
 
 /**
- * Function to destroy a `fossil_tofu_t` object and free the allocated memory.
+ * Function to destroy a `fossil_tofu_t` object and fossil_tofu_free the allocated memory.
  *
  * @param tofu The `fossil_tofu_t` object to be destroyed.
  * @note O(1) - Constant time complexity.

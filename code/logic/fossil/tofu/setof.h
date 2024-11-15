@@ -51,7 +51,7 @@ typedef struct fossil_set_t {
 fossil_set_t* fossil_set_create_container(char* type);
 
 /**
- * Erase the contents of the set and free allocated memory.
+ * Erase the contents of the set and fossil_tofu_free allocated memory.
  *
  * @param set The set to erase.
  * @note      O(n) - Linear time complexity, where n is the number of elements in the set.
@@ -131,8 +131,179 @@ bool fossil_set_is_cnullptr(const fossil_set_t* set);
 // Algorithm functions
 // *****************************************************************************
 
+/**
+ * Search for an element in the set.
+ *
+ * @param set     The set to search in.
+ * @param element The element to search for.
+ * @return        The index of the element if found, or -1 if not found.
+ * @note          O(n) - Linear time complexity, where n is the number of elements in the set.
+ */
+int fossil_set_algorithm_search(fossil_set_t* set, char *element);
+
+/**
+ * Sort the set.
+ *
+ * @param set The set to sort.
+ * @return    The error code indicating the success or failure of the operation.
+ * @note      O(n^2) - Quadratic time complexity, where n is the number of elements in the set.
+ */
+int fossil_set_algorithm_sort(fossil_set_t* set);
+
+/**
+ * Reverse the order of the elements in the set.
+ *
+ * @param set The set to reverse.
+ * @return    The error code indicating the success or failure of the operation.
+ * @note      O(n) - Linear time complexity, where n is the number of elements in the set.
+ */
+int fossil_set_algorithm_reverse(fossil_set_t* set);
+
 #ifdef __cplusplus
 }
+#endif
+
+#ifdef __cplusplus
+#include <string>
+
+namespace fossil {
+
+/**
+ * Create a new set with the specified data type.
+ *
+ * @param list_type The type of data the set will store.
+ * @return          The created set.
+ * @note            O(1) - Constant time complexity.
+ */
+fossil_set_t *set_create_container(const std::string &type) {
+    return fossil_set_create_container(const_cast<char *>(type.c_str()));
+}
+
+/**
+ * Erase the contents of the set and fossil_tofu_free allocated memory.
+ *
+ * @param set The set to erase.
+ * @note      O(n) - Linear time complexity, where n is the number of elements in the set.
+ */
+void set_destroy(fossil_set_t* set) {
+    fossil_set_destroy(set);
+}
+
+/**
+ * Insert data into the set.
+ *
+ * @param set  The set to insert data into.
+ * @param data The data to insert.
+ * @return     The error code indicating the success or failure of the operation.
+ * @note       O(1) - Constant time complexity.
+ */
+int32_t set_insert(fossil_set_t* set, const std::string &data) {
+    return fossil_set_insert(set, const_cast<char *>(data.c_str()));
+}
+
+/**
+ * Remove data from the set.
+ *
+ * @param set  The set to remove data from.
+ * @param data The data to remove.
+ * @return     The error code indicating the success or failure of the operation.
+ * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
+ */
+int32_t set_remove(fossil_set_t* set, const std::string &data) {
+    return fossil_set_remove(set, const_cast<char *>(data.c_str()));
+}
+
+/**
+ * Get the size of the set.
+ *
+ * @param set The set for which to get the size.
+ * @return    The size of the set.
+ * @note      O(n) - Linear time complexity, where n is the number of elements in the set.
+ */
+size_t set_size(const fossil_set_t* set) {
+    return fossil_set_size(set);
+}
+
+/**
+ * Check if the set is not empty.
+ *
+ * @param set The set to check.
+ * @return    True if the set is not empty, false otherwise.
+ * @note      O(1) - Constant time complexity.
+ */
+bool set_not_empty(const fossil_set_t* set) {
+    return fossil_set_not_empty(set);
+}
+
+/**
+ * Check if the set is not a null pointer.
+ *
+ * @param set The set to check.
+ * @return    True if the set is not a null pointer, false otherwise.
+ * @note      O(1) - Constant time complexity.
+ */
+bool set_not_cnullptr(const fossil_set_t* set) {
+    return fossil_set_not_cnullptr(set);
+}
+
+/**
+ * Check if the set is empty.
+ *
+ * @param set The set to check.
+ * @return    True if the set is empty, false otherwise.
+ * @note      O(1) - Constant time complexity.
+ */
+bool set_is_empty(const fossil_set_t* set) {
+    return fossil_set_is_empty(set);
+}
+
+/**
+ * Check if the set is a null pointer.
+ *
+ * @param set The set to check.
+ * @return    True if the set is a null pointer, false otherwise.
+ * @note      O(1) - Constant time complexity.
+ */
+bool set_is_cnullptr(const fossil_set_t* set) {
+    return fossil_set_is_cnullptr(set);
+}
+
+/**
+ * Search for an element in the set.
+ *
+ * @param set     The set to search in.
+ * @param element The element to search for.
+ * @return        The index of the element if found, or -1 if not found.
+ * @note          O(n) - Linear time complexity, where n is the number of elements in the set.
+ */
+int set_algorithm_search(fossil_set_t* set, const std::string &element) {
+    return fossil_set_algorithm_search(set, const_cast<char *>(element.c_str()));
+}
+
+/**
+ * Sort the set.
+ *
+ * @param set The set to sort.
+ * @return    The error code indicating the success or failure of the operation.
+ * @note      O(n^2) - Quadratic time complexity, where n is the number of elements in the set.
+ */
+int set_algorithm_sort(fossil_set_t* set) {
+    return fossil_set_algorithm_sort(set);
+}
+
+/**
+ * Reverse the order of the elements in the set.
+ *
+ * @param set The set to reverse.
+ * @return    The error code indicating the success or failure of the operation.
+ * @note      O(n) - Linear time complexity, where n is the number of elements in the set.
+ */
+int set_algorithm_reverse(fossil_set_t* set) {
+    return fossil_set_algorithm_reverse(set);
+}
+
+}
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

@@ -44,10 +44,10 @@ typedef struct {
  * @return The created tuple.
  * @note Time complexity: O(1)
  */
-fossil_tuple_t fossil_tuple_create(char *type);
+fossil_tuple_t *fossil_tuple_create(char *type);
 
 /**
- * @brief Destroys the tuple and frees the allocated memory.
+ * @brief Destroys the tuple and fossil_tofu_frees the allocated memory.
  *
  * @param tuple The tuple to destroy.
  * @note Time complexity: O(n)
@@ -75,7 +75,7 @@ void fossil_tuple_add(fossil_tuple_t *tuple, char *element);
  * @return The element at the specified index, or NULL if the index is out of bounds.
  * @note Time complexity: O(1)
  */
-fossil_tofu_t fossil_tuple_get(fossil_tuple_t *tuple, size_t index);
+fossil_tofu_t *fossil_tuple_get(fossil_tuple_t *tuple, size_t index);
 
 /**
  * @brief Removes the element at the specified index from the tuple.
@@ -125,7 +125,175 @@ void fossil_tuple_clear(fossil_tuple_t *tuple);
 // Algorithm functions
 // *****************************************************************************
 
+/**
+ * @brief Searches for an element in the tuple.
+ *
+ * @param tuple The tuple to search in.
+ * @param element The element to search for.
+ * @return The index of the element if found, or -1 if not found.
+ * @note Time complexity: O(n)
+ */
+int fossil_tuple_algorithm_search(fossil_tuple_t* tuple, char *element);
+
+/**
+ * @brief Sorts the elements in the tuple.
+ *
+ * @param tuple The tuple to sort.
+ * @return 0 on success, -1 on failure.
+ * @note Time complexity: O(n log n)
+ */
+int fossil_tuple_algorithm_sort(fossil_tuple_t* tuple);
+
+/**
+ * @brief Reverses the elements in the tuple.
+ *
+ * @param tuple The tuple to reverse.
+ * @return 0 on success, -1 on failure.
+ * @note Time complexity: O(n)
+ */
+int fossil_tuple_algorithm_reverse(fossil_tuple_t* tuple);
+
 #ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
+#include <string>
+
+namespace fossil {
+
+/**
+ * @brief Creates a new tuple with a given initial capacity.
+ *
+ * @param type The type of elements in the tuple.
+ * @return The created tuple.
+ * @note Time complexity: O(1)
+ */
+fossil_tuple_t *tuple_create(const std::string& type) {
+    return fossil_tuple_create(const_cast<char*>(type.c_str()));
+}
+
+/**
+ * @brief Destroys the tuple and frees the allocated memory.
+ *
+ * @param tuple The tuple to destroy.
+ * @note Time complexity: O(n)
+ */
+void tuple_destroy(fossil_tuple_t *tuple) {
+    fossil_tuple_destroy(tuple);
+}
+
+/**
+ * @brief Adds an element to the tuple.
+ *
+ * @param tuple The tuple to add the element to.
+ * @param element The element to add.
+ * @note Time complexity: O(1) on average, O(n) in the worst case due to resizing.
+ */
+void tuple_add(fossil_tuple_t *tuple, const std::string& element) {
+    fossil_tuple_add(tuple, const_cast<char*>(element.c_str()));
+}
+
+/**
+ * @brief Gets the element at the specified index from the tuple.
+ *
+ * @param tuple The tuple to get the element from.
+ * @param index The index to get the element at.
+ * @return The element at the specified index, or NULL if the index is out of bounds.
+ * @note Time complexity: O(1)
+ */
+fossil_tofu_t *tuple_get(fossil_tuple_t *tuple, size_t index) {
+    return fossil_tuple_get(tuple, index);
+}
+
+/**
+ * @brief Removes the element at the specified index from the tuple.
+ *
+ * @param tuple The tuple to remove the element from.
+ * @param index The index to remove the element at.
+ * @note Time complexity: O(n)
+ */
+void tuple_remove(fossil_tuple_t *tuple, size_t index) {
+    fossil_tuple_remove(tuple, index);
+}
+
+/**
+ * @brief Gets the number of elements in the tuple.
+ *
+ * @param tuple The tuple to get the size of.
+ * @return The number of elements in the tuple.
+ * @note Time complexity: O(1)
+ */
+size_t tuple_size(fossil_tuple_t *tuple) {
+    return fossil_tuple_size(tuple);
+}
+
+/**
+ * @brief Gets the capacity of the tuple.
+ *
+ * @param tuple The tuple to get the capacity of.
+ * @return The capacity of the tuple.
+ * @note Time complexity: O(1)
+ */
+size_t tuple_capacity(fossil_tuple_t *tuple) {
+    return fossil_tuple_capacity(tuple);
+}
+
+/**
+ * @brief Checks if the tuple is empty.
+ *
+ * @param tuple The tuple to check.
+ * @return true if the tuple is empty, false otherwise.
+ * @note Time complexity: O(1)
+ */
+bool tuple_is_empty(fossil_tuple_t *tuple) {
+    return fossil_tuple_is_empty(tuple);
+}
+
+/**
+ * @brief Clears all elements from the tuple.
+ *
+ * @param tuple The tuple to clear.
+ * @note Time complexity: O(n)
+ */
+void tuple_clear(fossil_tuple_t *tuple) {
+    fossil_tuple_clear(tuple);
+}
+
+/**
+ * @brief Searches for an element in the tuple.
+ *
+ * @param tuple The tuple to search in.
+ * @param element The element to search for.
+ * @return The index of the element if found, or -1 if not found.
+ * @note Time complexity: O(n)
+ */
+int tuple_algorithm_search(fossil_tuple_t* tuple, const std::string& element) {
+    return fossil_tuple_algorithm_search(tuple, const_cast<char*>(element.c_str()));
+}
+
+/**
+ * @brief Sorts the elements in the tuple.
+ *
+ * @param tuple The tuple to sort.
+ * @return 0 on success, -1 on failure.
+ * @note Time complexity: O(n log n)
+ */
+int tuple_algorithm_sort(fossil_tuple_t* tuple) {
+    return fossil_tuple_algorithm_sort(tuple);
+}
+
+/**
+ * @brief Reverses the elements in the tuple.
+ *
+ * @param tuple The tuple to reverse.
+ * @return 0 on success, -1 on failure.
+ * @note Time complexity: O(n)
+ */
+int tuple_algorithm_reverse(fossil_tuple_t* tuple) {
+    return fossil_tuple_algorithm_reverse(tuple);
+}
+
 }
 #endif
 

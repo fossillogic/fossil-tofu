@@ -51,7 +51,7 @@ typedef struct fossil_flist_t {
 fossil_flist_t* fossil_flist_create_container(char* type);
 
 /**
- * Erase the contents of the forward list and free allocated memory.
+ * Erase the contents of the forward list and fossil_tofu_free allocated memory.
  *
  * @param flist The forward list to erase.
  * @complexity  O(n)
@@ -146,7 +146,182 @@ bool fossil_flist_is_cnullptr(const fossil_flist_t* flist);
 // Algorithm functions
 // *****************************************************************************
 
+/**
+ * Search for an element in the forward list.
+ *
+ * @param flist   The forward list to search in.
+ * @param element The element to search for.
+ * @return        The index of the element if found, or -1 if not found.
+ * @complexity    O(n)
+ */
+int fossil_flist_algorithm_search(fossil_flist_t* flist, char *element);
+
+/**
+ * Sort the forward list in ascending order.
+ *
+ * @param flist The forward list to sort.
+ * @return      The error code indicating the success or failure of the operation.
+ * @complexity  O(n^2)
+ */
+int fossil_flist_algorithm_sort(fossil_flist_t* flist);
+
+/**
+ * Reverse the forward list.
+ *
+ * @param flist The forward list to reverse.
+ * @return      The error code indicating the success or failure of the operation.
+ * @complexity  O(n)
+ */
+int fossil_flist_algorithm_reverse(fossil_flist_t* flist);
+
 #ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
+#include <string>
+
+namespace fossil {
+
+/**
+ * Create a new forward list with the specified data type.
+ *
+ * @param type The type of data the forward list will store.
+ * @return     The created forward list.
+ */
+fossil_flist_t *flist_create_container(const std::string &type) {
+    return fossil_flist_create_container(const_cast<char *>(type.c_str()));
+}
+
+/**
+ * Erase the contents of the forward list and free allocated memory.
+ *
+ * @param flist The forward list to erase.
+ */
+void flist_destroy(fossil_flist_t *flist) {
+    fossil_flist_destroy(flist);
+}
+
+/**
+ * Insert data into the forward list.
+ *
+ * @param flist The forward list to insert data into.
+ * @param data  The data to insert.
+ * @return      The error code indicating the success or failure of the operation.
+ */
+int32_t flist_insert(fossil_flist_t *flist, const std::string &data) {
+    return fossil_flist_insert(flist, const_cast<char *>(data.c_str()));
+}
+
+/**
+ * Remove data from the forward list.
+ *
+ * @param flist The forward list to remove data from.
+ * @return      The error code indicating the success or failure of the operation.
+ */
+int32_t flist_remove(fossil_flist_t *flist) {
+    return fossil_flist_remove(flist);
+}
+
+/**
+ * Reverse the forward list in the forward direction.
+ *
+ * @param flist The forward list to reverse.
+ */
+void flist_reverse_forward(fossil_flist_t *flist) {
+    fossil_flist_reverse_forward(flist);
+}
+
+/**
+ * Reverse the forward list in the backward direction.
+ *
+ * @param flist The forward list to reverse.
+ */
+void flist_reverse_backward(fossil_flist_t *flist) {
+    fossil_flist_reverse_backward(flist);
+}
+
+/**
+ * Get the size of the forward list.
+ *
+ * @param flist The forward list for which to get the size.
+ * @return      The size of the forward list.
+ */
+size_t flist_size(const fossil_flist_t *flist) {
+    return fossil_flist_size(flist);
+}
+
+/**
+ * Check if the forward list is not empty.
+ *
+ * @param flist The forward list to check.
+ * @return      True if the forward list is not empty, false otherwise.
+ */
+bool flist_not_empty(const fossil_flist_t *flist) {
+    return fossil_flist_not_empty(flist);
+}
+
+/**
+ * Check if the forward list is not a null pointer.
+ *
+ * @param flist The forward list to check.
+ * @return      True if the forward list is not a null pointer, false otherwise.
+ */
+bool flist_not_cnullptr(const fossil_flist_t *flist) {
+    return fossil_flist_not_cnullptr(flist);
+}
+
+/**
+ * Check if the forward list is empty.
+ *
+ * @param flist The forward list to check.
+ * @return      True if the forward list is empty, false otherwise.
+ */
+bool flist_is_empty(const fossil_flist_t *flist) {
+    return fossil_flist_is_empty(flist);
+}
+
+/**
+ * Check if the forward list is a null pointer.
+ *
+ * @param flist The forward list to check.
+ * @return      True if the forward list is a null pointer, false otherwise.
+ */
+bool flist_is_cnullptr(const fossil_flist_t *flist) {
+    return fossil_flist_is_cnullptr(flist);
+}
+
+/**
+ * Search for an element in the forward list.
+ *
+ * @param flist   The forward list to search in.
+ * @param element The element to search for.
+ * @return        The index of the element if found, or -1 if not found.
+ */
+int flist_algorithm_search(fossil_flist_t *flist, const std::string &element) {
+    return fossil_flist_algorithm_search(flist, const_cast<char *>(element.c_str()));
+}
+
+/**
+ * Sort the forward list in ascending order.
+ *
+ * @param flist The forward list to sort.
+ * @return      The error code indicating the success or failure of the operation.
+ */
+int flist_algorithm_sort(fossil_flist_t *flist) {
+    return fossil_flist_algorithm_sort(flist);
+}
+
+/**
+ * Reverse the forward list.
+ *
+ * @param flist The forward list to reverse.
+ * @return      The error code indicating the success or failure of the operation.
+ */
+int flist_algorithm_reverse(fossil_flist_t *flist) {
+    return fossil_flist_algorithm_reverse(flist);
+}
+
 }
 #endif
 
