@@ -126,7 +126,7 @@ fossil_tofu_t fossil_tofu_create(char* type, char* value) {
         fprintf(stderr, "Memory allocation failed for value.data\n");
         tofu.type = FOSSIL_TOFU_TYPE_ANY; // Set to a safe state if allocation fails
     } else {
-        tofu.value.mutable = true;
+        tofu.value.mutable_flag = true;
     }
 
     // Allocate memory for attributes and check for failures
@@ -164,7 +164,7 @@ void fossil_tofu_destroy(fossil_tofu_t *tofu) {
 // *****************************************************************************
 
 int fossil_tofu_set_value(fossil_tofu_t *tofu, char *value) {
-    if (tofu == NULL || !tofu->value.mutable) return FOSSIL_TOFU_FAILURE;
+    if (tofu == NULL || !tofu->value.mutable_flag) return FOSSIL_TOFU_FAILURE;
 
     fossil_tofu_free(tofu->value.data);
     tofu->value.data = fossil_tofu_strdup(value);
@@ -176,13 +176,13 @@ char* fossil_tofu_get_value(const fossil_tofu_t *tofu) {
 }
 
 bool fossil_tofu_is_mutable(const fossil_tofu_t *tofu) {
-    return tofu != NULL && tofu->value.mutable;
+    return tofu != NULL && tofu->value.mutable_flag;
 }
 
-int fossil_tofu_set_mutable(fossil_tofu_t *tofu, bool mutable) {
+int fossil_tofu_set_mutable(fossil_tofu_t *tofu, bool mutable_flag) {
     if (tofu == NULL) return FOSSIL_TOFU_FAILURE;
 
-    tofu->value.mutable = mutable;
+    tofu->value.mutable_flag = mutable_flag;
     return FOSSIL_TOFU_SUCCESS;
 }
 
@@ -244,7 +244,7 @@ int fossil_tofu_copy(fossil_tofu_t *dest, const fossil_tofu_t *src) {
 
     dest->type = src->type;
     dest->value.data = fossil_tofu_strdup(src->value.data);
-    dest->value.mutable = src->value.mutable;
+    dest->value.mutable_flag = src->value.mutable_flag;
 
     dest->attribute.name = fossil_tofu_strdup(src->attribute.name);
     dest->attribute.description = fossil_tofu_strdup(src->attribute.description);
