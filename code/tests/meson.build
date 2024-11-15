@@ -4,7 +4,7 @@ if get_option('with_test').enabled()
     test_c   = ['unit_runner.c']
     test_cpp = ['unit_runner.cpp']
     test_cases = [
-        'tofu',
+        'tofu', 'tuple', 'vector'
     ]
 
     foreach cases : test_cases
