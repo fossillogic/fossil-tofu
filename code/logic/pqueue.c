@@ -16,120 +16,91 @@
 #include <stdlib.h>
 #include <string.h>
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 fossil_pqueue_t* fossil_pqueue_create_container(char* type) {
     fossil_pqueue_t* pqueue = (fossil_pqueue_t*)fossil_tofu_alloc(sizeof(fossil_pqueue_t));
-    if (!pqueue) {
+    if (pqueue == NULL) {
         return NULL;
     }
+    pqueue->type = type;
     pqueue->front = NULL;
-    pqueue->type = fossil_tofu_strdup(type);
     return pqueue;
 }
 
 void fossil_pqueue_destroy(fossil_pqueue_t* pqueue) {
-    if (!pqueue) {
+    if (pqueue == NULL) {
         return;
     }
-
-    fossil_pqueue_node_t* current = pqueue->front;
-    while (current) {
-        fossil_pqueue_node_t* next = current->next;
-        fossil_tofu_destroy(&current->data);
-        fossil_tofu_free(current);
-        current = next;
+    while (pqueue->front != NULL) {
+        fossil_pqueue_node_t* temp = pqueue->front;
+        pqueue->front = pqueue->front->next;
+        fossil_tofu_destroy(&temp->data);
+        fossil_tofu_free(temp);
     }
-
-    fossil_tofu_free(pqueue->type);
     fossil_tofu_free(pqueue);
 }
 
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
+
 int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, char *data, int32_t priority) {
-    if (!pqueue) {
-        return -1;
+    if (pqueue == NULL) {
+        return FOSSIL_TOFU_FAILURE;
     }
-
-    if (!pqueue->front) {
-        pqueue->front = (fossil_pqueue_node_t*)fossil_tofu_alloc(sizeof(fossil_pqueue_node_t));
-        if (!pqueue->front) {
-            return -1;
-        }
-        pqueue->front->data = fossil_tofu_create(pqueue->type, data);
-        pqueue->front->priority = priority;
-        pqueue->front->next = NULL;
-        return 0;
-    }
-
-    fossil_pqueue_node_t* current = pqueue->front;
-    fossil_pqueue_node_t* previous = NULL;
-    while (current && current->priority < priority) {
-        previous = current;
-        current = current->next;
-    }
-
     fossil_pqueue_node_t* node = (fossil_pqueue_node_t*)fossil_tofu_alloc(sizeof(fossil_pqueue_node_t));
-    if (!node) {
-        return -1;
+    if (node == NULL) {
+        return FOSSIL_TOFU_FAILURE;
     }
     node->data = fossil_tofu_create(pqueue->type, data);
     node->priority = priority;
-    node->next = current;
-
-    if (previous) {
-        previous->next = node;
-    } else {
+    node->next = NULL;
+    if (pqueue->front == NULL) {
         pqueue->front = node;
+    } else {
+        fossil_pqueue_node_t* current = pqueue->front;
+        fossil_pqueue_node_t* prev = NULL;
+        while (current != NULL && current->priority < priority) {
+            prev = current;
+            current = current->next;
+        }
+        if (prev == NULL) {
+            node->next = pqueue->front;
+            pqueue->front = node;
+        } else {
+            prev->next = node;
+            node->next = current;
+        }
     }
-
-    return 0;
+    return FOSSIL_TOFU_SUCCESS;
 }
 
 int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, int32_t priority) {
-    if (!pqueue) {
-        return -1;
+    if (pqueue == NULL || pqueue->front == NULL) {
+        return FOSSIL_TOFU_FAILURE;
     }
-
-    fossil_pqueue_node_t* current = pqueue->front;
-    fossil_pqueue_node_t* previous = NULL;
-    while (current && current->priority != priority) {
-        previous = current;
-        current = current->next;
-    }
-
-    if (!current) {
-        return -1;
-    }
-
-    if (previous) {
-        previous->next = current->next;
-    } else {
-        pqueue->front = current->next;
-    }
-
-    fossil_tofu_destroy(&current->data);
-    fossil_tofu_free(current);
-    return 0;
+    fossil_pqueue_node_t* temp = pqueue->front;
+    pqueue->front = pqueue->front->next;
+    fossil_tofu_destroy(&temp->data);
+    fossil_tofu_free(temp);
+    return FOSSIL_TOFU_SUCCESS;
 }
 
 size_t fossil_pqueue_size(const fossil_pqueue_t* pqueue) {
-    if (!pqueue) {
-        return 0;
-    }
-
     size_t size = 0;
     fossil_pqueue_node_t* current = pqueue->front;
-    while (current) {
+    while (current != NULL) {
         size++;
         current = current->next;
     }
-
     return size;
 }
 
 bool fossil_pqueue_not_empty(const fossil_pqueue_t* pqueue) {
-    if (!pqueue) {
-        return false;
-    }
-    return pqueue->front != NULL;
+    return pqueue != NULL && pqueue->front != NULL;
 }
 
 bool fossil_pqueue_not_cnullptr(const fossil_pqueue_t* pqueue) {
@@ -137,12 +108,66 @@ bool fossil_pqueue_not_cnullptr(const fossil_pqueue_t* pqueue) {
 }
 
 bool fossil_pqueue_is_empty(const fossil_pqueue_t* pqueue) {
-    if (!pqueue) {
-        return false;
-    }
-    return pqueue->front == NULL;
+    return pqueue == NULL || pqueue->front == NULL;
 }
 
 bool fossil_pqueue_is_cnullptr(const fossil_pqueue_t* pqueue) {
     return pqueue == NULL;
+}
+
+// *****************************************************************************
+// Algorithm functions
+// *****************************************************************************
+
+int fossil_pqueue_algorithm_search(fossil_pqueue_t* pqueue, char *element) {
+    if (pqueue == NULL) {
+        return FOSSIL_TOFU_FAILURE;
+    }
+    size_t index = 0;
+    fossil_pqueue_node_t* current = pqueue->front;
+    while (current != NULL) {
+        if (fossil_tofu_compare(&current->data, element) == 0) {
+            return index;
+        }
+        index++;
+        current = current->next;
+    }
+    return FOSSIL_TOFU_FAILURE;
+}
+
+int fossil_pqueue_algorithm_sort(fossil_pqueue_t* pqueue) {
+    if (pqueue == NULL) {
+        return FOSSIL_TOFU_FAILURE;
+    }
+    fossil_pqueue_node_t* current = pqueue->front;
+    while (current != NULL) {
+        fossil_pqueue_node_t* temp = current->next;
+        while (temp != NULL) {
+            if (fossil_tofu_compare(&current->data, &temp->data) > 0) {
+                fossil_tofu_t swap = current->data;
+                current->data = temp->data;
+                temp->data = swap;
+            }
+            temp = temp->next;
+        }
+        current = current->next;
+    }
+    return FOSSIL_TOFU_SUCCESS;
+}
+
+int fossil_pqueue_algorithm_reverse(fossil_pqueue_t* pqueue) {
+    if (pqueue == NULL) {
+        return FOSSIL_TOFU_FAILURE;
+    }
+    fossil_pqueue_node_t* current = pqueue->front;
+    fossil_pqueue_node_t* prev = NULL;
+    fossil_pqueue_node_t* next = NULL;
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    pqueue->front = prev;
+    return FOSSIL_TOFU_SUCCESS;
 }

@@ -258,7 +258,7 @@ int fossil_tofu_copy(fossil_tofu_t *dest, const fossil_tofu_t *src) {
 // *****************************************************************************
 
 int fossil_tofu_algorithm_compare(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2) {
-    if (tofu1 == NULL || tofu2 == NULL || tofu1->value.data == NULL || tofu2->value.data == NULL) return 0;
+    if (tofu1 == NULL || tofu2 == NULL || tofu1->value.data == NULL || tofu2->value.data == NULL) return FOSSIL_TOFU_SUCCESS;
 
     if (tofu1->type != tofu2->type) {
         return (int)tofu1->type - (int)tofu2->type;
@@ -268,7 +268,7 @@ int fossil_tofu_algorithm_compare(const fossil_tofu_t *tofu1, const fossil_tofu_
 }
 
 int fossil_tofu_algorithm_search(const fossil_tofu_t *array, size_t size, const fossil_tofu_t *tofu) {
-    if (array == NULL || tofu == NULL) return -1;
+    if (array == NULL || tofu == NULL) return FOSSIL_TOFU_FAILURE;
 
     for (size_t i = 0; i < size; i++) {
         if (fossil_tofu_equals(&array[i], tofu)) {
@@ -276,7 +276,7 @@ int fossil_tofu_algorithm_search(const fossil_tofu_t *array, size_t size, const 
         }
     }
 
-    return -1;
+    return FOSSIL_TOFU_FAILURE;
 }
 
 int fossil_tofu_algorithm_sort(fossil_tofu_t *array, size_t size, bool ascending) {
