@@ -176,8 +176,8 @@ int32_t set_insert(fossil_set_t* set, const std::string &data) {
  * @return     The error code indicating the success or failure of the operation.
  * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
  */
-int32_t set_erase(fossil_set_t* set) {
-    return fossil_set_erase(set);
+void set_erase(fossil_set_t* set) {
+    fossil_set_erase(set);
 }
 
 /**
