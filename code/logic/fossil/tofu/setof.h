@@ -80,7 +80,7 @@ int32_t fossil_set_insert(fossil_set_t* set, char *data);
  * @return     The error code indicating the success or failure of the operation.
  * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
  */
-int32_t fossil_set_remove(fossil_set_t* set);
+void fossil_set_erase(fossil_set_t *set);
 
 /**
  * Get the size of the set.
@@ -173,12 +173,11 @@ int32_t set_insert(fossil_set_t* set, const std::string &data) {
  * Remove data from the set.
  *
  * @param set  The set to remove data from.
- * @param data The data to remove.
  * @return     The error code indicating the success or failure of the operation.
  * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
  */
-int32_t set_remove(fossil_set_t* set, const std::string &data) {
-    return fossil_set_remove(set, const_cast<char *>(data.c_str()));
+int32_t set_erase(fossil_set_t* set) {
+    return fossil_set_erase(set);
 }
 
 /**

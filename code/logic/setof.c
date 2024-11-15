@@ -61,27 +61,16 @@ int32_t fossil_set_insert(fossil_set_t* set, char *data) {
     return FOSSIL_TOFU_SUCCESS;
 }
 
-int32_t fossil_set_remove(fossil_set_t* set) {
+void fossil_set_erase(fossil_set_t *set) {
     if (set == NULL) {
-        return FOSSIL_TOFU_FAILURE;
+        return;
     }
-    fossil_set_node_t* current = set->head;
-    fossil_set_node_t* prev = NULL;
-    while (current != NULL) {
-        if (current == set->head) {
-            if (prev == NULL) {
-                set->head = current->next;
-            } else {
-                prev->next = current->next;
-            }
-            fossil_tofu_destroy(&current->data);
-            fossil_tofu_free(current);
-            return FOSSIL_TOFU_SUCCESS;
-        }
-        prev = current;
-        current = current->next;
+    while (set->head != NULL) {
+        fossil_set_node_t* temp = set->head;
+        set->head = set->head->next;
+        fossil_tofu_destroy(&temp->data);
+        fossil_tofu_free(temp);
     }
-    return FOSSIL_TOFU_FAILURE;
 }
 
 size_t fossil_set_size(const fossil_set_t* set) {
