@@ -82,10 +82,22 @@ int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, int32_t priority) {
     if (pqueue == NULL || pqueue->front == NULL) {
         return FOSSIL_TOFU_FAILURE;
     }
-    fossil_pqueue_node_t* temp = pqueue->front;
-    pqueue->front = pqueue->front->next;
-    fossil_tofu_destroy(&temp->data);
-    fossil_tofu_free(temp);
+    fossil_pqueue_node_t* current = pqueue->front;
+    fossil_pqueue_node_t* prev = NULL;
+    while (current != NULL && current->priority != priority) {
+        prev = current;
+        current = current->next;
+    }
+    if (current == NULL) {
+        return FOSSIL_TOFU_FAILURE; // Node with the given priority not found
+    }
+    if (prev == NULL) {
+        pqueue->front = current->next;
+    } else {
+        prev->next = current->next;
+    }
+    fossil_tofu_destroy(&current->data);
+    fossil_tofu_free(current);
     return FOSSIL_TOFU_SUCCESS;
 }
 
