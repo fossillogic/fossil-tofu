@@ -17,21 +17,6 @@
 #include <string.h>
 
 // *****************************************************************************
-// Type definitions
-// *****************************************************************************
-
-// Stack structure
-typedef struct fossil_stack_node_t {
-    fossil_tofu_t data; // Data stored in the stack node
-    struct fossil_stack_node_t* next; // Pointer to the next node
-} fossil_stack_node_t;
-
-typedef struct fossil_stack_t {
-    char* type; // Type of the stack
-    fossil_stack_node_t* top; // Pointer to the top node of the stack
-} fossil_stack_t;
-
-// *****************************************************************************
 // Function prototypes
 // *****************************************************************************
 
