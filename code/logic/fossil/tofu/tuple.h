@@ -121,38 +121,6 @@ bool fossil_tuple_is_empty(fossil_tuple_t *tuple);
  */
 void fossil_tuple_clear(fossil_tuple_t *tuple);
 
-// *****************************************************************************
-// Algorithm functions
-// *****************************************************************************
-
-/**
- * @brief Searches for an element in the tuple.
- *
- * @param tuple The tuple to search in.
- * @param element The element to search for.
- * @return The index of the element if found, or -1 if not found.
- * @note Time complexity: O(n)
- */
-int fossil_tuple_algorithm_search(fossil_tuple_t* tuple, char *element);
-
-/**
- * @brief Sorts the elements in the tuple.
- *
- * @param tuple The tuple to sort.
- * @return 0 on success, -1 on failure.
- * @note Time complexity: O(n log n)
- */
-int fossil_tuple_algorithm_sort(fossil_tuple_t* tuple);
-
-/**
- * @brief Reverses the elements in the tuple.
- *
- * @param tuple The tuple to reverse.
- * @return 0 on success, -1 on failure.
- * @note Time complexity: O(n)
- */
-int fossil_tuple_algorithm_reverse(fossil_tuple_t* tuple);
-
 #ifdef __cplusplus
 }
 #endif
@@ -258,40 +226,6 @@ bool tuple_is_empty(fossil_tuple_t *tuple) {
  */
 void tuple_clear(fossil_tuple_t *tuple) {
     fossil_tuple_clear(tuple);
-}
-
-/**
- * @brief Searches for an element in the tuple.
- *
- * @param tuple The tuple to search in.
- * @param element The element to search for.
- * @return The index of the element if found, or -1 if not found.
- * @note Time complexity: O(n)
- */
-int tuple_algorithm_search(fossil_tuple_t* tuple, const std::string& element) {
-    return fossil_tuple_algorithm_search(tuple, const_cast<char*>(element.c_str()));
-}
-
-/**
- * @brief Sorts the elements in the tuple.
- *
- * @param tuple The tuple to sort.
- * @return 0 on success, -1 on failure.
- * @note Time complexity: O(n log n)
- */
-int tuple_algorithm_sort(fossil_tuple_t* tuple) {
-    return fossil_tuple_algorithm_sort(tuple);
-}
-
-/**
- * @brief Reverses the elements in the tuple.
- *
- * @param tuple The tuple to reverse.
- * @return 0 on success, -1 on failure.
- * @note Time complexity: O(n)
- */
-int tuple_algorithm_reverse(fossil_tuple_t* tuple) {
-    return fossil_tuple_algorithm_reverse(tuple);
 }
 
 }

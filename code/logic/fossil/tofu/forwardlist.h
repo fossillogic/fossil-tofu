@@ -142,38 +142,6 @@ bool fossil_flist_is_empty(const fossil_flist_t* flist);
  */
 bool fossil_flist_is_cnullptr(const fossil_flist_t* flist);
 
-// *****************************************************************************
-// Algorithm functions
-// *****************************************************************************
-
-/**
- * Search for an element in the forward list.
- *
- * @param flist   The forward list to search in.
- * @param element The element to search for.
- * @return        The index of the element if found, or -1 if not found.
- * @complexity    O(n)
- */
-int fossil_flist_algorithm_search(fossil_flist_t* flist, char *element);
-
-/**
- * Sort the forward list in ascending order.
- *
- * @param flist The forward list to sort.
- * @return      The error code indicating the success or failure of the operation.
- * @complexity  O(n^2)
- */
-int fossil_flist_algorithm_sort(fossil_flist_t* flist);
-
-/**
- * Reverse the forward list.
- *
- * @param flist The forward list to reverse.
- * @return      The error code indicating the success or failure of the operation.
- * @complexity  O(n)
- */
-int fossil_flist_algorithm_reverse(fossil_flist_t* flist);
-
 #ifdef __cplusplus
 }
 #endif
@@ -289,37 +257,6 @@ bool flist_is_empty(const fossil_flist_t *flist) {
  */
 bool flist_is_cnullptr(const fossil_flist_t *flist) {
     return fossil_flist_is_cnullptr(flist);
-}
-
-/**
- * Search for an element in the forward list.
- *
- * @param flist   The forward list to search in.
- * @param element The element to search for.
- * @return        The index of the element if found, or -1 if not found.
- */
-int flist_algorithm_search(fossil_flist_t *flist, const std::string &element) {
-    return fossil_flist_algorithm_search(flist, const_cast<char *>(element.c_str()));
-}
-
-/**
- * Sort the forward list in ascending order.
- *
- * @param flist The forward list to sort.
- * @return      The error code indicating the success or failure of the operation.
- */
-int flist_algorithm_sort(fossil_flist_t *flist) {
-    return fossil_flist_algorithm_sort(flist);
-}
-
-/**
- * Reverse the forward list.
- *
- * @param flist The forward list to reverse.
- * @return      The error code indicating the success or failure of the operation.
- */
-int flist_algorithm_reverse(fossil_flist_t *flist) {
-    return fossil_flist_algorithm_reverse(flist);
 }
 
 }

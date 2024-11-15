@@ -127,38 +127,6 @@ bool fossil_queue_is_empty(const fossil_queue_t* queue);
  */
 bool fossil_queue_is_cnullptr(const fossil_queue_t* queue);
 
-// *****************************************************************************
-// Algorithm functions
-// *****************************************************************************
-
-/**
- * Search for an element in the queue.
- *
- * @param queue   The queue to search in.
- * @param element The element to search for.
- * @return        The index of the element if found, or -1 if not found.
- * @note          Time complexity: O(n)
- */
-int fossil_queue_algorithm_search(fossil_queue_t* queue, char *element);
-
-/**
- * Sort the queue in ascending order.
- *
- * @param queue The queue to sort.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n^2)
- */
-int fossil_queue_algorithm_sort(fossil_queue_t* queue);
-
-/**
- * Reverse the order of the elements in the queue.
- *
- * @param queue The queue to reverse.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int fossil_queue_algorithm_reverse(fossil_queue_t* queue);
-
 #ifdef __cplusplus
 }
 #endif
@@ -265,40 +233,6 @@ bool queue_is_empty(const fossil_queue_t *queue) {
  */
 bool queue_is_cnullptr(const fossil_queue_t *queue) {
     return fossil_queue_is_cnullptr(queue);
-}
-
-/**
- * Search for an element in the queue.
- *
- * @param queue   The queue to search in.
- * @param element The element to search for.
- * @return        The index of the element if found, or -1 if not found.
- * @note          Time complexity: O(n)
- */
-int queue_algorithm_search(fossil_queue_t *queue, const std::string &element) {
-    return fossil_queue_algorithm_search(queue, const_cast<char *>(element.c_str()));
-}
-
-/**
- * Sort the queue in ascending order.
- *
- * @param queue The queue to sort.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n^2)
- */
-int queue_algorithm_sort(fossil_queue_t *queue) {
-    return fossil_queue_algorithm_sort(queue);
-}
-
-/**
- * Reverse the order of the elements in the queue.
- *
- * @param queue The queue to reverse.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int queue_algorithm_reverse(fossil_queue_t *queue) {
-    return fossil_queue_algorithm_reverse(queue);
 }
 
 }

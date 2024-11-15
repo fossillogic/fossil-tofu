@@ -134,38 +134,6 @@ bool fossil_stack_is_cnullptr(const fossil_stack_t* stack);
  */
 fossil_tofu_t fossil_stack_top(fossil_stack_t* stack);
 
-// *****************************************************************************
-// Algorithm functions
-// *****************************************************************************
-
-/**
- * Search for an element in the stack.
- *
- * @param stack     The stack to search.
- * @param element   The element to search for.
- * @return          The index of the element in the stack, or -1 if the element is not found.
- * @note            Time complexity: O(n)
- */
-int fossil_stack_algorithm_search(fossil_stack_t* stack, char *element);
-
-/**
- * Sort the stack.
- *
- * @param stack The stack to sort.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n^2)
- */
-int fossil_stack_algorithm_sort(fossil_stack_t* stack);
-
-/**
- * Reverse the stack.
- *
- * @param stack The stack to reverse.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int fossil_stack_algorithm_reverse(fossil_stack_t* stack);
-
 #ifdef __cplusplus
 }
 #endif
@@ -283,40 +251,6 @@ bool stack_is_cnullptr(const fossil_stack_t* stack) {
  */
 fossil_tofu_t stack_top(fossil_stack_t* stack) {
     return fossil_stack_top(stack);
-}
-
-/**
- * Search for an element in the stack.
- *
- * @param stack     The stack to search.
- * @param element   The element to search for.
- * @return          The index of the element in the stack, or -1 if the element is not found.
- * @note            Time complexity: O(n)
- */
-int stack_algorithm_search(fossil_stack_t* stack, const std::string& element) {
-    return fossil_stack_algorithm_search(stack, const_cast<char*>(element.c_str()));
-}
-
-/**
- * Sort the stack.
- *
- * @param stack The stack to sort.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n^2)
- */
-int stack_algorithm_sort(fossil_stack_t* stack) {
-    return fossil_stack_algorithm_sort(stack);
-}
-
-/**
- * Reverse the stack.
- *
- * @param stack The stack to reverse.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int stack_algorithm_reverse(fossil_stack_t* stack) {
-    return fossil_stack_algorithm_reverse(stack);
 }
 
 }

@@ -127,38 +127,6 @@ bool fossil_set_is_empty(const fossil_set_t* set);
  */
 bool fossil_set_is_cnullptr(const fossil_set_t* set);
 
-// *****************************************************************************
-// Algorithm functions
-// *****************************************************************************
-
-/**
- * Search for an element in the set.
- *
- * @param set     The set to search in.
- * @param element The element to search for.
- * @return        The index of the element if found, or -1 if not found.
- * @note          O(n) - Linear time complexity, where n is the number of elements in the set.
- */
-int fossil_set_algorithm_search(fossil_set_t* set, char *element);
-
-/**
- * Sort the set.
- *
- * @param set The set to sort.
- * @return    The error code indicating the success or failure of the operation.
- * @note      O(n^2) - Quadratic time complexity, where n is the number of elements in the set.
- */
-int fossil_set_algorithm_sort(fossil_set_t* set);
-
-/**
- * Reverse the order of the elements in the set.
- *
- * @param set The set to reverse.
- * @return    The error code indicating the success or failure of the operation.
- * @note      O(n) - Linear time complexity, where n is the number of elements in the set.
- */
-int fossil_set_algorithm_reverse(fossil_set_t* set);
-
 #ifdef __cplusplus
 }
 #endif
@@ -266,40 +234,6 @@ bool set_is_empty(const fossil_set_t* set) {
  */
 bool set_is_cnullptr(const fossil_set_t* set) {
     return fossil_set_is_cnullptr(set);
-}
-
-/**
- * Search for an element in the set.
- *
- * @param set     The set to search in.
- * @param element The element to search for.
- * @return        The index of the element if found, or -1 if not found.
- * @note          O(n) - Linear time complexity, where n is the number of elements in the set.
- */
-int set_algorithm_search(fossil_set_t* set, const std::string &element) {
-    return fossil_set_algorithm_search(set, const_cast<char *>(element.c_str()));
-}
-
-/**
- * Sort the set.
- *
- * @param set The set to sort.
- * @return    The error code indicating the success or failure of the operation.
- * @note      O(n^2) - Quadratic time complexity, where n is the number of elements in the set.
- */
-int set_algorithm_sort(fossil_set_t* set) {
-    return fossil_set_algorithm_sort(set);
-}
-
-/**
- * Reverse the order of the elements in the set.
- *
- * @param set The set to reverse.
- * @return    The error code indicating the success or failure of the operation.
- * @note      O(n) - Linear time complexity, where n is the number of elements in the set.
- */
-int set_algorithm_reverse(fossil_set_t* set) {
-    return fossil_set_algorithm_reverse(set);
 }
 
 }

@@ -76,39 +76,6 @@ FOSSIL_TEST_CASE(cpp_test_tuple_clear) {
     fossil::tuple_destroy(tuple);
 }
 
-FOSSIL_TEST_CASE(cpp_test_tuple_algorithm_search) {
-    fossil_tuple_t* tuple = fossil::tuple_create("i32");
-    fossil::tuple_add(tuple, "42");
-    fossil::tuple_add(tuple, "84");
-    fossil::tuple_add(tuple, "126");
-    ASSUME_ITS_TRUE(fossil::tuple_algorithm_search(tuple, "84") == 1);
-    fossil::tuple_destroy(tuple);
-}
-
-FOSSIL_TEST_CASE(cpp_test_tuple_algorithm_sort) {
-    fossil_tuple_t* tuple = fossil::tuple_create("i32");
-    fossil::tuple_add(tuple, "126");
-    fossil::tuple_add(tuple, "42");
-    fossil::tuple_add(tuple, "84");
-    ASSUME_ITS_TRUE(fossil::tuple_algorithm_sort(tuple) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_CSTR(fossil::tuple_get(tuple, 0).c_str(), "42");
-    ASSUME_ITS_EQUAL_CSTR(fossil::tuple_get(tuple, 1).c_str(), "84");
-    ASSUME_ITS_EQUAL_CSTR(fossil::tuple_get(tuple, 2).c_str(), "126");
-    fossil::tuple_destroy(tuple);
-}
-
-FOSSIL_TEST_CASE(cpp_test_tuple_algorithm_reverse) {
-    fossil_tuple_t* tuple = fossil::tuple_create("i32");
-    fossil::tuple_add(tuple, "42");
-    fossil::tuple_add(tuple, "84");
-    fossil::tuple_add(tuple, "126");
-    ASSUME_ITS_TRUE(fossil::tuple_algorithm_reverse(tuple) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_CSTR(fossil::tuple_get(tuple, 0).c_str(), "126");
-    ASSUME_ITS_EQUAL_CSTR(fossil::tuple_get(tuple, 1).c_str(), "84");
-    ASSUME_ITS_EQUAL_CSTR(fossil::tuple_get(tuple, 2).c_str(), "42");
-    fossil::tuple_destroy(tuple);
-}
-
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -118,9 +85,6 @@ FOSSIL_TEST_GROUP(cpp_tuple_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_add);
     FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_remove);
     FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_clear);
-    FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_algorithm_search);
-    FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_algorithm_sort);
-    FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_algorithm_reverse);
 
     FOSSIL_TEST_REGISTER(cpp_tuple_tofu_fixture);
 } // end of tests

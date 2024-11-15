@@ -128,38 +128,6 @@ bool fossil_dqueue_is_empty(const fossil_dqueue_t* dqueue);
  */
 bool fossil_dqueue_is_cnullptr(const fossil_dqueue_t* dqueue);
 
-// *****************************************************************************
-// Algorithm functions
-// *****************************************************************************
-
-/**
- * Search for data in the dynamic queue.
- *
- * @param dqueue  The dynamic queue to search.
- * @param element The element to search for.
- * @return        The error code indicating the success or failure of the operation.
- * @note          Time complexity: O(n)
- */
-int fossil_dqueue_algorithm_search(fossil_dqueue_t* dqueue, char *element);
-
-/**
- * Sort the dynamic queue in ascending order.
- *
- * @param dqueue The dynamic queue to sort.
- * @return       The error code indicating the success or failure of the operation.
- * @note         Time complexity: O(n^2)
- */
-int fossil_dqueue_algorithm_sort(fossil_dqueue_t* dqueue);
-
-/**
- * Reverse the dynamic queue.
- *
- * @param dqueue The dynamic queue to reverse.
- * @return       The error code indicating the success or failure of the operation.
- * @note         Time complexity: O(n)
- */
-int fossil_dqueue_algorithm_reverse(fossil_dqueue_t* dqueue);
-
 #ifdef __cplusplus
 }
 #endif
@@ -266,40 +234,6 @@ bool dqueue_is_empty(const fossil_dqueue_t *dqueue) {
  */
 bool dqueue_is_cnullptr(const fossil_dqueue_t *dqueue) {
     return fossil_dqueue_is_cnullptr(dqueue);
-}
-
-/**
- * Search for data in the dynamic queue.
- *
- * @param dqueue  The dynamic queue to search.
- * @param element The element to search for.
- * @return        The error code indicating the success or failure of the operation.
- * @note          Time complexity: O(n)
- */
-int dqueue_algorithm_search(fossil_dqueue_t *dqueue, char *element) {
-    return fossil_dqueue_algorithm_search(dqueue, element);
-}
-
-/**
- * Sort the dynamic queue in ascending order.
- *
- * @param dqueue The dynamic queue to sort.
- * @return       The error code indicating the success or failure of the operation.
- * @note         Time complexity: O(n^2)
- */
-int dqueue_algorithm_sort(fossil_dqueue_t *dqueue) {
-    return fossil_dqueue_algorithm_sort(dqueue);
-}
-
-/**
- * Reverse the dynamic queue.
- *
- * @param dqueue The dynamic queue to reverse.
- * @return       The error code indicating the success or failure of the operation.
- * @note         Time complexity: O(n)
- */
-int dqueue_algorithm_reverse(fossil_dqueue_t *dqueue) {
-    return fossil_dqueue_algorithm_reverse(dqueue);
 }
 
 }

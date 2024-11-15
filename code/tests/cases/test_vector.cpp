@@ -110,39 +110,6 @@ FOSSIL_TEST_CASE(cpp_test_vector_pop_at) {
     fossil::vector_destroy(vect);
 }
 
-FOSSIL_TEST_CASE(cpp_test_vector_algorithm_search) {
-    fossil_vector_t* vect = fossil::vector_create_container("i32");
-    fossil::vector_push_back(vect, "42");
-    fossil::vector_push_back(vect, "84");
-    fossil::vector_push_back(vect, "126");
-    ASSUME_ITS_TRUE(fossil::vector_algorithm_search(vect, "84") == 1);
-    fossil::vector_destroy(vect);
-}
-
-FOSSIL_TEST_CASE(cpp_test_vector_algorithm_sort) {
-    fossil_vector_t* vect = fossil::vector_create_container("i32");
-    fossil::vector_push_back(vect, "126");
-    fossil::vector_push_back(vect, "42");
-    fossil::vector_push_back(vect, "84");
-    ASSUME_ITS_TRUE(fossil::vector_algorithm_sort(vect) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 0).c_str(), "42");
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 1).c_str(), "84");
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 2).c_str(), "126");
-    fossil::vector_destroy(vect);
-}
-
-FOSSIL_TEST_CASE(cpp_test_vector_algorithm_reverse) {
-    fossil_vector_t* vect = fossil::vector_create_container("i32");
-    fossil::vector_push_back(vect, "42");
-    fossil::vector_push_back(vect, "84");
-    fossil::vector_push_back(vect, "126");
-    ASSUME_ITS_TRUE(fossil::vector_algorithm_reverse(vect) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 0).c_str(), "126");
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 1).c_str(), "84");
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 2).c_str(), "42");
-    fossil::vector_destroy(vect);
-}
-
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -155,9 +122,6 @@ FOSSIL_TEST_GROUP(cpp_vector_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_pop_back);
     FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_pop_front);
     FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_pop_at);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_algorithm_search);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_algorithm_sort);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_algorithm_reverse);
 
     FOSSIL_TEST_REGISTER(cpp_vector_tofu_fixture);
 } // end of tests

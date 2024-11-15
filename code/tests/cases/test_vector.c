@@ -109,39 +109,6 @@ FOSSIL_TEST_CASE(c_test_vector_pop_at) {
     fossil_vector_destroy(vector);
 }
 
-FOSSIL_TEST_CASE(c_test_vector_algorithm_search) {
-    fossil_vector_t* vector = fossil_vector_create_container("i32");
-    fossil_vector_push_back(vector, "42");
-    fossil_vector_push_back(vector, "84");
-    fossil_vector_push_back(vector, "126");
-    ASSUME_ITS_TRUE(fossil_vector_algorithm_search(vector, "84") == 1);
-    fossil_vector_destroy(vector);
-}
-
-FOSSIL_TEST_CASE(c_test_vector_algorithm_sort) {
-    fossil_vector_t* vector = fossil_vector_create_container("i32");
-    fossil_vector_push_back(vector, "126");
-    fossil_vector_push_back(vector, "42");
-    fossil_vector_push_back(vector, "84");
-    ASSUME_ITS_TRUE(fossil_vector_algorithm_sort(vector) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 0), "42");
-    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 1), "84");
-    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 2), "126");
-    fossil_vector_destroy(vector);
-}
-
-FOSSIL_TEST_CASE(c_test_vector_algorithm_reverse) {
-    fossil_vector_t* vector = fossil_vector_create_container("i32");
-    fossil_vector_push_back(vector, "42");
-    fossil_vector_push_back(vector, "84");
-    fossil_vector_push_back(vector, "126");
-    ASSUME_ITS_TRUE(fossil_vector_algorithm_reverse(vector) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 0), "126");
-    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 1), "84");
-    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 2), "42");
-    fossil_vector_destroy(vector);
-}
-
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -154,9 +121,6 @@ FOSSIL_TEST_GROUP(c_vector_tofu_tests) {
     FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_pop_back);
     FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_pop_front);
     FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_pop_at);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_algorithm_search);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_algorithm_sort);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_algorithm_reverse);
 
     FOSSIL_TEST_REGISTER(c_vector_tofu_fixture);
 } // end of tests

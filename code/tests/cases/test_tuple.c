@@ -74,39 +74,6 @@ FOSSIL_TEST_CASE(c_test_tuple_clear) {
     fossil_tuple_destroy(tuple);
 }
 
-FOSSIL_TEST_CASE(c_test_tuple_algorithm_search) {
-    fossil_tuple_t* tuple = fossil_tuple_create("i32");
-    fossil_tuple_add(tuple, "42");
-    fossil_tuple_add(tuple, "84");
-    fossil_tuple_add(tuple, "126");
-    ASSUME_ITS_TRUE(fossil_tuple_algorithm_search(tuple, "84") == 1);
-    fossil_tuple_destroy(tuple);
-}
-
-FOSSIL_TEST_CASE(c_test_tuple_algorithm_sort) {
-    fossil_tuple_t* tuple = fossil_tuple_create("i32");
-    fossil_tuple_add(tuple, "126");
-    fossil_tuple_add(tuple, "42");
-    fossil_tuple_add(tuple, "84");
-    ASSUME_ITS_TRUE(fossil_tuple_algorithm_sort(tuple) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_CSTR(fossil_tuple_get(tuple, 0), "42");
-    ASSUME_ITS_EQUAL_CSTR(fossil_tuple_get(tuple, 1), "84");
-    ASSUME_ITS_EQUAL_CSTR(fossil_tuple_get(tuple, 2), "126");
-    fossil_tuple_destroy(tuple);
-}
-
-FOSSIL_TEST_CASE(c_test_tuple_algorithm_reverse) {
-    fossil_tuple_t* tuple = fossil_tuple_create("i32");
-    fossil_tuple_add(tuple, "42");
-    fossil_tuple_add(tuple, "84");
-    fossil_tuple_add(tuple, "126");
-    ASSUME_ITS_TRUE(fossil_tuple_algorithm_reverse(tuple) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_CSTR(fossil_tuple_get(tuple, 0), "126");
-    ASSUME_ITS_EQUAL_CSTR(fossil_tuple_get(tuple, 1), "84");
-    ASSUME_ITS_EQUAL_CSTR(fossil_tuple_get(tuple, 2), "42");
-    fossil_tuple_destroy(tuple);
-}
-
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -116,9 +83,6 @@ FOSSIL_TEST_GROUP(c_tuple_tofu_tests) {
     FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_add);
     FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_remove);
     FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_clear);
-    FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_algorithm_search);
-    FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_algorithm_sort);
-    FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_algorithm_reverse);
 
     FOSSIL_TEST_REGISTER(c_tuple_tofu_fixture);
 } // end of tests

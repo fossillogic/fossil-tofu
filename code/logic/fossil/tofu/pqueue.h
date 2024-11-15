@@ -127,38 +127,6 @@ bool fossil_pqueue_is_empty(const fossil_pqueue_t* pqueue);
  */
 bool fossil_pqueue_is_cnullptr(const fossil_pqueue_t* pqueue);
 
-// *****************************************************************************
-// Algorithm functions
-// *****************************************************************************
-
-/**
- * Search for an element in the queue.
- *
- * @param pqueue   The queue to search in.
- * @param element The element to search for.
- * @return        The index of the element if found, or -1 if not found.
- * @note          Time complexity: O(n)
- */
-int fossil_pqueue_algorithm_search(fossil_pqueue_t* pqueue, char *element);
-
-/**
- * Sort the queue in ascending order.
- *
- * @param pqueue The queue to sort.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n^2)
- */
-int fossil_pqueue_algorithm_sort(fossil_pqueue_t* pqueue);
-
-/**
- * Reverse the order of the elements in the queue.
- *
- * @param pqueue The queue to reverse.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int fossil_pqueue_algorithm_reverse(fossil_pqueue_t* pqueue);
-
 #ifdef __cplusplus
 }
 #endif
@@ -267,40 +235,6 @@ bool pqueue_is_empty(const fossil_pqueue_t* pqueue) {
  */
 bool pqueue_is_cnullptr(const fossil_pqueue_t* pqueue) {
     return fossil_pqueue_is_cnullptr(pqueue);
-}
-
-/**
- * Search for an element in the queue.
- *
- * @param pqueue   The queue to search in.
- * @param element The element to search for.
- * @return        The index of the element if found, or -1 if not found.
- * @note          Time complexity: O(n)
- */
-int pqueue_algorithm_search(fossil_pqueue_t* pqueue, const std::string& element) {
-    return fossil_pqueue_algorithm_search(pqueue, const_cast<char*>(element.c_str()));
-}
-
-/**
- * Sort the queue in ascending order.
- *
- * @param pqueue The queue to sort.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n^2)
- */
-int pqueue_algorithm_sort(fossil_pqueue_t* pqueue) {
-    return fossil_pqueue_algorithm_sort(pqueue);
-}
-
-/**
- * Reverse the order of the elements in the queue.
- *
- * @param pqueue The queue to reverse.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int pqueue_algorithm_reverse(fossil_pqueue_t* pqueue) {
-    return fossil_pqueue_algorithm_reverse(pqueue);
 }
 
 }

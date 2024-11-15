@@ -111,33 +111,3 @@ void fossil_tuple_clear(fossil_tuple_t *tuple) {
     }
     tuple->element_count = 0;
 }
-
-// *****************************************************************************
-// Algorithm functions
-// *****************************************************************************
-
-int fossil_tuple_algorithm_search(fossil_tuple_t* tuple, char *element) {
-    if (tuple == NULL) {
-        return FOSSIL_TOFU_FAILURE;
-    }
-    for (size_t i = 0; i < tuple->element_count; i++) {
-        if (fossil_tofu_equals(&tuple->elements[i], element) == 0) {
-            return i;
-        }
-    }
-    return FOSSIL_TOFU_FAILURE;
-}
-
-int fossil_tuple_algorithm_sort(fossil_tuple_t* tuple) {
-    if (tuple == NULL) {
-        return FOSSIL_TOFU_FAILURE;
-    }
-    return fossil_tofu_algorithm_sort(tuple->elements, tuple->element_count, true);
-}
-
-int fossil_tuple_algorithm_reverse(fossil_tuple_t* tuple) {
-    if (tuple == NULL) {
-        return FOSSIL_TOFU_FAILURE;
-    }
-    return fossil_tofu_algorithm_reverse(tuple->elements, tuple->element_count);
-}

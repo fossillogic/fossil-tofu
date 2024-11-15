@@ -207,41 +207,6 @@ size_t fossil_vector_capacity(const fossil_vector_t* vector);
  */
 char *fossil_vector_get(const fossil_vector_t* vector, size_t index);
 
-// *****************************************************************************
-// Algorithm functions
-// *****************************************************************************
-
-/**
- * Search for an element in the vector.
- * 
- * Time complexity: O(n)
- *
- * @param vector  The vector in which to search for the element.
- * @param element The element to search for.
- * @return        0 if the element was found, -1 otherwise.
- */
-int fossil_vector_algorithm_search(const fossil_vector_t* vector, char *element);
-
-/**
- * Sort the elements in the vector.
- * 
- * Time complexity: O(n log n)
- *
- * @param vector The vector to sort.
- * @return       0 if the vector was sorted, -1 otherwise.
- */
-int fossil_vector_algorithm_sort(fossil_vector_t* vector);
-
-/**
- * Reverse the elements in the vector.
- * 
- * Time complexity: O(n)
- *
- * @param vector The vector to reverse.
- * @return       0 if the vector was reversed, -1 otherwise.
- */
-int fossil_vector_algorithm_reverse(fossil_vector_t* vector);
-
 #ifdef __cplusplus
 }
 #endif
@@ -452,44 +417,6 @@ inline size_t vector_capacity(const fossil_vector_t* vector) {
 inline std::string vector_get(const fossil_vector_t* vector, size_t index) {
     return std::string(fossil_vector_get(vector, index));
 }
-
-/**
- * Search for an element in the vector.
- * 
- * Time complexity: O(n)
- *
- * @param vector  The vector in which to search for the element.
- * @param element The element to search for.
- * @return        0 if the element was found, -1 otherwise.
- */
-inline int vector_algorithm_search(const fossil_vector_t* vector, const std::string& element) {
-    return fossil_vector_algorithm_search(vector, const_cast<char*>(element.c_str()));
-}
-
-/**
- * Sort the elements in the vector.
- * 
- * Time complexity: O(n log n)
- *
- * @param vector The vector to sort.
- * @return       0 if the vector was sorted, -1 otherwise.
- */
-inline int vector_algorithm_sort(fossil_vector_t* vector) {
-    return fossil_vector_algorithm_sort(vector);
-}
-
-/**
- * Reverse the elements in the vector.
- * 
- * Time complexity: O(n)
- *
- * @param vector The vector to reverse.
- * @return       0 if the vector was reversed, -1 otherwise.
- */
-inline int vector_algorithm_reverse(fossil_vector_t* vector) {
-    return fossil_vector_algorithm_reverse(vector);
-}
-
 
 }
 

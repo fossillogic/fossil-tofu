@@ -144,38 +144,6 @@ bool fossil_dlist_is_empty(const fossil_dlist_t* dlist);
  */
 bool fossil_dlist_is_cnullptr(const fossil_dlist_t* dlist);
 
-// *****************************************************************************
-// Algorithm functions
-// *****************************************************************************
-
-/**
- * Search for data in the doubly linked list.
- *
- * @param dlist   The doubly linked list to search.
- * @param element The element to search for.
- * @return        The index of the element if found, or -1 if not found.
- * @note          Time complexity: O(n)
- */
-int fossil_dlist_algorithm_search(fossil_dlist_t* dlist, char *element);
-
-/**
- * Sort the doubly linked list in ascending order.
- *
- * @param dlist The doubly linked list to sort.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n^2)
- */
-int fossil_dlist_algorithm_sort(fossil_dlist_t* dlist);
-
-/**
- * Reverse the doubly linked list.
- *
- * @param dlist The doubly linked list to reverse.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int fossil_dlist_algorithm_reverse(fossil_dlist_t* dlist);
-
 #ifdef __cplusplus
 }
 #endif
@@ -302,40 +270,6 @@ bool dlist_is_empty(const fossil_dlist_t* dlist) {
  */
 bool dlist_is_cnullptr(const fossil_dlist_t* dlist) {
     return fossil_dlist_is_cnullptr(dlist);
-}
-
-/**
- * Search for data in the doubly linked list.
- *
- * @param dlist   The doubly linked list to search.
- * @param element The element to search for.
- * @return        The index of the element if found, or -1 if not found.
- * @note          Time complexity: O(n)
- */
-int dlist_algorithm_search(fossil_dlist_t* dlist, char *element) {
-    return fossil_dlist_algorithm_search(dlist, element);
-}
-
-/**
- * Sort the doubly linked list in ascending order.
- *
- * @param dlist The doubly linked list to sort.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n^2)
- */
-int dlist_algorithm_sort(fossil_dlist_t* dlist) {
-    return fossil_dlist_algorithm_sort(dlist);
-}
-
-/**
- * Reverse the doubly linked list.
- *
- * @param dlist The doubly linked list to reverse.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int dlist_algorithm_reverse(fossil_dlist_t* dlist) {
-    return fossil_dlist_algorithm_reverse(dlist);
 }
 
 }
