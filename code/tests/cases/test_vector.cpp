@@ -15,8 +15,6 @@
 
 #include "fossil/tofu/framework.h"
 
-using namespace fossil;
-
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Utilities
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -41,73 +39,74 @@ FOSSIL_TEARDOWN(cpp_vector_tofu_fixture) {
 // by the Meson build system's approach of using test cases
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
+
 FOSSIL_TEST_CASE(cpp_test_vector_create_destroy) {
-    fossil_vector_t* vect = fossil::vector_create_container("i32");
-    ASSUME_ITS_TRUE(vect != NULL);
-    ASSUME_ITS_TRUE(fossil::vector_is_empty(vect) == true);
-    fossil::vector_destroy(vect);
+    fossil_vector_t* vector = fossil_vector_create_container("i32");
+    ASSUME_ITS_TRUE(vector != NULL);
+    ASSUME_ITS_TRUE(fossil_vector_is_empty(vector) == true);
+    fossil_vector_destroy(vector);
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_push_back) {
-    fossil_vector_t* vect = fossil::vector_create_container("i32");
-    fossil::vector_push_back(vect, "42");
-    ASSUME_ITS_TRUE(fossil::vector_size(vect) == 1);
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 0).c_str(), "42");
-    fossil::vector_destroy(vect);
+    fossil_vector_t* vector = fossil_vector_create_container("i32");
+    fossil_vector_push_back(vector, "42");
+    ASSUME_ITS_TRUE(fossil_vector_size(vector) == 1);
+    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 0), "42");
+    fossil_vector_destroy(vector);
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_push_front) {
-    fossil_vector_t* vect = fossil::vector_create_container("i32");
-    fossil::vector_push_back(vect, "42");
-    fossil::vector_push_front(vect, "84");
-    ASSUME_ITS_TRUE(fossil::vector_size(vect) == 2);
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 0).c_str(), "84");
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 1).c_str(), "42");
-    fossil::vector_destroy(vect);
+    fossil_vector_t* vector = fossil_vector_create_container("i32");
+    fossil_vector_push_back(vector, "42");
+    fossil_vector_push_front(vector, "84");
+    ASSUME_ITS_TRUE(fossil_vector_size(vector) == 2);
+    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 0), "84");
+    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 1), "42");
+    fossil_vector_destroy(vector);
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_push_at) {
-    fossil_vector_t* vect = fossil::vector_create_container("i32");
-    fossil::vector_push_back(vect, "42");
-    fossil::vector_push_back(vect, "126");
-    fossil::vector_push_at(vect, 1, "84");
-    ASSUME_ITS_TRUE(fossil::vector_size(vect) == 3);
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 0).c_str(), "42");
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 1).c_str(), "84");
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 2).c_str(), "126");
-    fossil::vector_destroy(vect);
+    fossil_vector_t* vector = fossil_vector_create_container("i32");
+    fossil_vector_push_back(vector, "42");
+    fossil_vector_push_back(vector, "126");
+    fossil_vector_push_at(vector, 1, "84");
+    ASSUME_ITS_TRUE(fossil_vector_size(vector) == 3);
+    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 0), "42");
+    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 1), "84");
+    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 2), "126");
+    fossil_vector_destroy(vector);
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_pop_back) {
-    fossil_vector_t* vect = fossil::vector_create_container("i32");
-    fossil::vector_push_back(vect, "42");
-    fossil::vector_push_back(vect, "84");
-    fossil::vector_pop_back(vect);
-    ASSUME_ITS_TRUE(fossil::vector_size(vect) == 1);
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 0).c_str(), "42");
-    fossil::vector_destroy(vect);
+    fossil_vector_t* vector = fossil_vector_create_container("i32");
+    fossil_vector_push_back(vector, "42");
+    fossil_vector_push_back(vector, "84");
+    fossil_vector_pop_back(vector);
+    ASSUME_ITS_TRUE(fossil_vector_size(vector) == 1);
+    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 0), "42");
+    fossil_vector_destroy(vector);
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_pop_front) {
-    fossil_vector_t* vect = fossil::vector_create_container("i32");
-    fossil::vector_push_back(vect, "42");
-    fossil::vector_push_back(vect, "84");
-    fossil::vector_pop_front(vect);
-    ASSUME_ITS_TRUE(fossil::vector_size(vect) == 1);
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 0).c_str(), "84");
-    fossil::vector_destroy(vect);
+    fossil_vector_t* vector = fossil_vector_create_container("i32");
+    fossil_vector_push_back(vector, "42");
+    fossil_vector_push_back(vector, "84");
+    fossil_vector_pop_front(vector);
+    ASSUME_ITS_TRUE(fossil_vector_size(vector) == 1);
+    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 0), "84");
+    fossil_vector_destroy(vector);
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_pop_at) {
-    fossil_vector_t* vect = fossil::vector_create_container("i32");
-    fossil::vector_push_back(vect, "42");
-    fossil::vector_push_back(vect, "84");
-    fossil::vector_push_back(vect, "126");
-    fossil::vector_pop_at(vect, 1);
-    ASSUME_ITS_TRUE(fossil::vector_size(vect) == 2);
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 0).c_str(), "42");
-    ASSUME_ITS_EQUAL_CSTR(fossil::vector_get(vect, 1).c_str(), "126");
-    fossil::vector_destroy(vect);
+    fossil_vector_t* vector = fossil_vector_create_container("i32");
+    fossil_vector_push_back(vector, "42");
+    fossil_vector_push_back(vector, "84");
+    fossil_vector_push_back(vector, "126");
+    fossil_vector_pop_at(vector, 1);
+    ASSUME_ITS_TRUE(fossil_vector_size(vector) == 2);
+    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 0), "42");
+    ASSUME_ITS_EQUAL_CSTR(fossil_vector_get(vector, 1), "126");
+    fossil_vector_destroy(vector);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *

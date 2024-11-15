@@ -15,8 +15,6 @@
 
 #include "fossil/tofu/framework.h"
 
-using namespace fossil;
-
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Utilities
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -43,37 +41,37 @@ FOSSIL_TEARDOWN(cpp_tuple_tofu_fixture) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
 FOSSIL_TEST_CASE(cpp_test_tuple_create_destroy) {
-    fossil_tuple_t* tuple = fossil::tuple_create("i32");
+    fossil_tuple_t* tuple = fossil_tuple_create("i32");
     ASSUME_ITS_TRUE(tuple != NULL);
-    ASSUME_ITS_TRUE(fossil::tuple_is_empty(tuple) == true);
-    fossil::tuple_destroy(tuple);
+    ASSUME_ITS_TRUE(fossil_tuple_is_empty(tuple) == true);
+    fossil_tuple_destroy(tuple);
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_add) {
-    fossil_tuple_t* tuple = fossil::tuple_create("i32");
-    fossil::tuple_add(tuple, "42");
-    ASSUME_ITS_TRUE(fossil::tuple_size(tuple) == 1);
-    ASSUME_ITS_EQUAL_CSTR(fossil::tuple_get(tuple, 0).c_str(), "42");
-    fossil::tuple_destroy(tuple);
+    fossil_tuple_t* tuple = fossil_tuple_create("i32");
+    fossil_tuple_add(tuple, "42");
+    ASSUME_ITS_TRUE(fossil_tuple_size(tuple) == 1);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tuple_get(tuple, 0), "42");
+    fossil_tuple_destroy(tuple);
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_remove) {
-    fossil_tuple_t* tuple = fossil::tuple_create("i32");
-    fossil::tuple_add(tuple, "42");
-    fossil::tuple_add(tuple, "84");
-    fossil::tuple_remove(tuple, 0);
-    ASSUME_ITS_TRUE(fossil::tuple_size(tuple) == 1);
-    ASSUME_ITS_EQUAL_CSTR(fossil::tuple_get(tuple, 0).c_str(), "84");
-    fossil::tuple_destroy(tuple);
+    fossil_tuple_t* tuple = fossil_tuple_create("i32");
+    fossil_tuple_add(tuple, "42");
+    fossil_tuple_add(tuple, "84");
+    fossil_tuple_remove(tuple, 0);
+    ASSUME_ITS_TRUE(fossil_tuple_size(tuple) == 1);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tuple_get(tuple, 0), "84");
+    fossil_tuple_destroy(tuple);
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_clear) {
-    fossil_tuple_t* tuple = fossil::tuple_create("i32");
-    fossil::tuple_add(tuple, "42");
-    fossil::tuple_add(tuple, "84");
-    fossil::tuple_clear(tuple);
-    ASSUME_ITS_TRUE(fossil::tuple_is_empty(tuple) == true);
-    fossil::tuple_destroy(tuple);
+    fossil_tuple_t* tuple = fossil_tuple_create("i32");
+    fossil_tuple_add(tuple, "42");
+    fossil_tuple_add(tuple, "84");
+    fossil_tuple_clear(tuple);
+    ASSUME_ITS_TRUE(fossil_tuple_is_empty(tuple) == true);
+    fossil_tuple_destroy(tuple);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
