@@ -197,6 +197,10 @@ size_t fossil_vector_capacity(const fossil_vector_t* vector) {
     return vector == NULL ? 0 : vector->capacity;
 }
 
+char *fossil_vector_get(const fossil_vector_t* vector, size_t index) {
+    return vector == NULL || index >= vector->size ? NULL : vector->data[index].value.data;
+}
+
 // *****************************************************************************
 // Algorithm functions
 // *****************************************************************************

@@ -72,11 +72,11 @@ void fossil_tuple_add(fossil_tuple_t *tuple, char *element) {
     tuple->elements[tuple->element_count++] = fossil_tofu_create(tuple->type, element);
 }
 
-fossil_tofu_t *fossil_tuple_get(fossil_tuple_t *tuple, size_t index) {
+char *fossil_tuple_get(fossil_tuple_t *tuple, size_t index) {
     if (tuple == NULL || index >= tuple->element_count) {
         return NULL;
     }
-    return &tuple->elements[index];
+    return tuple->elements[index].value.data;
 }
 
 void fossil_tuple_remove(fossil_tuple_t *tuple, size_t index) {

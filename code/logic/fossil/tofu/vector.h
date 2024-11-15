@@ -196,6 +196,17 @@ size_t fossil_vector_size(const fossil_vector_t* vector);
  */
 size_t fossil_vector_capacity(const fossil_vector_t* vector);
 
+/**
+ * Get the element at the specified index in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector The vector from which to get the element.
+ * @param index  The index of the element to get.
+ * @return       The element at the specified index.
+ */
+char *fossil_vector_get(const fossil_vector_t* vector, size_t index);
+
 // *****************************************************************************
 // Algorithm functions
 // *****************************************************************************
@@ -427,6 +438,19 @@ inline size_t vector_size(const fossil_vector_t* vector) {
  */
 inline size_t vector_capacity(const fossil_vector_t* vector) {
     return fossil_vector_capacity(vector);
+}
+
+/**
+ * Get the element at the specified index in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector The vector from which to get the element.
+ * @param index  The index of the element to get.
+ * @return       The element at the specified index.
+ */
+inline std::string vector_get(const fossil_vector_t* vector, size_t index) {
+    return std::string(fossil_vector_get(vector, index));
 }
 
 /**

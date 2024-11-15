@@ -75,7 +75,7 @@ void fossil_tuple_add(fossil_tuple_t *tuple, char *element);
  * @return The element at the specified index, or NULL if the index is out of bounds.
  * @note Time complexity: O(1)
  */
-fossil_tofu_t *fossil_tuple_get(fossil_tuple_t *tuple, size_t index);
+char *fossil_tuple_get(fossil_tuple_t *tuple, size_t index);
 
 /**
  * @brief Removes the element at the specified index from the tuple.
@@ -202,8 +202,8 @@ void tuple_add(fossil_tuple_t *tuple, const std::string& element) {
  * @return The element at the specified index, or NULL if the index is out of bounds.
  * @note Time complexity: O(1)
  */
-fossil_tofu_t *tuple_get(fossil_tuple_t *tuple, size_t index) {
-    return fossil_tuple_get(tuple, index);
+std::string tuple_get(fossil_tuple_t *tuple, size_t index) {
+    return std::string(fossil_tuple_get(tuple, index));
 }
 
 /**
