@@ -68,7 +68,7 @@ int32_t fossil_set_remove(fossil_set_t* set) {
     fossil_set_node_t* current = set->head;
     fossil_set_node_t* prev = NULL;
     while (current != NULL) {
-        if (fossil_tofu_compare(&current->data, set->type) == 0) {
+        if (current == set->head) {
             if (prev == NULL) {
                 set->head = current->next;
             } else {

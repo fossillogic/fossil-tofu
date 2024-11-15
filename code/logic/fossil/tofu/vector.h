@@ -118,16 +118,6 @@ void fossil_vector_pop_front(fossil_vector_t* vector);
 void fossil_vector_pop_at(fossil_vector_t* vector, size_t index);
 
 /**
- * Remove the specified element from the vector.
- * 
- * Time complexity: O(n)
- *
- * @param vector  The vector from which to remove the element.
- * @return        0 if the element was removed, -1 otherwise.
- */
-int32_t fossil_vector_remove(fossil_vector_t* vector);
-
-/**
  * Remove all elements from the vector.
  * 
  * Time complexity: O(1)
@@ -308,18 +298,6 @@ inline void vector_pop_front(fossil_vector_t* vector) {
  */
 inline void vector_pop_at(fossil_vector_t* vector, size_t index) {
     fossil_vector_pop_at(vector, index);
-}
-
-/**
- * Remove the specified element from the vector.
- * 
- * Time complexity: O(n)
- *
- * @param vector  The vector from which to remove the element.
- * @return        0 if the element was removed, -1 otherwise.
- */
-inline int32_t vector_remove(fossil_vector_t* vector) {
-    return fossil_vector_remove(vector);
 }
 
 /**

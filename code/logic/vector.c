@@ -27,7 +27,7 @@ fossil_vector_t* fossil_vector_create_container(char* type) {
     }
     vector->data = (fossil_tofu_t*)fossil_tofu_alloc(INITIAL_CAPACITY * sizeof(fossil_tofu_t));
     if (vector->data == NULL) {
-        fossil_tofu_fossil_tofu_free(vector);
+        fossil_tofu_free(vector);
         return NULL;
     }
     vector->size = 0;
@@ -43,8 +43,8 @@ void fossil_vector_destroy(fossil_vector_t* vector) {
     for (size_t i = 0; i < vector->size; i++) {
         fossil_tofu_destroy(&vector->data[i]);
     }
-    fossil_tofu_fossil_tofu_free(vector->data);
-    fossil_tofu_fossil_tofu_free(vector);
+    fossil_tofu_free(vector->data);
+    fossil_tofu_free(vector);
 }
 
 // *****************************************************************************
@@ -63,7 +63,7 @@ void fossil_vector_push_back(fossil_vector_t* vector, char *element) {
         for (size_t i = 0; i < vector->size; i++) {
             new_data[i] = vector->data[i];
         }
-        fossil_tofu_fossil_tofu_free(vector->data);
+        fossil_tofu_free(vector->data);
         vector->data = new_data;
         vector->capacity *= 2;
     }
@@ -82,7 +82,7 @@ void fossil_vector_push_front(fossil_vector_t* vector, char *element) {
         for (size_t i = 0; i < vector->size; i++) {
             new_data[i + 1] = vector->data[i];
         }
-        fossil_tofu_fossil_tofu_free(vector->data);
+        fossil_tofu_free(vector->data);
         vector->data = new_data;
         vector->capacity *= 2;
     } else {
@@ -109,7 +109,7 @@ void fossil_vector_push_at(fossil_vector_t* vector, size_t index, char *element)
         for (size_t i = index; i < vector->size; i++) {
             new_data[i + 1] = vector->data[i];
         }
-        fossil_tofu_fossil_tofu_free(vector->data);
+        fossil_tofu_free(vector->data);
         vector->data = new_data;
         vector->capacity *= 2;
     } else {
@@ -148,19 +148,6 @@ void fossil_vector_pop_at(fossil_vector_t* vector, size_t index) {
         vector->data[i] = vector->data[i + 1];
     }
     vector->size--;
-}
-
-int32_t fossil_vector_remove(fossil_vector_t* vector) {
-    if (vector == NULL || vector->size == 0) {
-        return FOSSIL_TOFU_FAILURE;
-    }
-    for (size_t i = 0; i < vector->size; i++) {
-        if (fossil_tofu_equals(&vector->data[i], vector->type) == 0) {
-            fossil_vector_pop_at(vector, i);
-            return FOSSIL_TOFU_SUCCESS;
-        }
-    }
-    return FOSSIL_TOFU_FAILURE;
 }
 
 void fossil_vector_erase(fossil_vector_t* vector) {
