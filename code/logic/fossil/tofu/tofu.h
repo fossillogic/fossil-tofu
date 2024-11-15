@@ -683,8 +683,8 @@ fossil_tofu_t tofu_algorithm_max(const fossil_tofu_t *array, size_t size, int (*
  * @return The sum result.
  */
 template <typename T>
-T tofu_algorithm_sum(const fossil_tofu_t *array, size_t size, T (*sum_fn)(const fossil_tofu_t &tofu)) {
-    return *static_cast<T*>(fossil_tofu_algorithm_sum(array, size, reinterpret_cast<void* (*)(const fossil_tofu_t*, void*)>(sum_fn)));
+T tofu_algorithm_sum(const fossil_tofu_t *array, size_t size, T (*sum_fn)(const fossil_tofu_t *tofu)) {
+    return *static_cast<T*>(fossil_tofu_algorithm_sum(array, size, reinterpret_cast<void* (*)(const fossil_tofu_t*)>(sum_fn)));
 }
 
 } // namespace fossil
