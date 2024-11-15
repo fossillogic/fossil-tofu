@@ -214,7 +214,7 @@ namespace fossil {
  * @param expected_type The expected type of elements in the vector.
  * @return              The created vector.
  */
-inline fossil_vector_t* vector_create_container(const std::string& type) {
+fossil_vector_t* vector_create_container(const std::string& type) {
     return fossil_vector_create_container(const_cast<char*>(type.c_str()));
 }
 
@@ -225,7 +225,7 @@ inline fossil_vector_t* vector_create_container(const std::string& type) {
  *
  * @param vector The vector to erase.
  */
-inline void vector_destroy(fossil_vector_t* vector) {
+void vector_destroy(fossil_vector_t* vector) {
     fossil_vector_destroy(vector);
 }
 
@@ -237,7 +237,7 @@ inline void vector_destroy(fossil_vector_t* vector) {
  * @param vector  The vector to which the element will be added.
  * @param element The element to add.
  */
-inline void vector_push_back(fossil_vector_t* vector, const std::string& element) {
+void vector_push_back(fossil_vector_t* vector, const std::string& element) {
     fossil_vector_push_back(vector, const_cast<char*>(element.c_str()));
 }
 
@@ -249,7 +249,7 @@ inline void vector_push_back(fossil_vector_t* vector, const std::string& element
  * @param vector  The vector to which the element will be added.
  * @param element The element to add.
  */
-inline void vector_push_front(fossil_vector_t* vector, const std::string& element) {
+void vector_push_front(fossil_vector_t* vector, const std::string& element) {
     fossil_vector_push_front(vector, const_cast<char*>(element.c_str()));
 }
 
@@ -262,7 +262,7 @@ inline void vector_push_front(fossil_vector_t* vector, const std::string& elemen
  * @param index   The index at which to add the element.
  * @param element The element to add.
  */
-inline void vector_push_at(fossil_vector_t* vector, size_t index, const std::string& element) {
+void vector_push_at(fossil_vector_t* vector, size_t index, const std::string& element) {
     fossil_vector_push_at(vector, index, const_cast<char*>(element.c_str()));
 }
 
@@ -273,7 +273,7 @@ inline void vector_push_at(fossil_vector_t* vector, size_t index, const std::str
  *
  * @param vector The vector from which to remove the last element.
  */
-inline void vector_pop_back(fossil_vector_t* vector) {
+void vector_pop_back(fossil_vector_t* vector) {
     fossil_vector_pop_back(vector);
 }
 
@@ -284,7 +284,7 @@ inline void vector_pop_back(fossil_vector_t* vector) {
  *
  * @param vector The vector from which to remove the first element.
  */
-inline void vector_pop_front(fossil_vector_t* vector) {
+void vector_pop_front(fossil_vector_t* vector) {
     fossil_vector_pop_front(vector);
 }
 
@@ -296,7 +296,7 @@ inline void vector_pop_front(fossil_vector_t* vector) {
  * @param vector The vector from which to remove the element.
  * @param index  The index at which to remove the element.
  */
-inline void vector_pop_at(fossil_vector_t* vector, size_t index) {
+void vector_pop_at(fossil_vector_t* vector, size_t index) {
     fossil_vector_pop_at(vector, index);
 }
 
@@ -307,7 +307,7 @@ inline void vector_pop_at(fossil_vector_t* vector, size_t index) {
  *
  * @param vector The vector from which to remove all elements.
  */
-inline void vector_erase(fossil_vector_t* vector) {
+void vector_erase(fossil_vector_t* vector) {
     fossil_vector_erase(vector);
 }
 
@@ -319,7 +319,7 @@ inline void vector_erase(fossil_vector_t* vector) {
  * @param vector The vector to check.
  * @return       True if the vector is a null pointer, false otherwise.
  */
-inline bool vector_is_cnullptr(const fossil_vector_t* vector) {
+bool vector_is_cnullptr(const fossil_vector_t* vector) {
     return fossil_vector_is_cnullptr(vector);
 }
 
@@ -331,7 +331,7 @@ inline bool vector_is_cnullptr(const fossil_vector_t* vector) {
  * @param vector The vector to check.
  * @return       True if the vector is not a null pointer, false otherwise.
  */
-inline bool vector_not_cnullptr(const fossil_vector_t* vector) {
+bool vector_not_cnullptr(const fossil_vector_t* vector) {
     return fossil_vector_not_cnullptr(vector);
 }
 
@@ -343,7 +343,7 @@ inline bool vector_not_cnullptr(const fossil_vector_t* vector) {
  * @param vector The vector to check.
  * @return       True if the vector is empty, false otherwise.
  */
-inline bool vector_is_empty(const fossil_vector_t* vector) {
+bool vector_is_empty(const fossil_vector_t* vector) {
     return fossil_vector_is_empty(vector);
 }
 
@@ -355,7 +355,7 @@ inline bool vector_is_empty(const fossil_vector_t* vector) {
  * @param vector The vector to check.
  * @return       True if the vector is not empty, false otherwise.
  */
-inline bool vector_not_empty(const fossil_vector_t* vector) {
+bool vector_not_empty(const fossil_vector_t* vector) {
     return fossil_vector_not_empty(vector);
 }
 
@@ -367,7 +367,7 @@ inline bool vector_not_empty(const fossil_vector_t* vector) {
  * @param vector The vector for which to get the size.
  * @return       The size of the vector.
  */
-inline size_t vector_size(const fossil_vector_t* vector) {
+size_t vector_size(const fossil_vector_t* vector) {
     return fossil_vector_size(vector);
 }
 
@@ -379,7 +379,7 @@ inline size_t vector_size(const fossil_vector_t* vector) {
  * @param vector The vector for which to get the capacity.
  * @return       The capacity of the vector.
  */
-inline size_t vector_capacity(const fossil_vector_t* vector) {
+size_t vector_capacity(const fossil_vector_t* vector) {
     return fossil_vector_capacity(vector);
 }
 
@@ -392,7 +392,7 @@ inline size_t vector_capacity(const fossil_vector_t* vector) {
  * @param index  The index of the element to get.
  * @return       The element at the specified index.
  */
-inline std::string vector_get(const fossil_vector_t* vector, size_t index) {
+std::string vector_get(const fossil_vector_t* vector, size_t index) {
     return std::string(fossil_vector_get(vector, index));
 }
 
