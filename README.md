@@ -10,17 +10,6 @@ ToFu is a versatile, platform-independent library offering a comprehensive suite
 4. **High Performance**: Implemented in C and C++ to maximize performance and resource efficiency, suitable for both desktop and embedded applications.
 5. **Extensive Documentation and Examples**: Includes comprehensive documentation and example code to help developers get started quickly and effectively.
 
-## Data Structures
-
-ToFu includes a variety of data structures that are foundational for software development:
-
-- **Lists**: Includes `flist` (forward list), `dlist` (doubly linked list).
-- **Queues**: Provides `queue` and `dequeue` (double-ended queue).
-- **Priority Queue**: Offers a `pqueue` (priority queue) for managing elements based on priority.
-- **Associative Containers**: Includes `mapof` (map) and `setof` (set), useful for key-value pairs and unique collections.
-- **Arrays and Vectors**: Features `arrayof` and `vector` for dynamic array-like structures.
-- **Stack**: Implements the stack data structure for LIFO (Last In, First Out) operations.
-
 ## Generic Tofu Type
 
 ToFu introduces the `fossil_tofu_t` type, a generic container type that supports various operations:
@@ -64,7 +53,7 @@ Before using ToFu, ensure you have the following installed:
    # ======================
    [wrap-git]
    url = https://github.com/fossillogic/fossil-tofu.git
-   revision = v0.1.4
+   revision = v0.1.5
 
    [provide]
    fossil-tofu = fossil_tofu_dep
