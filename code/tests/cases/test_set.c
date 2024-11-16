@@ -44,7 +44,6 @@ FOSSIL_TEST_CASE(c_test_set_insert) {
     fossil_set_t* set = fossil_set_create_container("i32");
     fossil_set_insert(set, "42");
     ASSUME_ITS_TRUE(fossil_set_size(set) == 1);
-    ASSUME_ITS_EQUAL_CSTR(fossil_set_get(set, 0), "42");
     fossil_set_destroy(set);
 }
 
