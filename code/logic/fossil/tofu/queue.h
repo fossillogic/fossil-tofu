@@ -21,6 +21,10 @@ extern "C"
 {
 #endif
 
+// *****************************************************************************
+// Type definitions
+// *****************************************************************************
+
 // Node structure for the queue
 typedef struct fossil_queue_node_t {
     fossil_tofu_t data;
@@ -34,6 +38,10 @@ typedef struct fossil_queue_t {
     char* type;
 } fossil_queue_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * Create a new queue with the specified data type.
  *
@@ -41,15 +49,19 @@ typedef struct fossil_queue_t {
  * @return          The created queue.
  * @note            Time complexity: O(1)
  */
-fossil_queue_t* fossil_queue_create(char* type);
+fossil_queue_t* fossil_queue_create_container(char* type);
 
 /**
- * Erase the contents of the queue and free allocated memory.
+ * Erase the contents of the queue and fossil_tofu_free allocated memory.
  *
  * @param queue The queue to erase.
  * @note        Time complexity: O(n)
  */
 void fossil_queue_destroy(fossil_queue_t* queue);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Insert data into the queue.
@@ -59,27 +71,16 @@ void fossil_queue_destroy(fossil_queue_t* queue);
  * @return      The error code indicating the success or failure of the operation.
  * @note        Time complexity: O(1)
  */
-int32_t fossil_queue_insert(fossil_queue_t* queue, fossil_tofu_t data);
+int32_t fossil_queue_insert(fossil_queue_t* queue, char *data);
 
 /**
  * Remove data from the queue.
  *
  * @param queue The queue to remove data from.
- * @param data  The data to remove.
  * @return      The error code indicating the success or failure of the operation.
  * @note        Time complexity: O(1)
  */
-int32_t fossil_queue_remove(fossil_queue_t* queue, fossil_tofu_t* data);
-
-/**
- * Search for data in the queue.
- *
- * @param queue The queue to search.
- * @param data  The data to search for.
- * @return      The error code indicating the success or failure of the operation.
- * @note        Time complexity: O(n)
- */
-int32_t fossil_queue_search(const fossil_queue_t* queue, fossil_tofu_t data);
+int32_t fossil_queue_remove(fossil_queue_t* queue);
 
 /**
  * Get the size of the queue.
@@ -127,59 +128,6 @@ bool fossil_queue_is_empty(const fossil_queue_t* queue);
 bool fossil_queue_is_cnullptr(const fossil_queue_t* queue);
 
 #ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class Queue {
-    public:
-        Queue(const std::string& type) : queue_(fossil_queue_create(const_cast<char*>(type.c_str()))) {}
-
-        ~Queue() {
-            fossil_queue_destroy(queue_);
-        }
-
-        void insert(fossil_tofu_t data) {
-            fossil_queue_insert(queue_, data);
-        }
-
-        fossil_tofu_t remove() {
-            fossil_tofu_t data;
-            fossil_queue_remove(queue_, &data);
-            return data;
-        }
-
-        bool search(fossil_tofu_t data) {
-            return fossil_queue_search(queue_, data) == 0;
-        }
-
-        size_t size() {
-            return fossil_queue_size(queue_);
-        }
-
-        bool not_empty() {
-            return fossil_queue_not_empty(queue_);
-        }
-
-        bool not_cnullptr() {
-            return fossil_queue_not_cnullptr(queue_);
-        }
-
-        bool is_empty() {
-            return fossil_queue_is_empty(queue_);
-        }
-
-        bool is_cnullptr() {
-            return fossil_queue_is_cnullptr(queue_);
-        }
-
-    private:
-        fossil_queue_t* queue_;
-    };
 }
 #endif
 

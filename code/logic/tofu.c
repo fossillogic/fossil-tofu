@@ -24,736 +24,392 @@
 #include <time.h>
 
 // Lookup table for valid strings corresponding to each tofu type.
-static const char *tofu_type_strings[] = {
-    "ghost", "int", "uint", "hex", "octal",
-    "float", "double", "bstr", "wstr", "cstr",
-    "bchar", "cchar", "wchar", "bool", "size"
+static char *_TOFU_TYPE_ID[] = {
+    "i8",
+    "i16",
+    "i32",
+    "i64",
+    "u8",
+    "u16",
+    "u32",
+    "u64",
+    "hex",
+    "octal",
+    "float",
+    "double",
+    "wstr",
+    "cstr",
+    "cchar",
+    "wchar",
+    "bool",
+    "size",
+    "any"
 };
 
-// Function to check if a string represents a valid integer
-bool is_valid_int(const char *str) {
-    if (*str == '-' || *str == '+') str++;
-    if (!*str) return false; // Ensure there's at least one digit
-    while (*str) {
-        if (!isdigit(*str)) return false;
-        str++;
-    }
-    return true;
-}
+static char *_TOFU_TYPE_NAME[] = {
+    "Signed 8-bit Integer",
+    "Signed 16-bit Integer",
+    "Signed 32-bit Integer",
+    "Signed 64-bit Integer",
+    "Unsigned 8-bit Integer",
+    "Unsigned 16-bit Integer",
+    "Unsigned 32-bit Integer",
+    "Unsigned 64-bit Integer",
+    "Hexadecimal",
+    "Octal",
+    "Float",
+    "Double",
+    "Wide String",
+    "C String",
+    "Byte",
+    "Char",
+    "Wide Char",
+    "Boolean",
+    "Size",
+    "Any"
+};
 
-// Function to check if a string represents a valid unsigned integer
-bool is_valid_uint(const char *str) {
-    if (!*str) return false; // Ensure there's at least one digit
-    while (*str) {
-        if (!isdigit(*str)) return false;
-        str++;
-    }
-    return true;
-}
+static char *_TOFU_TYPE_INFO[] = {
+    "An 8-bit signed integer value",
+    "A 16-bit signed integer value",
+    "A 32-bit signed integer value",
+    "A 64-bit signed integer value",
+    "An 8-bit unsigned integer value",
+    "A 16-bit unsigned integer value",
+    "A 32-bit unsigned integer value",
+    "A 64-bit unsigned integer value",
+    "A hexadecimal value",
+    "An octal value",
+    "A single-precision floating point value",
+    "A double-precision floating point value",
+    "A wide string value",
+    "A C string value",
+    "A byte value",
+    "A character value",
+    "A wide character value",
+    "A boolean value",
+    "A size value",
+    "A generic value"
+};
 
-// Function to check if a string represents a valid hexadecimal number
-bool is_valid_hex(const char *str) {
-    if (strlen(str) > 2 && str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
-        str += 2;  // Skip "0x" or "0X"
-        if (!*str) return false; // Ensure there's at least one digit
-        while (*str) {
-            if (!isxdigit(*str)) return false;
-            str++;
-        }
-        return true;
-    }
-    return false;
-}
+fossil_tofu_type_t fossil_tofu_validate_type(const char *type_str) {
+    if (type_str == NULL) return FOSSIL_TOFU_TYPE_ANY;
 
-// Function to check if a string represents a valid octal number
-bool is_valid_octal(const char *str) {
-    if (strlen(str) > 1 && str[0] == '0') {
-        str++;  // Skip "0"
-        if (!*str) return false; // Ensure there's at least one digit
-        while (*str) {
-            if (*str < '0' || *str > '7') return false;
-            str++;
-        }
-        return true;
-    }
-    return false;
-}
-
-// Function to check if a string represents a valid float/double
-bool is_valid_float(const char *str) {
-    bool has_dot = false;
-    if (*str == '-' || *str == '+') str++;
-    if (!*str) return false; // Ensure there's at least one digit
-    while (*str) {
-        if (*str == '.') {
-            if (has_dot) return false;  // More than one dot
-            has_dot = true;
-        } else if (!isdigit(*str)) {
-            return false;
-        }
-        str++;
-    }
-    return has_dot;  // Ensure there was at least one dot
-}
-
-// Function to check if a string represents a valid boolean (true or false)
-bool is_valid_bool(const char *str) {
-    return strcmp(str, "true") == 0 || strcmp(str, "false") == 0;
-}
-
-// Function to duplicate a wide string
-wchar_t *custom_wcsdup(const wchar_t *src) {
-    if (src == NULL) {
-        return NULL;
-    }
-
-    size_t len = wcslen(src) + 1; // +1 for the null terminator
-    wchar_t *dup = (wchar_t *)malloc(len * sizeof(wchar_t));
-    if (dup) {
-        wcscpy(dup, src);
-    }
-
-    return dup;
-}
-
-// Helper function to convert hexadecimal string to uint64_t
-static uint64_t parse_hexadecimal(const char *value) {
-    uint64_t result;
-    sscanf(value, "%" SCNx64, &result);
-    return result;
-}
-
-// Helper function to convert octal string to uint64_t
-static uint64_t parse_octal(const char *value) {
-    uint64_t result;
-    sscanf(value, "%" SCNo64, &result);
-    return result;
-}
-
-// Function to convert string to fossil_tofu_type_t
-fossil_tofu_type_t string_to_tofu_type(const char *str) {
-    if (!str) {
-        fprintf(stderr, "Error: NULL pointer passed to string_to_tofu_type\n");
-        return FOSSIL_TOFU_TYPE_GHOST;
-    }
-
-    for (int i = 0; i < FOSSIL_TOFU_TYPE_SIZE; ++i) {
-        if (strcmp(str, tofu_type_strings[i]) == 0) {
+    for (size_t i = 0; i < sizeof(_TOFU_TYPE_ID) / sizeof(_TOFU_TYPE_ID[0]); i++) {
+        if (strcmp(type_str, _TOFU_TYPE_ID[i]) == 0) {
             return (fossil_tofu_type_t)i;
         }
     }
 
-    fprintf(stderr, "Error: Invalid tofu type string '%s'\n", str);
-    return FOSSIL_TOFU_TYPE_GHOST; // Default to ghost type if not found
+    return FOSSIL_TOFU_TYPE_ANY;
 }
 
-// Helper function to check if a type is valid.
-bool fossil_tofu_is_valid_type(const char *type) {
-    size_t num_types = sizeof(tofu_type_strings) / sizeof(tofu_type_strings[0]);
-    for (size_t i = 0; i < num_types; i++) {
-        if (strcmp(type, tofu_type_strings[i]) == 0) {
-            return true;
-        }
-    }
-    return false;
-}
+// *****************************************************************************
+// Managment functions
+// *****************************************************************************
 
-// Function to create fossil_tofu_t based on type and value strings with validation checks
-fossil_tofu_t fossil_tofu_create(char *type, char *value) {
-    fossil_tofu_type_t tofu_type = string_to_tofu_type(type);
+fossil_tofu_t fossil_tofu_create(char* type, char* value) {
     fossil_tofu_t tofu;
-    tofu.type = tofu_type;
-    tofu.is_cached = false;
+    fossil_tofu_type_t type_enum = fossil_tofu_validate_type(type);
 
-    switch (tofu_type) {
-        case FOSSIL_TOFU_TYPE_INT:
-            if (!is_valid_int(value)) {
-                fprintf(stderr, "Invalid integer value\n");
-                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
-            } else {
-                tofu.value.int_val = atoll(value);
-            }
-            break;
-        case FOSSIL_TOFU_TYPE_UINT:
-            if (!is_valid_uint(value)) {
-                fprintf(stderr, "Invalid unsigned integer value\n");
-                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
-            } else {
-                tofu.value.uint_val = strtoull(value, NULL, 10);
-            }
-            break;
-        case FOSSIL_TOFU_TYPE_HEX:
-            if (!is_valid_hex(value)) {
-                fprintf(stderr, "Invalid hexadecimal value\n");
-                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
-            } else {
-                tofu.value.uint_val = parse_hexadecimal(value);
-            }
-            break;
-        case FOSSIL_TOFU_TYPE_OCTAL:
-            if (!is_valid_octal(value)) {
-                fprintf(stderr, "Invalid octal value\n");
-                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
-            } else {
-                tofu.value.uint_val = parse_octal(value);
-            }
-            break;
-        case FOSSIL_TOFU_TYPE_FLOAT:
-            if (!is_valid_float(value)) {
-                fprintf(stderr, "Invalid float value\n");
-                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
-            } else {
-                tofu.value.float_val = strtof(value, NULL);
-            }
-            break;
-        case FOSSIL_TOFU_TYPE_DOUBLE:
-            if (!is_valid_float(value)) {
-                fprintf(stderr, "Invalid double value\n");
-                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
-            } else {
-                tofu.value.double_val = strtod(value, NULL);
-            }
-            break;
-        case FOSSIL_TOFU_TYPE_BSTR:
-            tofu.value.uchar_string_val = (uint16_t *)fossil_tofu_alloc((strlen(value) + 1) * sizeof(uint16_t));
-            if (!tofu.value.uchar_string_val) {
-                fprintf(stderr, "Memory allocation failed for BSTR\n");
-                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
-            tofu.value.wchar_string_val = custom_wcsdup((wchar_t *)value);
-            if (!tofu.value.wchar_string_val) {
-                fprintf(stderr, "Memory allocation failed for WSTR\n");
-            tofu.value.cchar_string_val = fossil_tofu_strdup(value);
-            if (!tofu.value.cchar_string_val) {
-                fprintf(stderr, "Memory allocation failed for CSTR\n");
-                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
-            }
-            }
-                strcpy((char *)tofu.value.uchar_string_val, value);
-            }
-            break;
-        case FOSSIL_TOFU_TYPE_WSTR:
-            tofu.value.wchar_string_val = custom_wcsdup((wchar_t *)value);
-            break;
-        case FOSSIL_TOFU_TYPE_CSTR:
-            tofu.value.cchar_string_val = fossil_tofu_strdup(value);
-            break;
-        case FOSSIL_TOFU_TYPE_BCHAR:
-            tofu.value.uchar_val = (uint16_t)value[0];
-            break;
-        case FOSSIL_TOFU_TYPE_CCHAR:
-            tofu.value.cchar_val = value[0];
-            break;
-        case FOSSIL_TOFU_TYPE_WCHAR:
-            tofu.value.wchar_val = ((wchar_t *)value)[0];
-            break;
-        case FOSSIL_TOFU_TYPE_BOOL:
-            if (!is_valid_bool(value)) {
-                fprintf(stderr, "Invalid boolean value\n");
-                tofu.type = FOSSIL_TOFU_TYPE_GHOST;
-            } else {
-                if (strcmp(value, "true") == 0) {
-                    tofu.value.bool_val = true;
-                } else {
-                    tofu.value.bool_val = false;
-                }
-            }
-            break;
-        default:
-            fprintf(stderr, "Unsupported type\n");
-            tofu.type = FOSSIL_TOFU_TYPE_GHOST;
-            break;
+    // Validate type and handle failure
+    if (type_enum < FOSSIL_TOFU_TYPE_I8 || type_enum > FOSSIL_TOFU_TYPE_ANY) {
+        fprintf(stderr, "Invalid type: %s\n", type);
+        tofu.type = FOSSIL_TOFU_TYPE_ANY;
+    } else {
+        tofu.type = type_enum;
+    }
+
+    // Initialize data and check for memory allocation failure
+    tofu.value.data = fossil_tofu_strdup(value);
+    if (tofu.value.data == NULL) {
+        fprintf(stderr, "Memory allocation failed for value.data\n");
+        tofu.type = FOSSIL_TOFU_TYPE_ANY; // Set to a safe state if allocation fails
+    } else {
+        tofu.value.mutable_flag = true;
+    }
+
+    // Allocate memory for attributes and check for failures
+    tofu.attribute.name = fossil_tofu_strdup(_TOFU_TYPE_NAME[tofu.type]);
+    if (tofu.attribute.name == NULL) {
+        fprintf(stderr, "Memory allocation failed for attribute.name\n");
+        tofu.type = FOSSIL_TOFU_TYPE_ANY; // Set to a safe state if allocation fails
+    }
+
+    tofu.attribute.description = fossil_tofu_strdup(_TOFU_TYPE_INFO[tofu.type]);
+    if (tofu.attribute.description == NULL) {
+        fprintf(stderr, "Memory allocation failed for attribute.description\n");
+        tofu.type = FOSSIL_TOFU_TYPE_ANY; // Set to a safe state if allocation fails
+    }
+
+    tofu.attribute.id = fossil_tofu_strdup(_TOFU_TYPE_ID[tofu.type]);
+    if (tofu.attribute.id == NULL) {
+        fprintf(stderr, "Memory allocation failed for attribute.id\n");
+        tofu.type = FOSSIL_TOFU_TYPE_ANY; // Set to a safe state if allocation fails
     }
 
     return tofu;
 }
 
-// Memorization (caching) function for fossil_tofu_t
-void fossil_tofu_memorize(fossil_tofu_t *tofu) {
-    if (!tofu->is_cached) {
-        tofu->cached_value = tofu->value;
-        tofu->is_cached = true;
-    }
-}
-
-// Utility function to print fossil_tofu_t
-void fossil_tofu_print(fossil_tofu_t tofu) {
-    const char *type_str = fossil_tofu_type_to_string(tofu.type);
-    if (!type_str) {
-        fprintf(stderr, "Error: Invalid tofu type\n");
-        return;
-    }
-
-    printf("Type: %s, Value: ", type_str);
-    switch (tofu.type) {
-        case FOSSIL_TOFU_TYPE_INT:
-            printf("%" PRId64, tofu.value.int_val);
-            break;
-        case FOSSIL_TOFU_TYPE_UINT:
-            printf("%" PRIu64, tofu.value.uint_val);
-            break;
-        case FOSSIL_TOFU_TYPE_HEX:
-            printf("0x%" PRIX64, tofu.value.uint_val);
-            break;
-        case FOSSIL_TOFU_TYPE_OCTAL:
-            printf("0%" PRIo64, tofu.value.uint_val);
-            break;
-        case FOSSIL_TOFU_TYPE_FLOAT:
-            printf("%f", tofu.value.float_val);
-            break;
-        case FOSSIL_TOFU_TYPE_DOUBLE:
-            printf("%f", tofu.value.double_val);
-            break;
-        case FOSSIL_TOFU_TYPE_BSTR:
-            if (!tofu.value.uchar_string_val) {
-                fprintf(stderr, "Error: Null BSTR value\n");
-                return;
-            }
-            printf("%s", (char*)tofu.value.uchar_string_val);
-            break;
-        case FOSSIL_TOFU_TYPE_WSTR:
-            if (!tofu.value.wchar_string_val) {
-                fprintf(stderr, "Error: Null WSTR value\n");
-                return;
-            }
-            printf("%ls", tofu.value.wchar_string_val);
-            break;
-        case FOSSIL_TOFU_TYPE_CSTR:
-            if (!tofu.value.cchar_string_val) {
-                fprintf(stderr, "Error: Null CSTR value\n");
-                return;
-            }
-            printf("%s", tofu.value.cchar_string_val);
-            break;
-        case FOSSIL_TOFU_TYPE_BCHAR:
-            printf("%c", (char)tofu.value.uchar_val);
-            break;
-        case FOSSIL_TOFU_TYPE_CCHAR:
-            printf("%c", tofu.value.cchar_val);
-            break;
-        case FOSSIL_TOFU_TYPE_WCHAR:
-            printf("%c", (char)tofu.value.wchar_val);
-            break;
-        case FOSSIL_TOFU_TYPE_SIZE:
-            printf("%" PRIuPTR, (uintptr_t)tofu.value.size_val);
-            break;
-        case FOSSIL_TOFU_TYPE_BOOL:
-            printf("%s", tofu.value.bool_val ? "true" : "false");
-            break;
-        default:
-            printf("unknown");
-            break;
-    }
-    printf("\n");
-}
-
-// Function to destroy fossil_tofu_t and free allocated memory
 void fossil_tofu_destroy(fossil_tofu_t *tofu) {
-    if (!tofu) {
-        return;
-    }
-
-    switch (tofu->type) {
-        case FOSSIL_TOFU_TYPE_BSTR:
-            if (tofu->value.uchar_string_val) {
-                fossil_tofu_free(tofu->value.uchar_string_val);
-            }
-            break;
-        case FOSSIL_TOFU_TYPE_WSTR:
-            if (tofu->value.wchar_string_val) {
-                fossil_tofu_free(tofu->value.wchar_string_val);
-            }
-            break;
-        case FOSSIL_TOFU_TYPE_CSTR:
-            if (tofu->value.cchar_string_val) {
-                fossil_tofu_free(tofu->value.cchar_string_val);
-            }
-            break;
-        default:
-            break;
-    }
-    tofu->type = FOSSIL_TOFU_TYPE_GHOST;
-    tofu->is_cached = false;
+    if (tofu == NULL) return;
+    fossil_tofu_free(tofu->value.data);
+    fossil_tofu_free(tofu->attribute.name);
+    fossil_tofu_free(tofu->attribute.description);
+    fossil_tofu_free(tofu->attribute.id);
 }
 
-// Utility function to convert fossil_tofu_type_t to string representation
-const char* fossil_tofu_type_to_string(fossil_tofu_type_t type) {
-    if (type >= 0 && type < FOSSIL_TOFU_TYPE_BOOL) {
-        return tofu_type_strings[type];
-    } else {
-        return "unknown";
-    }
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
+
+int fossil_tofu_set_value(fossil_tofu_t *tofu, char *value) {
+    if (tofu == NULL || !tofu->value.mutable_flag) return FOSSIL_TOFU_FAILURE;
+
+    fossil_tofu_free(tofu->value.data);
+    tofu->value.data = fossil_tofu_strdup(value);
+    return FOSSIL_TOFU_SUCCESS;
 }
 
-// Utility function to compare two fossil_tofu_t objects
-bool fossil_tofu_compare(fossil_tofu_t *tofu1, fossil_tofu_t *tofu2) {
-    if (!tofu1 || !tofu2) {
-        fprintf(stderr, "Error: Null pointer passed to fossil_tofu_compare\n");
-        return false;
-    }
-    if (tofu1->type != tofu2->type) return false;
-
-    switch (tofu1->type) {
-        case FOSSIL_TOFU_TYPE_INT:
-            return tofu1->value.int_val == tofu2->value.int_val;
-        case FOSSIL_TOFU_TYPE_UINT:
-        case FOSSIL_TOFU_TYPE_HEX:
-        case FOSSIL_TOFU_TYPE_OCTAL:
-            return tofu1->value.uint_val == tofu2->value.uint_val;
-        case FOSSIL_TOFU_TYPE_FLOAT:
-            return tofu1->value.float_val == tofu2->value.float_val;
-        case FOSSIL_TOFU_TYPE_DOUBLE:
-            return tofu1->value.double_val == tofu2->value.double_val;
-        case FOSSIL_TOFU_TYPE_BSTR:
-            if (!tofu1->value.uchar_string_val || !tofu2->value.uchar_string_val) {
-                fprintf(stderr, "Error: Null string in BSTR comparison\n");
-                return false;
-            }
-            return strcmp((char*)tofu1->value.uchar_string_val, (char*)tofu2->value.uchar_string_val) == 0;
-        case FOSSIL_TOFU_TYPE_WSTR:
-            if (!tofu1->value.wchar_string_val || !tofu2->value.wchar_string_val) {
-                fprintf(stderr, "Error: Null string in WSTR comparison\n");
-                return false;
-            }
-            return wcscmp(tofu1->value.wchar_string_val, tofu2->value.wchar_string_val) == 0;
-        case FOSSIL_TOFU_TYPE_CSTR:
-            if (!tofu1->value.cchar_string_val || !tofu2->value.cchar_string_val) {
-                fprintf(stderr, "Error: Null string in CSTR comparison\n");
-                return false;
-            }
-            return strcmp(tofu1->value.cchar_string_val, tofu2->value.cchar_string_val) == 0;
-        case FOSSIL_TOFU_TYPE_BCHAR:
-            return tofu1->value.uchar_val == tofu2->value.uchar_val;
-        case FOSSIL_TOFU_TYPE_CCHAR:
-            return tofu1->value.cchar_val == tofu2->value.cchar_val;
-        case FOSSIL_TOFU_TYPE_WCHAR:
-            return tofu1->value.wchar_val == tofu2->value.wchar_val;
-        case FOSSIL_TOFU_TYPE_SIZE:
-            return tofu1->value.size_val == tofu2->value.size_val;
-        case FOSSIL_TOFU_TYPE_BOOL:
-            return tofu1->value.bool_val == tofu2->value.bool_val;
-        default:
-            return false;
-    }
+char* fossil_tofu_get_value(const fossil_tofu_t *tofu) {
+    return tofu != NULL ? tofu->value.data : NULL;
 }
 
-// Utility function to check if two fossil_tofu_t objects are equal
-bool fossil_tofu_equals(fossil_tofu_t tofu1, fossil_tofu_t tofu2) {
-    if (tofu1.type != tofu2.type) {
-        return false;
-    }
-
-    switch (tofu1.type) {
-        case FOSSIL_TOFU_TYPE_INT:
-            return tofu1.value.int_val == tofu2.value.int_val;
-        case FOSSIL_TOFU_TYPE_UINT:
-        case FOSSIL_TOFU_TYPE_HEX:
-        case FOSSIL_TOFU_TYPE_OCTAL:
-            return tofu1.value.uint_val == tofu2.value.uint_val;
-        case FOSSIL_TOFU_TYPE_FLOAT:
-            return tofu1.value.float_val == tofu2.value.float_val;
-        case FOSSIL_TOFU_TYPE_DOUBLE:
-            return tofu1.value.double_val == tofu2.value.double_val;
-        case FOSSIL_TOFU_TYPE_BSTR:
-            if (!tofu1.value.uchar_string_val || !tofu2.value.uchar_string_val) {
-                fprintf(stderr, "Error: Null string in BSTR comparison\n");
-                return false;
-            }
-            return strcmp((char*)tofu1.value.uchar_string_val, (char*)tofu2.value.uchar_string_val) == 0;
-        case FOSSIL_TOFU_TYPE_WSTR:
-            if (!tofu1.value.wchar_string_val || !tofu2.value.wchar_string_val) {
-                fprintf(stderr, "Error: Null string in WSTR comparison\n");
-                return false;
-            }
-            return wcscmp(tofu1.value.wchar_string_val, tofu2.value.wchar_string_val) == 0;
-        case FOSSIL_TOFU_TYPE_CSTR:
-            if (!tofu1.value.cchar_string_val || !tofu2.value.cchar_string_val) {
-                fprintf(stderr, "Error: Null string in CSTR comparison\n");
-                return false;
-            }
-            return strcmp(tofu1.value.cchar_string_val, tofu2.value.cchar_string_val) == 0;
-        case FOSSIL_TOFU_TYPE_BCHAR:
-            return tofu1.value.uchar_val == tofu2.value.uchar_val;
-        case FOSSIL_TOFU_TYPE_CCHAR:
-            return tofu1.value.cchar_val == tofu2.value.cchar_val;
-        case FOSSIL_TOFU_TYPE_WCHAR:
-            return tofu1.value.wchar_val == tofu2.value.wchar_val;
-        case FOSSIL_TOFU_TYPE_SIZE:
-            return tofu1.value.size_val == tofu2.value.size_val;
-        case FOSSIL_TOFU_TYPE_BOOL:
-            return tofu1.value.bool_val == tofu2.value.bool_val;
-        default:
-            return false;
-    }
+bool fossil_tofu_is_mutable(const fossil_tofu_t *tofu) {
+    return tofu != NULL && tofu->value.mutable_flag;
 }
 
-// Utility function to copy a fossil_tofu_t object
-fossil_tofu_t fossil_tofu_copy(fossil_tofu_t tofu) {
-    fossil_tofu_t copy = tofu;
-    copy.is_cached = false; // Reset the cached state in the copy
-    
-    switch (tofu.type) {
-        case FOSSIL_TOFU_TYPE_BSTR:
-            copy.value.uchar_string_val = (uint16_t *)fossil_tofu_strdup((char*)tofu.value.uchar_string_val);
-            if (!copy.value.uchar_string_val) {
-                fprintf(stderr, "Memory allocation failed for BSTR\n");
-                copy.type = FOSSIL_TOFU_TYPE_GHOST;
-            }
-            break;
-        case FOSSIL_TOFU_TYPE_WSTR:
-            copy.value.wchar_string_val = custom_wcsdup(tofu.value.wchar_string_val);
-            if (!copy.value.wchar_string_val) {
-                fprintf(stderr, "Memory allocation failed for WSTR\n");
-                copy.type = FOSSIL_TOFU_TYPE_GHOST;
-            }
-            break;
-        case FOSSIL_TOFU_TYPE_CSTR:
-            copy.value.cchar_string_val = fossil_tofu_strdup(tofu.value.cchar_string_val);
-            if (!copy.value.cchar_string_val) {
-                fprintf(stderr, "Memory allocation failed for CSTR\n");
-                copy.type = FOSSIL_TOFU_TYPE_GHOST;
-            }
-            break;
-        case FOSSIL_TOFU_TYPE_INT:
-            copy.value.int_val = tofu.value.int_val;
-            break;
-        case FOSSIL_TOFU_TYPE_UINT:
-        case FOSSIL_TOFU_TYPE_HEX:
-        case FOSSIL_TOFU_TYPE_OCTAL:
-            copy.value.uint_val = tofu.value.uint_val;
-            break;
-        case FOSSIL_TOFU_TYPE_FLOAT:
-            copy.value.float_val = tofu.value.float_val;
-            break;
-        case FOSSIL_TOFU_TYPE_DOUBLE:
-            copy.value.double_val = tofu.value.double_val;
-            break;
-        case FOSSIL_TOFU_TYPE_BCHAR:
-            copy.value.uchar_val = tofu.value.uchar_val;
-            break;
-        case FOSSIL_TOFU_TYPE_CCHAR:
-            copy.value.cchar_val = tofu.value.cchar_val;
-            break;
-        case FOSSIL_TOFU_TYPE_WCHAR:
-            copy.value.wchar_val = tofu.value.wchar_val;
-            break;
-        case FOSSIL_TOFU_TYPE_SIZE:
-            copy.value.size_val = tofu.value.size_val;
-            break;
-        case FOSSIL_TOFU_TYPE_BOOL:
-            copy.value.bool_val = tofu.value.bool_val;
-            break;
-        default:
-            break;
-    }
-    return copy;
+int fossil_tofu_set_mutable(fossil_tofu_t *tofu, bool mutable_flag) {
+    if (tofu == NULL) return FOSSIL_TOFU_FAILURE;
+
+    tofu->value.mutable_flag = mutable_flag;
+    return FOSSIL_TOFU_SUCCESS;
 }
 
-// Function to transform elements in an array
-void fossil_tofu_actionof_transform(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t)) {
-    if (!array || !func) return;
+fossil_tofu_type_t fossil_tofu_get_type(const fossil_tofu_t *tofu) {
+    return tofu != NULL ? tofu->type : FOSSIL_TOFU_TYPE_ANY;
+}
+
+const char* fossil_tofu_type_name(fossil_tofu_type_t type) {
+    if (type >= 0 && type < sizeof(_TOFU_TYPE_NAME) / sizeof(_TOFU_TYPE_NAME[0])) {
+        return _TOFU_TYPE_NAME[type];
+    }
+    return "Unknown Type";
+}
+
+const char* fossil_tofu_type_info(fossil_tofu_type_t type) {
+    if (type >= 0 && type < sizeof(_TOFU_TYPE_NAME) / sizeof(_TOFU_TYPE_NAME[0])) {
+        return _TOFU_TYPE_NAME[type];
+    }
+    return "No type info available.";
+}
+
+void fossil_tofu_display(const fossil_tofu_t *tofu) {
+    if (tofu == NULL) return;
+
+    printf("Type: %s\n", fossil_tofu_type_name(tofu->type));
+    printf("Value: %s\n", tofu->value.data);
+    printf("Attribute Name: %s\n", tofu->attribute.name);
+    printf("Description: %s\n", tofu->attribute.description);
+    printf("ID: %s\n", tofu->attribute.id);
+}
+
+int fossil_tofu_set_attribute(fossil_tofu_t *tofu, const char *name, const char *description, const char *id) {
+    if (tofu == NULL) return FOSSIL_TOFU_FAILURE;
+
+    fossil_tofu_free(tofu->attribute.name);
+    fossil_tofu_free(tofu->attribute.description);
+    fossil_tofu_free(tofu->attribute.id);
+
+    tofu->attribute.name = fossil_tofu_strdup(name);
+    tofu->attribute.description = fossil_tofu_strdup(description);
+    tofu->attribute.id = fossil_tofu_strdup(id);
+
+    return FOSSIL_TOFU_SUCCESS;
+}
+
+const fossil_tofu_attribute_t* fossil_tofu_get_attribute(const fossil_tofu_t *tofu) {
+    return tofu != NULL ? &tofu->attribute : NULL;
+}
+
+bool fossil_tofu_equals(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2) {
+    if (tofu1 == NULL || tofu2 == NULL) return false;
+
+    return tofu1->type == tofu2->type &&
+           strcmp(tofu1->value.data, tofu2->value.data) == 0;
+}
+
+int fossil_tofu_copy(fossil_tofu_t *dest, const fossil_tofu_t *src) {
+    if (dest == NULL || src == NULL) return FOSSIL_TOFU_FAILURE;
+
+    dest->type = src->type;
+    dest->value.data = fossil_tofu_strdup(src->value.data);
+    dest->value.mutable_flag = src->value.mutable_flag;
+
+    dest->attribute.name = fossil_tofu_strdup(src->attribute.name);
+    dest->attribute.description = fossil_tofu_strdup(src->attribute.description);
+    dest->attribute.id = fossil_tofu_strdup(src->attribute.id);
+
+    return FOSSIL_TOFU_SUCCESS;
+}
+
+// *****************************************************************************
+// Algorithm functions
+// *****************************************************************************
+
+int fossil_tofu_algorithm_compare(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2) {
+    if (tofu1 == NULL || tofu2 == NULL || tofu1->value.data == NULL || tofu2->value.data == NULL) return FOSSIL_TOFU_SUCCESS;
+
+    if (tofu1->type != tofu2->type) {
+        return (int)tofu1->type - (int)tofu2->type;
+    }
+
+    return strcmp(tofu1->value.data, tofu2->value.data);
+}
+
+int fossil_tofu_algorithm_search(const fossil_tofu_t *array, size_t size, const fossil_tofu_t *tofu) {
+    if (array == NULL || tofu == NULL) return FOSSIL_TOFU_FAILURE;
+
     for (size_t i = 0; i < size; i++) {
-        array[i] = func(array[i]);
+        if (fossil_tofu_equals(&array[i], tofu)) {
+            return (int)i;
+        }
     }
+
+    return FOSSIL_TOFU_FAILURE;
 }
 
-// Function to accumulate elements in an array
-fossil_tofu_t fossil_tofu_actionof_accumulate(fossil_tofu_t *array, size_t size, fossil_tofu_t init, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t)) {
-    if (!array || !func) return init;
-    fossil_tofu_t result = init;
+int fossil_tofu_algorithm_sort(fossil_tofu_t *array, size_t size, bool ascending) {
+    if (array == NULL || size == 0) return FOSSIL_TOFU_FAILURE;
+
+    // Perform sorting using bubble-sort style
+    for (size_t i = 0; i < size - 1; i++) {
+        for (size_t j = i + 1; j < size; j++) {
+            int cmp = fossil_tofu_algorithm_compare(&array[i], &array[j]);
+
+            // Determine if we need to swap based on ascending/descending order
+            if ((ascending && cmp > 0) || (!ascending && cmp < 0)) {
+                // Swap entire `fossil_tofu_t` elements
+                fossil_tofu_t temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+    }
+
+    return FOSSIL_TOFU_SUCCESS;
+}
+
+int fossil_tofu_algorithm_transform(fossil_tofu_t *array, size_t size, int (*transform_fn)(fossil_tofu_t *tofu)) {
+    if (array == NULL || size == 0) return FOSSIL_TOFU_FAILURE;
+
     for (size_t i = 0; i < size; i++) {
-        result = func(result, array[i]);
+        if (transform_fn(&array[i]) != FOSSIL_TOFU_SUCCESS) {
+            return FOSSIL_TOFU_FAILURE;
+        }
     }
-    return result;
+
+    return FOSSIL_TOFU_SUCCESS;
 }
 
-// Function to filter elements in an array
-size_t fossil_tofu_actionof_filter(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t)) {
-    if (!array || !pred) return 0;
+void* fossil_tofu_algorithm_accumulate(const fossil_tofu_t *array, size_t size, void* (*accumulate_fn)(const fossil_tofu_t *tofu, void *accum), void* initial) {
+    if (array == NULL || size == 0) return NULL;
+
+    void *accum = initial;
+    for (size_t i = 0; i < size; i++) {
+        accum = accumulate_fn(&array[i], accum);
+    }
+
+    return accum;
+}
+
+int fossil_tofu_algorithm_filter(const fossil_tofu_t *array, size_t size, bool (*filter_fn)(const fossil_tofu_t *tofu), fossil_tofu_t **result, size_t *result_size) {
+    if (array == NULL || size == 0) return FOSSIL_TOFU_FAILURE;
+
+    size_t count = 0;
+    for (size_t i = 0; i < size; i++) {
+        if (filter_fn(&array[i])) {
+            count++;
+        }
+    }
+
+    if (count == 0) {
+        *result = NULL;
+        *result_size = 0;
+        return FOSSIL_TOFU_SUCCESS;
+    }
+
+    *result = fossil_tofu_alloc(count * sizeof(fossil_tofu_t));
+    if (*result == NULL) {
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     size_t j = 0;
     for (size_t i = 0; i < size; i++) {
-        if (pred(array[i])) {
-            array[j++] = array[i];
+        if (filter_fn(&array[i])) {
+            fossil_tofu_copy(&(*result)[j], &array[i]);
+            j++;
         }
     }
-    return j;
+
+    *result_size = count;
+    return FOSSIL_TOFU_SUCCESS;
 }
 
-// Function to search for an element in an array
-fossil_tofu_t* fossil_tofu_actionof_search(fossil_tofu_t *array, size_t size, fossil_tofu_t key, bool (*compare)(fossil_tofu_t, fossil_tofu_t)) {
-    if (!array || !compare) return NULL;
-    for (size_t i = 0; i < size; i++) {
-        if (compare(array[i], key)) {
-            return &array[i];
-        }
+int fossil_tofu_algorithm_reverse(fossil_tofu_t *array, size_t size) {
+    if (array == NULL || size == 0) return FOSSIL_TOFU_FAILURE;
+
+    fossil_tofu_t temp;
+    for (size_t i = 0; i < size / 2; i++) {
+        temp = array[i];
+        array[i] = array[size - i - 1];
+        array[size - i - 1] = temp;
     }
-    return NULL;
+
+    return FOSSIL_TOFU_SUCCESS;
 }
 
-// Function to reverse elements in an array
-void fossil_tofu_actionof_reverse(fossil_tofu_t *array, size_t size) {
-    if (!array) return;
-    for (size_t i = 0, j = size - 1; i < j; i++, j--) {
-        fossil_tofu_actionof_swap(array, i, j);
-    }
-}
+fossil_tofu_t* fossil_tofu_algorithm_min(const fossil_tofu_t *array, size_t size, int (*compare_fn)(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2)) {
+    if (array == NULL || size == 0) return NULL;
 
-// Function to swap two elements in an array
-void fossil_tofu_actionof_swap(fossil_tofu_t *array, size_t index1, size_t index2) {
-    if (!array) return;
-    fossil_tofu_t temp = array[index1];
-    array[index1] = array[index2];
-    array[index2] = temp;
-}
-
-// Function to compare two elements
-int fossil_tofu_actionof_compare(fossil_tofu_t a, fossil_tofu_t b) {
-    if (a.type != b.type) return a.type - b.type;
-
-    switch (a.type) {
-        case FOSSIL_TOFU_TYPE_INT:
-            return (a.value.int_val > b.value.int_val) - (a.value.int_val < b.value.int_val);
-        case FOSSIL_TOFU_TYPE_UINT:
-        case FOSSIL_TOFU_TYPE_HEX:
-        case FOSSIL_TOFU_TYPE_OCTAL:
-            return (a.value.uint_val > b.value.uint_val) - (a.value.uint_val < b.value.uint_val);
-        case FOSSIL_TOFU_TYPE_DOUBLE:
-            return (a.value.double_val > b.value.double_val) - (a.value.double_val < b.value.double_val);
-        case FOSSIL_TOFU_TYPE_FLOAT:
-            return (a.value.float_val > b.value.float_val) - (a.value.float_val < b.value.float_val);
-        case FOSSIL_TOFU_TYPE_BSTR:
-            return strcmp((char*)a.value.uchar_string_val, (char*)b.value.uchar_string_val);
-        case FOSSIL_TOFU_TYPE_WSTR:
-            return wcscmp(a.value.wchar_string_val, b.value.wchar_string_val);
-        case FOSSIL_TOFU_TYPE_CSTR:
-            return strcmp(a.value.cchar_string_val, b.value.cchar_string_val);
-        case FOSSIL_TOFU_TYPE_BCHAR:
-            return (a.value.uchar_val > b.value.uchar_val) - (a.value.uchar_val < b.value.uchar_val);
-        case FOSSIL_TOFU_TYPE_CCHAR:
-            return (a.value.cchar_val > b.value.cchar_val) - (a.value.cchar_val < b.value.cchar_val);
-        case FOSSIL_TOFU_TYPE_WCHAR:
-            return (a.value.wchar_val > b.value.wchar_val) - (a.value.wchar_val < b.value.wchar_val);
-        case FOSSIL_TOFU_TYPE_SIZE:
-            return (a.value.size_val > b.value.size_val) - (a.value.size_val < b.value.size_val);
-        case FOSSIL_TOFU_TYPE_BOOL:
-            return (a.value.bool_val > b.value.bool_val) - (a.value.bool_val < b.value.bool_val);
-        default:
-            return 0; // Consider equal for unknown types
-    }
-}
-
-// Function to reduce elements in an array
-fossil_tofu_t fossil_tofu_actionof_reduce(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t)) {
-    if (!array || !func || size == 0) return fossil_tofu_create("ghost", "");
-    fossil_tofu_t result = array[0];
+    fossil_tofu_t *min = (fossil_tofu_t*)&array[0];
     for (size_t i = 1; i < size; i++) {
-        result = func(result, array[i]);
-    }
-    return result;
-}
-
-// Function to shuffle elements in an array
-void fossil_tofu_actionof_shuffle(fossil_tofu_t *array, size_t size) {
-    if (!array) return;
-    srand(time(NULL));
-    for (size_t i = 0; i < size; i++) {
-        size_t j = i + rand() / (RAND_MAX / (size - i) + 1);
-        fossil_tofu_actionof_swap(array, i, j);
-    }
-}
-
-// Function to apply a function to each element in an array
-void fossil_tofu_actionof_for_each(fossil_tofu_t *array, size_t size, void (*func)(fossil_tofu_t)) {
-    if (!array || !func) return;
-    for (size_t i = 0; i < size; i++) {
-        func(array[i]);
-    }
-}
-
-// Function to partition elements in an array
-size_t fossil_tofu_actionof_partition(fossil_tofu_t *array, size_t size, bool (*pred)(fossil_tofu_t)) {
-    if (!array || !pred) return 0;
-    size_t j = 0;
-    for (size_t i = 0; i < size; i++) {
-        if (pred(array[i])) {
-            fossil_tofu_actionof_swap(array, i, j++);
+        if (compare_fn(&array[i], min) < 0) {
+            min = (fossil_tofu_t*)&array[i];
         }
     }
-    return j;
+
+    return min;
 }
 
-// Function to calculate the summary of elements in an array
-fossil_tofu_t fossil_tofu_actionof_summary(fossil_tofu_t *array, size_t size, fossil_tofu_t (*func)(fossil_tofu_t, fossil_tofu_t)) {
-    if (!array || !func) return fossil_tofu_create("ghost", "");
-    return fossil_tofu_actionof_reduce(array, size, func);
+fossil_tofu_t* fossil_tofu_algorithm_max(const fossil_tofu_t *array, size_t size, int (*compare_fn)(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2)) {
+    if (array == NULL || size == 0) return NULL;
+
+    fossil_tofu_t *max = (fossil_tofu_t*)&array[0];
+    for (size_t i = 1; i < size; i++) {
+        if (compare_fn(&array[i], max) > 0) {
+            max = (fossil_tofu_t*)&array[i];
+        }
+    }
+
+    return max;
 }
 
-// Helper function for calculating the average
-fossil_tofu_t fossil_tofu_actionof_average_helper(fossil_tofu_t a, fossil_tofu_t b) {
-    a.value.double_val += b.value.double_val;
-    return a;
-}
+void* fossil_tofu_algorithm_sum(const fossil_tofu_t *array, size_t size, void* (*sum_fn)(const fossil_tofu_t *tofu)) {
+    if (array == NULL || size == 0) return NULL;
 
-// Function to calculate the average of elements in an array
-fossil_tofu_t fossil_tofu_actionof_average(fossil_tofu_t *array, size_t size) {
-    if (!array || size == 0) return fossil_tofu_create("ghost", "ghost");
-    fossil_tofu_t sum = fossil_tofu_actionof_reduce(array, size, fossil_tofu_actionof_average_helper);
-    sum.value.double_val /= size;
+    void *sum = sum_fn(&array[0]);
+    for (size_t i = 1; i < size; i++) {
+        sum = sum_fn(&array[i]);
+    }
+
     return sum;
 }
 
-// Function to create a new iterator for an array of tofu
-fossil_tofu_iteratorof_t fossil_tofu_iteratorof_create(fossil_tofu_t *array, size_t size) {
-    fossil_tofu_iteratorof_t iterator;
-    if (!array || size == 0) {
-        fprintf(stderr, "Error: Invalid array or size\n");
-        iterator.array = NULL;
-        iterator.size = 0;
-        iterator.current_index = 0;
-    } else {
-        iterator.array = array;
-        iterator.size = size;
-        iterator.current_index = 0;
-    }
-    return iterator;
-}
+// *****************************************************************************
+// Memory management functions
+// *****************************************************************************
 
-// Function to check if the iterator has more elements
-bool fossil_tofu_iteratorof_has_next(fossil_tofu_iteratorof_t *iterator) {
-    if (!iterator || !iterator->array) {
-        fprintf(stderr, "Error: Invalid iterator\n");
-        return false;
-    }
-    return iterator->current_index < iterator->size;
-}
-
-// Function to get the next element in the iterator
-fossil_tofu_t fossil_tofu_iteratorof_next(fossil_tofu_iteratorof_t *iterator) {
-    if (!iterator || !iterator->array) {
-        fprintf(stderr, "Error: Invalid iterator\n");
-        return fossil_tofu_create("ghost", ""); // Return a ghost tofu if iterator is invalid
-    }
-    if (fossil_tofu_iteratorof_has_next(iterator)) {
-        return iterator->array[iterator->current_index++];
-    }
-    fprintf(stderr, "Error: No more elements in iterator\n");
-    return fossil_tofu_create("ghost", ""); // Return a ghost tofu if no more elements
-}
-
-// Function to reset the iterator to the beginning
-void fossil_tofu_iteratorof_reset(fossil_tofu_iteratorof_t *iterator) {
-    if (!iterator) {
-        fprintf(stderr, "Error: Invalid iterator\n");
-        return;
-    }
-    iterator->current_index = 0;
-}
-
-/**
- * @brief Allocate memory.
- * 
- * @param size Size of the memory to allocate.
- * @return Pointer to the allocated memory, or NULL if allocation fails or size is 0.
- */
 tofu_memory_t fossil_tofu_alloc(size_t size) {
     if (size == 0) {
         fprintf(stderr, "Error: Cannot allocate zero bytes\n");
@@ -768,13 +424,6 @@ tofu_memory_t fossil_tofu_alloc(size_t size) {
     return ptr;
 }
 
-/**
- * @brief Reallocate memory.
- * 
- * @param ptr Pointer to the memory to reallocate.
- * @param size Size of the memory to reallocate.
- * @return Pointer to the reallocated memory, or NULL if reallocation fails.
- */
 tofu_memory_t fossil_tofu_realloc(tofu_memory_t ptr, size_t size) {
     if (size == 0) {
         fprintf(stderr, "Error: Cannot reallocate to zero bytes\n");
@@ -791,11 +440,6 @@ tofu_memory_t fossil_tofu_realloc(tofu_memory_t ptr, size_t size) {
     return new_ptr;
 }
 
-/**
- * @brief Free memory.
- * 
- * @param ptr Pointer to the memory to free.
- */
 void fossil_tofu_free(tofu_memory_t ptr) {
     if (ptr) {
         free(ptr);
@@ -804,12 +448,6 @@ void fossil_tofu_free(tofu_memory_t ptr) {
     }
 } // end of fun
 
-/**
- * @brief Duplicate a string.
- * 
- * @param str String to duplicate.
- * @return Pointer to the duplicated string, or NULL if allocation fails.
- */
 char* fossil_tofu_strdup(const char* str) {
     if (!str) {
         fprintf(stderr, "Error: NULL pointer passed to fossil_tofu_strdup\n");

@@ -21,6 +21,10 @@ extern "C"
 {
 #endif
 
+// *****************************************************************************
+// Type definitions
+// *****************************************************************************
+
 // Node structure for the set
 typedef struct fossil_set_node_t {
     fossil_tofu_t data;
@@ -33,6 +37,10 @@ typedef struct fossil_set_t {
     char* type;
 } fossil_set_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * Create a new set with the specified data type.
  *
@@ -40,15 +48,19 @@ typedef struct fossil_set_t {
  * @return          The created set.
  * @note            O(1) - Constant time complexity.
  */
-fossil_set_t* fossil_set_create(char* type);
+fossil_set_t* fossil_set_create_container(char* type);
 
 /**
- * Erase the contents of the set and free allocated memory.
+ * Erase the contents of the set and fossil_tofu_free allocated memory.
  *
  * @param set The set to erase.
  * @note      O(n) - Linear time complexity, where n is the number of elements in the set.
  */
 void fossil_set_destroy(fossil_set_t* set);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Insert data into the set.
@@ -58,7 +70,7 @@ void fossil_set_destroy(fossil_set_t* set);
  * @return     The error code indicating the success or failure of the operation.
  * @note       O(1) - Constant time complexity.
  */
-int32_t fossil_set_insert(fossil_set_t* set, fossil_tofu_t data);
+int32_t fossil_set_insert(fossil_set_t* set, char *data);
 
 /**
  * Remove data from the set.
@@ -68,17 +80,7 @@ int32_t fossil_set_insert(fossil_set_t* set, fossil_tofu_t data);
  * @return     The error code indicating the success or failure of the operation.
  * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
  */
-int32_t fossil_set_remove(fossil_set_t* set, fossil_tofu_t data);
-
-/**
- * Search for data in the set.
- *
- * @param set  The set to search.
- * @param data The data to search for.
- * @return     The error code indicating the success or failure of the operation.
- * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
- */
-int32_t fossil_set_search(const fossil_set_t* set, fossil_tofu_t data);
+void fossil_set_erase(fossil_set_t *set);
 
 /**
  * Get the size of the set.
@@ -125,72 +127,7 @@ bool fossil_set_is_empty(const fossil_set_t* set);
  */
 bool fossil_set_is_cnullptr(const fossil_set_t* set);
 
-/**
- * Check if the set contains a specific element.
- *
- * @param set  The set to check.
- * @param data The data to search for.
- * @return     True if the set contains the element, false otherwise.
- * @note       O(n) - Linear time complexity, where n is the number of elements in the set.
- */
-int32_t fossil_set_contains(const fossil_set_t* set, fossil_tofu_t data);
-
 #ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class Set {
-    public:
-        Set(const std::string& type) : set_(fossil_set_create(const_cast<char*>(type.c_str()))) {}
-
-        ~Set() {
-            fossil_set_destroy(set_);
-        }
-
-        void insert(fossil_tofu_t data) {
-            fossil_set_insert(set_, data);
-        }
-
-        void remove(fossil_tofu_t data) {
-            fossil_set_remove(set_, data);
-        }
-
-        int search(fossil_tofu_t data) {
-            return fossil_set_search(set_, data);
-        }
-
-        size_t size() {
-            return fossil_set_size(set_);
-        }
-
-        bool not_empty() {
-            return fossil_set_not_empty(set_);
-        }
-
-        bool not_cnullptr() {
-            return fossil_set_not_cnullptr(set_);
-        }
-
-        bool is_empty() {
-            return fossil_set_is_empty(set_);
-        }
-
-        bool is_cnullptr() {
-            return fossil_set_is_cnullptr(set_);
-        }
-
-        bool contains(fossil_tofu_t data) {
-            return fossil_set_contains(set_, data);
-        }
-
-    private:
-        fossil_set_t* set_;
-    };
 }
 #endif
 

@@ -21,6 +21,10 @@ extern "C"
 {
 #endif
 
+// *****************************************************************************
+// Type definitions
+// *****************************************************************************
+
 typedef struct fossil_pqueue_node_t {
     fossil_tofu_t data;
     int32_t priority;
@@ -32,6 +36,10 @@ typedef struct fossil_pqueue_t {
     char* type;
 } fossil_pqueue_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * Create a new priority queue with the specified data type.
  *
@@ -39,15 +47,19 @@ typedef struct fossil_pqueue_t {
  * @return           The created priority queue.
  * @note             Time complexity: O(1)
  */
-fossil_pqueue_t* fossil_pqueue_create(char* type);
+fossil_pqueue_t* fossil_pqueue_create_container(char* type);
 
 /**
- * Erase the contents of the priority queue and free allocated memory.
+ * Erase the contents of the priority queue and fossil_tofu_free allocated memory.
  *
  * @param pqueue The priority queue to erase.
  * @note         Time complexity: O(n)
  */
 void fossil_pqueue_destroy(fossil_pqueue_t* pqueue);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Insert data into the priority queue with the specified priority.
@@ -58,29 +70,17 @@ void fossil_pqueue_destroy(fossil_pqueue_t* pqueue);
  * @return         The error code indicating the success or failure of the operation.
  * @note           Time complexity: O(n)
  */
-int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority);
+int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, char *data, int32_t priority);
 
 /**
  * Remove data from the priority queue.
  *
  * @param pqueue   The priority queue to remove data from.
- * @param data     The data to remove.
  * @param priority The priority of the data.
  * @return         The error code indicating the success or failure of the operation.
  * @note           Time complexity: O(1)
  */
-int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, fossil_tofu_t* data, int32_t priority);
-
-/**
- * Search for data in the priority queue.
- *
- * @param pqueue   The priority queue to search.
- * @param data     The data to search for.
- * @param priority The priority of the data.
- * @return         The error code indicating the success or failure of the operation.
- * @note           Time complexity: O(n)
- */
-int32_t fossil_pqueue_search(const fossil_pqueue_t* pqueue, fossil_tofu_t data, int32_t priority);
+int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, int32_t priority);
 
 /**
  * Get the size of the priority queue.
@@ -128,59 +128,6 @@ bool fossil_pqueue_is_empty(const fossil_pqueue_t* pqueue);
 bool fossil_pqueue_is_cnullptr(const fossil_pqueue_t* pqueue);
 
 #ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class PQueue {
-    public:
-        PQueue(const std::string& type) : pqueue_(fossil_pqueue_create(const_cast<char*>(type.c_str()))) {}
-
-        ~PQueue() {
-            fossil_pqueue_destroy(pqueue_);
-        }
-
-        void insert(fossil_tofu_t data, int32_t priority) {
-            fossil_pqueue_insert(pqueue_, data, priority);
-        }
-
-        fossil_tofu_t remove() {
-            fossil_tofu_t data;
-            fossil_pqueue_remove(pqueue_, &data, 0);
-            return data;
-        }
-
-        bool search(fossil_tofu_t data, int32_t priority) {
-            return fossil_pqueue_search(pqueue_, data, priority) == 0;
-        }
-
-        size_t size() {
-            return fossil_pqueue_size(pqueue_);
-        }
-
-        bool not_empty() {
-            return fossil_pqueue_not_empty(pqueue_);
-        }
-
-        bool not_cnullptr() {
-            return fossil_pqueue_not_cnullptr(pqueue_);
-        }
-
-        bool is_empty() {
-            return fossil_pqueue_is_empty(pqueue_);
-        }
-
-        bool is_cnullptr() {
-            return fossil_pqueue_is_cnullptr(pqueue_);
-        }
-
-    private:
-        fossil_pqueue_t* pqueue_;
-    };
 }
 #endif
 

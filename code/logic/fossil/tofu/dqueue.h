@@ -21,6 +21,10 @@ extern "C"
 {
 #endif
 
+// *****************************************************************************
+// Type definitions
+// *****************************************************************************
+
 // Node structure for the double-ended queue
 typedef struct fossil_dqueue_node_t {
     fossil_tofu_t data;
@@ -35,6 +39,10 @@ typedef struct fossil_dqueue_t {
     char *type;
 } fossil_dqueue_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * Create a new dynamic queue with the specified data type.
  *
@@ -42,15 +50,19 @@ typedef struct fossil_dqueue_t {
  * @return          The created dynamic queue.
  * @note            Time complexity: O(1)
  */
-fossil_dqueue_t* fossil_dqueue_create(char* type);
+fossil_dqueue_t* fossil_dqueue_create_container(char* type);
 
 /**
- * Erase the contents of the dynamic queue and free allocated memory.
+ * Erase the contents of the dynamic queue and fossil_tofu_free allocated memory.
  *
  * @param dqueue The dynamic queue to erase.
  * @note         Time complexity: O(n)
  */
 void fossil_dqueue_destroy(fossil_dqueue_t* dqueue);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Insert data into the dynamic queue.
@@ -60,27 +72,16 @@ void fossil_dqueue_destroy(fossil_dqueue_t* dqueue);
  * @return       The error code indicating the success or failure of the operation.
  * @note         Time complexity: O(1)
  */
-int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, fossil_tofu_t data);
+int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, char *data);
 
 /**
  * Remove data from the dynamic queue.
  *
  * @param dqueue The dynamic queue to remove data from.
- * @param data   A pointer to store the removed data.
  * @return       The error code indicating the success or failure of the operation.
  * @note         Time complexity: O(1)
  */
-int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue, fossil_tofu_t* data);
-
-/**
- * Search for data in the dynamic queue.
- *
- * @param dqueue The dynamic queue to search.
- * @param data   The data to search for.
- * @return       The error code indicating the success or failure of the operation.
- * @note         Time complexity: O(n)
- */
-int32_t fossil_dqueue_search(const fossil_dqueue_t* dqueue, fossil_tofu_t data);
+int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue);
 
 /**
  * Get the size of the dynamic queue.
@@ -128,59 +129,6 @@ bool fossil_dqueue_is_empty(const fossil_dqueue_t* dqueue);
 bool fossil_dqueue_is_cnullptr(const fossil_dqueue_t* dqueue);
 
 #ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class DQueue {
-    public:
-        DQueue(const std::string& type) : dqueue_(fossil_dqueue_create(const_cast<char*>(type.c_str()))) {}
-
-        ~DQueue() {
-            fossil_dqueue_destroy(dqueue_);
-        }
-
-        void insert(fossil_tofu_t data) {
-            fossil_dqueue_insert(dqueue_, data);
-        }
-
-        fossil_tofu_t remove() {
-            fossil_tofu_t data;
-            fossil_dqueue_remove(dqueue_, &data);
-            return data;
-        }
-
-        int search(fossil_tofu_t data) {
-            return fossil_dqueue_search(dqueue_, data);
-        }
-
-        size_t size() {
-            return fossil_dqueue_size(dqueue_);
-        }
-
-        bool not_empty() {
-            return fossil_dqueue_not_empty(dqueue_);
-        }
-
-        bool not_cnullptr() {
-            return fossil_dqueue_not_cnullptr(dqueue_);
-        }
-
-        bool is_empty() {
-            return fossil_dqueue_is_empty(dqueue_);
-        }
-
-        bool is_cnullptr() {
-            return fossil_dqueue_is_cnullptr(dqueue_);
-        }
-
-    private:
-        fossil_dqueue_t* dqueue_;
-    };
 }
 #endif
 

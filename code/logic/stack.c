@@ -16,100 +16,77 @@
 #include <stdlib.h>
 #include <string.h>
 
-fossil_stack_t* fossil_stack_create(char* type) {
-    if (!type) {
-        return NULL; // Error: type is NULL
-    }
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
 
+fossil_stack_t* fossil_stack_create_container(char* type) {
     fossil_stack_t* stack = (fossil_stack_t*)fossil_tofu_alloc(sizeof(fossil_stack_t));
-    if (stack) {
-        stack->type = type; // Assuming type is a static string or managed separately
-        stack->top = NULL;
+    if (stack == NULL) {
+        return NULL;
     }
+    stack->type = type;
+    stack->top = NULL;
     return stack;
 }
 
 void fossil_stack_destroy(fossil_stack_t* stack) {
-    if (!stack) return;
-
-    fossil_stack_node_t* current = stack->top;
-    while (current) {
-        fossil_stack_node_t* next = current->next;
-        fossil_tofu_free(current);
-        current = next;
+    if (stack == NULL) {
+        return;
     }
-    stack->top = NULL;
+    while (stack->top != NULL) {
+        fossil_stack_node_t* temp = stack->top;
+        stack->top = stack->top->next;
+        fossil_tofu_destroy(&temp->data);
+        fossil_tofu_free(temp);
+    }
     fossil_tofu_free(stack);
 }
 
-int32_t fossil_stack_insert(fossil_stack_t* stack, fossil_tofu_t data) {
-    if (!stack) {
-        return FOSSIL_TOFU_FAILURE; // Error: stack is NULL
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
+
+int32_t fossil_stack_insert(fossil_stack_t* stack, char *data) {
+    if (stack == NULL) {
+        return FOSSIL_TOFU_FAILURE;
     }
-
-    fossil_stack_node_t* new_node = (fossil_stack_node_t*)fossil_tofu_alloc(sizeof(fossil_stack_node_t));
-    if (!new_node) {
-        return FOSSIL_TOFU_FAILURE; // Allocation failed
+    fossil_stack_node_t* node = (fossil_stack_node_t*)fossil_tofu_alloc(sizeof(fossil_stack_node_t));
+    if (node == NULL) {
+        return FOSSIL_TOFU_FAILURE;
     }
-
-    new_node->data = data;
-    new_node->next = stack->top;
-    stack->top = new_node;
-
-    return FOSSIL_TOFU_SUCCESS; // Success
+    node->data = fossil_tofu_create(stack->type, data);
+    node->next = stack->top;
+    stack->top = node;
+    return FOSSIL_TOFU_SUCCESS;
 }
 
-int32_t fossil_stack_remove(fossil_stack_t* stack, fossil_tofu_t* data) {
-    if (!stack || !data) {
-        return FOSSIL_TOFU_FAILURE; // Error: stack or data is NULL
+int32_t fossil_stack_remove(fossil_stack_t* stack) {
+    if (stack == NULL || stack->top == NULL) {
+        return FOSSIL_TOFU_FAILURE;
     }
-
-    if (!stack->top) {
-        return FOSSIL_TOFU_FAILURE; // Stack is empty
-    }
-
-    fossil_stack_node_t* top_node = stack->top;
-    *data = top_node->data;
-    stack->top = top_node->next;
-    fossil_tofu_free(top_node);
-
-    return FOSSIL_TOFU_SUCCESS; // Success
-}
-
-int32_t fossil_stack_search(const fossil_stack_t* stack, fossil_tofu_t data) {
-    if (!stack) {
-        return FOSSIL_TOFU_FAILURE; // Error: stack is NULL
-    }
-
-    fossil_stack_node_t* current = stack->top;
-    while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            return FOSSIL_TOFU_SUCCESS; // Found
-        }
-        current = current->next;
-    }
-    return FOSSIL_TOFU_FAILURE; // Not found
+    fossil_stack_node_t* temp = stack->top;
+    stack->top = stack->top->next;
+    fossil_tofu_destroy(&temp->data);
+    fossil_tofu_free(temp);
+    return FOSSIL_TOFU_SUCCESS;
 }
 
 size_t fossil_stack_size(const fossil_stack_t* stack) {
-    if (!stack) {
-        return 0; // Error: stack is NULL
+    if (stack == NULL) {
+        return FOSSIL_TOFU_SUCCESS;
     }
-
-    size_t count = 0;
+    size_t size = 0;
     fossil_stack_node_t* current = stack->top;
-    while (current) {
-        count++;
+    while (current != NULL) {
+        size++;
         current = current->next;
     }
-    return count;
+    return size;
 }
 
 bool fossil_stack_not_empty(const fossil_stack_t* stack) {
-    if (!stack) {
-        return false; // Error: stack is NULL
-    }
-    return stack->top != NULL;
+    return stack != NULL && stack->top != NULL;
 }
 
 bool fossil_stack_not_cnullptr(const fossil_stack_t* stack) {
@@ -117,23 +94,16 @@ bool fossil_stack_not_cnullptr(const fossil_stack_t* stack) {
 }
 
 bool fossil_stack_is_empty(const fossil_stack_t* stack) {
-    if (!stack) {
-        return true; // Error: stack is NULL
-    }
-    return stack->top == NULL;
+    return stack == NULL || stack->top == NULL;
 }
 
 bool fossil_stack_is_cnullptr(const fossil_stack_t* stack) {
     return stack == NULL;
 }
 
-fossil_tofu_t fossil_stack_top(fossil_stack_t* stack, fossil_tofu_t default_value) {
-    if (!stack) {
-        return default_value; // Error: stack is NULL
-    }
-
-    if (!stack->top) {
-        return default_value; // Stack is empty
+fossil_tofu_t fossil_stack_top(fossil_stack_t* stack) {
+    if (stack == NULL || stack->top == NULL) {
+        return fossil_tofu_create(stack->type, "");
     }
     return stack->top->data;
 }

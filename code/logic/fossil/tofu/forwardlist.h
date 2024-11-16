@@ -21,6 +21,10 @@ extern "C"
 {
 #endif
 
+// *****************************************************************************
+// Type definitions
+// *****************************************************************************
+
 // Node structure for the linked list
 typedef struct fossil_flist_node_t {
     fossil_tofu_t data;
@@ -33,6 +37,10 @@ typedef struct fossil_flist_t {
     char* type;
 } fossil_flist_t;
 
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
 /**
  * Create a new forward list with the specified data type.
  *
@@ -40,15 +48,19 @@ typedef struct fossil_flist_t {
  * @return          The created forward list.
  * @complexity      O(1)
  */
-fossil_flist_t* fossil_flist_create(char* type);
+fossil_flist_t* fossil_flist_create_container(char* type);
 
 /**
- * Erase the contents of the forward list and free allocated memory.
+ * Erase the contents of the forward list and fossil_tofu_free allocated memory.
  *
  * @param flist The forward list to erase.
  * @complexity  O(n)
  */
 void fossil_flist_destroy(fossil_flist_t* flist);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Insert data into the forward list.
@@ -58,27 +70,16 @@ void fossil_flist_destroy(fossil_flist_t* flist);
  * @return      The error code indicating the success or failure of the operation.
  * @complexity  O(1)
  */
-int32_t fossil_flist_insert(fossil_flist_t* flist, fossil_tofu_t data);
+int32_t fossil_flist_insert(fossil_flist_t* flist, char *data);
 
 /**
  * Remove data from the forward list.
  *
  * @param flist The forward list to remove data from.
- * @param data  A pointer to store the removed data.
  * @return      The error code indicating the success or failure of the operation.
  * @complexity  O(1)
  */
-int32_t fossil_flist_remove(fossil_flist_t* flist, fossil_tofu_t* data);
-
-/**
- * Search for data in the forward list.
- *
- * @param flist The forward list to search.
- * @param data  The data to search for.
- * @return      The error code indicating the success or failure of the operation.
- * @complexity  O(n)
- */
-int32_t fossil_flist_search(const fossil_flist_t* flist, fossil_tofu_t data);
+int32_t fossil_flist_remove(fossil_flist_t* flist);
 
 /**
  * Reverse the forward list in the forward direction.
@@ -141,68 +142,73 @@ bool fossil_flist_is_empty(const fossil_flist_t* flist);
  */
 bool fossil_flist_is_cnullptr(const fossil_flist_t* flist);
 
-#ifdef __cplusplus
-}
-#endif
+// *****************************************************************************
+// Getter and setter functions
+// *****************************************************************************
+
+/**
+ * Get the element at the specified index in the forward list.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param flist The forward list from which to get the element.
+ * @param index The index of the element to get.
+ * @return      The element at the specified index.
+ */
+char *fossil_flist_get(const fossil_flist_t* flist, size_t index);
+
+/**
+ * Get the first element in the forward list.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param flist The forward list from which to get the first element.
+ * @return      The first element in the forward list.
+ */
+char *fossil_flist_get_front(const fossil_flist_t* flist);
+
+/**
+ * Get the last element in the forward list.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param flist The forward list from which to get the last element.
+ * @return      The last element in the forward list.
+ */
+char *fossil_flist_get_back(const fossil_flist_t* flist);
+
+/**
+ * Set the element at the specified index in the forward list.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param flist   The forward list in which to set the element.
+ * @param index   The index at which to set the element.
+ * @param element The element to set.
+ */
+void fossil_flist_set(fossil_flist_t* flist, size_t index, char *element);
+
+/**
+ * Set the first element in the forward list.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param flist   The forward list in which to set the first element.
+ * @param element The element to set.
+ */
+void fossil_flist_set_front(fossil_flist_t* flist, char *element);
+
+/**
+ * Set the last element in the forward list.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param flist   The forward list in which to set the last element.
+ * @param element The element to set.
+ */
+void fossil_flist_set_back(fossil_flist_t* flist, char *element);
 
 #ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class ForwardList {
-    public:
-        ForwardList(const std::string& type) : flist_(fossil_flist_create(const_cast<char*>(type.c_str()))) {}
-
-        ~ForwardList() {
-            fossil_flist_destroy(flist_);
-        }
-
-        void insert(fossil_tofu_t data) {
-            fossil_flist_insert(flist_, data);
-        }
-
-        fossil_tofu_t remove() {
-            fossil_tofu_t data;
-            fossil_flist_remove(flist_, &data);
-            return data;
-        }
-
-        bool search(fossil_tofu_t data) {
-            return fossil_flist_search(flist_, data) == 0;
-        }
-
-        size_t size() {
-            return fossil_flist_size(flist_);
-        }
-
-        void reverse_forward() {
-            fossil_flist_reverse_forward(flist_);
-        }
-
-        void reverse_backward() {
-            fossil_flist_reverse_backward(flist_);
-        }
-
-        bool not_empty() {
-            return fossil_flist_not_empty(flist_);
-        }
-
-        bool not_cnullptr() {
-            return fossil_flist_not_cnullptr(flist_);
-        }
-
-        bool is_empty() {
-            return fossil_flist_is_empty(flist_);
-        }
-
-        bool is_cnullptr() {
-            return fossil_flist_is_cnullptr(flist_);
-        }
-
-    private:
-        fossil_flist_t* flist_;
-    };
 }
 #endif
 

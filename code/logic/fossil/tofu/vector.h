@@ -17,11 +17,12 @@
 #include "tofu.h"
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-#define INITIAL_CAPACITY 10
+// *****************************************************************************
+// Type definitions
+// *****************************************************************************
 
 typedef struct {
     fossil_tofu_t* data;
@@ -29,6 +30,10 @@ typedef struct {
     size_t capacity;
     char* type;
 } fossil_vector_t;
+
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
 
 /**
  * Create a new vector with the specified expected type.
@@ -38,16 +43,20 @@ typedef struct {
  * @param expected_type The expected type of elements in the vector.
  * @return              The created vector.
  */
-fossil_vector_t* fossil_vector_create(char* type);
+fossil_vector_t* fossil_vector_create_container(char* type);
 
 /**
- * Erase the contents of the vector and free allocated memory.
+ * Erase the contents of the vector and fossil_tofu_free allocated memory.
  * 
  * Time complexity: O(n)
  *
  * @param vector The vector to erase.
  */
 void fossil_vector_destroy(fossil_vector_t* vector);
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
 
 /**
  * Add an element to the end of the vector.
@@ -57,7 +66,7 @@ void fossil_vector_destroy(fossil_vector_t* vector);
  * @param vector  The vector to which the element will be added.
  * @param element The element to add.
  */
-void fossil_vector_push_back(fossil_vector_t* vector, fossil_tofu_t element);
+void fossil_vector_push_back(fossil_vector_t* vector, char *element);
 
 /**
  * Add an element to the front of the vector.
@@ -67,7 +76,7 @@ void fossil_vector_push_back(fossil_vector_t* vector, fossil_tofu_t element);
  * @param vector  The vector to which the element will be added.
  * @param element The element to add.
  */
-void fossil_vector_push_front(fossil_vector_t* vector, fossil_tofu_t element);
+void fossil_vector_push_front(fossil_vector_t* vector, char *element);
 
 /**
  * Add an element at the specified index in the vector.
@@ -78,7 +87,7 @@ void fossil_vector_push_front(fossil_vector_t* vector, fossil_tofu_t element);
  * @param index   The index at which to add the element.
  * @param element The element to add.
  */
-void fossil_vector_push_at(fossil_vector_t* vector, size_t index, fossil_tofu_t element);
+void fossil_vector_push_at(fossil_vector_t* vector, size_t index, char *element);
 
 /**
  * Remove the last element from the vector.
@@ -115,38 +124,7 @@ void fossil_vector_pop_at(fossil_vector_t* vector, size_t index);
  *
  * @param vector The vector from which to remove all elements.
  */
-void fossil_vector_erase(fossil_vector_t* vector, size_t index);
-
-/**
- * Remove all elements from the vector that match the target element.
- * 
- * Time complexity: O(n)
- *
- * @param vector The vector from which to remove elements.
- * @param target The element to remove.
- */
-void fossil_vector_erase_if(fossil_vector_t* vector, fossil_tofu_t target);
-
-
-/**
- * Search for a target element in the vector.
- * 
- * Time complexity: O(n)
- *
- * @param vector The vector to search.
- * @param target The element to search for.
- * @return       The index of the target element, or -1 if not found.
- */
-int fossil_vector_search(const fossil_vector_t* vector, fossil_tofu_t target);
-
-/**
- * Reverse the order of elements in the vector.
- * 
- * Time complexity: O(n)
- *
- * @param vector The vector to reverse.
- */
-void fossil_vector_reverse(fossil_vector_t* vector);
+void fossil_vector_erase(fossil_vector_t* vector);
 
 /**
  * Check if the vector is a null pointer.
@@ -208,95 +186,95 @@ size_t fossil_vector_size(const fossil_vector_t* vector);
  */
 size_t fossil_vector_capacity(const fossil_vector_t* vector);
 
+// *****************************************************************************
+// Getter and setter functions
+// *****************************************************************************
+
 /**
- * Display the contents of the vector.
+ * Get the element at the specified index in the vector.
  * 
- * Time complexity: O(n)
+ * Time complexity: O(1)
  *
- * @param vector The vector to peek into.
+ * @param vector The vector from which to get the element.
+ * @param index  The index of the element to get.
+ * @return       The element at the specified index.
  */
-void fossil_vector_peek(const fossil_vector_t* vector);
+char *fossil_vector_get(const fossil_vector_t* vector, size_t index);
+
+/**
+ * Get the first element in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector The vector from which to get the first element.
+ * @return       The first element in the vector.
+ */
+char *fossil_vector_get_front(const fossil_vector_t* vector);
+
+/**
+ * Get the last element in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector The vector from which to get the last element.
+ * @return       The last element in the vector.
+ */
+char *fossil_vector_get_back(const fossil_vector_t* vector);
+
+/**
+ * Get the element at the specified index in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector The vector from which to get the element.
+ * @param index  The index of the element to get.
+ * @return       The element at the specified index.
+ */
+char *fossil_vector_get_at(const fossil_vector_t* vector, size_t index);
+
+/**
+ * Set the element at the specified index in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector  The vector in which to set the element.
+ * @param index   The index at which to set the element.
+ * @param element The element to set.
+ */
+void fossil_vector_set(fossil_vector_t* vector, size_t index, char *element);
+
+/**
+ * Set the first element in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector  The vector in which to set the first element.
+ * @param element The element to set.
+ */
+void fossil_vector_set_front(fossil_vector_t* vector, char *element);
+
+/**
+ * Set the last element in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector  The vector in which to set the last element.
+ * @param element The element to set.
+ */
+void fossil_vector_set_back(fossil_vector_t* vector, char *element);
+
+/**
+ * Set the element at the specified index in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector  The vector in which to set the element.
+ * @param index   The index at which to set the element.
+ * @param element The element to set.
+ */
+void fossil_vector_set_at(fossil_vector_t* vector, size_t index, char *element);
 
 #ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-
-#include <string>
-
-namespace fossil {
-    class Vector {
-    public:
-        Vector(const std::string& type) : vector_(fossil_vector_create(const_cast<char*>(type.c_str()))) {}
-
-        ~Vector() {
-            fossil_vector_destroy(vector_);
-        }
-
-        void push_back(fossil_tofu_t element) {
-            fossil_vector_push_back(vector_, element);
-        }
-
-        void push_front(fossil_tofu_t element) {
-            fossil_vector_push_front(vector_, element);
-        }
-
-        void push_at(size_t index, fossil_tofu_t element) {
-            fossil_vector_push_at(vector_, index, element);
-        }
-
-        void pop_back() {
-            fossil_vector_pop_back(vector_);
-        }
-
-        void pop_front() {
-            fossil_vector_pop_front(vector_);
-        }
-
-        void pop_at(size_t index) {
-            fossil_vector_pop_at(vector_, index);
-        }
-
-        int search(fossil_tofu_t target) {
-            return fossil_vector_search(vector_, target);
-        }
-
-        void reverse() {
-            fossil_vector_reverse(vector_);
-        }
-
-        bool is_cnullptr() {
-            return fossil_vector_is_cnullptr(vector_);
-        }
-
-        bool not_cnullptr() {
-            return fossil_vector_not_cnullptr(vector_);
-        }
-
-        bool is_empty() {
-            return fossil_vector_is_empty(vector_);
-        }
-
-        bool not_empty() {
-            return fossil_vector_not_empty(vector_);
-        }
-
-        size_t size() {
-            return fossil_vector_size(vector_);
-        }
-
-        size_t capacity() {
-            return fossil_vector_capacity(vector_);
-        }
-
-        void peek() {
-            fossil_vector_peek(vector_);
-        }
-
-    private:
-        fossil_vector_t* vector_;
-    };
 }
 #endif
 

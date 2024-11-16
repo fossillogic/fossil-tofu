@@ -16,137 +16,87 @@
 #include <stdlib.h>
 #include <string.h>
 
-fossil_dqueue_t* fossil_dqueue_create(char* type) {
-    if (!type) {
-        fprintf(stderr, "Error: type cannot be NULL\n");
-        return NULL;
-    }
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
 
+fossil_dqueue_t* fossil_dqueue_create_container(char* type) {
     fossil_dqueue_t* dqueue = (fossil_dqueue_t*)fossil_tofu_alloc(sizeof(fossil_dqueue_t));
-    if (!dqueue) {
-        fprintf(stderr, "Error: Memory allocation failed for dqueue\n");
+    if (dqueue == NULL) {
         return NULL;
     }
-
     dqueue->front = NULL;
     dqueue->rear = NULL;
-    dqueue->type = fossil_tofu_strdup(type);  // Duplicate the type string to manage its memory
-    if (!dqueue->type) {
-        fprintf(stderr, "Error: Memory allocation failed for type string\n");
-        fossil_tofu_free(dqueue);
-        return NULL;
-    }
-
+    dqueue->type = fossil_tofu_strdup(type);
     return dqueue;
 }
 
 void fossil_dqueue_destroy(fossil_dqueue_t* dqueue) {
-    if (!dqueue) return;
-
     fossil_dqueue_node_t* current = dqueue->front;
-    while (current) {
+    while (current != NULL) {
         fossil_dqueue_node_t* next = current->next;
+        fossil_tofu_destroy(&current->data);
         fossil_tofu_free(current);
         current = next;
     }
-    dqueue->front = NULL;
-    dqueue->rear = NULL;
-    fossil_tofu_free(dqueue->type);  // Free the duplicated type string
+    fossil_tofu_free(dqueue->type);
     fossil_tofu_free(dqueue);
 }
 
-int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, fossil_tofu_t data) {
-    if (!dqueue) {
-        fprintf(stderr, "Error: dqueue cannot be NULL\n");
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
+
+int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, char *data) {
+    if (data == NULL || dqueue == NULL) {
         return FOSSIL_TOFU_FAILURE;
     }
 
-    fossil_dqueue_node_t* new_node = (fossil_dqueue_node_t*)fossil_tofu_alloc(sizeof(fossil_dqueue_node_t));
-    if (!new_node) {
-        fprintf(stderr, "Error: Memory allocation failed for new node\n");
-        return FOSSIL_TOFU_FAILURE;  // Allocation failed
+    fossil_dqueue_node_t* node = (fossil_dqueue_node_t*)fossil_tofu_alloc(sizeof(fossil_dqueue_node_t));
+    if (node == NULL) {
+        return FOSSIL_TOFU_FAILURE;
     }
-
-    new_node->data = data;
-    new_node->prev = NULL;
-    new_node->next = NULL;
-
-    if (dqueue->rear == NULL) {
-        // Empty queue case
-        dqueue->front = new_node;
-        dqueue->rear = new_node;
+    node->data = fossil_tofu_create(dqueue->type, data);
+    node->next = NULL;
+    if (dqueue->front == NULL) {
+        dqueue->front = node;
+        dqueue->rear = node;
+        node->prev = NULL;
     } else {
-        // Non-empty queue case
-        new_node->prev = dqueue->rear;
-        dqueue->rear->next = new_node;
-        dqueue->rear = new_node;
+        dqueue->rear->next = node;
+        node->prev = dqueue->rear;
+        dqueue->rear = node;
     }
-
-    return FOSSIL_TOFU_SUCCESS;  // Success
+    return FOSSIL_TOFU_SUCCESS;
 }
 
-int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue, fossil_tofu_t* data) {
-    if (!dqueue || !data) {
-        fprintf(stderr, "Error: dqueue and data cannot be NULL\n");
+int32_t fossil_dqueue_remove(fossil_dqueue_t* dqueue) {
+    if (dqueue->front == NULL) {
         return FOSSIL_TOFU_FAILURE;
     }
-
-    if (fossil_dqueue_is_empty(dqueue)) {
-        return FOSSIL_TOFU_FAILURE;  // Empty queue
-    }
-
-    fossil_dqueue_node_t* node_to_remove = dqueue->front;
-
-    if (node_to_remove == dqueue->rear) {
-        dqueue->front = NULL;
+    fossil_dqueue_node_t* node = dqueue->front;
+    dqueue->front = node->next;
+    if (dqueue->front == NULL) {
         dqueue->rear = NULL;
     } else {
-        dqueue->front = node_to_remove->next;
         dqueue->front->prev = NULL;
     }
-
-    *data = node_to_remove->data;
-    fossil_tofu_free(node_to_remove);
-
-    return FOSSIL_TOFU_SUCCESS;  // Success
-}
-
-int32_t fossil_dqueue_search(const fossil_dqueue_t* dqueue, fossil_tofu_t data) {
-    if (!dqueue) {
-        fprintf(stderr, "Error: dqueue cannot be NULL\n");
-        return FOSSIL_TOFU_FAILURE;
-    }
-
-    fossil_dqueue_node_t* current = dqueue->front;
-    while (current) {
-        if (fossil_tofu_equals(current->data, data)) {
-            return FOSSIL_TOFU_SUCCESS;  // Found
-        }
-        current = current->next;
-    }
-    return FOSSIL_TOFU_FAILURE;  // Not found
+    fossil_tofu_destroy(&node->data);
+    fossil_tofu_free(node);
+    return FOSSIL_TOFU_SUCCESS;
 }
 
 size_t fossil_dqueue_size(const fossil_dqueue_t* dqueue) {
-    if (!dqueue) {
-        fprintf(stderr, "Error: dqueue cannot be NULL\n");
-        return 0;
-    }
-
-    size_t count = 0;
+    size_t size = 0;
     fossil_dqueue_node_t* current = dqueue->front;
-    while (current) {
-        count++;
+    while (current != NULL) {
+        size++;
         current = current->next;
     }
-    return count;
+    return size;
 }
 
 bool fossil_dqueue_not_empty(const fossil_dqueue_t* dqueue) {
-    if (!dqueue) {
-        fprintf(stderr, "Error: dqueue cannot be NULL\n");
-        return false;
-    }
     return dqueue->front != NULL;
 }
 
@@ -155,10 +105,6 @@ bool fossil_dqueue_not_cnullptr(const fossil_dqueue_t* dqueue) {
 }
 
 bool fossil_dqueue_is_empty(const fossil_dqueue_t* dqueue) {
-    if (!dqueue) {
-        fprintf(stderr, "Error: dqueue cannot be NULL\n");
-        return true;
-    }
     return dqueue->front == NULL;
 }
 
