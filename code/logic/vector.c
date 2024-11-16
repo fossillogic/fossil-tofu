@@ -184,6 +184,50 @@ size_t fossil_vector_capacity(const fossil_vector_t* vector) {
     return vector == NULL ? 0 : vector->capacity;
 }
 
+// *****************************************************************************
+// Getter and setter functions
+// *****************************************************************************
+
 char *fossil_vector_get(const fossil_vector_t* vector, size_t index) {
-    return vector == NULL || index >= vector->size ? NULL : vector->data[index].value.data;
+    return vector == NULL || index >= vector->size ? NULL : fossil_tofu_get_value(&vector->data[index]);
+}
+
+char *fossil_vector_get_front(const fossil_vector_t* vector) {
+    return vector == NULL || vector->size == 0 ? NULL : fossil_tofu_get_value(&vector->data[0]);
+}
+
+char *fossil_vector_get_back(const fossil_vector_t* vector) {
+    return vector == NULL || vector->size == 0 ? NULL : fossil_tofu_get_value(&vector->data[vector->size - 1]);
+}
+
+char *fossil_vector_get_at(const fossil_vector_t* vector, size_t index) {
+    return vector == NULL || index >= vector->size ? NULL : fossil_tofu_get_value(&vector->data[index]);
+}
+
+void fossil_vector_set(fossil_vector_t* vector, size_t index, char *element) {
+    if (vector == NULL || index >= vector->size) {
+        return;
+    }
+    fossil_tofu_set_value(&vector->data[index], element);
+}
+
+void fossil_vector_set_front(fossil_vector_t* vector, char *element) {
+    if (vector == NULL || vector->size == 0) {
+        return;
+    }
+    fossil_tofu_set_value(&vector->data[0], element);
+}
+
+void fossil_vector_set_back(fossil_vector_t* vector, char *element) {
+    if (vector == NULL || vector->size == 0) {
+        return;
+    }
+    fossil_tofu_set_value(&vector->data[vector->size - 1], element);
+}
+
+void fossil_vector_set_at(fossil_vector_t* vector, size_t index, char *element) {
+    if (vector == NULL || index >= vector->size) {
+        return;
+    }
+    fossil_tofu_set_value(&vector->data[index], element);
 }

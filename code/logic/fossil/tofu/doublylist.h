@@ -144,6 +144,72 @@ bool fossil_dlist_is_empty(const fossil_dlist_t* dlist);
  */
 bool fossil_dlist_is_cnullptr(const fossil_dlist_t* dlist);
 
+// *****************************************************************************
+// Getter and setter functions
+// *****************************************************************************
+
+/**
+ * Get the element at the specified index in the doubly linked list.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param dlist The doubly linked list from which to get the element.
+ * @param index The index of the element to get.
+ * @return      The element at the specified index.
+ */
+char *fossil_dlist_get(const fossil_dlist_t* dlist, size_t index);
+
+/**
+ * Get the first element in the doubly linked list.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param dlist The doubly linked list from which to get the first element.
+ * @return      The first element in the doubly linked list.
+ */
+char *fossil_dlist_get_front(const fossil_dlist_t* dlist);
+
+/**
+ * Get the last element in the doubly linked list.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param dlist The doubly linked list from which to get the last element.
+ * @return      The last element in the doubly linked list.
+ */
+char *fossil_dlist_get_back(const fossil_dlist_t* dlist);
+
+/**
+ * Set the element at the specified index in the doubly linked list.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param dlist   The doubly linked list in which to set the element.
+ * @param index   The index at which to set the element.
+ * @param element The element to set.
+ */
+void fossil_dlist_set(fossil_dlist_t* dlist, size_t index, char *element);
+
+/**
+ * Set the first element in the doubly linked list.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param dlist   The doubly linked list in which to set the first element.
+ * @param element The element to set.
+ */
+void fossil_dlist_set_front(fossil_dlist_t* dlist, char *element);
+
+/**
+ * Set the last element in the doubly linked list.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param dlist   The doubly linked list in which to set the last element.
+ * @param element The element to set.
+ */
+void fossil_dlist_set_back(fossil_dlist_t* dlist, char *element);
+
 #ifdef __cplusplus
 }
 #endif

@@ -186,6 +186,10 @@ size_t fossil_vector_size(const fossil_vector_t* vector);
  */
 size_t fossil_vector_capacity(const fossil_vector_t* vector);
 
+// *****************************************************************************
+// Getter and setter functions
+// *****************************************************************************
+
 /**
  * Get the element at the specified index in the vector.
  * 
@@ -196,6 +200,79 @@ size_t fossil_vector_capacity(const fossil_vector_t* vector);
  * @return       The element at the specified index.
  */
 char *fossil_vector_get(const fossil_vector_t* vector, size_t index);
+
+/**
+ * Get the first element in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector The vector from which to get the first element.
+ * @return       The first element in the vector.
+ */
+char *fossil_vector_get_front(const fossil_vector_t* vector);
+
+/**
+ * Get the last element in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector The vector from which to get the last element.
+ * @return       The last element in the vector.
+ */
+char *fossil_vector_get_back(const fossil_vector_t* vector);
+
+/**
+ * Get the element at the specified index in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector The vector from which to get the element.
+ * @param index  The index of the element to get.
+ * @return       The element at the specified index.
+ */
+char *fossil_vector_get_at(const fossil_vector_t* vector, size_t index);
+
+/**
+ * Set the element at the specified index in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector  The vector in which to set the element.
+ * @param index   The index at which to set the element.
+ * @param element The element to set.
+ */
+void fossil_vector_set(fossil_vector_t* vector, size_t index, char *element);
+
+/**
+ * Set the first element in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector  The vector in which to set the first element.
+ * @param element The element to set.
+ */
+void fossil_vector_set_front(fossil_vector_t* vector, char *element);
+
+/**
+ * Set the last element in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector  The vector in which to set the last element.
+ * @param element The element to set.
+ */
+void fossil_vector_set_back(fossil_vector_t* vector, char *element);
+
+/**
+ * Set the element at the specified index in the vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param vector  The vector in which to set the element.
+ * @param index   The index at which to set the element.
+ * @param element The element to set.
+ */
+void fossil_vector_set_at(fossil_vector_t* vector, size_t index, char *element);
 
 #ifdef __cplusplus
 }

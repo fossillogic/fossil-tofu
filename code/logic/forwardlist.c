@@ -110,3 +110,57 @@ bool fossil_flist_is_empty(const fossil_flist_t* flist) {
 bool fossil_flist_is_cnullptr(const fossil_flist_t* flist) {
     return flist == NULL;
 }
+
+// *****************************************************************************
+// Getter and setter functions
+// *****************************************************************************
+
+char *fossil_flist_get(const fossil_flist_t* flist, size_t index) {
+    size_t i = 0;
+    fossil_flist_node_t* current = flist->head;
+    while (current != NULL) {
+        if (i == index) {
+            return fossil_tofu_get_value(&current->data);
+        }
+        i++;
+        current = current->next;
+    }
+    return NULL;
+}
+
+char *fossil_flist_get_front(const fossil_flist_t* flist) {
+    return fossil_tofu_get_value(&flist->head->data);
+}
+
+char *fossil_flist_get_back(const fossil_flist_t* flist) {
+    fossil_flist_node_t* current = flist->head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    return fossil_tofu_get_value(&current->data);
+}
+
+void fossil_flist_set(fossil_flist_t* flist, size_t index, char *element) {
+    size_t i = 0;
+    fossil_flist_node_t* current = flist->head;
+    while (current != NULL) {
+        if (i == index) {
+            fossil_tofu_set_value(&current->data, element);
+            return;
+        }
+        i++;
+        current = current->next;
+    }
+}
+
+void fossil_flist_set_front(fossil_flist_t* flist, char *element) {
+    fossil_tofu_set_value(&flist->head->data, element);
+}
+
+void fossil_flist_set_back(fossil_flist_t* flist, char *element) {
+    fossil_flist_node_t* current = flist->head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    fossil_tofu_set_value(&current->data, element);
+}

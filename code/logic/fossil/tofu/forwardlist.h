@@ -142,6 +142,72 @@ bool fossil_flist_is_empty(const fossil_flist_t* flist);
  */
 bool fossil_flist_is_cnullptr(const fossil_flist_t* flist);
 
+// *****************************************************************************
+// Getter and setter functions
+// *****************************************************************************
+
+/**
+ * Get the element at the specified index in the forward list.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param flist The forward list from which to get the element.
+ * @param index The index of the element to get.
+ * @return      The element at the specified index.
+ */
+char *fossil_flist_get(const fossil_flist_t* flist, size_t index);
+
+/**
+ * Get the first element in the forward list.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param flist The forward list from which to get the first element.
+ * @return      The first element in the forward list.
+ */
+char *fossil_flist_get_front(const fossil_flist_t* flist);
+
+/**
+ * Get the last element in the forward list.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param flist The forward list from which to get the last element.
+ * @return      The last element in the forward list.
+ */
+char *fossil_flist_get_back(const fossil_flist_t* flist);
+
+/**
+ * Set the element at the specified index in the forward list.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param flist   The forward list in which to set the element.
+ * @param index   The index at which to set the element.
+ * @param element The element to set.
+ */
+void fossil_flist_set(fossil_flist_t* flist, size_t index, char *element);
+
+/**
+ * Set the first element in the forward list.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param flist   The forward list in which to set the first element.
+ * @param element The element to set.
+ */
+void fossil_flist_set_front(fossil_flist_t* flist, char *element);
+
+/**
+ * Set the last element in the forward list.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param flist   The forward list in which to set the last element.
+ * @param element The element to set.
+ */
+void fossil_flist_set_back(fossil_flist_t* flist, char *element);
+
 #ifdef __cplusplus
 }
 #endif
