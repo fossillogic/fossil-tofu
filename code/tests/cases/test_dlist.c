@@ -88,7 +88,7 @@ FOSSIL_TEST_CASE(c_test_dlist_reverse_forward) {
     fossil_dlist_insert(dlist, "3");
     fossil_dlist_reverse_forward(dlist);
     // Assuming we have a function to get the front element
-    ASSUME_ITS_TRUE(fossil_dlist_get_front(dlist) == "3");
+    ASSUME_ITS_EQUAL_CSTR(fossil_dlist_get_front(dlist), "3");
     fossil_dlist_destroy(dlist);
 }
 
@@ -99,7 +99,7 @@ FOSSIL_TEST_CASE(c_test_dlist_reverse_backward) {
     fossil_dlist_insert(dlist, "3");
     fossil_dlist_reverse_backward(dlist);
     // Assuming we have a function to get the back element
-    ASSUME_ITS_TRUE(fossil_dlist_get_back(dlist) == "1");
+    ASSUME_ITS_EQUAL_CSTR(fossil_dlist_get_back(dlist), "1");
     fossil_dlist_destroy(dlist);
 }
 
