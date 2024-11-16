@@ -71,9 +71,7 @@ int32_t fossil_dlist_remove(fossil_dlist_t* dlist) {
     }
     fossil_dlist_node_t* node = dlist->head;
     dlist->head = node->next;
-    if (dlist->head == NULL) {
-        dlist->tail = NULL;
-    } else {
+    if (dlist->head != NULL) {
         dlist->head->prev = NULL;
     }
     fossil_tofu_destroy(&node->data);
@@ -82,28 +80,37 @@ int32_t fossil_dlist_remove(fossil_dlist_t* dlist) {
 }
 
 void fossil_dlist_reverse_forward(fossil_dlist_t* dlist) {
-    fossil_dlist_node_t* prev = NULL;
-    fossil_dlist_node_t* current = dlist->head;
-    fossil_dlist_node_t* next = NULL;
-    while (current != NULL) {
-        next = current->next;
-        current->next = prev;
-        current->prev = next;
-        prev = current;
-        current = next;
+    if (dlist == NULL || dlist->head == NULL) {
+        return;
     }
-    dlist->head = prev;
+    fossil_dlist_node_t* current = dlist->head;
+    fossil_dlist_node_t* temp = NULL;
+    while (current != NULL) {
+        temp = current->next;
+        current->next = current->prev;
+        current->prev = temp;
+        current = temp;
+    }
+    temp = dlist->head;
+    dlist->head = dlist->tail;
+    dlist->tail = temp;
 }
 
 void fossil_dlist_reverse_backward(fossil_dlist_t* dlist) {
-    fossil_dlist_node_t* current = dlist->head;
+    if (dlist == NULL || dlist->tail == NULL) {
+        return;
+    }
+    fossil_dlist_node_t* current = dlist->tail;
     fossil_dlist_node_t* temp = NULL;
     while (current != NULL) {
         temp = current->prev;
         current->prev = current->next;
         current->next = temp;
-        current = current->prev;
+        current = temp;
     }
+    temp = dlist->tail;
+    dlist->tail = dlist->head;
+    dlist->head = temp;
 }
 
 size_t fossil_dlist_size(const fossil_dlist_t* dlist) {

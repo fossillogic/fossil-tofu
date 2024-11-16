@@ -48,6 +48,10 @@ void fossil_dqueue_destroy(fossil_dqueue_t* dqueue) {
 // *****************************************************************************
 
 int32_t fossil_dqueue_insert(fossil_dqueue_t* dqueue, char *data) {
+    if (data == NULL || dqueue == NULL) {
+        return FOSSIL_TOFU_FAILURE;
+    }
+
     fossil_dqueue_node_t* node = (fossil_dqueue_node_t*)fossil_tofu_alloc(sizeof(fossil_dqueue_node_t));
     if (node == NULL) {
         return FOSSIL_TOFU_FAILURE;
