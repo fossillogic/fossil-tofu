@@ -50,6 +50,30 @@ FOSSIL_TEST_CASE(cpp_test_create_destroy) {
     fossil::tofu_destroy(tofu);
 }
 
+FOSSIL_TEST_CASE(cpp_test_create_default) {
+    fossil::tofu_t tofu = fossil::tofu_create_default();
+    ASSUME_ITS_TRUE(tofu.type == FOSSIL_TOFU_TYPE_ANY);
+    ASSUME_ITS_EQUAL_CSTR(tofu.value.data, "");
+    fossil::tofu_destroy(tofu);
+}
+
+FOSSIL_TEST_CASE(cpp_test_create_copy) {
+    fossil::tofu_t tofu1 = fossil::tofu_create("i32", "42");
+    fossil::tofu_t tofu2 = fossil::tofu_create_copy(tofu1);
+    ASSUME_ITS_TRUE(fossil::tofu_equals(tofu1, tofu2) == true);
+    fossil::tofu_destroy(tofu1);
+    fossil::tofu_destroy(tofu2);
+}
+
+FOSSIL_TEST_CASE(cpp_test_create_move) {
+    fossil::tofu_t tofu1 = fossil::tofu_create("i32", "42");
+    fossil::tofu_t tofu2 = fossil::tofu_create_move(tofu1);
+    ASSUME_ITS_TRUE(tofu1.type == FOSSIL_TOFU_TYPE_ANY);
+    ASSUME_ITS_TRUE(tofu1.value.data == nullptr);
+    ASSUME_ITS_TRUE(fossil::tofu_equals(tofu2, tofu1) == false);
+    fossil::tofu_destroy(tofu2);
+}
+
 FOSSIL_TEST_CASE(cpp_test_set_get_value) {
     fossil::tofu_t tofu = fossil::tofu_create("i32", "42");
     ASSUME_ITS_TRUE(fossil::tofu_set_value(tofu, "84") == FOSSIL_TOFU_SUCCESS);
@@ -155,6 +179,9 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_reverse) {
 extern "C" FOSSIL_TEST_GROUP(cpp_generic_tofu_tests) {    
     // Generic ToFu Fixture
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_create_destroy);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_create_default);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_create_copy);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_create_move);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_set_get_value);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_mutability);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_set_get_attribute);
