@@ -152,7 +152,7 @@ fossil_tofu_t fossil_tofu_create(char* type, char* value) {
 }
 
 fossil_tofu_t* fossil_tofu_create_default(void) {
-    fossil_tofu_t *tofu = (fossil_tofu_t*)fossil_tofu_malloc(sizeof(fossil_tofu_t));
+    fossil_tofu_t *tofu = (fossil_tofu_t*)fossil_tofu_alloc(sizeof(fossil_tofu_t));
     if (tofu == NULL) return NULL;
 
     tofu->type = FOSSIL_TOFU_TYPE_ANY;
@@ -169,7 +169,7 @@ fossil_tofu_t* fossil_tofu_create_default(void) {
 fossil_tofu_t* fossil_tofu_create_copy(const fossil_tofu_t* other) {
     if (other == NULL) return NULL;
 
-    fossil_tofu_t *tofu = (fossil_tofu_t*)fossil_tofu_malloc(sizeof(fossil_tofu_t));
+    fossil_tofu_t *tofu = (fossil_tofu_t*)fossil_tofu_alloc(sizeof(fossil_tofu_t));
     if (tofu == NULL) return NULL;
 
     tofu->type = other->type;
@@ -186,7 +186,7 @@ fossil_tofu_t* fossil_tofu_create_copy(const fossil_tofu_t* other) {
 fossil_tofu_t* fossil_tofu_create_move(fossil_tofu_t* other) {
     if (other == NULL) return NULL;
 
-    fossil_tofu_t *tofu = (fossil_tofu_t*)fossil_tofu_malloc(sizeof(fossil_tofu_t));
+    fossil_tofu_t *tofu = (fossil_tofu_t*)fossil_tofu_alloc(sizeof(fossil_tofu_t));
     if (tofu == NULL) return NULL;
 
     tofu->type = other->type;
