@@ -176,7 +176,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_reverse) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
-extern "C" FOSSIL_TEST_GROUP(cpp_generic_tofu_tests) {    
+FOSSIL_TEST_GROUP(cpp_generic_tofu_tests) {    
     // Generic ToFu Fixture
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_create_destroy);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_create_default);
