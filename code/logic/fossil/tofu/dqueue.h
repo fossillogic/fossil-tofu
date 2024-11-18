@@ -17,8 +17,7 @@
 #include "tofu.h"
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 // *****************************************************************************
@@ -240,7 +239,7 @@ namespace fossil {
  * @note            Time complexity: O(1)
  */
 inline fossil_dqueue_t* dqueue_create_container(std::string type) {
-    return fossil_dqueue_create_container(type.c_str());
+    return fossil_dqueue_create_container(const_cast<char*>(type.c_str()));
 }
 
 /**
@@ -301,7 +300,7 @@ inline void dqueue_destroy(fossil_dqueue_t* dqueue) {
  * @note         Time complexity: O(1)
  */
 inline int32_t dqueue_insert(fossil_dqueue_t* dqueue, std::string data) {
-    return fossil_dqueue_insert(dqueue, data.c_str());
+    return fossil_dqueue_insert(dqueue, const_cast<char*>(data.c_str()));
 }
 
 /**
@@ -418,7 +417,7 @@ inline char* dqueue_get_back(const fossil_dqueue_t* dqueue) {
  * @param element The element to set.
  */
 inline void dqueue_set(fossil_dqueue_t* dqueue, size_t index, std::string element) {
-    fossil_dqueue_set(dqueue, index, element.c_str());
+    fossil_dqueue_set(dqueue, index, const_cast<char*>(element.c_str()));
 }
 
 /**
@@ -430,7 +429,7 @@ inline void dqueue_set(fossil_dqueue_t* dqueue, size_t index, std::string elemen
  * @param element The element to set.
  */
 inline void dqueue_set_front(fossil_dqueue_t* dqueue, std::string element) {
-    fossil_dqueue_set_front(dqueue, element.c_str());
+    fossil_dqueue_set_front(dqueue, const_cast<char*>(element.c_str()));
 }
 
 /**
@@ -442,7 +441,7 @@ inline void dqueue_set_front(fossil_dqueue_t* dqueue, std::string element) {
  * @param element The element to set.
  */
 inline void dqueue_set_back(fossil_dqueue_t* dqueue, std::string element) {
-    fossil_dqueue_set_back(dqueue, element.c_str());
+    fossil_dqueue_set_back(dqueue, const_cast<char*>(element.c_str()));
 }
 
 }
