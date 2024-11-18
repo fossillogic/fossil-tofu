@@ -46,14 +46,14 @@ FOSSIL_TEARDOWN(cpp_generic_tofu_fixture) {
 FOSSIL_TEST_CASE(cpp_test_create_destroy) {
     fossil::tofu_t tofu = fossil::tofu_create("i32", "42");
     ASSUME_ITS_TRUE(tofu.type == FOSSIL_TOFU_TYPE_I32);
-    ASSUME_ITS_EQUAL_CSTR(tofu.value.data, "42");
+    ASSUME_ITS_EQUAL_CSTR(std::string(tofu.value.data), std::string("42"));
     fossil::tofu_destroy(tofu);
 }
 
 FOSSIL_TEST_CASE(cpp_test_create_default) {
     fossil::tofu_t tofu = fossil::tofu_create_default();
     ASSUME_ITS_TRUE(tofu.type == FOSSIL_TOFU_TYPE_ANY);
-    ASSUME_ITS_EQUAL_CSTR(tofu.value.data, "");
+    ASSUME_ITS_EQUAL_CSTR(std::string(tofu.value.data), std::string(""));
     fossil::tofu_destroy(tofu);
 }
 
@@ -77,7 +77,7 @@ FOSSIL_TEST_CASE(cpp_test_create_move) {
 FOSSIL_TEST_CASE(cpp_test_set_get_value) {
     fossil::tofu_t tofu = fossil::tofu_create("i32", "42");
     ASSUME_ITS_TRUE(fossil::tofu_set_value(tofu, "84") == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_CSTR(fossil::tofu_get_value(tofu).c_str(), "84");
+    ASSUME_ITS_EQUAL_CSTR(fossil::tofu_get_value(tofu), std::string("84"));
     fossil::tofu_destroy(tofu);
 }
 
@@ -93,9 +93,9 @@ FOSSIL_TEST_CASE(cpp_test_set_get_attribute) {
     fossil::tofu_t tofu = fossil::tofu_create("i32", "42");
     ASSUME_ITS_TRUE(fossil::tofu_set_attribute(tofu, "Test Attribute", "Test Description", "c_test_id") == FOSSIL_TOFU_SUCCESS);
     const fossil::tofu_attribute_t* attr = fossil::tofu_get_attribute(tofu);
-    ASSUME_ITS_EQUAL_CSTR(attr->name, "Test Attribute");
-    ASSUME_ITS_EQUAL_CSTR(attr->description, "Test Description");
-    ASSUME_ITS_EQUAL_CSTR(attr->id, "c_test_id");
+    ASSUME_ITS_EQUAL_CSTR(std::string(attr->name), std::string("Test Attribute"));
+    ASSUME_ITS_EQUAL_CSTR(std::string(attr->description), std::string("Test Description"));
+    ASSUME_ITS_EQUAL_CSTR(std::string(attr->id), std::string("c_test_id"));
     fossil::tofu_destroy(tofu);
 }
 
@@ -165,9 +165,9 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_reverse) {
         fossil::tofu_create("i32", "126")
     };
     ASSUME_ITS_TRUE(fossil::tofu_algorithm_reverse(array.data(), array.size()) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_CSTR(array[0].value.data, "126");
-    ASSUME_ITS_EQUAL_CSTR(array[1].value.data, "84");
-    ASSUME_ITS_EQUAL_CSTR(array[2].value.data, "42");
+    ASSUME_ITS_EQUAL_CSTR(std::string(array[0].value.data), std::string("126"));
+    ASSUME_ITS_EQUAL_CSTR(std::string(array[1].value.data), std::string("84"));
+    ASSUME_ITS_EQUAL_CSTR(std::string(array[2].value.data), std::string("42"));
     for (auto& item : array) {
         fossil::tofu_destroy(item);
     }
