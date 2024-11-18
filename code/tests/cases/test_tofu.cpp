@@ -44,30 +44,30 @@ FOSSIL_TEARDOWN(cpp_generic_tofu_fixture) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
 FOSSIL_TEST_CASE(cpp_test_create_destroy) {
-    fossil::tofu_t tofu = fossil::tofu_create("i32", "42");
+    fossil_tofu_t tofu = fossil::tofu_create("i32", "42");
     ASSUME_ITS_TRUE(tofu.type == FOSSIL_TOFU_TYPE_I32);
     ASSUME_ITS_EQUAL_CSTR(std::string(tofu.value.data), std::string("42"));
     fossil::tofu_destroy(tofu);
 }
 
 FOSSIL_TEST_CASE(cpp_test_create_default) {
-    fossil::tofu_t tofu = fossil::tofu_create_default();
+    fossil_tofu_t tofu = fossil::tofu_create_default();
     ASSUME_ITS_TRUE(tofu.type == FOSSIL_TOFU_TYPE_ANY);
     ASSUME_ITS_EQUAL_CSTR(std::string(tofu.value.data), std::string(""));
     fossil::tofu_destroy(tofu);
 }
 
 FOSSIL_TEST_CASE(cpp_test_create_copy) {
-    fossil::tofu_t tofu1 = fossil::tofu_create("i32", "42");
-    fossil::tofu_t tofu2 = fossil::tofu_create_copy(tofu1);
+    fossil_tofu_t tofu1 = fossil::tofu_create("i32", "42");
+    fossil_tofu_t tofu2 = fossil::tofu_create_copy(tofu1);
     ASSUME_ITS_TRUE(fossil::tofu_equals(tofu1, tofu2) == true);
     fossil::tofu_destroy(tofu1);
     fossil::tofu_destroy(tofu2);
 }
 
 FOSSIL_TEST_CASE(cpp_test_create_move) {
-    fossil::tofu_t tofu1 = fossil::tofu_create("i32", "42");
-    fossil::tofu_t tofu2 = fossil::tofu_create_move(tofu1);
+    fossil_tofu_t tofu1 = fossil::tofu_create("i32", "42");
+    fossil_tofu_t tofu2 = fossil::tofu_create_move(tofu1);
     ASSUME_ITS_TRUE(tofu1.type == FOSSIL_TOFU_TYPE_ANY);
     ASSUME_ITS_TRUE(tofu1.value.data == nullptr);
     ASSUME_ITS_TRUE(fossil::tofu_equals(tofu2, tofu1) == false);
@@ -75,14 +75,14 @@ FOSSIL_TEST_CASE(cpp_test_create_move) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_set_get_value) {
-    fossil::tofu_t tofu = fossil::tofu_create("i32", "42");
+    fossil_tofu_t tofu = fossil::tofu_create("i32", "42");
     ASSUME_ITS_TRUE(fossil::tofu_set_value(tofu, "84") == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_EQUAL_CSTR(fossil::tofu_get_value(tofu), std::string("84"));
     fossil::tofu_destroy(tofu);
 }
 
 FOSSIL_TEST_CASE(cpp_test_mutability) {
-    fossil::tofu_t tofu = fossil::tofu_create("i32", "42");
+    fossil_tofu_t tofu = fossil::tofu_create("i32", "42");
     ASSUME_ITS_TRUE(fossil::tofu_is_mutable(tofu) == true);
     ASSUME_ITS_TRUE(fossil::tofu_set_mutable(tofu, false) == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil::tofu_is_mutable(tofu) == false);
@@ -90,9 +90,9 @@ FOSSIL_TEST_CASE(cpp_test_mutability) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_set_get_attribute) {
-    fossil::tofu_t tofu = fossil::tofu_create("i32", "42");
+    fossil_tofu_t tofu = fossil::tofu_create("i32", "42");
     ASSUME_ITS_TRUE(fossil::tofu_set_attribute(tofu, "Test Attribute", "Test Description", "c_test_id") == FOSSIL_TOFU_SUCCESS);
-    const fossil::tofu_attribute_t* attr = fossil::tofu_get_attribute(tofu);
+    const fossil_tofu_attribute_t* attr = fossil::tofu_get_attribute(tofu);
     ASSUME_ITS_EQUAL_CSTR(std::string(attr->name), std::string("Test Attribute"));
     ASSUME_ITS_EQUAL_CSTR(std::string(attr->description), std::string("Test Description"));
     ASSUME_ITS_EQUAL_CSTR(std::string(attr->id), std::string("c_test_id"));
@@ -100,16 +100,16 @@ FOSSIL_TEST_CASE(cpp_test_set_get_attribute) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_equals) {
-    fossil::tofu_t tofu1 = fossil::tofu_create("i32", "42");
-    fossil::tofu_t tofu2 = fossil::tofu_create("i32", "42");
+    fossil_tofu_t tofu1 = fossil::tofu_create("i32", "42");
+    fossil_tofu_t tofu2 = fossil::tofu_create("i32", "42");
     ASSUME_ITS_TRUE(fossil::tofu_equals(tofu1, tofu2) == true);
     fossil::tofu_destroy(tofu1);
     fossil::tofu_destroy(tofu2);
 }
 
 FOSSIL_TEST_CASE(cpp_test_copy) {
-    fossil::tofu_t tofu1 = fossil::tofu_create("i32", "42");
-    fossil::tofu_t tofu2;
+    fossil_tofu_t tofu1 = fossil::tofu_create("i32", "42");
+    fossil_tofu_t tofu2;
     ASSUME_ITS_TRUE(fossil::tofu_copy(tofu2, tofu1) == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil::tofu_equals(tofu1, tofu2) == true);
     fossil::tofu_destroy(tofu1);
@@ -117,20 +117,20 @@ FOSSIL_TEST_CASE(cpp_test_copy) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_algorithm_compare) {
-    fossil::tofu_t tofu1 = fossil::tofu_create("i32", "42");
-    fossil::tofu_t tofu2 = fossil::tofu_create("i32", "84");
+    fossil_tofu_t tofu1 = fossil::tofu_create("i32", "42");
+    fossil_tofu_t tofu2 = fossil::tofu_create("i32", "84");
     ASSUME_ITS_TRUE(fossil::tofu_algorithm_compare(tofu1, tofu2) < 0);
     fossil::tofu_destroy(tofu1);
     fossil::tofu_destroy(tofu2);
 }
 
 FOSSIL_TEST_CASE(cpp_test_algorithm_search) {
-    std::vector<fossil::tofu_t> array = {
+    std::vector<fossil_tofu_t> array = {
         fossil::tofu_create("i32", "42"),
         fossil::tofu_create("i32", "84"),
         fossil::tofu_create("i32", "126")
     };
-    fossil::tofu_t tofu = fossil::tofu_create("i32", "84");
+    fossil_tofu_t tofu = fossil::tofu_create("i32", "84");
     ASSUME_ITS_TRUE(fossil::tofu_algorithm_search(array.data(), array.size(), tofu) == 1);
     for (auto& item : array) {
         fossil::tofu_destroy(item);
@@ -139,7 +139,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_search) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_algorithm_sort) {
-    std::vector<fossil::tofu_t> array = {
+    std::vector<fossil_tofu_t> array = {
         fossil::tofu_create("i32", "126"),
         fossil::tofu_create("i32", "42"),
         fossil::tofu_create("i32", "84")
@@ -159,7 +159,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_sort) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_algorithm_reverse) {
-    std::vector<fossil::tofu_t> array = {
+    std::vector<fossil_tofu_t> array = {
         fossil::tofu_create("i32", "42"),
         fossil::tofu_create("i32", "84"),
         fossil::tofu_create("i32", "126")

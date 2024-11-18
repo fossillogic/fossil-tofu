@@ -414,10 +414,6 @@ char* fossil_tofu_strdup(const char* str);
 
 namespace fossil {
 
-typedef fossil_tofu_attribute_t tofu_attribute_t;
-typedef fossil_tofu_value_t tofu_value_t;
-typedef fossil_tofu_t tofu_t;
-
 /**
  * Function to create a `fossil_tofu_t` object based on type and value strings.
  *
