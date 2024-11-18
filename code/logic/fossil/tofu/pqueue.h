@@ -238,8 +238,8 @@ namespace fossil {
  * @return           The created priority queue.
  * @note             Time complexity: O(1)
  */
-inline fossil_pqueue_t* pqueue_create_container(char* type) {
-    return fossil_pqueue_create_container(type);
+inline fossil_pqueue_t* pqueue_create_container(const std::string& type) {
+    return fossil_pqueue_create_container(const_cast<char*>(type.c_str()));
 }
 
 /**
@@ -300,8 +300,8 @@ inline void pqueue_destroy(fossil_pqueue_t* pqueue) {
  * @return         The error code indicating the success or failure of the operation.
  * @note           Time complexity: O(n)
  */
-inline int32_t pqueue_insert(fossil_pqueue_t* pqueue, char *data, int32_t priority) {
-    return fossil_pqueue_insert(pqueue, data, priority);
+inline int32_t pqueue_insert(fossil_pqueue_t* pqueue, const std::string& data, int32_t priority) {
+    return fossil_pqueue_insert(pqueue, const_cast<char*>(data.c_str()), priority);
 }
 
 /**
@@ -383,8 +383,8 @@ inline bool pqueue_is_cnullptr(const fossil_pqueue_t* pqueue) {
  * @param pqueue The priority queue from which to get the element.
  * @return       The element with the highest priority.
  */
-inline char *pqueue_get_front(const fossil_pqueue_t* pqueue) {
-    return fossil_pqueue_get_front(pqueue);
+inline std::string pqueue_get_front(const fossil_pqueue_t* pqueue) {
+    return std::string(fossil_pqueue_get_front(pqueue));
 }
 
 /**
@@ -395,8 +395,8 @@ inline char *pqueue_get_front(const fossil_pqueue_t* pqueue) {
  * @param pqueue The priority queue from which to get the element.
  * @return       The element with the lowest priority.
  */
-inline char *pqueue_get_back(const fossil_pqueue_t* pqueue) {
-    return fossil_pqueue_get_back(pqueue);
+inline std::string pqueue_get_back(const fossil_pqueue_t* pqueue) {
+    return std::string(fossil_pqueue_get_back(pqueue));
 }
 
 /**
@@ -408,8 +408,8 @@ inline char *pqueue_get_back(const fossil_pqueue_t* pqueue) {
  * @param priority The priority of the element to get.
  * @return         The element at the specified priority.
  */
-inline char *pqueue_get_at(const fossil_pqueue_t* pqueue, int32_t priority) {
-    return fossil_pqueue_get_at(pqueue, priority);
+inline std::string pqueue_get_at(const fossil_pqueue_t* pqueue, int32_t priority) {
+    return std::string(fossil_pqueue_get_at(pqueue, priority));
 }
 
 /**
@@ -420,8 +420,8 @@ inline char *pqueue_get_at(const fossil_pqueue_t* pqueue, int32_t priority) {
  * @param pqueue  The priority queue in which to set the element.
  * @param element The element to set.
  */
-inline void pqueue_set_front(fossil_pqueue_t* pqueue, char *element) {
-    fossil_pqueue_set_front(pqueue, element);
+inline void pqueue_set_front(fossil_pqueue_t* pqueue, const std::string& element) {
+    fossil_pqueue_set_front(pqueue, const_cast<char*>(element.c_str()));
 }
 
 /**
@@ -432,8 +432,8 @@ inline void pqueue_set_front(fossil_pqueue_t* pqueue, char *element) {
  * @param pqueue  The priority queue in which to set the element.
  * @param element The element to set.
  */
-inline void pqueue_set_back(fossil_pqueue_t* pqueue, char *element) {
-    fossil_pqueue_set_back(pqueue, element);
+inline void pqueue_set_back(fossil_pqueue_t* pqueue, const std::string& element) {
+    fossil_pqueue_set_back(pqueue, const_cast<char*>(element.c_str()));
 }
 
 /**
@@ -445,8 +445,8 @@ inline void pqueue_set_back(fossil_pqueue_t* pqueue, char *element) {
  * @param priority The priority at which to set the element.
  * @param element  The element to set.
  */
-inline void pqueue_set_at(fossil_pqueue_t* pqueue, int32_t priority, char *element) {
-    fossil_pqueue_set_at(pqueue, priority, element);
+inline void pqueue_set_at(fossil_pqueue_t* pqueue, int32_t priority, const std::string& element) {
+    fossil_pqueue_set_at(pqueue, priority, const_cast<char*>(element.c_str()));
 }
 
 }
