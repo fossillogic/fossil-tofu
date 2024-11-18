@@ -31,6 +31,39 @@ fossil_queue_t* fossil_queue_create_container(char* type) {
     return queue;
 }
 
+fossil_queue_t* fossil_queue_create_default(void) {
+    return fossil_queue_create_container("any");
+}
+
+fossil_queue_t* fossil_queue_create_copy(const fossil_queue_t* other) {
+    fossil_queue_t* queue = (fossil_queue_t*)fossil_tofu_alloc(sizeof(fossil_queue_t));
+    if (queue == NULL) {
+        return NULL;
+    }
+    queue->type = other->type;
+    queue->front = NULL;
+    queue->rear = NULL;
+    fossil_queue_node_t* current = other->front;
+    while (current != NULL) {
+        fossil_queue_insert(queue, current->data.value.data);
+        current = current->next;
+    }
+    return queue;
+}
+
+fossil_queue_t* fossil_queue_create_move(fossil_queue_t* other) {
+    fossil_queue_t* queue = (fossil_queue_t*)fossil_tofu_alloc(sizeof(fossil_queue_t));
+    if (queue == NULL) {
+        return NULL;
+    }
+    queue->type = other->type;
+    queue->front = other->front;
+    queue->rear = other->rear;
+    other->front = NULL;
+    other->rear = NULL;
+    return queue;
+}
+
 void fossil_queue_destroy(fossil_queue_t* queue) {
     if (queue == NULL) {
         return;
@@ -102,4 +135,30 @@ bool fossil_queue_is_empty(const fossil_queue_t* queue) {
 
 bool fossil_queue_is_cnullptr(const fossil_queue_t* queue) {
     return queue == NULL;
+}
+
+// *****************************************************************************
+// Getter and setter functions
+// *****************************************************************************
+
+char *fossil_queue_get_front(const fossil_queue_t* queue) {
+    return queue == NULL || queue->front == NULL ? NULL : queue->front->data.value.data;
+}
+
+char *fossil_queue_get_rear(const fossil_queue_t* queue) {
+    return queue == NULL || queue->rear == NULL ? NULL : queue->rear->data.value.data;
+}
+
+void fossil_queue_set_front(fossil_queue_t* queue, char *element) {
+    if (queue == NULL || queue->front == NULL) {
+        return;
+    }
+    fossil_tofu_set_value(&queue->front->data, element);
+}
+
+void fossil_queue_set_rear(fossil_queue_t* queue, char *element) {
+    if (queue == NULL || queue->rear == NULL) {
+        return;
+    }
+    fossil_tofu_set_value(&queue->rear->data, element);
 }

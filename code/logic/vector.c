@@ -36,6 +36,45 @@ fossil_vector_t* fossil_vector_create_container(char* type) {
     return vector;
 }
 
+fossil_vector_t* fossil_vector_create_default(void) {
+    return fossil_vector_create_container("any");
+}
+
+fossil_vector_t* fossil_vector_create_copy(const fossil_vector_t* other) {
+    fossil_vector_t* vector = (fossil_vector_t*)fossil_tofu_alloc(sizeof(fossil_vector_t));
+    if (vector == NULL) {
+        return NULL;
+    }
+    vector->data = (fossil_tofu_t*)fossil_tofu_alloc(other->capacity * sizeof(fossil_tofu_t));
+    if (vector->data == NULL) {
+        fossil_tofu_free(vector);
+        return NULL;
+    }
+    vector->size = other->size;
+    vector->capacity = other->capacity;
+    vector->type = other->type;
+    for (size_t i = 0; i < other->size; i++) {
+        vector->data[i] = other->data[i];
+    }
+    return vector;
+}
+
+fossil_vector_t* fossil_vector_create_move(fossil_vector_t* other) {
+    fossil_vector_t* vector = (fossil_vector_t*)fossil_tofu_alloc(sizeof(fossil_vector_t));
+    if (vector == NULL) {
+        return NULL;
+    }
+    vector->data = other->data;
+    vector->size = other->size;
+    vector->capacity = other->capacity;
+    vector->type = other->type;
+    other->data = NULL;
+    other->size = 0;
+    other->capacity = 0;
+    other->type = NULL;
+    return vector;
+}
+
 void fossil_vector_destroy(fossil_vector_t* vector) {
     if (vector == NULL) {
         return;

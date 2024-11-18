@@ -92,6 +92,32 @@ typedef struct {
 fossil_tofu_t fossil_tofu_create(char* type, char* value);
 
 /**
+ * @brief Creates a new tofu with default values.
+ *
+ * @return The created tofu.
+ * @note Time complexity: O(1)
+ */
+fossil_tofu_t* fossil_tofu_create_default(void);
+
+/**
+ * @brief Creates a new tofu by copying an existing tofu.
+ *
+ * @param other The tofu to copy.
+ * @return The created tofu.
+ * @note Time complexity: O(n)
+ */
+fossil_tofu_t* fossil_tofu_create_copy(const fossil_tofu_t* other);
+
+/**
+ * @brief Creates a new tofu by moving an existing tofu.
+ *
+ * @param other The tofu to move.
+ * @return The created tofu.
+ * @note Time complexity: O(1)
+ */
+fossil_tofu_t* fossil_tofu_create_move(fossil_tofu_t* other);
+
+/**
  * Function to destroy a `fossil_tofu_t` object and fossil_tofu_free the allocated memory.
  *
  * @param tofu The `fossil_tofu_t` object to be destroyed.
@@ -402,6 +428,38 @@ typedef fossil_tofu_t tofu_t;
  */
 fossil_tofu_t tofu_create(std::string type, std::string value) {
     return fossil_tofu_create(const_cast<char*>(type.c_str()), const_cast<char*>(value.c_str()));
+}
+
+/**
+ * Function to create a `fossil_tofu_t` object with default values.
+ *
+ * @return The created `fossil_tofu_t` object.
+ * @note O(1) - Constant time complexity.
+ */
+fossil_tofu_t tofu_create_default(void) {
+    return *fossil_tofu_create_default();
+}
+
+/**
+ * Function to create a `fossil_tofu_t` object by copying an existing object.
+ *
+ * @param other The `fossil_tofu_t` object to copy.
+ * @return The created `fossil_tofu_t` object.
+ * @note O(n) - Linear time complexity based on the number of attributes.
+ */
+fossil_tofu_t tofu_create_copy(const fossil_tofu_t &other) {
+    return *fossil_tofu_create_copy(&other);
+}
+
+/**
+ * Function to create a `fossil_tofu_t` object by moving an existing object.
+ *
+ * @param other The `fossil_tofu_t` object to move.
+ * @return The created `fossil_tofu_t` object.
+ * @note O(1) - Constant time complexity.
+ */
+fossil_tofu_t tofu_create_move(fossil_tofu_t &other) {
+    return *fossil_tofu_create_move(&other);
 }
 
 /**

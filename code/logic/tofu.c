@@ -151,6 +151,63 @@ fossil_tofu_t fossil_tofu_create(char* type, char* value) {
     return tofu;
 }
 
+fossil_tofu_t* fossil_tofu_create_default(void) {
+    fossil_tofu_t *tofu = (fossil_tofu_t*)fossil_tofu_malloc(sizeof(fossil_tofu_t));
+    if (tofu == NULL) return NULL;
+
+    tofu->type = FOSSIL_TOFU_TYPE_ANY;
+    tofu->value.data = fossil_tofu_strdup("");
+    tofu->value.mutable_flag = true;
+
+    tofu->attribute.name = fossil_tofu_strdup("Any");
+    tofu->attribute.description = fossil_tofu_strdup("A generic value");
+    tofu->attribute.id = fossil_tofu_strdup("any");
+
+    return tofu;
+}
+
+fossil_tofu_t* fossil_tofu_create_copy(const fossil_tofu_t* other) {
+    if (other == NULL) return NULL;
+
+    fossil_tofu_t *tofu = (fossil_tofu_t*)fossil_tofu_malloc(sizeof(fossil_tofu_t));
+    if (tofu == NULL) return NULL;
+
+    tofu->type = other->type;
+    tofu->value.data = fossil_tofu_strdup(other->value.data);
+    tofu->value.mutable_flag = other->value.mutable_flag;
+
+    tofu->attribute.name = fossil_tofu_strdup(other->attribute.name);
+    tofu->attribute.description = fossil_tofu_strdup(other->attribute.description);
+    tofu->attribute.id = fossil_tofu_strdup(other->attribute.id);
+
+    return tofu;
+}
+
+fossil_tofu_t* fossil_tofu_create_move(fossil_tofu_t* other) {
+    if (other == NULL) return NULL;
+
+    fossil_tofu_t *tofu = (fossil_tofu_t*)fossil_tofu_malloc(sizeof(fossil_tofu_t));
+    if (tofu == NULL) return NULL;
+
+    tofu->type = other->type;
+    tofu->value.data = other->value.data;
+    tofu->value.mutable_flag = other->value.mutable_flag;
+
+    tofu->attribute.name = other->attribute.name;
+    tofu->attribute.description = other->attribute.description;
+    tofu->attribute.id = other->attribute.id;
+
+    other->type = FOSSIL_TOFU_TYPE_ANY;
+    other->value.data = NULL;
+    other->value.mutable_flag = false;
+
+    other->attribute.name = NULL;
+    other->attribute.description = NULL;
+    other->attribute.id = NULL;
+
+    return tofu;
+}
+
 void fossil_tofu_destroy(fossil_tofu_t *tofu) {
     if (tofu == NULL) return;
     fossil_tofu_free(tofu->value.data);

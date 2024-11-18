@@ -52,6 +52,35 @@ typedef struct fossil_queue_t {
 fossil_queue_t* fossil_queue_create_container(char* type);
 
 /**
+ * Create a new queue with default values.
+ * 
+ * Time complexity: O(1)
+ *
+ * @return The created queue.
+ */
+fossil_queue_t* fossil_queue_create_default(void);
+
+/**
+ * Create a new queue by copying an existing queue.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param other The queue to copy.
+ * @return      The created queue.
+ */
+fossil_queue_t* fossil_queue_create_copy(const fossil_queue_t* other);
+
+/**
+ * Create a new queue by moving an existing queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param other The queue to move.
+ * @return      The created queue.
+ */
+fossil_queue_t* fossil_queue_create_move(fossil_queue_t* other);
+
+/**
  * Erase the contents of the queue and fossil_tofu_free allocated memory.
  *
  * @param queue The queue to erase.
@@ -127,8 +156,251 @@ bool fossil_queue_is_empty(const fossil_queue_t* queue);
  */
 bool fossil_queue_is_cnullptr(const fossil_queue_t* queue);
 
+// *****************************************************************************
+// Getter and setter functions
+// *****************************************************************************
+
+/**
+ * Get the element at the front of the queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param queue The queue from which to get the front element.
+ * @return      The element at the front of the queue.
+ */
+char *fossil_queue_get_front(const fossil_queue_t* queue);
+
+/**
+ * Get the element at the rear of the queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param queue The queue from which to get the rear element.
+ * @return      The element at the rear of the queue.
+ */
+char *fossil_queue_get_rear(const fossil_queue_t* queue);
+
+/**
+ * Set the element at the front of the queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param queue   The queue in which to set the front element.
+ * @param element The element to set at the front.
+ */
+void fossil_queue_set_front(fossil_queue_t* queue, char *element);
+
+/**
+ * Set the element at the rear of the queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param queue   The queue in which to set the rear element.
+ * @param element The element to set at the rear.
+ */
+void fossil_queue_set_rear(fossil_queue_t* queue, char *element);
+
 #ifdef __cplusplus
 }
+
+namespace fossil {
+
+// *****************************************************************************
+// Function prototypes
+// *****************************************************************************
+
+/**
+ * Create a new queue with the specified data type.
+ *
+ * @param list_type The type of data the queue will store.
+ * @return          The created queue.
+ * @note            Time complexity: O(1)
+ */
+inline fossil_queue_t* queue_create_container(const std::string& type) {
+    return fossil_queue_create_container(const_cast<char*>(type.c_str()));
+}
+
+/**
+ * Create a new queue with default values.
+ * 
+ * Time complexity: O(1)
+ *
+ * @return The created queue.
+ */
+inline fossil_queue_t* queue_create_default() {
+    return fossil_queue_create_default();
+}
+
+/**
+ * Create a new queue by copying an existing queue.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param other The queue to copy.
+ * @return      The created queue.
+ */
+inline fossil_queue_t* queue_create_copy(const fossil_queue_t* other) {
+    return fossil_queue_create_copy(other);
+}
+
+/**
+ * Create a new queue by moving an existing queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param other The queue to move.
+ * @return      The created queue.
+ */
+inline fossil_queue_t* queue_create_move(fossil_queue_t* other) {
+    return fossil_queue_create_move(other);
+}
+
+/**
+ * Erase the contents of the queue and fossil_tofu_free allocated memory.
+ *
+ * @param queue The queue to erase.
+ * @note        Time complexity: O(n)
+ */
+inline void queue_destroy(fossil_queue_t* queue) {
+    fossil_queue_destroy(queue);
+}
+
+// *****************************************************************************
+// Utility functions
+// *****************************************************************************
+
+/**
+ * Insert data into the queue.
+ *
+ * @param queue The queue to insert data into.
+ * @param data  The data to insert.
+ * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(1)
+ */
+inline int32_t queue_insert(fossil_queue_t* queue, const std::string& data) {
+    return fossil_queue_insert(queue, const_cast<char*>(data.c_str()));
+}
+
+/**
+ * Remove data from the queue.
+ *
+ * @param queue The queue to remove data from.
+ * @return      The error code indicating the success or failure of the operation.
+ * @note        Time complexity: O(1)
+ */
+inline int32_t queue_remove(fossil_queue_t* queue) {
+    return fossil_queue_remove(queue);
+}
+
+/**
+ * Get the size of the queue.
+ *
+ * @param queue The queue for which to get the size.
+ * @return      The size of the queue.
+ * @note        Time complexity: O(n)
+ */
+inline size_t queue_size(const fossil_queue_t* queue) {
+    return fossil_queue_size(queue);
+}
+
+/**
+ * Check if the queue is not empty.
+ *
+ * @param queue The queue to check.
+ * @return      True if the queue is not empty, false otherwise.
+ * @note        Time complexity: O(1)
+ */
+inline bool queue_not_empty(const fossil_queue_t* queue) {
+    return fossil_queue_not_empty(queue);
+}
+
+/**
+ * Check if the queue is not a null pointer.
+ *
+ * @param queue The queue to check.
+ * @return      True if the queue is not a null pointer, false otherwise.
+ * @note        Time complexity: O(1)
+ */
+inline bool queue_not_cnullptr(const fossil_queue_t* queue) {
+    return fossil_queue_not_cnullptr(queue);
+}
+
+/**
+ * Check if the queue is empty.
+ *
+ * @param queue The queue to check.
+ * @return      True if the queue is empty, false otherwise.
+ * @note        Time complexity: O(1)
+ */
+inline bool queue_is_empty(const fossil_queue_t* queue) {
+    return fossil_queue_is_empty(queue);
+}
+
+/**
+ * Check if the queue is a null pointer.
+ *
+ * @param queue The queue to check.
+ * @return      True if the queue is a null pointer, false otherwise.
+ * @note        Time complexity: O(1)
+ */
+inline bool queue_is_cnullptr(const fossil_queue_t* queue) {
+    return fossil_queue_is_cnullptr(queue);
+}
+
+// *****************************************************************************
+// Getter and setter functions
+// *****************************************************************************
+
+/**
+ * Get the element at the front of the queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param queue The queue from which to get the front element.
+ * @return      The element at the front of the queue.
+ */
+inline std::string queue_get_front(const fossil_queue_t* queue) {
+    return std::string(fossil_queue_get_front(queue));
+}
+
+/**
+ * Get the element at the rear of the queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param queue The queue from which to get the rear element.
+ * @return      The element at the rear of the queue.
+ */
+inline std::string queue_get_rear(const fossil_queue_t* queue) {
+    return std::string(fossil_queue_get_rear(queue));
+}
+
+/**
+ * Set the element at the front of the queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param queue   The queue in which to set the front element.
+ * @param element The element to set at the front.
+ */
+inline void queue_set_front(fossil_queue_t* queue, const std::string& element) {
+    fossil_queue_set_front(queue, const_cast<char*>(element.c_str()));
+}
+
+/**
+ * Set the element at the rear of the queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param queue   The queue in which to set the rear element.
+ * @param element The element to set at the rear.
+ */
+inline void queue_set_rear(fossil_queue_t* queue, const std::string& element) {
+    fossil_queue_set_rear(queue, const_cast<char*>(element.c_str()));
+}
+
+}
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */
