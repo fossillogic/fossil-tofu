@@ -8,9 +8,8 @@ if get_option('with_test').enabled()
 
     foreach cases : test_cases
         test_c += ['cases' / 'test_' + cases + '.c']
+        test_c += ['cases' / 'test_' + cases + '.cpp']
     endforeach
-
-    test_c += ['cases' / 'test_tofu.cpp']
 
     pizza_c = executable('testbed-c', test_c, include_directories: dir, dependencies: [dependency('fossil-test'), fossil_tofu_dep])
 
