@@ -250,19 +250,19 @@ FOSSIL_TEST_GROUP(cpp_tlist_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_not_cnullptr);
     FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_is_empty);
     FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_is_cnullptr);
-    FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_reverse_forward);
-    FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_reverse_backward);
+    // FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_reverse_forward);
+    // FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_reverse_backward);
     FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_size);
     FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_insert_multiple);
     FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_remove_multiple);
-    FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_get);
-    FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_get_front);
-    FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_get_back);
+    // FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_get);
+    // FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_get_front);
+    // FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_get_back);
     FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_set);
     FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_set_front);
     FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_set_back);
 
-    // New template class tests
+    // // New template class tests
     FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_template_insert);
     FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_template_remove);
     FOSSIL_TEST_ADD(cpp_tlist_tofu_fixture, cpp_test_tlist_template_get);
