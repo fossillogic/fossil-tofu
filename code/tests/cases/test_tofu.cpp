@@ -173,6 +173,53 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_reverse) {
     }
 }
 
+FOSSIL_TEST_CASE(cpp_test_tofu_class_create_destroy) {
+    fossil::Tofu<int> tofu("Test Tofu", "Test Description", "cpp_test_id", 42);
+    ASSUME_ITS_EQUAL_CSTR(tofu.getName().c_str(), "Test Tofu");
+    ASSUME_ITS_EQUAL_CSTR(tofu.getDescription().c_str(), "Test Description");
+    ASSUME_ITS_EQUAL_CSTR(tofu.getId().c_str(), "cpp_test_id");
+    ASSUME_ITS_TRUE(tofu.getValue() == 42);
+}
+
+FOSSIL_TEST_CASE(cpp_test_tofu_class_create_copy) {
+    fossil::Tofu<int> tofu1("Test Tofu", "Test Description", "cpp_test_id", 42);
+    fossil::Tofu<int> tofu2 = tofu1;
+    ASSUME_ITS_TRUE(tofu1 == tofu2);
+}
+
+FOSSIL_TEST_CASE(cpp_test_tofu_class_create_move) {
+    fossil::Tofu<int> tofu1("Test Tofu", "Test Description", "cpp_test_id", 42);
+    fossil::Tofu<int> tofu2 = std::move(tofu1);
+    ASSUME_ITS_TRUE(tofu2.getValue() == 42);
+    ASSUME_ITS_TRUE(tofu1.getName().empty());
+}
+
+FOSSIL_TEST_CASE(cpp_test_tofu_class_set_get_value) {
+    fossil::Tofu<int> tofu("Test Tofu", "Test Description", "cpp_test_id", 42);
+    tofu.setValue(84);
+    ASSUME_ITS_TRUE(tofu.getValue() == 84);
+}
+
+FOSSIL_TEST_CASE(cpp_test_tofu_class_mutability) {
+    fossil::Tofu<int> tofu("Test Tofu", "Test Description", "cpp_test_id", 42);
+    ASSUME_ITS_TRUE(tofu.isMutable() == true);
+    tofu.setMutable(false);
+    ASSUME_ITS_TRUE(tofu.isMutable() == false);
+}
+
+FOSSIL_TEST_CASE(cpp_test_tofu_class_set_get_attribute) {
+    fossil::Tofu<int> tofu("Test Tofu", "Test Description", "cpp_test_id", 42);
+    ASSUME_ITS_EQUAL_CSTR(tofu.getName().c_str(), "Test Tofu");
+    ASSUME_ITS_EQUAL_CSTR(tofu.getDescription().c_str(), "Test Description");
+    ASSUME_ITS_EQUAL_CSTR(tofu.getId().c_str(), "cpp_test_id");
+}
+
+FOSSIL_TEST_CASE(cpp_test_tofu_class_equals) {
+    fossil::Tofu<int> tofu1("Test Tofu", "Test Description", "cpp_test_id", 42);
+    fossil::Tofu<int> tofu2("Test Tofu", "Test Description", "cpp_test_id", 42);
+    ASSUME_ITS_TRUE(tofu1 == tofu2);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -191,6 +238,13 @@ FOSSIL_TEST_GROUP(cpp_generic_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_create_default);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_create_copy);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_create_move);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_create_destroy);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_create_copy);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_create_move);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_set_get_value);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_mutability);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_set_get_attribute);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_equals);
 
     FOSSIL_TEST_REGISTER(cpp_generic_tofu_fixture);
 } // end of tests

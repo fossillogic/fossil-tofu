@@ -79,6 +79,69 @@ FOSSIL_TEST_CASE(cpp_test_set_is_empty) {
     fossil_set_destroy(set);
 }
 
+FOSSIL_TEST_CASE(cpp_test_set_template_insert) {
+    fossil::Set<int> set;
+    set.insert(42);
+    ASSUME_ITS_TRUE(set.size() == 1);
+}
+
+FOSSIL_TEST_CASE(cpp_test_set_template_erase) {
+    fossil::Set<int> set;
+    set.insert(42);
+    set.erase(42);
+    ASSUME_ITS_TRUE(set.is_empty() == true);
+}
+
+FOSSIL_TEST_CASE(cpp_test_set_template_not_empty) {
+    fossil::Set<int> set;
+    set.insert(42);
+    ASSUME_ITS_TRUE(set.not_empty() == true);
+}
+
+FOSSIL_TEST_CASE(cpp_test_set_template_is_empty) {
+    fossil::Set<int> set;
+    ASSUME_ITS_TRUE(set.is_empty() == true);
+}
+
+FOSSIL_TEST_CASE(cpp_test_set_template_get) {
+    fossil::Set<int> set;
+    set.insert(42);
+    ASSUME_ITS_TRUE(set.get(0) == 42);
+}
+
+FOSSIL_TEST_CASE(cpp_test_set_template_get_front) {
+    fossil::Set<int> set;
+    set.insert(42);
+    ASSUME_ITS_TRUE(set.get_front() == 42);
+}
+
+FOSSIL_TEST_CASE(cpp_test_set_template_get_back) {
+    fossil::Set<int> set;
+    set.insert(42);
+    ASSUME_ITS_TRUE(set.get_back() == 42);
+}
+
+FOSSIL_TEST_CASE(cpp_test_set_template_set) {
+    fossil::Set<int> set;
+    set.insert(42);
+    set.set(0, 84);
+    ASSUME_ITS_TRUE(set.get(0) == 84);
+}
+
+FOSSIL_TEST_CASE(cpp_test_set_template_set_front) {
+    fossil::Set<int> set;
+    set.insert(42);
+    set.set_front(84);
+    ASSUME_ITS_TRUE(set.get_front() == 84);
+}
+
+FOSSIL_TEST_CASE(cpp_test_set_template_set_back) {
+    fossil::Set<int> set;
+    set.insert(42);
+    set.set_back(84);
+    ASSUME_ITS_TRUE(set.get_back() == 84);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -90,6 +153,18 @@ FOSSIL_TEST_GROUP(cpp_set_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_set_tofu_fixture, cpp_test_set_not_cnullptr);
     FOSSIL_TEST_ADD(cpp_set_tofu_fixture, cpp_test_set_is_cnullptr);
     FOSSIL_TEST_ADD(cpp_set_tofu_fixture, cpp_test_set_is_empty);
+
+    // Template class tests
+    FOSSIL_TEST_ADD(cpp_set_tofu_fixture, cpp_test_set_template_insert);
+    FOSSIL_TEST_ADD(cpp_set_tofu_fixture, cpp_test_set_template_erase);
+    FOSSIL_TEST_ADD(cpp_set_tofu_fixture, cpp_test_set_template_not_empty);
+    FOSSIL_TEST_ADD(cpp_set_tofu_fixture, cpp_test_set_template_is_empty);
+    FOSSIL_TEST_ADD(cpp_set_tofu_fixture, cpp_test_set_template_get);
+    FOSSIL_TEST_ADD(cpp_set_tofu_fixture, cpp_test_set_template_get_front);
+    FOSSIL_TEST_ADD(cpp_set_tofu_fixture, cpp_test_set_template_get_back);
+    FOSSIL_TEST_ADD(cpp_set_tofu_fixture, cpp_test_set_template_set);
+    FOSSIL_TEST_ADD(cpp_set_tofu_fixture, cpp_test_set_template_set_front);
+    FOSSIL_TEST_ADD(cpp_set_tofu_fixture, cpp_test_set_template_set_back);
 
     FOSSIL_TEST_REGISTER(cpp_set_tofu_fixture);
 } // end of tests

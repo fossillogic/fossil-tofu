@@ -81,6 +81,47 @@ FOSSIL_TEST_CASE(cpp_test_queue_is_cnullptr) {
     ASSUME_ITS_TRUE(fossil_queue_is_cnullptr(queue) == true);
 }
 
+FOSSIL_TEST_CASE(cpp_test_queue_template_insert) {
+    fossil::Queue<int> queue;
+    queue.insert(42);
+    ASSUME_ITS_TRUE(queue.getFront() == 42);
+    ASSUME_ITS_TRUE(queue.getRear() == 42);
+}
+
+FOSSIL_TEST_CASE(cpp_test_queue_template_remove) {
+    fossil::Queue<int> queue;
+    queue.insert(42);
+    queue.remove();
+    ASSUME_ITS_TRUE(queue.isEmpty() == true);
+}
+
+FOSSIL_TEST_CASE(cpp_test_queue_template_not_empty) {
+    fossil::Queue<int> queue;
+    queue.insert(42);
+    ASSUME_ITS_TRUE(queue.isEmpty() == false);
+}
+
+FOSSIL_TEST_CASE(cpp_test_queue_template_is_empty) {
+    fossil::Queue<int> queue;
+    ASSUME_ITS_TRUE(queue.isEmpty() == true);
+    queue.insert(42);
+    ASSUME_ITS_TRUE(queue.isEmpty() == false);
+}
+
+FOSSIL_TEST_CASE(cpp_test_queue_template_get_front) {
+    fossil::Queue<int> queue;
+    queue.insert(42);
+    queue.insert(43);
+    ASSUME_ITS_TRUE(queue.getFront() == 42);
+}
+
+FOSSIL_TEST_CASE(cpp_test_queue_template_get_rear) {
+    fossil::Queue<int> queue;
+    queue.insert(42);
+    queue.insert(43);
+    ASSUME_ITS_TRUE(queue.getRear() == 43);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -92,6 +133,12 @@ FOSSIL_TEST_GROUP(cpp_queue_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_not_cnullptr);
     FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_is_empty);
     FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_is_cnullptr);
+    FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_template_insert);
+    FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_template_remove);
+    FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_template_not_empty);
+    FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_template_is_empty);
+    FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_template_get_front);
+    FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_template_get_rear);
 
     FOSSIL_TEST_REGISTER(cpp_queue_tofu_fixture);
 } // end of tests

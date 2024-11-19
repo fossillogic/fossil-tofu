@@ -131,6 +131,76 @@ FOSSIL_TEST_CASE(cpp_test_flist_multiple_removes) {
     fossil_flist_destroy(flist);
 }
 
+FOSSIL_TEST_CASE(cpp_test_flist_template_insert) {
+    fossil::ForwardList<int> flist;
+    flist.insert(42);
+    ASSUME_ITS_TRUE(flist.size() == 1);
+    ASSUME_ITS_TRUE(flist.front() == 42);
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_template_remove) {
+    fossil::ForwardList<int> flist;
+    flist.insert(42);
+    flist.remove();
+    ASSUME_ITS_TRUE(flist.isEmpty() == true);
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_template_reverse) {
+    fossil::ForwardList<int> flist;
+    flist.insert(1);
+    flist.insert(2);
+    flist.insert(3);
+    flist.reverse();
+    ASSUME_ITS_TRUE(flist.size() == 3);
+    ASSUME_ITS_TRUE(flist.front() == 1);
+    ASSUME_ITS_TRUE(flist.back() == 3);
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_template_size) {
+    fossil::ForwardList<int> flist;
+    ASSUME_ITS_TRUE(flist.size() == 0);
+    flist.insert(42);
+    ASSUME_ITS_TRUE(flist.size() == 1);
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_template_is_empty) {
+    fossil::ForwardList<int> flist;
+    ASSUME_ITS_TRUE(flist.isEmpty() == true);
+    flist.insert(42);
+    ASSUME_ITS_TRUE(flist.isEmpty() == false);
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_template_get) {
+    fossil::ForwardList<int> flist;
+    flist.insert(1);
+    flist.insert(2);
+    flist.insert(3);
+    ASSUME_ITS_TRUE(flist.get(0) == 3);
+    ASSUME_ITS_TRUE(flist.get(1) == 2);
+    ASSUME_ITS_TRUE(flist.get(2) == 1);
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_template_front) {
+    fossil::ForwardList<int> flist;
+    flist.insert(42);
+    ASSUME_ITS_TRUE(flist.front() == 42);
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_template_back) {
+    fossil::ForwardList<int> flist;
+    flist.insert(1);
+    flist.insert(2);
+    flist.insert(3);
+    ASSUME_ITS_TRUE(flist.back() == 1);
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_template_clear) {
+    fossil::ForwardList<int> flist;
+    flist.insert(42);
+    flist.clear();
+    ASSUME_ITS_TRUE(flist.isEmpty() == true);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -147,6 +217,17 @@ FOSSIL_TEST_GROUP(cpp_flist_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_size);
     FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_multiple_inserts);
     FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_multiple_removes);
+
+    // Template class tests
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_template_insert);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_template_remove);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_template_reverse);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_template_size);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_template_is_empty);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_template_get);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_template_front);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_template_back);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_template_clear);
 
     FOSSIL_TEST_REGISTER(cpp_flist_tofu_fixture);
 } // end of tests

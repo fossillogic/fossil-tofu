@@ -152,11 +152,64 @@ FOSSIL_TEST_CASE(cpp_test_stack_top) {
     fossil_stack_destroy(stack);
 }
 
+FOSSIL_TEST_CASE(cpp_test_stack_template_push) {
+    fossil::Stack<int> stack;
+    stack.push(42);
+    ASSUME_ITS_TRUE(stack.size() == 1);
+    ASSUME_ITS_TRUE(stack.peek() == 42);
+}
+
+FOSSIL_TEST_CASE(cpp_test_stack_template_pop) {
+    fossil::Stack<int> stack;
+    stack.push(42);
+    stack.pop();
+    ASSUME_ITS_TRUE(stack.isEmpty() == true);
+}
+
+FOSSIL_TEST_CASE(cpp_test_stack_template_peek) {
+    fossil::Stack<int> stack;
+    stack.push(42);
+    ASSUME_ITS_TRUE(stack.peek() == 42);
+}
+
+FOSSIL_TEST_CASE(cpp_test_stack_template_is_empty) {
+    fossil::Stack<int> stack;
+    ASSUME_ITS_TRUE(stack.isEmpty() == true);
+    stack.push(42);
+    ASSUME_ITS_TRUE(stack.isEmpty() == false);
+}
+
+FOSSIL_TEST_CASE(cpp_test_stack_template_size) {
+    fossil::Stack<int> stack;
+    stack.push(42);
+    stack.push(84);
+    ASSUME_ITS_TRUE(stack.size() == 2);
+}
+
+FOSSIL_TEST_CASE(cpp_test_stack_template_pop_empty) {
+    fossil::Stack<int> stack;
+    try {
+        stack.pop();
+        ASSUME_ITS_TRUE(false); // Should not reach here
+    } catch (const std::underflow_error&) {
+        ASSUME_ITS_TRUE(true); // Exception caught as expected
+    }
+}
+
+FOSSIL_TEST_CASE(cpp_test_stack_template_peek_empty) {
+    fossil::Stack<int> stack;
+    try {
+        stack.peek();
+        ASSUME_ITS_TRUE(false); // Should not reach here
+    } catch (const std::underflow_error&) {
+        ASSUME_ITS_TRUE(true); // Exception caught as expected
+    }
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
-FOSSIL_TEST_GROUP(cpp_stack_tofu_tests) {    
-    // Generic ToFu Fixture
+FOSSIL_TEST_GROUP(cpp_stack_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_insert);
     FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_remove);
     FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_size);
@@ -171,6 +224,13 @@ FOSSIL_TEST_GROUP(cpp_stack_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_create_move);
     FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_get);
     FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_set);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_push);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_pop);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_peek);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_is_empty);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_size);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_pop_empty);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_peek_empty);
 
     FOSSIL_TEST_REGISTER(cpp_stack_tofu_fixture);
 } // end of tests

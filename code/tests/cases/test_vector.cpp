@@ -109,6 +109,82 @@ FOSSIL_TEST_CASE(cpp_test_vector_pop_at) {
     fossil_vector_destroy(vector);
 }
 
+FOSSIL_TEST_CASE(cpp_test_vector_template_create_destroy) {
+    fossil::Vector<int> vector;
+    ASSUME_ITS_TRUE(vector.is_empty());
+}
+
+FOSSIL_TEST_CASE(cpp_test_vector_template_push_back) {
+    fossil::Vector<int> vector;
+    vector.push_back(42);
+    ASSUME_ITS_TRUE(vector.get_size() == 1);
+    ASSUME_ITS_TRUE(vector.get(0) == 42);
+}
+
+FOSSIL_TEST_CASE(cpp_test_vector_template_push_front) {
+    fossil::Vector<int> vector;
+    vector.push_back(42);
+    vector.push_front(84);
+    ASSUME_ITS_TRUE(vector.get_size() == 2);
+    ASSUME_ITS_TRUE(vector.get(0) == 84);
+    ASSUME_ITS_TRUE(vector.get(1) == 42);
+}
+
+FOSSIL_TEST_CASE(cpp_test_vector_template_push_at) {
+    fossil::Vector<int> vector;
+    vector.push_back(42);
+    vector.push_back(126);
+    vector.push_at(1, 84);
+    ASSUME_ITS_TRUE(vector.get_size() == 3);
+    ASSUME_ITS_TRUE(vector.get(0) == 42);
+    ASSUME_ITS_TRUE(vector.get(1) == 84);
+    ASSUME_ITS_TRUE(vector.get(2) == 126);
+}
+
+FOSSIL_TEST_CASE(cpp_test_vector_template_pop_back) {
+    fossil::Vector<int> vector;
+    vector.push_back(42);
+    vector.push_back(84);
+    vector.pop_back();
+    ASSUME_ITS_TRUE(vector.get_size() == 1);
+    ASSUME_ITS_TRUE(vector.get(0) == 42);
+}
+
+FOSSIL_TEST_CASE(cpp_test_vector_template_pop_front) {
+    fossil::Vector<int> vector;
+    vector.push_back(42);
+    vector.push_back(84);
+    vector.pop_front();
+    ASSUME_ITS_TRUE(vector.get_size() == 1);
+    ASSUME_ITS_TRUE(vector.get(0) == 84);
+}
+
+FOSSIL_TEST_CASE(cpp_test_vector_template_pop_at) {
+    fossil::Vector<int> vector;
+    vector.push_back(42);
+    vector.push_back(84);
+    vector.push_back(126);
+    vector.pop_at(1);
+    ASSUME_ITS_TRUE(vector.get_size() == 2);
+    ASSUME_ITS_TRUE(vector.get(0) == 42);
+    ASSUME_ITS_TRUE(vector.get(1) == 126);
+}
+
+FOSSIL_TEST_CASE(cpp_test_vector_template_erase) {
+    fossil::Vector<int> vector;
+    vector.push_back(42);
+    vector.push_back(84);
+    vector.erase();
+    ASSUME_ITS_TRUE(vector.is_empty());
+}
+
+FOSSIL_TEST_CASE(cpp_test_vector_template_set) {
+    fossil::Vector<int> vector;
+    vector.push_back(42);
+    vector.set(0, 84);
+    ASSUME_ITS_TRUE(vector.get(0) == 84);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -121,6 +197,15 @@ FOSSIL_TEST_GROUP(cpp_vector_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_pop_back);
     FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_pop_front);
     FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_pop_at);
+    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_template_create_destroy);
+    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_template_push_back);
+    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_template_push_front);
+    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_template_push_at);
+    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_template_pop_back);
+    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_template_pop_front);
+    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_template_pop_at);
+    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_template_erase);
+    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_template_set);
 
     FOSSIL_TEST_REGISTER(cpp_vector_tofu_fixture);
 } // end of tests
