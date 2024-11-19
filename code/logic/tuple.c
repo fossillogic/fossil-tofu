@@ -50,12 +50,12 @@ fossil_tuple_t* fossil_tuple_create_copy(const fossil_tuple_t* other) {
         fossil_tofu_free(tuple);
         return NULL;
     }
+    for (size_t i = 0; i < other->element_count; i++) {
+        tuple->elements[i] = fossil_tofu_create(other->type, other->elements[i].value.data);
+    }
     tuple->element_count = other->element_count;
     tuple->capacity = other->capacity;
     tuple->type = other->type;
-    for (size_t i = 0; i < other->element_count; i++) {
-        tuple->elements[i] = other->elements[i];
-    }
     return tuple;
 }
 
