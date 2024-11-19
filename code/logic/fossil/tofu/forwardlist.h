@@ -243,7 +243,15 @@ void fossil_flist_set_back(fossil_flist_t* flist, char *element);
 
 namespace fossil {
 
-//
+/**
+ * @brief A forward list data structure.
+ * 
+ * A forward list is a data structure that stores elements in a linear sequence.
+ * Elements can be inserted and removed from the front of the list, but not from
+ * the back. The forward list does not support random access to elements.
+ * 
+ * @tparam T The type of data to store in the forward list.
+ */
 template <typename T>
 class ForwardList {
 public:
@@ -253,15 +261,21 @@ public:
         Node* next;
     };
 
-    // Constructor
+    /**
+     * Default constructor.
+     */
     ForwardList() : head(nullptr), type(typeid(T).name()) {}
 
-    // Destructor
+    /**
+     * Destructor.
+     */
     ~ForwardList() {
         clear();
     }
 
-    // Copy constructor
+    /**
+     * Copy constructor.
+     */
     ForwardList(const ForwardList& other) : head(nullptr), type(other.type) {
         Node* current = other.head;
         while (current) {
@@ -270,12 +284,16 @@ public:
         }
     }
 
-    // Move constructor
+    /**
+     * Move constructor.
+     */
     ForwardList(ForwardList&& other) noexcept : head(other.head), type(other.type) {
         other.head = nullptr;
     }
 
-    // Copy assignment operator
+    /**
+     * Copy assignment operator.
+     */
     ForwardList& operator=(const ForwardList& other) {
         if (this != &other) {
             clear();
@@ -288,7 +306,9 @@ public:
         return *this;
     }
 
-    // Move assignment operator
+    /**
+     * Move assignment operator.
+     */
     ForwardList& operator=(ForwardList&& other) noexcept {
         if (this != &other) {
             clear();
@@ -299,13 +319,19 @@ public:
         return *this;
     }
 
-    // Insert data into the forward list
+    /**
+     * Insert data into the forward list.
+     *
+     * @param data The data to insert.
+     */
     void insert(const T& data) {
         Node* newNode = new Node{data, head};
         head = newNode;
     }
 
-    // Remove data from the forward list
+    /**
+     * Remove data from the forward list.
+     */
     void remove() {
         if (head) {
             Node* temp = head;
@@ -316,7 +342,9 @@ public:
         }
     }
 
-    // Reverse the forward list
+    /**
+     * Reverse the forward list in the forward direction.
+     */
     void reverse() {
         Node* prev = nullptr;
         Node* current = head;
@@ -330,7 +358,13 @@ public:
         head = prev;
     }
 
-    // Get the size of the forward list
+    /**
+     * Get the size of the forward list.
+     * 
+     * Time complexity: O(n)
+     *
+     * @return The size of the forward list.
+     */
     size_t size() const {
         size_t count = 0;
         Node* current = head;
@@ -341,12 +375,25 @@ public:
         return count;
     }
 
-    // Check if the forward list is empty
+    /**
+     * Check if the forward list is not empty.
+     * 
+     * Time complexity: O(1)
+     *
+     * @return True if the forward list is not empty, false otherwise.
+     */
     bool isEmpty() const {
         return head == nullptr;
     }
 
-    // Get the element at the specified index in the forward list
+    /**
+     * Get the element at the specified index in the forward list.
+     * 
+     * Time complexity: O(n)
+     *
+     * @param index The index of the element to get.
+     * @return      The element at the specified index.
+     */
     T& get(size_t index) {
         Node* current = head;
         for (size_t i = 0; i < index; ++i) {
@@ -361,7 +408,13 @@ public:
         return current->data;
     }
 
-    // Get the first element in the forward list
+    /**
+     * Get the first element in the forward list.
+     * 
+     * Time complexity: O(1)
+     *
+     * @return The first element in the forward list.
+     */
     T& front() {
         if (!head) {
             throw std::underflow_error("List is empty");
@@ -369,7 +422,13 @@ public:
         return head->data;
     }
 
-    // Get the last element in the forward list
+    /**
+     * Get the last element in the forward list.
+     * 
+     * Time complexity: O(n)
+     *
+     * @return The last element in the forward list.
+     */
     T& back() {
         if (!head) {
             throw std::underflow_error("List is empty");
@@ -381,7 +440,14 @@ public:
         return current->data;
     }
 
-    // Clear the forward list
+    /**
+     * Set the element at the specified index in the forward list.
+     * 
+     * Time complexity: O(n)
+     *
+     * @param index   The index at which to set the element.
+     * @param element The element to set.
+     */
     void clear() {
         while (head) {
             Node* temp = head;

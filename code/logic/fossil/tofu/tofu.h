@@ -411,18 +411,65 @@ char* fossil_tofu_strdup(const char* str);
 
 namespace fossil {
 
+/**
+ * @brief A dynamic data structure that can hold various types of data.
+ */
 template <typename T>
 class Tofu {
 public:
+    /**
+     * @brief Default constructor.
+     * 
+     * @note Time complexity: O(1)
+     */
     Tofu(const std::string& name, const std::string& description, const std::string& id, const T& value)
         : name_(name), description_(description), id_(id), value_(value), mutable_flag_(true) {}
 
+    /**
+     * @brief Destructor.
+     * 
+     * @note Time complexity: O(1)
+     */
     const std::string& getName() const { return name_; }
+
+    /**
+     * @brief Get the description of the tofu.
+     * 
+     * @return The description of the tofu.
+     * @note Time complexity: O(1)
+     */
     const std::string& getDescription() const { return description_; }
+
+    /**
+     * @brief Get the unique identifier of the tofu.
+     * 
+     * @return The unique identifier of the tofu.
+     * @note Time complexity: O(1)
+     */
     const std::string& getId() const { return id_; }
+
+    /**
+     * @brief Get the value of the tofu.
+     * 
+     * @return The value of the tofu.
+     * @note Time complexity: O(1)
+     */
     const T& getValue() const { return value_; }
+
+    /**
+     * @brief Check if the tofu is mutable.
+     * 
+     * @return `true` if mutable, `false` otherwise.
+     * @note Time complexity: O(1)
+     */
     bool isMutable() const { return mutable_flag_; }
 
+    /**
+     * @brief Set the value of the tofu.
+     * 
+     * @param value The value to set.
+     * @note Time complexity: O(1)
+     */
     void setValue(const T& value) {
         if (mutable_flag_) {
             value_ = value;
@@ -431,28 +478,75 @@ public:
         }
     }
 
+    /**
+     * @brief Set the mutability of the tofu.
+     * 
+     * @param mutable_flag The mutability flag to set.
+     * @note Time complexity: O(1)
+     */
     void setMutable(bool mutable_flag) { mutable_flag_ = mutable_flag; }
 
+    /**
+     * @brief Get the type of the tofu.
+     * 
+     * @return The type of the tofu.
+     * @note Time complexity: O(1)
+     */
     bool operator==(const Tofu& other) const {
         return name_ == other.name_ && description_ == other.description_ && id_ == other.id_ && value_ == other.value_;
     }
 
+    /**
+     * @brief Compare two tofu objects for equality.
+     * 
+     * @param other The other tofu object to compare.
+     * @return `true` if the objects are equal, `false` otherwise.
+     * @note Time complexity: O(1)
+     */
     bool operator!=(const Tofu& other) const {
         return !(*this == other);
     }
 
+    /**
+     * @brief Compare two tofu objects for inequality.
+     * 
+     * @param other The other tofu object to compare.
+     * @return `true` if the objects are not equal, `false` otherwise.
+     * @note Time complexity: O(1)
+     */
     bool operator<(const Tofu& other) const {
         return value_ < other.value_;
     }
 
+    /**
+     * @brief Compare two tofu objects for less than.
+     * 
+     * @param other The other tofu object to compare.
+     * @return `true` if the first object is less than the second, `false` otherwise.
+     * @note Time complexity: O(1)
+     */
     bool operator>(const Tofu& other) const {
         return value_ > other.value_;
     }
 
+    /**
+     * @brief Compare two tofu objects for greater than.
+     * 
+     * @param other The other tofu object to compare.
+     * @return `true` if the first object is greater than the second, `false` otherwise.
+     * @note Time complexity: O(1)
+     */
     bool operator<=(const Tofu& other) const {
         return !(*this > other);
     }
 
+    /**
+     * @brief Compare two tofu objects for less than or equal to.
+     * 
+     * @param other The other tofu object to compare.
+     * @return `true` if the first object is less than or equal to the second, `false` otherwise.
+     * @note Time complexity: O(1)
+     */
     bool operator>=(const Tofu& other) const {
         return !(*this < other);
     }

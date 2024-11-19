@@ -203,17 +203,37 @@ void fossil_tuple_set_back(fossil_tuple_t* tuple, char *element);
 
 namespace fossil {
 
+/**
+ * @brief A dynamic array of elements.
+ * 
+ * @tparam T The type of elements in the tuple.
+ */
 template <typename T>
 class Tuple {
 public:
+    /**
+     * @brief Creates a new tuple with a given initial capacity.
+     * 
+     * @param initial_capacity The initial capacity of the tuple.
+     */
     Tuple(size_t initial_capacity = 10)
         : elements(new T[initial_capacity]), element_count(0), capacity(initial_capacity) {}
 
+    /**
+     * @brief Creates a new tuple by copying an existing tuple.
+     * 
+     * @param other The tuple to copy.
+     */
     Tuple(const Tuple& other)
         : elements(new T[other.capacity]), element_count(other.element_count), capacity(other.capacity) {
         std::copy(other.elements, other.elements + other.element_count, elements);
     }
 
+    /**
+     * @brief Creates a new tuple by moving an existing tuple.
+     * 
+     * @param other The tuple to move.
+     */
     Tuple(Tuple&& other) noexcept
         : elements(other.elements), element_count(other.element_count), capacity(other.capacity) {
         other.elements = nullptr;
@@ -221,10 +241,18 @@ public:
         other.capacity = 0;
     }
 
+    /**
+     * @brief Destroys the tuple and frees the allocated memory.
+     */
     ~Tuple() {
         delete[] elements;
     }
 
+    /**
+     * @brief Adds an element to the tuple.
+     * 
+     * @param element The element to add.
+     */
     void add(const T& element) {
         if (element_count == capacity) {
             resize(capacity * 2);
@@ -232,6 +260,11 @@ public:
         elements[element_count++] = element;
     }
 
+    /**
+     * @brief Removes the element at the specified index from the tuple.
+     * 
+     * @param index The index of the element to remove.
+     */
     void remove(size_t index) {
         if (index >= element_count) {
             throw std::out_of_range("Index out of range");
@@ -240,22 +273,46 @@ public:
         --element_count;
     }
 
+    /**
+     * @brief Gets the number of elements in the tuple.
+     * 
+     * @return The number of elements in the tuple.
+     */
     size_t size() const {
         return element_count;
     }
 
+    /**
+     * @brief Gets the capacity of the tuple.
+     * 
+     * @return The capacity of the tuple.
+     */
     size_t get_capacity() const {
         return capacity;
     }
 
+    /**
+     * @brief Checks if the tuple is empty.
+     * 
+     * @return true if the tuple is empty, false otherwise.
+     */
     bool is_empty() const {
         return element_count == 0;
     }
 
+    /**
+     * @brief Clears all elements from the tuple.
+     */
     void clear() {
         element_count = 0;
     }
 
+    /**
+     * @brief Gets the element at the specified index in the tuple.
+     * 
+     * @param index The index of the element to get.
+     * @return The element at the specified index.
+     */
     T& get(size_t index) {
         if (index >= element_count) {
             throw std::out_of_range("Index out of range");
@@ -263,6 +320,12 @@ public:
         return elements[index];
     }
 
+    /**
+     * @brief Gets the element at the specified index in the tuple.
+     * 
+     * @param index The index of the element to get.
+     * @return The element at the specified index.
+     */
     const T& get(size_t index) const {
         if (index >= element_count) {
             throw std::out_of_range("Index out of range");
@@ -270,6 +333,11 @@ public:
         return elements[index];
     }
 
+    /**
+     * @brief Gets the first element in the tuple.
+     * 
+     * @return The first element in the tuple.
+     */
     T& front() {
         if (is_empty()) {
             throw std::out_of_range("Tuple is empty");
@@ -277,6 +345,11 @@ public:
         return elements[0];
     }
 
+    /**
+     * @brief Gets the first element in the tuple.
+     * 
+     * @return The first element in the tuple.
+     */
     const T& front() const {
         if (is_empty()) {
             throw std::out_of_range("Tuple is empty");
@@ -284,6 +357,11 @@ public:
         return elements[0];
     }
 
+    /**
+     * @brief Gets the last element in the tuple.
+     * 
+     * @return The last element in the tuple.
+     */
     T& back() {
         if (is_empty()) {
             throw std::out_of_range("Tuple is empty");
@@ -291,6 +369,11 @@ public:
         return elements[element_count - 1];
     }
 
+    /**
+     * @brief Gets the last element in the tuple.
+     * 
+     * @return The last element in the tuple.
+     */
     const T& back() const {
         if (is_empty()) {
             throw std::out_of_range("Tuple is empty");
@@ -298,6 +381,12 @@ public:
         return elements[element_count - 1];
     }
 
+    /**
+     * @brief Sets the element at the specified index in the tuple.
+     * 
+     * @param index The index at which to set the element.
+     * @param element The element to set.
+     */
     void set(size_t index, const T& element) {
         if (index >= element_count) {
             throw std::out_of_range("Index out of range");
@@ -305,6 +394,11 @@ public:
         elements[index] = element;
     }
 
+    /**
+     * @brief Sets the first element in the tuple.
+     * 
+     * @param element The element to set.
+     */
     void set_front(const T& element) {
         if (is_empty()) {
             throw std::out_of_range("Tuple is empty");
@@ -312,6 +406,11 @@ public:
         elements[0] = element;
     }
 
+    /**
+     * @brief Sets the last element in the tuple.
+     * 
+     * @param element The element to set.
+     */
     void set_back(const T& element) {
         if (is_empty()) {
             throw std::out_of_range("Tuple is empty");
@@ -320,6 +419,11 @@ public:
     }
 
 private:
+    /**
+     * @brief Resizes the tuple to the specified capacity.
+     * 
+     * @param new_capacity The new capacity of the tuple.
+     */
     void resize(size_t new_capacity) {
         T* new_elements = new T[new_capacity];
         std::move(elements, elements + element_count, new_elements);

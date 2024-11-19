@@ -245,16 +245,32 @@ void fossil_dlist_set_back(fossil_dlist_t* dlist, char *element);
 
 namespace fossil {
 
-//
+/**
+ * @brief A doubly linked list.
+ * 
+ * @tparam T The type of data the doubly linked list will store.
+ */
 template <typename T>
 class DList {
 public:
+    /**
+     * @brief Default constructor.
+     */
     DList() : head(nullptr), tail(nullptr) {}
 
+    /**
+     * @brief Destructor.
+     */
     ~DList() {
         clear();
     }
 
+    /**
+     * @brief Insert data into the doubly linked list.
+     * 
+     * @param data The data to insert.
+     * @note Time complexity: O(1)
+     */
     void insert(const T& data) {
         Node* newNode = new Node(data);
         if (!head) {
@@ -266,6 +282,10 @@ public:
         }
     }
 
+    /**
+     * @brief Remove data from the doubly linked list.
+     * @note Time complexity: O(1)
+     */
     void remove() {
         if (!tail) {
             throw std::underflow_error("List is empty");
@@ -280,6 +300,10 @@ public:
         delete toDelete;
     }
 
+    /**
+     * @brief Reverse the doubly linked list in the forward direction.
+     * @note Time complexity: O(n)
+     */
     T get(size_t index) const {
         Node* current = head;
         for (size_t i = 0; i < index; ++i) {
@@ -294,6 +318,10 @@ public:
         return current->data;
     }
 
+    /**
+     * @brief Get the first element in the doubly linked list.
+     * @note Time complexity: O(1)
+     */
     T get_front() const {
         if (!head) {
             throw std::underflow_error("List is empty");
@@ -301,6 +329,10 @@ public:
         return head->data;
     }
 
+    /**
+     * @brief Get the last element in the doubly linked list.
+     * @note Time complexity: O(1)
+     */
     T get_back() const {
         if (!tail) {
             throw std::underflow_error("List is empty");
@@ -308,6 +340,10 @@ public:
         return tail->data;
     }
 
+    /**
+     * @brief Set the element at the specified index in the doubly linked list.
+     * @note Time complexity: O(n)
+     */
     void clear() {
         while (head) {
             Node* toDelete = head;
@@ -317,6 +353,10 @@ public:
         tail = nullptr;
     }
 
+    /**
+     * @brief Get the size of the doubly linked list.
+     * @note Time complexity: O(n)
+     */
     size_t size() const {
         size_t count = 0;
         Node* current = head;
@@ -327,6 +367,10 @@ public:
         return count;
     }
 
+    /**
+     * @brief Check if the doubly linked list is not empty.
+     * @note Time complexity: O(1)
+     */
     bool is_empty() const {
         return head == nullptr;
     }

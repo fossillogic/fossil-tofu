@@ -228,7 +228,11 @@ void fossil_set_set_back(fossil_set_t* set, char *element);
 
 namespace fossil {
 
-//
+/**
+ * @brief Set data structure.
+ * 
+ * @tparam T The type of data the set will store.
+ */
 template <typename T>
 class Set {
 public:
@@ -238,21 +242,33 @@ public:
         Node* next;
     };
 
-    // Constructor
+    /**
+     * Default constructor.
+     */
     Set() : head(nullptr) {}
 
-    // Destructor
+    /**
+     * Destructor.
+     */
     ~Set() {
         clear();
     }
 
-    // Insert data into the set
+    /**
+     * Insert data into the set.
+     *
+     * @param data The data to insert.
+     */
     void insert(const T& data) {
         Node* newNode = new Node{data, head};
         head = newNode;
     }
 
-    // Remove data from the set
+    /**
+     * Remove data from the set.
+     *
+     * @param data The data to remove.
+     */
     void erase(const T& data) {
         Node** current = &head;
         while (*current) {
@@ -266,7 +282,11 @@ public:
         }
     }
 
-    // Get the size of the set
+    /**
+     * Get the size of the set.
+     *
+     * @return The size of the set.
+     */
     size_t size() const {
         size_t count = 0;
         Node* current = head;
@@ -277,17 +297,29 @@ public:
         return count;
     }
 
-    // Check if the set is not empty
+    /**
+     * Check if the set is not empty.
+     *
+     * @return True if the set is not empty, false otherwise.
+     */
     bool not_empty() const {
         return head != nullptr;
     }
 
-    // Check if the set is empty
+    /**
+     * Check if the set is empty.
+     *
+     * @return True if the set is empty, false otherwise.
+     */
     bool is_empty() const {
         return head == nullptr;
     }
 
-    // Get the element at the specified index in the set
+    /**
+     * Check if the set is a null pointer.
+     *
+     * @return True if the set is a null pointer, false otherwise.
+     */
     T get(size_t index) const {
         Node* current = head;
         while (current && index > 0) {
@@ -300,7 +332,11 @@ public:
         throw std::out_of_range("Index out of range");
     }
 
-    // Get the first element in the set
+    /**
+     * Get the first element in the set.
+     *
+     * @return The first element in the set.
+     */
     T get_front() const {
         if (head) {
             return head->data;
@@ -308,7 +344,11 @@ public:
         throw std::out_of_range("Set is empty");
     }
 
-    // Get the last element in the set
+    /**
+     * Get the last element in the set.
+     *
+     * @return The last element in the set.
+     */
     T get_back() const {
         if (!head) {
             throw std::out_of_range("Set is empty");
@@ -320,7 +360,12 @@ public:
         return current->data;
     }
 
-    // Set the element at the specified index in the set
+    /**
+     * Set the element at the specified index in the set.
+     *
+     * @param index   The index at which to set the element.
+     * @param element The element to set.
+     */
     void set(size_t index, const T& element) {
         Node* current = head;
         while (current && index > 0) {
@@ -334,7 +379,11 @@ public:
         }
     }
 
-    // Set the first element in the set
+    /**
+     * Set the first element in the set.
+     *
+     * @param element The element to set.
+     */
     void set_front(const T& element) {
         if (head) {
             head->data = element;
@@ -343,7 +392,11 @@ public:
         }
     }
 
-    // Set the last element in the set
+    /**
+     * Set the last element in the set.
+     *
+     * @param element The element to set.
+     */
     void set_back(const T& element) {
         if (!head) {
             throw std::out_of_range("Set is empty");
@@ -355,7 +408,9 @@ public:
         current->data = element;
     }
 
-    // Clear the set
+    /**
+     * Clear the set.
+     */
     void clear() {
         while (head) {
             Node* temp = head;

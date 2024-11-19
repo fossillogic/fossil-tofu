@@ -195,23 +195,42 @@ void fossil_stack_set(fossil_stack_t* stack, size_t index, fossil_tofu_t element
 
 namespace fossil {
 
+/**
+ * Stack data structure.
+ *
+ * @tparam T The type of data stored in the stack.
+ */
 template <typename T>
 class Stack {
 public:
+    /**
+     * Default constructor.
+     */
     Stack() : top(nullptr), stack_size(0) {}
 
+    /**
+     * Destructor.
+     */
     ~Stack() {
         while (!isEmpty()) {
             pop();
         }
     }
 
+    /**
+     * Push data onto the stack.
+     *
+     * @param data The data to push onto the stack.
+     */
     void push(const T& data) {
         Node* newNode = new Node{data, top};
         top = newNode;
         ++stack_size;
     }
 
+    /**
+     * Pop data from the stack.
+     */
     void pop() {
         if (isEmpty()) {
             throw std::underflow_error("Stack is empty");
@@ -222,6 +241,11 @@ public:
         --stack_size;
     }
 
+    /**
+     * Get the top element of the stack.
+     *
+     * @return The top element of the stack.
+     */
     T& peek() {
         if (isEmpty()) {
             throw std::underflow_error("Stack is empty");
@@ -229,6 +253,11 @@ public:
         return top->data;
     }
 
+    /**
+     * Get the top element of the stack.
+     *
+     * @return The top element of the stack.
+     */
     const T& peek() const {
         if (isEmpty()) {
             throw std::underflow_error("Stack is empty");
@@ -236,10 +265,20 @@ public:
         return top->data;
     }
 
+    /**
+     * Check if the stack is empty.
+     *
+     * @return True if the stack is empty, false otherwise.
+     */
     bool isEmpty() const {
         return top == nullptr;
     }
 
+    /**
+     * Get the size of the stack.
+     *
+     * @return The size of the stack.
+     */
     size_t size() const {
         return stack_size;
     }

@@ -206,18 +206,36 @@ void fossil_queue_set_rear(fossil_queue_t* queue, char *element);
 
 namespace fossil {
 
-//
+/**
+ * @brief A dynamic data structure that can hold various types of data.
+ */
 template <typename T>
 class Queue {
 public:
+    /**
+     * @brief Default constructor.
+     * 
+     * @note Time complexity: O(1)
+     */
     Queue() : front(nullptr), rear(nullptr) {}
 
+    /**
+     * @brief Destructor.
+     * 
+     * @note Time complexity: O(n)
+     */
     ~Queue() {
         while (!isEmpty()) {
             remove();
         }
     }
 
+    /**
+     * @brief Insert data into the queue.
+     * 
+     * @param data The data to insert.
+     * @note      Time complexity: O(1)
+     */
     void insert(const T& data) {
         Node* newNode = new Node(data);
         if (isEmpty()) {
@@ -227,6 +245,7 @@ public:
             rear = newNode;
         }
     }
+
 
     void remove() {
         if (isEmpty()) {
@@ -240,6 +259,12 @@ public:
         }
     }
 
+    /**
+     * @brief Get the element at the front of the queue.
+     * 
+     * @return The element at the front of the queue.
+     * @note   Time complexity: O(1)
+     */
     T getFront() const {
         if (isEmpty()) {
             throw std::underflow_error("Queue is empty");
@@ -247,6 +272,12 @@ public:
         return front->data;
     }
 
+    /**
+     * @brief Get the element at the rear of the queue.
+     * 
+     * @return The element at the rear of the queue.
+     * @note   Time complexity: O(1)
+     */
     T getRear() const {
         if (isEmpty()) {
             throw std::underflow_error("Queue is empty");
@@ -254,6 +285,12 @@ public:
         return rear->data;
     }
 
+    /**
+     * @brief Set the element at the front of the queue.
+     * 
+     * @param data The element to set at the front.
+     * @note      Time complexity: O(1)
+     */
     bool isEmpty() const {
         return front == nullptr;
     }
