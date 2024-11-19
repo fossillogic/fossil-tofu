@@ -408,6 +408,8 @@ char* fossil_tofu_strdup(const char* str);
 #ifdef __cplusplus
 }
 #include <stdexcept>
+#include <utility>
+#include <string>
 
 namespace fossil {
 
