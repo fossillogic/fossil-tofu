@@ -224,6 +224,152 @@ void fossil_set_set_back(fossil_set_t* set, char *element);
 
 #ifdef __cplusplus
 }
+#include <stdexcept>
+
+namespace fossil {
+
+//
+template <typename T>
+class Set {
+public:
+    // Node structure for the set
+    struct Node {
+        T data;
+        Node* next;
+    };
+
+    // Constructor
+    Set() : head(nullptr) {}
+
+    // Destructor
+    ~Set() {
+        clear();
+    }
+
+    // Insert data into the set
+    void insert(const T& data) {
+        Node* newNode = new Node{data, head};
+        head = newNode;
+    }
+
+    // Remove data from the set
+    void erase(const T& data) {
+        Node** current = &head;
+        while (*current) {
+            if ((*current)->data == data) {
+                Node* temp = *current;
+                *current = (*current)->next;
+                delete temp;
+                return;
+            }
+            current = &((*current)->next);
+        }
+    }
+
+    // Get the size of the set
+    size_t size() const {
+        size_t count = 0;
+        Node* current = head;
+        while (current) {
+            ++count;
+            current = current->next;
+        }
+        return count;
+    }
+
+    // Check if the set is not empty
+    bool not_empty() const {
+        return head != nullptr;
+    }
+
+    // Check if the set is empty
+    bool is_empty() const {
+        return head == nullptr;
+    }
+
+    // Get the element at the specified index in the set
+    T get(size_t index) const {
+        Node* current = head;
+        while (current && index > 0) {
+            current = current->next;
+            --index;
+        }
+        if (current) {
+            return current->data;
+        }
+        throw std::out_of_range("Index out of range");
+    }
+
+    // Get the first element in the set
+    T get_front() const {
+        if (head) {
+            return head->data;
+        }
+        throw std::out_of_range("Set is empty");
+    }
+
+    // Get the last element in the set
+    T get_back() const {
+        if (!head) {
+            throw std::out_of_range("Set is empty");
+        }
+        Node* current = head;
+        while (current->next) {
+            current = current->next;
+        }
+        return current->data;
+    }
+
+    // Set the element at the specified index in the set
+    void set(size_t index, const T& element) {
+        Node* current = head;
+        while (current && index > 0) {
+            current = current->next;
+            --index;
+        }
+        if (current) {
+            current->data = element;
+        } else {
+            throw std::out_of_range("Index out of range");
+        }
+    }
+
+    // Set the first element in the set
+    void set_front(const T& element) {
+        if (head) {
+            head->data = element;
+        } else {
+            throw std::out_of_range("Set is empty");
+        }
+    }
+
+    // Set the last element in the set
+    void set_back(const T& element) {
+        if (!head) {
+            throw std::out_of_range("Set is empty");
+        }
+        Node* current = head;
+        while (current->next) {
+            current = current->next;
+        }
+        current->data = element;
+    }
+
+    // Clear the set
+    void clear() {
+        while (head) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+
+private:
+    Node* head;
+};
+
+} // namespace fossil
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

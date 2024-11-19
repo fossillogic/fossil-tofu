@@ -239,6 +239,164 @@ void fossil_flist_set_back(fossil_flist_t* flist, char *element);
 
 #ifdef __cplusplus
 }
+#include <stdexcept>
+
+namespace fossil {
+
+//
+template <typename T>
+class ForwardList {
+public:
+    // Node structure for the linked list
+    struct Node {
+        T data;
+        Node* next;
+    };
+
+    // Constructor
+    ForwardList() : head(nullptr), type(typeid(T).name()) {}
+
+    // Destructor
+    ~ForwardList() {
+        clear();
+    }
+
+    // Copy constructor
+    ForwardList(const ForwardList& other) : head(nullptr), type(other.type) {
+        Node* current = other.head;
+        while (current) {
+            insert(current->data);
+            current = current->next;
+        }
+    }
+
+    // Move constructor
+    ForwardList(ForwardList&& other) noexcept : head(other.head), type(other.type) {
+        other.head = nullptr;
+    }
+
+    // Copy assignment operator
+    ForwardList& operator=(const ForwardList& other) {
+        if (this != &other) {
+            clear();
+            Node* current = other.head;
+            while (current) {
+                insert(current->data);
+                current = current->next;
+            }
+        }
+        return *this;
+    }
+
+    // Move assignment operator
+    ForwardList& operator=(ForwardList&& other) noexcept {
+        if (this != &other) {
+            clear();
+            head = other.head;
+            type = other.type;
+            other.head = nullptr;
+        }
+        return *this;
+    }
+
+    // Insert data into the forward list
+    void insert(const T& data) {
+        Node* newNode = new Node{data, head};
+        head = newNode;
+    }
+
+    // Remove data from the forward list
+    void remove() {
+        if (head) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        } else {
+            throw std::underflow_error("List is empty");
+        }
+    }
+
+    // Reverse the forward list
+    void reverse() {
+        Node* prev = nullptr;
+        Node* current = head;
+        Node* next = nullptr;
+        while (current) {
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+        head = prev;
+    }
+
+    // Get the size of the forward list
+    size_t size() const {
+        size_t count = 0;
+        Node* current = head;
+        while (current) {
+            ++count;
+            current = current->next;
+        }
+        return count;
+    }
+
+    // Check if the forward list is empty
+    bool isEmpty() const {
+        return head == nullptr;
+    }
+
+    // Get the element at the specified index in the forward list
+    T& get(size_t index) {
+        Node* current = head;
+        for (size_t i = 0; i < index; ++i) {
+            if (!current) {
+                throw std::out_of_range("Index out of range");
+            }
+            current = current->next;
+        }
+        if (!current) {
+            throw std::out_of_range("Index out of range");
+        }
+        return current->data;
+    }
+
+    // Get the first element in the forward list
+    T& front() {
+        if (!head) {
+            throw std::underflow_error("List is empty");
+        }
+        return head->data;
+    }
+
+    // Get the last element in the forward list
+    T& back() {
+        if (!head) {
+            throw std::underflow_error("List is empty");
+        }
+        Node* current = head;
+        while (current->next) {
+            current = current->next;
+        }
+        return current->data;
+    }
+
+    // Clear the forward list
+    void clear() {
+        while (head) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+
+private:
+    Node* head;
+    std::string type;
+};
+
+} // namespace fossil
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

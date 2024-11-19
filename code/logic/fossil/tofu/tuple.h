@@ -199,6 +199,142 @@ void fossil_tuple_set_back(fossil_tuple_t* tuple, char *element);
 
 #ifdef __cplusplus
 }
+#include <stdexcept>
+
+namespace fossil {
+
+template <typename T>
+class Tuple {
+public:
+    Tuple(size_t initial_capacity = 10)
+        : elements(new T[initial_capacity]), element_count(0), capacity(initial_capacity) {}
+
+    Tuple(const Tuple& other)
+        : elements(new T[other.capacity]), element_count(other.element_count), capacity(other.capacity) {
+        std::copy(other.elements, other.elements + other.element_count, elements);
+    }
+
+    Tuple(Tuple&& other) noexcept
+        : elements(other.elements), element_count(other.element_count), capacity(other.capacity) {
+        other.elements = nullptr;
+        other.element_count = 0;
+        other.capacity = 0;
+    }
+
+    ~Tuple() {
+        delete[] elements;
+    }
+
+    void add(const T& element) {
+        if (element_count == capacity) {
+            resize(capacity * 2);
+        }
+        elements[element_count++] = element;
+    }
+
+    void remove(size_t index) {
+        if (index >= element_count) {
+            throw std::out_of_range("Index out of range");
+        }
+        std::move(elements + index + 1, elements + element_count, elements + index);
+        --element_count;
+    }
+
+    size_t size() const {
+        return element_count;
+    }
+
+    size_t get_capacity() const {
+        return capacity;
+    }
+
+    bool is_empty() const {
+        return element_count == 0;
+    }
+
+    void clear() {
+        element_count = 0;
+    }
+
+    T& get(size_t index) {
+        if (index >= element_count) {
+            throw std::out_of_range("Index out of range");
+        }
+        return elements[index];
+    }
+
+    const T& get(size_t index) const {
+        if (index >= element_count) {
+            throw std::out_of_range("Index out of range");
+        }
+        return elements[index];
+    }
+
+    T& front() {
+        if (is_empty()) {
+            throw std::out_of_range("Tuple is empty");
+        }
+        return elements[0];
+    }
+
+    const T& front() const {
+        if (is_empty()) {
+            throw std::out_of_range("Tuple is empty");
+        }
+        return elements[0];
+    }
+
+    T& back() {
+        if (is_empty()) {
+            throw std::out_of_range("Tuple is empty");
+        }
+        return elements[element_count - 1];
+    }
+
+    const T& back() const {
+        if (is_empty()) {
+            throw std::out_of_range("Tuple is empty");
+        }
+        return elements[element_count - 1];
+    }
+
+    void set(size_t index, const T& element) {
+        if (index >= element_count) {
+            throw std::out_of_range("Index out of range");
+        }
+        elements[index] = element;
+    }
+
+    void set_front(const T& element) {
+        if (is_empty()) {
+            throw std::out_of_range("Tuple is empty");
+        }
+        elements[0] = element;
+    }
+
+    void set_back(const T& element) {
+        if (is_empty()) {
+            throw std::out_of_range("Tuple is empty");
+        }
+        elements[element_count - 1] = element;
+    }
+
+private:
+    void resize(size_t new_capacity) {
+        T* new_elements = new T[new_capacity];
+        std::move(elements, elements + element_count, new_elements);
+        delete[] elements;
+        elements = new_elements;
+        capacity = new_capacity;
+    }
+
+    T* elements;
+    size_t element_count;
+    size_t capacity;
+};
+
+}
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

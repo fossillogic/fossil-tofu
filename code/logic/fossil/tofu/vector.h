@@ -305,6 +305,119 @@ void fossil_vector_set_at(fossil_vector_t* vector, size_t index, char *element);
 
 #ifdef __cplusplus
 }
+#include <stdexcept>
+
+namespace fossil {
+
+template <typename T>
+class Vector {
+public:
+    Vector() : data(nullptr), size(0), capacity(0) {}
+    explicit Vector(size_t initial_capacity) : data(new T[initial_capacity]), size(0), capacity(initial_capacity) {}
+    ~Vector() { delete[] data; }
+
+    void push_back(const T& element) {
+        if (size == capacity) {
+            resize(capacity == 0 ? 1 : capacity * 2);
+        }
+        data[size++] = element;
+    }
+
+    void push_front(const T& element) {
+        if (size == capacity) {
+            resize(capacity == 0 ? 1 : capacity * 2);
+        }
+        for (size_t i = size; i > 0; --i) {
+            data[i] = data[i - 1];
+        }
+        data[0] = element;
+        ++size;
+    }
+
+    void push_at(size_t index, const T& element) {
+        if (index > size) throw std::out_of_range("Index out of range");
+        if (size == capacity) {
+            resize(capacity == 0 ? 1 : capacity * 2);
+        }
+        for (size_t i = size; i > index; --i) {
+            data[i] = data[i - 1];
+        }
+        data[index] = element;
+        ++size;
+    }
+
+    void pop_back() {
+        if (size > 0) {
+            --size;
+        }
+    }
+
+    void pop_front() {
+        if (size > 0) {
+            for (size_t i = 0; i < size - 1; ++i) {
+                data[i] = data[i + 1];
+            }
+            --size;
+        }
+    }
+
+    void pop_at(size_t index) {
+        if (index >= size) throw std::out_of_range("Index out of range");
+        for (size_t i = index; i < size - 1; ++i) {
+            data[i] = data[i + 1];
+        }
+        --size;
+    }
+
+    void erase() {
+        size = 0;
+    }
+
+    bool is_empty() const {
+        return size == 0;
+    }
+
+    size_t get_size() const {
+        return size;
+    }
+
+    size_t get_capacity() const {
+        return capacity;
+    }
+
+    T& get(size_t index) {
+        if (index >= size) throw std::out_of_range("Index out of range");
+        return data[index];
+    }
+
+    const T& get(size_t index) const {
+        if (index >= size) throw std::out_of_range("Index out of range");
+        return data[index];
+    }
+
+    void set(size_t index, const T& element) {
+        if (index >= size) throw std::out_of_range("Index out of range");
+        data[index] = element;
+    }
+
+private:
+    void resize(size_t new_capacity) {
+        T* new_data = new T[new_capacity];
+        for (size_t i = 0; i < size; ++i) {
+            new_data[i] = data[i];
+        }
+        delete[] data;
+        data = new_data;
+        capacity = new_capacity;
+    }
+
+    T* data;
+    size_t size;
+    size_t capacity;
+};
+
+} // namespace fossil
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

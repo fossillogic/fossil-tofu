@@ -224,6 +224,122 @@ void fossil_dqueue_set_back(fossil_dqueue_t* dqueue, char *element);
 
 #ifdef __cplusplus
 }
+#include <stdexcept>
+
+namespace fossil {
+
+//
+template <typename T>
+class DQueue {
+public:
+    DQueue() : front(nullptr), rear(nullptr), size(0) {}
+
+    ~DQueue() {
+        while (!isEmpty()) {
+            remove();
+        }
+    }
+
+    void insert(const T& data) {
+        Node* newNode = new Node(data);
+        if (isEmpty()) {
+            front = rear = newNode;
+        } else {
+            rear->next = newNode;
+            newNode->prev = rear;
+            rear = newNode;
+        }
+        ++size;
+    }
+
+    void remove() {
+        if (isEmpty()) {
+            throw std::underflow_error("Queue is empty");
+        }
+        Node* temp = front;
+        front = front->next;
+        if (front) {
+            front->prev = nullptr;
+        } else {
+            rear = nullptr;
+        }
+        delete temp;
+        --size;
+    }
+
+    T get(size_t index) const {
+        if (index >= size) {
+            throw std::out_of_range("Index out of range");
+        }
+        Node* current = front;
+        for (size_t i = 0; i < index; ++i) {
+            current = current->next;
+        }
+        return current->data;
+    }
+
+    T getFront() const {
+        if (isEmpty()) {
+            throw std::underflow_error("Queue is empty");
+        }
+        return front->data;
+    }
+
+    T getBack() const {
+        if (isEmpty()) {
+            throw std::underflow_error("Queue is empty");
+        }
+        return rear->data;
+    }
+
+    void set(size_t index, const T& data) {
+        if (index >= size) {
+            throw std::out_of_range("Index out of range");
+        }
+        Node* current = front;
+        for (size_t i = 0; i < index; ++i) {
+            current = current->next;
+        }
+        current->data = data;
+    }
+
+    void setFront(const T& data) {
+        if (isEmpty()) {
+            throw std::underflow_error("Queue is empty");
+        }
+        front->data = data;
+    }
+
+    void setBack(const T& data) {
+        if (isEmpty()) {
+            throw std::underflow_error("Queue is empty");
+        }
+        rear->data = data;
+    }
+
+    size_t getSize() const {
+        return size;
+    }
+
+    bool isEmpty() const {
+        return size == 0;
+    }
+
+private:
+    struct Node {
+        T data;
+        Node* prev;
+        Node* next;
+        Node(const T& data) : data(data), prev(nullptr), next(nullptr) {}
+    };
+
+    Node* front;
+    Node* rear;
+    size_t size;
+};
+
+} // namespace fossil
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

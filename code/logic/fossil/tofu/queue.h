@@ -202,6 +202,75 @@ void fossil_queue_set_rear(fossil_queue_t* queue, char *element);
 
 #ifdef __cplusplus
 }
+#include <stdexcept>
+
+namespace fossil {
+
+//
+template <typename T>
+class Queue {
+public:
+    Queue() : front(nullptr), rear(nullptr) {}
+
+    ~Queue() {
+        while (!isEmpty()) {
+            remove();
+        }
+    }
+
+    void insert(const T& data) {
+        Node* newNode = new Node(data);
+        if (isEmpty()) {
+            front = rear = newNode;
+        } else {
+            rear->next = newNode;
+            rear = newNode;
+        }
+    }
+
+    void remove() {
+        if (isEmpty()) {
+            throw std::underflow_error("Queue is empty");
+        }
+        Node* temp = front;
+        front = front->next;
+        delete temp;
+        if (front == nullptr) {
+            rear = nullptr;
+        }
+    }
+
+    T getFront() const {
+        if (isEmpty()) {
+            throw std::underflow_error("Queue is empty");
+        }
+        return front->data;
+    }
+
+    T getRear() const {
+        if (isEmpty()) {
+            throw std::underflow_error("Queue is empty");
+        }
+        return rear->data;
+    }
+
+    bool isEmpty() const {
+        return front == nullptr;
+    }
+
+private:
+    struct Node {
+        T data;
+        Node* next;
+        Node(const T& data) : data(data), next(nullptr) {}
+    };
+
+    Node* front;
+    Node* rear;
+};
+
+} // namespace fossil
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

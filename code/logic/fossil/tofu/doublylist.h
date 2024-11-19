@@ -241,6 +241,110 @@ void fossil_dlist_set_back(fossil_dlist_t* dlist, char *element);
 
 #ifdef __cplusplus
 }
+#include <stdexcept>
+
+namespace fossil {
+
+//
+template <typename T>
+class DList {
+public:
+    DList() : head(nullptr), tail(nullptr) {}
+
+    ~DList() {
+        clear();
+    }
+
+    void insert(const T& data) {
+        Node* newNode = new Node(data);
+        if (!head) {
+            head = tail = newNode;
+        } else {
+            tail->next = newNode;
+            newNode->prev = tail;
+            tail = newNode;
+        }
+    }
+
+    void remove() {
+        if (!tail) {
+            throw std::underflow_error("List is empty");
+        }
+        Node* toDelete = tail;
+        tail = tail->prev;
+        if (tail) {
+            tail->next = nullptr;
+        } else {
+            head = nullptr;
+        }
+        delete toDelete;
+    }
+
+    T get(size_t index) const {
+        Node* current = head;
+        for (size_t i = 0; i < index; ++i) {
+            if (!current) {
+                throw std::out_of_range("Index out of range");
+            }
+            current = current->next;
+        }
+        if (!current) {
+            throw std::out_of_range("Index out of range");
+        }
+        return current->data;
+    }
+
+    T get_front() const {
+        if (!head) {
+            throw std::underflow_error("List is empty");
+        }
+        return head->data;
+    }
+
+    T get_back() const {
+        if (!tail) {
+            throw std::underflow_error("List is empty");
+        }
+        return tail->data;
+    }
+
+    void clear() {
+        while (head) {
+            Node* toDelete = head;
+            head = head->next;
+            delete toDelete;
+        }
+        tail = nullptr;
+    }
+
+    size_t size() const {
+        size_t count = 0;
+        Node* current = head;
+        while (current) {
+            ++count;
+            current = current->next;
+        }
+        return count;
+    }
+
+    bool is_empty() const {
+        return head == nullptr;
+    }
+
+private:
+    struct Node {
+        T data;
+        Node* prev;
+        Node* next;
+        Node(const T& data) : data(data), prev(nullptr), next(nullptr) {}
+    };
+
+    Node* head;
+    Node* tail;
+};
+
+} // namespace fossil
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

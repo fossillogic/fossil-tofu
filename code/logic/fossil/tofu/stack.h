@@ -191,6 +191,71 @@ void fossil_stack_set(fossil_stack_t* stack, size_t index, fossil_tofu_t element
 
 #ifdef __cplusplus
 }
+#include <stdexcept>
+
+namespace fossil {
+
+template <typename T>
+class Stack {
+public:
+    Stack() : top(nullptr), stack_size(0) {}
+
+    ~Stack() {
+        while (!isEmpty()) {
+            pop();
+        }
+    }
+
+    void push(const T& data) {
+        Node* newNode = new Node{data, top};
+        top = newNode;
+        ++stack_size;
+    }
+
+    void pop() {
+        if (isEmpty()) {
+            throw std::underflow_error("Stack is empty");
+        }
+        Node* temp = top;
+        top = top->next;
+        delete temp;
+        --stack_size;
+    }
+
+    T& peek() {
+        if (isEmpty()) {
+            throw std::underflow_error("Stack is empty");
+        }
+        return top->data;
+    }
+
+    const T& peek() const {
+        if (isEmpty()) {
+            throw std::underflow_error("Stack is empty");
+        }
+        return top->data;
+    }
+
+    bool isEmpty() const {
+        return top == nullptr;
+    }
+
+    size_t size() const {
+        return stack_size;
+    }
+
+private:
+    struct Node {
+        T data;
+        Node* next;
+    };
+
+    Node* top;
+    size_t stack_size;
+};
+
+} // namespace fossil
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

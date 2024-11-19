@@ -224,6 +224,188 @@ void fossil_pqueue_set_at(fossil_pqueue_t* pqueue, int32_t priority, char *eleme
 
 #ifdef __cplusplus
 }
+#include <stdexcept>
+
+namespace fossil {
+
+//
+template <typename T>
+class PQueue {
+public:
+    PQueue() : front(nullptr), type("default") {}
+    PQueue(const std::string& queue_type) : front(nullptr), type(queue_type) {}
+    PQueue(const PQueue& other) : front(copyNodes(other.front)), type(other.type) {}
+    PQueue(PQueue&& other) noexcept : front(other.front), type(std::move(other.type)) {
+        other.front = nullptr;
+    }
+    ~PQueue() {
+        destroyNodes(front);
+    }
+
+    void insert(const T& data, int32_t priority) {
+        fossil_pqueue_node_t* newNode = new fossil_pqueue_node_t{data, priority, nullptr};
+        if (!front || front->priority > priority) {
+            newNode->next = front;
+            front = newNode;
+        } else {
+            fossil_pqueue_node_t* current = front;
+            while (current->next && current->next->priority <= priority) {
+                current = current->next;
+            }
+            newNode->next = current->next;
+            current->next = newNode;
+        }
+    }
+
+    void remove(int32_t priority) {
+        if (!front) {
+            throw std::runtime_error("Queue is empty");
+        }
+        if (front->priority == priority) {
+            fossil_pqueue_node_t* temp = front;
+            front = front->next;
+            delete temp;
+        } else {
+            fossil_pqueue_node_t* current = front;
+            while (current->next && current->next->priority != priority) {
+                current = current->next;
+            }
+            if (current->next) {
+                fossil_pqueue_node_t* temp = current->next;
+                current->next = current->next->next;
+                delete temp;
+            } else {
+                throw std::runtime_error("Element not found");
+            }
+        }
+    }
+
+    size_t size() const {
+        size_t count = 0;
+        fossil_pqueue_node_t* current = front;
+        while (current) {
+            ++count;
+            current = current->next;
+        }
+        return count;
+    }
+
+    bool not_empty() const {
+        return front != nullptr;
+    }
+
+    bool is_empty() const {
+        return front == nullptr;
+    }
+
+    T get_front() const {
+        if (!front) {
+            throw std::runtime_error("Queue is empty");
+        }
+        return front->data;
+    }
+
+    T get_back() const {
+        if (!front) {
+            throw std::runtime_error("Queue is empty");
+        }
+        fossil_pqueue_node_t* current = front;
+        while (current->next) {
+            current = current->next;
+        }
+        return current->data;
+    }
+
+    T get_at(int32_t priority) const {
+        fossil_pqueue_node_t* current = front;
+        while (current && current->priority != priority) {
+            current = current->next;
+        }
+        if (!current) {
+            throw std::runtime_error("Element not found");
+        }
+        return current->data;
+    }
+
+    void set_front(const T& element) {
+        if (!front) {
+            throw std::runtime_error("Queue is empty");
+        }
+        front->data = element;
+    }
+
+    void set_back(const T& element) {
+        if (!front) {
+            throw std::runtime_error("Queue is empty");
+        }
+        fossil_pqueue_node_t* current = front;
+        while (current->next) {
+            current = current->next;
+        }
+        current->data = element;
+    }
+
+    void set_at(int32_t priority, const T& element) {
+        fossil_pqueue_node_t* current = front;
+        while (current && current->priority != priority) {
+            current = current->next;
+        }
+        if (!current) {
+            throw std::runtime_error("Element not found");
+        }
+        current->data = element;
+    }
+
+    //
+    PQueue& operator=(const PQueue& other) {
+        if (this != &other) {
+            destroyNodes(front);
+            front = copyNodes(other.front);
+            type = other.type;
+        }
+        return *this;
+    }
+
+    PQueue& operator=(PQueue&& other) noexcept {
+        if (this != &other) {
+            destroyNodes(front);
+            front = other.front;
+            type = std::move(other.type);
+            other.front = nullptr;
+        }
+        return *this;
+    }
+
+private:
+    struct fossil_pqueue_node_t {
+        T data;
+        int32_t priority;
+        fossil_pqueue_node_t* next;
+    };
+
+    fossil_pqueue_node_t* front;
+    std::string type;
+
+    static fossil_pqueue_node_t* copyNodes(fossil_pqueue_node_t* node) {
+        if (!node) {
+            return nullptr;
+        }
+        fossil_pqueue_node_t* newNode = new fossil_pqueue_node_t{node->data, node->priority, nullptr};
+        newNode->next = copyNodes(node->next);
+        return newNode;
+    }
+
+    static void destroyNodes(fossil_pqueue_node_t* node) {
+        while (node) {
+            fossil_pqueue_node_t* temp = node;
+            node = node->next;
+            delete temp;
+        }
+    }
+};
+
+} // namespace fossil
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

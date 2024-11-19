@@ -407,6 +407,66 @@ char* fossil_tofu_strdup(const char* str);
 
 #ifdef __cplusplus
 }
+#include <stdexcept>
+
+namespace fossil {
+
+template <typename T>
+class Tofu {
+public:
+    Tofu(const std::string& name, const std::string& description, const std::string& id, const T& value)
+        : name_(name), description_(description), id_(id), value_(value), mutable_flag_(true) {}
+
+    const std::string& getName() const { return name_; }
+    const std::string& getDescription() const { return description_; }
+    const std::string& getId() const { return id_; }
+    const T& getValue() const { return value_; }
+    bool isMutable() const { return mutable_flag_; }
+
+    void setValue(const T& value) {
+        if (mutable_flag_) {
+            value_ = value;
+        } else {
+            throw std::runtime_error("Tofu is immutable");
+        }
+    }
+
+    void setMutable(bool mutable_flag) { mutable_flag_ = mutable_flag; }
+
+    bool operator==(const Tofu& other) const {
+        return name_ == other.name_ && description_ == other.description_ && id_ == other.id_ && value_ == other.value_;
+    }
+
+    bool operator!=(const Tofu& other) const {
+        return !(*this == other);
+    }
+
+    bool operator<(const Tofu& other) const {
+        return value_ < other.value_;
+    }
+
+    bool operator>(const Tofu& other) const {
+        return value_ > other.value_;
+    }
+
+    bool operator<=(const Tofu& other) const {
+        return !(*this > other);
+    }
+
+    bool operator>=(const Tofu& other) const {
+        return !(*this < other);
+    }
+
+private:
+    std::string name_;
+    std::string description_;
+    std::string id_;
+    T value_;
+    bool mutable_flag_;
+};
+
+} // namespace fossil
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */
