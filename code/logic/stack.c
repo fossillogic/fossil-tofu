@@ -30,6 +30,36 @@ fossil_stack_t* fossil_stack_create_container(char* type) {
     return stack;
 }
 
+fossil_stack_t* fossil_stack_create_default(void) {
+    return fossil_stack_create_container("any");
+}
+
+fossil_stack_t* fossil_stack_create_copy(const fossil_stack_t* other) {
+    fossil_stack_t* stack = (fossil_stack_t*)fossil_tofu_alloc(sizeof(fossil_stack_t));
+    if (stack == NULL) {
+        return NULL;
+    }
+    stack->type = other->type;
+    stack->top = NULL;
+    fossil_stack_node_t* current = other->top;
+    while (current != NULL) {
+        fossil_stack_insert(stack, current->data.value.data);
+        current = current->next;
+    }
+    return stack;
+}
+
+fossil_stack_t* fossil_stack_create_move(fossil_stack_t* other) {
+    fossil_stack_t* stack = (fossil_stack_t*)fossil_tofu_alloc(sizeof(fossil_stack_t));
+    if (stack == NULL) {
+        return NULL;
+    }
+    stack->type = other->type;
+    stack->top = other->top;
+    other->top = NULL;
+    return stack;
+}
+
 void fossil_stack_destroy(fossil_stack_t* stack) {
     if (stack == NULL) {
         return;
@@ -106,4 +136,52 @@ fossil_tofu_t fossil_stack_top(fossil_stack_t* stack) {
         return fossil_tofu_create(stack->type, "");
     }
     return stack->top->data;
+}
+
+// *****************************************************************************
+// Getter and setter functions
+// *****************************************************************************
+
+/**
+ * Get the element at the specified index in the stack.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param stack The stack from which to get the element.
+ * @param index The index of the element to get.
+ * @return      The element at the specified index.
+ */
+fossil_tofu_t fossil_stack_get(const fossil_stack_t* stack, size_t index) {
+    size_t i = 0;
+    fossil_stack_node_t* current = stack->top;
+    while (current != NULL) {
+        if (i == index) {
+            return current->data;
+        }
+        i++;
+        current = current->next;
+    }
+    return fossil_tofu_create(stack->type, "");
+}
+
+/**
+ * Set the element at the specified index in the stack.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param stack   The stack in which to set the element.
+ * @param index   The index at which to set the element.
+ * @param element The element to set.
+ */
+void fossil_stack_set(fossil_stack_t* stack, size_t index, fossil_tofu_t element) {
+    size_t i = 0;
+    fossil_stack_node_t* current = stack->top;
+    while (current != NULL) {
+        if (i == index) {
+            current->data = element;
+            return;
+        }
+        i++;
+        current = current->next;
+    }
 }

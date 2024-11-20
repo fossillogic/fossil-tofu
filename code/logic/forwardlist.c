@@ -30,6 +30,36 @@ fossil_flist_t* fossil_flist_create_container(char* type) {
     return flist;
 }
 
+fossil_flist_t* fossil_flist_create_default(void) {
+    return fossil_flist_create_container("any");
+}
+
+fossil_flist_t* fossil_flist_create_copy(const fossil_flist_t* other) {
+    fossil_flist_t* flist = (fossil_flist_t*)fossil_tofu_alloc(sizeof(fossil_flist_t));
+    if (flist == NULL) {
+        return NULL;
+    }
+    flist->type = fossil_tofu_strdup(other->type);
+    flist->head = NULL;
+    fossil_flist_node_t* current = other->head;
+    while (current != NULL) {
+        fossil_flist_insert(flist, fossil_tofu_get_value(&current->data));
+        current = current->next;
+    }
+    return flist;
+}
+
+fossil_flist_t* fossil_flist_create_move(fossil_flist_t* other) {
+    fossil_flist_t* flist = (fossil_flist_t*)fossil_tofu_alloc(sizeof(fossil_flist_t));
+    if (flist == NULL) {
+        return NULL;
+    }
+    flist->type = other->type;
+    flist->head = other->head;
+    other->head = NULL;
+    return flist;
+}
+
 void fossil_flist_destroy(fossil_flist_t* flist) {
     fossil_flist_node_t* current = flist->head;
     while (current != NULL) {

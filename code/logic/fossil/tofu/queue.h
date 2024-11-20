@@ -52,6 +52,35 @@ typedef struct fossil_queue_t {
 fossil_queue_t* fossil_queue_create_container(char* type);
 
 /**
+ * Create a new queue with default values.
+ * 
+ * Time complexity: O(1)
+ *
+ * @return The created queue.
+ */
+fossil_queue_t* fossil_queue_create_default(void);
+
+/**
+ * Create a new queue by copying an existing queue.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param other The queue to copy.
+ * @return      The created queue.
+ */
+fossil_queue_t* fossil_queue_create_copy(const fossil_queue_t* other);
+
+/**
+ * Create a new queue by moving an existing queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param other The queue to move.
+ * @return      The created queue.
+ */
+fossil_queue_t* fossil_queue_create_move(fossil_queue_t* other);
+
+/**
  * Erase the contents of the queue and fossil_tofu_free allocated memory.
  *
  * @param queue The queue to erase.
@@ -127,8 +156,158 @@ bool fossil_queue_is_empty(const fossil_queue_t* queue);
  */
 bool fossil_queue_is_cnullptr(const fossil_queue_t* queue);
 
+// *****************************************************************************
+// Getter and setter functions
+// *****************************************************************************
+
+/**
+ * Get the element at the front of the queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param queue The queue from which to get the front element.
+ * @return      The element at the front of the queue.
+ */
+char *fossil_queue_get_front(const fossil_queue_t* queue);
+
+/**
+ * Get the element at the rear of the queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param queue The queue from which to get the rear element.
+ * @return      The element at the rear of the queue.
+ */
+char *fossil_queue_get_rear(const fossil_queue_t* queue);
+
+/**
+ * Set the element at the front of the queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param queue   The queue in which to set the front element.
+ * @param element The element to set at the front.
+ */
+void fossil_queue_set_front(fossil_queue_t* queue, char *element);
+
+/**
+ * Set the element at the rear of the queue.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param queue   The queue in which to set the rear element.
+ * @param element The element to set at the rear.
+ */
+void fossil_queue_set_rear(fossil_queue_t* queue, char *element);
+
 #ifdef __cplusplus
 }
+#include <stdexcept>
+
+namespace fossil {
+
+/**
+ * @brief A dynamic data structure that can hold various types of data.
+ */
+template <typename T>
+class Queue {
+public:
+    /**
+     * @brief Default constructor.
+     * 
+     * @note Time complexity: O(1)
+     */
+    Queue() : front(nullptr), rear(nullptr) {}
+
+    /**
+     * @brief Destructor.
+     * 
+     * @note Time complexity: O(n)
+     */
+    ~Queue() {
+        while (!isEmpty()) {
+            remove();
+        }
+    }
+
+    /**
+     * @brief Insert data into the queue.
+     * 
+     * @param data The data to insert.
+     * @note      Time complexity: O(1)
+     */
+    void insert(const T& data) {
+        Node* newNode = new Node(data);
+        if (isEmpty()) {
+            front = rear = newNode;
+        } else {
+            rear->next = newNode;
+            rear = newNode;
+        }
+    }
+
+
+    void remove() {
+        if (isEmpty()) {
+            throw std::underflow_error("Queue is empty");
+        }
+        Node* temp = front;
+        front = front->next;
+        delete temp;
+        if (front == nullptr) {
+            rear = nullptr;
+        }
+    }
+
+    /**
+     * @brief Get the element at the front of the queue.
+     * 
+     * @return The element at the front of the queue.
+     * @note   Time complexity: O(1)
+     */
+    T getFront() const {
+        if (isEmpty()) {
+            throw std::underflow_error("Queue is empty");
+        }
+        return front->data;
+    }
+
+    /**
+     * @brief Get the element at the rear of the queue.
+     * 
+     * @return The element at the rear of the queue.
+     * @note   Time complexity: O(1)
+     */
+    T getRear() const {
+        if (isEmpty()) {
+            throw std::underflow_error("Queue is empty");
+        }
+        return rear->data;
+    }
+
+    /**
+     * @brief Set the element at the front of the queue.
+     * 
+     * @param data The element to set at the front.
+     * @note      Time complexity: O(1)
+     */
+    bool isEmpty() const {
+        return front == nullptr;
+    }
+
+private:
+    struct Node {
+        T data;
+        Node* next;
+        Node(const T& data) : data(data), next(nullptr) {}
+    };
+
+    Node* front;
+    Node* rear;
+};
+
+} // namespace fossil
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

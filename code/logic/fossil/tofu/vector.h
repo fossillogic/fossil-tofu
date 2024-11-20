@@ -46,6 +46,35 @@ typedef struct {
 fossil_vector_t* fossil_vector_create_container(char* type);
 
 /**
+ * Create a new vector with default values.
+ * 
+ * Time complexity: O(1)
+ *
+ * @return The created vector.
+ */
+fossil_vector_t* fossil_vector_create_default(void);
+
+/**
+ * Create a new vector by copying an existing vector.
+ * 
+ * Time complexity: O(n)
+ *
+ * @param other The vector to copy.
+ * @return      The created vector.
+ */
+fossil_vector_t* fossil_vector_create_copy(const fossil_vector_t* other);
+
+/**
+ * Create a new vector by moving an existing vector.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param other The vector to move.
+ * @return      The created vector.
+ */
+fossil_vector_t* fossil_vector_create_move(fossil_vector_t* other);
+
+/**
  * Erase the contents of the vector and fossil_tofu_free allocated memory.
  * 
  * Time complexity: O(n)
@@ -276,6 +305,240 @@ void fossil_vector_set_at(fossil_vector_t* vector, size_t index, char *element);
 
 #ifdef __cplusplus
 }
+#include <stdexcept>
+
+namespace fossil {
+
+/**
+ * A dynamic array that can grow and shrink as needed.
+ * 
+ * @tparam T The type of elements in the vector.
+ */
+template <typename T>
+class Vector {
+public:
+    /**
+     * Create a new vector with the specified initial capacity.
+     * 
+     * Time complexity: O(1)
+     *
+     * @param initial_capacity The initial capacity of the vector.
+     */
+    Vector() : data(nullptr), size(0), capacity(0) {}
+
+    /**
+     * Create a new vector with the specified initial capacity.
+     * 
+     * Time complexity: O(1)
+     *
+     * @param initial_capacity The initial capacity of the vector.
+     */
+    explicit Vector(size_t initial_capacity) : data(new T[initial_capacity]), size(0), capacity(initial_capacity) {}
+
+    /**
+     * Destroy the vector and fossil_tofu_free allocated memory.
+     * 
+     * Time complexity: O(1)
+     */
+    ~Vector() { delete[] data; }
+
+    /**
+     * Add an element to the end of the vector.
+     * 
+     * Amortized time complexity: O(1)
+     *
+     * @param element The element to add.
+     */
+    void push_back(const T& element) {
+        if (size == capacity) {
+            resize(capacity == 0 ? 1 : capacity * 2);
+        }
+        data[size++] = element;
+    }
+
+    /**
+     * Add an element to the front of the vector.
+     * 
+     * Time complexity: O(n)
+     *
+     * @param element The element to add.
+     */
+    void push_front(const T& element) {
+        if (size == capacity) {
+            resize(capacity == 0 ? 1 : capacity * 2);
+        }
+        for (size_t i = size; i > 0; --i) {
+            data[i] = data[i - 1];
+        }
+        data[0] = element;
+        ++size;
+    }
+
+    /**
+     * Add an element at the specified index in the vector.
+     * 
+     * Time complexity: O(n)
+     *
+     * @param index   The index at which to add the element.
+     * @param element The element to add.
+     */
+    void push_at(size_t index, const T& element) {
+        if (index > size) throw std::out_of_range("Index out of range");
+        if (size == capacity) {
+            resize(capacity == 0 ? 1 : capacity * 2);
+        }
+        for (size_t i = size; i > index; --i) {
+            data[i] = data[i - 1];
+        }
+        data[index] = element;
+        ++size;
+    }
+
+    /**
+     * Remove the last element from the vector.
+     * 
+     * Time complexity: O(1)
+     */
+    void pop_back() {
+        if (size > 0) {
+            --size;
+        }
+    }
+
+    /**
+     * Remove the first element from the vector.
+     * 
+     * Time complexity: O(n)
+     */
+    void pop_front() {
+        if (size > 0) {
+            for (size_t i = 0; i < size - 1; ++i) {
+                data[i] = data[i + 1];
+            }
+            --size;
+        }
+    }
+
+    /**
+     * Remove the element at the specified index in the vector.
+     * 
+     * Time complexity: O(n)
+     *
+     * @param index The index at which to remove the element.
+     */
+    void pop_at(size_t index) {
+        if (index >= size) throw std::out_of_range("Index out of range");
+        for (size_t i = index; i < size - 1; ++i) {
+            data[i] = data[i + 1];
+        }
+        --size;
+    }
+
+    /**
+     * Remove all elements from the vector.
+     * 
+     * Time complexity: O(1)
+     */
+    void erase() {
+        size = 0;
+    }
+
+    /**
+     * Check if the vector is empty.
+     * 
+     * Time complexity: O(1)
+     *
+     * @return True if the vector is empty, false otherwise.
+     */
+    bool is_empty() const {
+        return size == 0;
+    }
+
+    /**
+     * Get the size of the vector.
+     * 
+     * Time complexity: O(1)
+     *
+     * @return The size of the vector.
+     */
+    size_t get_size() const {
+        return size;
+    }
+
+    /**
+     * Get the capacity of the vector.
+     * 
+     * Time complexity: O(1)
+     *
+     * @return The capacity of the vector.
+     */
+    size_t get_capacity() const {
+        return capacity;
+    }
+
+    /**
+     * Get the element at the specified index in the vector.
+     * 
+     * Time complexity: O(1)
+     *
+     * @param index The index of the element to get.
+     * @return      The element at the specified index.
+     */
+    T& get(size_t index) {
+        if (index >= size) throw std::out_of_range("Index out of range");
+        return data[index];
+    }
+
+    /**
+     * Get the element at the specified index in the vector.
+     * 
+     * Time complexity: O(1)
+     *
+     * @param index The index of the element to get.
+     * @return      The element at the specified index.
+     */
+    const T& get(size_t index) const {
+        if (index >= size) throw std::out_of_range("Index out of range");
+        return data[index];
+    }
+
+    /**
+     * Get the first element in the vector.
+     * 
+     * Time complexity: O(1)
+     *
+     * @return The first element in the vector.
+     */
+    void set(size_t index, const T& element) {
+        if (index >= size) throw std::out_of_range("Index out of range");
+        data[index] = element;
+    }
+
+private:
+    /**
+     * Resize the vector to the specified new capacity.
+     * 
+     * Time complexity: O(n)
+     *
+     * @param new_capacity The new capacity of the vector.
+     */
+    void resize(size_t new_capacity) {
+        T* new_data = new T[new_capacity];
+        for (size_t i = 0; i < size; ++i) {
+            new_data[i] = data[i];
+        }
+        delete[] data;
+        data = new_data;
+        capacity = new_capacity;
+    }
+
+    T* data;
+    size_t size;
+    size_t capacity;
+};
+
+} // namespace fossil
+
 #endif
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

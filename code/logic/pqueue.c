@@ -30,6 +30,36 @@ fossil_pqueue_t* fossil_pqueue_create_container(char* type) {
     return pqueue;
 }
 
+fossil_pqueue_t* fossil_pqueue_create_default(void) {
+    return fossil_pqueue_create_container("any");
+}
+
+fossil_pqueue_t* fossil_pqueue_create_copy(const fossil_pqueue_t* other) {
+    fossil_pqueue_t* pqueue = (fossil_pqueue_t*)fossil_tofu_alloc(sizeof(fossil_pqueue_t));
+    if (pqueue == NULL) {
+        return NULL;
+    }
+    pqueue->type = other->type;
+    pqueue->front = NULL;
+    fossil_pqueue_node_t* current = other->front;
+    while (current != NULL) {
+        fossil_pqueue_insert(pqueue, current->data.value.data, current->priority);
+        current = current->next;
+    }
+    return pqueue;
+}
+
+fossil_pqueue_t* fossil_pqueue_create_move(fossil_pqueue_t* other) {
+    fossil_pqueue_t* pqueue = (fossil_pqueue_t*)fossil_tofu_alloc(sizeof(fossil_pqueue_t));
+    if (pqueue == NULL) {
+        return NULL;
+    }
+    pqueue->type = other->type;
+    pqueue->front = other->front;
+    other->front = NULL;
+    return pqueue;
+}
+
 void fossil_pqueue_destroy(fossil_pqueue_t* pqueue) {
     if (pqueue == NULL) {
         return;
@@ -125,4 +155,65 @@ bool fossil_pqueue_is_empty(const fossil_pqueue_t* pqueue) {
 
 bool fossil_pqueue_is_cnullptr(const fossil_pqueue_t* pqueue) {
     return pqueue == NULL;
+}
+
+// *****************************************************************************
+// Getter and setter functions
+// *****************************************************************************
+
+char *fossil_pqueue_get_front(const fossil_pqueue_t* pqueue) {
+    return pqueue == NULL || pqueue->front == NULL ? NULL : pqueue->front->data.value.data;
+}
+
+char *fossil_pqueue_get_back(const fossil_pqueue_t* pqueue) {
+    if (pqueue == NULL || pqueue->front == NULL) {
+        return NULL;
+    }
+    fossil_pqueue_node_t* current = pqueue->front;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    return current->data.value.data;
+}
+
+char *fossil_pqueue_get_at(const fossil_pqueue_t* pqueue, int32_t priority) {
+    if (pqueue == NULL || pqueue->front == NULL) {
+        return NULL;
+    }
+    fossil_pqueue_node_t* current = pqueue->front;
+    while (current != NULL && current->priority != priority) {
+        current = current->next;
+    }
+    return current == NULL ? NULL : current->data.value.data;
+}
+
+void fossil_pqueue_set_front(fossil_pqueue_t* pqueue, char *element) {
+    if (pqueue == NULL || pqueue->front == NULL) {
+        return;
+    }
+    fossil_tofu_set_value(&pqueue->front->data, element);
+}
+
+void fossil_pqueue_set_back(fossil_pqueue_t* pqueue, char *element) {
+    if (pqueue == NULL || pqueue->front == NULL) {
+        return;
+    }
+    fossil_pqueue_node_t* current = pqueue->front;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    fossil_tofu_set_value(&current->data, element);
+}
+
+void fossil_pqueue_set_at(fossil_pqueue_t* pqueue, int32_t priority, char *element) {
+    if (pqueue == NULL || pqueue->front == NULL) {
+        return;
+    }
+    fossil_pqueue_node_t* current = pqueue->front;
+    while (current != NULL && current->priority != priority) {
+        current = current->next;
+    }
+    if (current != NULL) {
+        fossil_tofu_set_value(&current->data, element);
+    }
 }
