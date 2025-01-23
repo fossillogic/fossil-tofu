@@ -7,6 +7,7 @@ on:
       - "**.h"
       - "**.cpp"
       - "**.hpp"
+      - "**.rs"
       - "**.py"
       - "**.build"
       - "**.options"
@@ -16,6 +17,7 @@ on:
       - "**.h"
       - "**.cpp"
       - "**.hpp"
+      - "**.rs"
       - "**.py"
       - "**.build"
       - "**.options"
@@ -215,7 +217,7 @@ jobs:
 
     strategy:
       matrix:
-        distro: [ubuntu, debian, fedora, archlinux]
+        distro: [ubuntu, fedora, archlinux, debian]
 
     steps:
       - name: Checkout code
@@ -247,7 +249,8 @@ jobs:
             -w /workspace \
             ${GITHUB_REPOSITORY}:${{ matrix.distro }} \
             /bin/bash -c "
-              meson setup builddir --fatal-meson-warnings -Dwerror=true -Dwith_test=enabled -Dwarning_level=3 -Dc_std=c17 -Dfossil-test:c_std=c17
+              apt-get update
+              meson setup builddir --fatal-meson-warnings -Dwerror=true -Dwith_test=enabled -Dwarning_level=3
               meson compile -C builddir
               meson test -C builddir -v"
 
