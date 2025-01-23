@@ -11,7 +11,6 @@ set(TEST_CODE
     doublylist.c
     dqueue.c
     forwardlist.c
-    meson.build
     pqueue.c
     queue.c
     setof.c
@@ -25,7 +24,7 @@ set(TEST_CODE
 add_library(fossil-tofu STATIC ${TEST_CODE} ${HEADER_FILES})
 
 # Set the library to be installed
-install(TARGETS fossil-test
+install(TARGETS fossil-tofu
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
@@ -37,4 +36,4 @@ install(FILES ${HEADER_FILES} DESTINATION include/fossil)
 # Declare the dependency
 add_library(fossil_tofu_dep INTERFACE)
 target_link_libraries(fossil_tofu_dep INTERFACE fossil-tofu)
-target_include_directories(fossil_test_dep INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(fossil_tofu_dep INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
