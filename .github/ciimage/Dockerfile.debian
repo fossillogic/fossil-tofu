@@ -15,6 +15,7 @@ RUN apt-get update && \
     gdb \
     llvm \
     libstdc++-8-dev \
+    pkg-config \
     wget \
     cmake \
     python3 \
