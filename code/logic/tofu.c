@@ -104,6 +104,7 @@ fossil_tofu_type_t fossil_tofu_validate_type(const char *type_str) {
     return FOSSIL_TOFU_TYPE_ANY;
 }
 
+
 // *****************************************************************************
 // Managment functions
 // *****************************************************************************
