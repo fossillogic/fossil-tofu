@@ -57,7 +57,7 @@ To get started with Fossil ToFu, ensure you have the following installed:
    # ======================
    [wrap-git]
    url = https://github.com/fossillogic/fossil-tofu.git
-   revision = v1.1.6
+   revision = v0.1.7
 
    [provide]
    fossil-tofu = fossil_tofu_dep
