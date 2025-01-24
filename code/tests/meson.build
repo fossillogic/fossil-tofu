@@ -12,7 +12,7 @@ if get_option('with_test').enabled()
     endforeach
 
     pizza_c = executable('testbed-c', test_c, include_directories: dir,
-                         dependencies: [dependency('fossil-test', method: 'meson'), fossil_tofu_dep])
+                         dependencies: [subprojects('fossil-test'), fossil_tofu_dep])
 
     test('fossil testing C', pizza_c)
 endif
