@@ -32,20 +32,24 @@ ToFu provides a rich set of algorithms and utility functions:
 
 ## Prerequisites
 
-Before using ToFu, ensure you have the following installed:
+To get started with Fossil ToFu, ensure you have the following installed:
 
-- **Meson Build System**: This project requires Meson. If it's not already installed, you can follow the [installation instructions on the Meson website](https://mesonbuild.com/Getting-meson.html).
+- **Meson Build System**: If you don’t have Meson installed, follow the installation instructions on the official [Meson website](https://mesonbuild.com/Getting-meson.html).
+- **CMake Build System**: If you don’t have CMake installed, follow the installation instructions on the official [CMake website](https://cmake.org/getting-started/).
 
-## Adding Dependency
+### Adding Fossil Test Dependency
 
-1. **Install Meson Build System**: Ensure that Meson `1.3` or newer is installed on your system. You can install or upgrade it using pip:
+#### Adding Fossil Test Dependency With Meson
 
+1. **Install Meson Build System**:
+   Install Meson version `1.3` or newer:
    ```sh
-   python -m pip install meson           # to install Meson
-   python -m pip install --upgrade meson # to upgrade Meson
+   python -m pip install meson           # To install Meson
+   python -m pip install --upgrade meson # To upgrade Meson
    ```
 
-2. **Adding Wrap File**: Navigate to the `subprojects` directory and create a `.wrap` file, such as `fossil-tofu.wrap`, with the following content:
+2. **Create a `.wrap` File**:
+   Add the `fossil-tofu.wrap` file in your `subprojects` directory and include the following content:
 
    ```ini
    # ======================
@@ -53,19 +57,51 @@ Before using ToFu, ensure you have the following installed:
    # ======================
    [wrap-git]
    url = https://github.com/fossillogic/fossil-tofu.git
-   revision = v0.1.6
+   revision = v0.1.7
 
    [provide]
    fossil-tofu = fossil_tofu_dep
    ```
 
-3. **Integrate the New Dependency**: To integrate the dependency into your Meson project, add the following line to your `meson.build` file:
-
+3. **Integrate the Dependency**:
+   In your `meson.build` file, integrate Fossil Tofu by adding the following line:
    ```ini
    dep = dependency('fossil-tofu')
    ```
 
-   This line imports the `fossil-tofu` dependency, making it available for use in your project.
+---
+
+#### Adding Fossil Test Dependency With CMake
+
+To use Fossil Tofu with CMake, follow these steps:
+
+1. **Install CMake**:
+   Install CMake version `3.13.4` or newer:
+
+   ```sh
+   python -m pip install cmake           # To install CMake
+   python -m pip install --upgrade cmake # To upgrade CMake
+   ```
+
+2. **Find and Integrate Fossil Test**:
+   After installing CMake, you can integrate Fossil Tofu as a dependency. Add the following lines to your `CMakeLists.txt` file:
+
+   ```cmake
+   # Find Fossil Tofu package
+   find_package(FossilTofu REQUIRED)
+
+   # Link the Fossil Tofu to your project
+   target_link_libraries(your_target FossilTofu)
+   ```
+
+3. **Configure Your CMake Project**:
+   Make sure to configure your CMake project to include the necessary paths and dependencies for Fossil Tofu. Typically, you’ll want to make sure the `FossilTofu` library is correctly linked in your build configuration.
+
+   This will ensure that Fossil Tofu is included and properly built with your project.
+
+---
+
+**Note**: For the best experience, always use the latest release of Fossil Test. Visit the [Fossil ToFu Releases](https://github.com/fossillogic/fossil-tofu/releases) page for the latest versions.
 
 ## Configure Options
 

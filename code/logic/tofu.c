@@ -23,6 +23,7 @@
 #include <wchar.h>
 #include <time.h>
 
+
 // Lookup table for valid strings corresponding to each tofu type.
 static char *_TOFU_TYPE_ID[] = {
     "i8",
@@ -103,6 +104,7 @@ fossil_tofu_type_t fossil_tofu_validate_type(const char *type_str) {
 
     return FOSSIL_TOFU_TYPE_ANY;
 }
+
 
 // *****************************************************************************
 // Managment functions
