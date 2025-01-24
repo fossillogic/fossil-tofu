@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.13.4)
 
 # Project metadata
-project(FossilTofu VERSION 0.1.6 LANGUAGES C CXX)
+project(FossilTofu VERSION 0.1.7 LANGUAGES C CXX)
 
 # Set the C and C++ standards
 set(CMAKE_C_STANDARD 11)
