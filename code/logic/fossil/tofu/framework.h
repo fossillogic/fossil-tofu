@@ -20,6 +20,7 @@
 // data structures
 #include "forwardlist.h"
 #include "doublylist.h"
+#include "circularlist.h"
 #include "tuple.h"
 #include "setof.h"
 #include "dqueue.h"
