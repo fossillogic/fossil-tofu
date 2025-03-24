@@ -241,16 +241,16 @@ FOSSIL_TEST_CASE(cpp_test_clist_class_set_back) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(cpp_clist_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_insert);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_remove);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_not_empty);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_not_cnullptr);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_is_empty);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_is_cnullptr);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_reverse);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_size);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_insert_multiple);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_remove_multiple);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_insert);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_remove);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_not_empty);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_not_cnullptr);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_is_empty);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_is_cnullptr);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_reverse);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_size);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_insert_multiple);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_remove_multiple);
 
     FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_class_insert);
     FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_class_remove);
