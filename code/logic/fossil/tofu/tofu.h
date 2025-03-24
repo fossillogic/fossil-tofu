@@ -16,7 +16,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include <stddef>
+#include <stddef.h>
 #include <wchar.h>
 
 #define INITIAL_CAPACITY 10
