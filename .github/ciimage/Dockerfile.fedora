@@ -13,8 +13,6 @@ RUN dnf -y update && \
     clang \
     gdb \
     llvm \
-    rust \
-    cargo \
     wget \
     python3 \
     python3-pip \
