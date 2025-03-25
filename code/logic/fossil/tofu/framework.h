@@ -18,6 +18,7 @@
 #include "tofu.h"
 
 // data structures
+#include "circularlist.h"
 #include "forwardlist.h"
 #include "doublylist.h"
 #include "tuple.h"
