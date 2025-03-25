@@ -9,6 +9,7 @@ file(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/fossil/*.h)
 # List the source files
 set(TEST_CODE
     doublylist.c
+    circularlist.c
     dqueue.c
     forwardlist.c
     pqueue.c
