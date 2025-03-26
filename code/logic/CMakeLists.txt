@@ -15,6 +15,7 @@ set(TEST_CODE
     pqueue.c
     queue.c
     setof.c
+    mapof.c
     stack.c
     tofu.c
     tuple.c
