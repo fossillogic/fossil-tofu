@@ -23,6 +23,7 @@
 #include "doublylist.h"
 #include "tuple.h"
 #include "setof.h"
+#include "mapof.h"
 #include "dqueue.h"
 #include "pqueue.h"
 #include "queue.h"
