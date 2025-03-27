@@ -271,7 +271,7 @@ namespace tofu {
          *
          * @param other The priority queue to move.
          */
-        PQueue(PQueue&& other) noexcept {
+        PQueue(PQueue&& other) {
             pqueue = fossil_pqueue_create_move(other.pqueue);
             if (pqueue == nullptr) {
                 throw std::runtime_error("Failed to create priority queue.");
