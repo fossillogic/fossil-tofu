@@ -243,223 +243,190 @@ void fossil_flist_set_back(fossil_flist_t* flist, char *element);
 
 namespace fossil {
 
-/**
- * @brief A forward list data structure.
- * 
- * A forward list is a data structure that stores elements in a linear sequence.
- * Elements can be inserted and removed from the front of the list, but not from
- * the back. The forward list does not support random access to elements.
- * 
- * @tparam T The type of data to store in the forward list.
- */
-template <typename T>
-class ForwardList {
-public:
-    // Node structure for the linked list
-    struct Node {
-        T data;
-        Node* next;
+namespace tofu {
+
+    class FList {
+    public:
+        /**
+         * Constructor to create a forward list with a specified data type.
+         *
+         * @param type The type of data the forward list will store.
+         */
+        FList(char* type) {
+            flist = fossil_flist_create_container(type);
+        }
+
+        /**
+         * Default constructor to create a forward list with default values.
+         */
+        FList() {
+            flist = fossil_flist_create_default();
+        }
+
+        /**
+         * Copy constructor to create a forward list by copying another forward list.
+         *
+         * @param other The forward list to copy.
+         */
+        FList(const FList& other) {
+            flist = fossil_flist_create_copy(other.flist);
+        }
+
+        /**
+         * Move constructor to create a forward list by moving another forward list.
+         *
+         * @param other The forward list to move.
+         */
+        FList(FList&& other) {
+            flist = fossil_flist_create_move(other.flist);
+        }
+
+        /**
+         * Destructor to destroy the forward list and free allocated memory.
+         */
+        ~FList() {
+            fossil_flist_destroy(flist);
+        }
+
+        /**
+         * Insert data into the forward list.
+         *
+         * @param data The data to insert.
+         */
+        void insert(char *data) {
+            fossil_flist_insert(flist, data);
+        }
+
+        /**
+         * Remove data from the forward list.
+         */
+        void remove() {
+            fossil_flist_remove(flist);
+        }
+
+        /**
+         * Reverse the forward list in the forward direction.
+         */
+        void reverse_forward() {
+            fossil_flist_reverse_forward(flist);
+        }
+
+        /**
+         * Reverse the forward list in the backward direction.
+         */
+        void reverse_backward() {
+            fossil_flist_reverse_backward(flist);
+        }
+
+        /**
+         * Get the size of the forward list.
+         *
+         * @return The size of the forward list.
+         */
+        size_t size() const {
+            return fossil_flist_size(flist);
+        }
+
+        /**
+         * Check if the forward list is not empty.
+         *
+         * @return True if the forward list is not empty, false otherwise.
+         */
+        bool not_empty() const {
+            return fossil_flist_not_empty(flist);
+        }
+
+        /**
+         * Check if the forward list is not a null pointer.
+         *
+         * @return True if the forward list is not a null pointer, false otherwise.
+         */
+        bool not_cnullptr() const {
+            return fossil_flist_not_cnullptr(flist);
+        }
+
+        /**
+         * Check if the forward list is empty.
+         *
+         * @return True if the forward list is empty, false otherwise.
+         */
+        bool is_empty() const {
+            return fossil_flist_is_empty(flist);
+        }
+
+        /**
+         * Check if the forward list is a null pointer.
+         *
+         * @return True if the forward list is a null pointer, false otherwise.
+         */
+        bool is_cnullptr() const {
+            return fossil_flist_is_cnullptr(flist);
+        }
+
+        /**
+         * Get the element at the specified index in the forward list.
+         *
+         * @param index The index of the element to get.
+         * @return      The element at the specified index.
+         */
+        char *get(size_t index) const {
+            return fossil_flist_get(flist, index);
+        }
+
+        /**
+         * Get the first element in the forward list.
+         *
+         * @return The first element in the forward list.
+         */
+        char *get_front() const {
+            return fossil_flist_get_front(flist);
+        }
+
+        /**
+         * Get the last element in the forward list.
+         *
+         * @return The last element in the forward list.
+         */
+        char *get_back() const {
+            return fossil_flist_get_back(flist);
+        }
+
+        /**
+         * Set the element at the specified index in the forward list.
+         *
+         * @param index   The index at which to set the element.
+         * @param element The element to set.
+         */
+        void set(size_t index, char *element) {
+            fossil_flist_set(flist, index, element);
+        }
+
+        /**
+         * Set the first element in the forward list.
+         *
+         * @param element The element to set.
+         */
+        void set_front(char *element) {
+            fossil_flist_set_front(flist, element);
+        }
+
+        /**
+         * Set the last element in the forward list.
+         *
+         * @param element The element to set.
+         */
+        void set_back(char *element) {
+            fossil_flist_set_back(flist, element);
+        }
+
+    private:
+        /**
+         * Pointer to the underlying fossil_flist_t structure.
+         */
+        fossil_flist_t* flist;
     };
 
-    /**
-     * Default constructor.
-     */
-    ForwardList() : head(nullptr), type(typeid(T).name()) {}
-
-    /**
-     * Destructor.
-     */
-    ~ForwardList() {
-        clear();
-    }
-
-    /**
-     * Copy constructor.
-     */
-    ForwardList(const ForwardList& other) : head(nullptr), type(other.type) {
-        Node* current = other.head;
-        while (current) {
-            insert(current->data);
-            current = current->next;
-        }
-    }
-
-    /**
-     * Move constructor.
-     */
-    ForwardList(ForwardList&& other) noexcept : head(other.head), type(other.type) {
-        other.head = nullptr;
-    }
-
-    /**
-     * Copy assignment operator.
-     */
-    ForwardList& operator=(const ForwardList& other) {
-        if (this != &other) {
-            clear();
-            Node* current = other.head;
-            while (current) {
-                insert(current->data);
-                current = current->next;
-            }
-        }
-        return *this;
-    }
-
-    /**
-     * Move assignment operator.
-     */
-    ForwardList& operator=(ForwardList&& other) noexcept {
-        if (this != &other) {
-            clear();
-            head = other.head;
-            type = other.type;
-            other.head = nullptr;
-        }
-        return *this;
-    }
-
-    /**
-     * Insert data into the forward list.
-     *
-     * @param data The data to insert.
-     */
-    void insert(const T& data) {
-        Node* newNode = new Node{data, head};
-        head = newNode;
-    }
-
-    /**
-     * Remove data from the forward list.
-     */
-    void remove() {
-        if (head) {
-            Node* temp = head;
-            head = head->next;
-            delete temp;
-        } else {
-            throw std::underflow_error("List is empty");
-        }
-    }
-
-    /**
-     * Reverse the forward list in the forward direction.
-     */
-    void reverse() {
-        Node* prev = nullptr;
-        Node* current = head;
-        Node* next = nullptr;
-        while (current) {
-            next = current->next;
-            current->next = prev;
-            prev = current;
-            current = next;
-        }
-        head = prev;
-    }
-
-    /**
-     * Get the size of the forward list.
-     * 
-     * Time complexity: O(n)
-     *
-     * @return The size of the forward list.
-     */
-    size_t size() const {
-        size_t count = 0;
-        Node* current = head;
-        while (current) {
-            ++count;
-            current = current->next;
-        }
-        return count;
-    }
-
-    /**
-     * Check if the forward list is not empty.
-     * 
-     * Time complexity: O(1)
-     *
-     * @return True if the forward list is not empty, false otherwise.
-     */
-    bool isEmpty() const {
-        return head == nullptr;
-    }
-
-    /**
-     * Get the element at the specified index in the forward list.
-     * 
-     * Time complexity: O(n)
-     *
-     * @param index The index of the element to get.
-     * @return      The element at the specified index.
-     */
-    T& get(size_t index) {
-        Node* current = head;
-        for (size_t i = 0; i < index; ++i) {
-            if (!current) {
-                throw std::out_of_range("Index out of range");
-            }
-            current = current->next;
-        }
-        if (!current) {
-            throw std::out_of_range("Index out of range");
-        }
-        return current->data;
-    }
-
-    /**
-     * Get the first element in the forward list.
-     * 
-     * Time complexity: O(1)
-     *
-     * @return The first element in the forward list.
-     */
-    T& front() {
-        if (!head) {
-            throw std::underflow_error("List is empty");
-        }
-        return head->data;
-    }
-
-    /**
-     * Get the last element in the forward list.
-     * 
-     * Time complexity: O(n)
-     *
-     * @return The last element in the forward list.
-     */
-    T& back() {
-        if (!head) {
-            throw std::underflow_error("List is empty");
-        }
-        Node* current = head;
-        while (current->next) {
-            current = current->next;
-        }
-        return current->data;
-    }
-
-    /**
-     * Set the element at the specified index in the forward list.
-     * 
-     * Time complexity: O(n)
-     *
-     * @param index   The index at which to set the element.
-     * @param element The element to set.
-     */
-    void clear() {
-        while (head) {
-            Node* temp = head;
-            head = head->next;
-            delete temp;
-        }
-    }
-
-private:
-    Node* head;
-    std::string type;
-};
+} // namespace tofu
 
 } // namespace fossil
 
