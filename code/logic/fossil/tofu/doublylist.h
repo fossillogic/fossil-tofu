@@ -290,7 +290,7 @@ namespace tofu {
          * @param other The doubly linked list to move.
          * @throws std::runtime_error If the list creation fails.
          */
-        DList(DList&& other) noexcept : dlist(fossil_dlist_create_move(other.dlist)) {
+        DList(DList&& other) : dlist(fossil_dlist_create_move(other.dlist)) {
             if (dlist == nullptr) {
                 throw std::runtime_error("Failed to create doubly linked list.");
             }
