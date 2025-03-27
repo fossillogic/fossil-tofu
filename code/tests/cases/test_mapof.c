@@ -117,6 +117,7 @@ FOSSIL_TEST_CASE(c_test_mapof_remove_multiple) {
     fossil_mapof_insert(map, "key1", "value1");
     fossil_mapof_insert(map, "key2", "value2");
     fossil_mapof_insert(map, "key3", "value3");
+
     ASSUME_ITS_TRUE(fossil_mapof_remove(map, "key1") == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_mapof_remove(map, "key2") == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_mapof_size(map) == 1);

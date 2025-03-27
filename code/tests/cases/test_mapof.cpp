@@ -123,6 +123,79 @@ FOSSIL_TEST_CASE(cpp_test_mapof_remove_multiple) {
     fossil_mapof_destroy(map);
 }
 
+FOSSIL_TEST_CASE(cpp_test_mapof_class_insert) {
+    fossil::tofu::MapOf map("cstr", "cstr");
+    ASSUME_ITS_TRUE(map.insert(const_cast<char*>("key1"), const_cast<char*>("value1")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(map.size() == 1);
+}
+
+FOSSIL_TEST_CASE(cpp_test_mapof_class_remove) {
+    fossil::tofu::MapOf map("cstr", "cstr");
+    map.insert(const_cast<char*>("key1"), const_cast<char*>("value1"));
+    ASSUME_ITS_TRUE(map.remove(const_cast<char*>("key1")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(map.is_empty() == true);
+}
+
+FOSSIL_TEST_CASE(cpp_test_mapof_class_contains) {
+    fossil::tofu::MapOf map("cstr", "cstr");
+    map.insert(const_cast<char*>("key1"), const_cast<char*>("value1"));
+    ASSUME_ITS_TRUE(map.contains(const_cast<char*>("key1")) == true);
+    ASSUME_ITS_TRUE(map.contains(const_cast<char*>("key2")) == false);
+}
+
+FOSSIL_TEST_CASE(cpp_test_mapof_class_get) {
+    fossil::tofu::MapOf map("cstr", "cstr");
+    map.insert(const_cast<char*>("key1"), const_cast<char*>("value1"));
+    fossil_tofu_t value = map.get(const_cast<char*>("key1"));
+    ASSUME_ITS_TRUE(strcmp(fossil_tofu_get_value(&value), "value1") == 0);
+}
+
+FOSSIL_TEST_CASE(cpp_test_mapof_class_set) {
+    fossil::tofu::MapOf map("cstr", "cstr");
+    map.insert(const_cast<char*>("key1"), const_cast<char*>("value1"));
+    ASSUME_ITS_TRUE(map.set(const_cast<char*>("key1"), const_cast<char*>("value2")) == FOSSIL_TOFU_SUCCESS);
+    fossil_tofu_t value = map.get(const_cast<char*>("key1"));
+    ASSUME_ITS_TRUE(strcmp(fossil_tofu_get_value(&value), "value2") == 0);
+}
+
+FOSSIL_TEST_CASE(cpp_test_mapof_class_size) {
+    fossil::tofu::MapOf map("cstr", "cstr");
+    map.insert(const_cast<char*>("key1"), const_cast<char*>("value1"));
+    map.insert(const_cast<char*>("key2"), const_cast<char*>("value2"));
+    ASSUME_ITS_TRUE(map.size() == 2);
+}
+
+FOSSIL_TEST_CASE(cpp_test_mapof_class_not_empty) {
+    fossil::tofu::MapOf map("cstr", "cstr");
+    map.insert(const_cast<char*>("key1"), const_cast<char*>("value1"));
+    ASSUME_ITS_TRUE(map.not_empty() == true);
+}
+
+FOSSIL_TEST_CASE(cpp_test_mapof_class_is_empty) {
+    fossil::tofu::MapOf map("cstr", "cstr");
+    ASSUME_ITS_TRUE(map.is_empty() == true);
+    map.insert(const_cast<char*>("key1"), const_cast<char*>("value1"));
+    ASSUME_ITS_TRUE(map.is_empty() == false);
+}
+
+FOSSIL_TEST_CASE(cpp_test_mapof_class_insert_multiple) {
+    fossil::tofu::MapOf map("cstr", "cstr");
+    ASSUME_ITS_TRUE(map.insert(const_cast<char*>("key1"), const_cast<char*>("value1")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(map.insert(const_cast<char*>("key2"), const_cast<char*>("value2")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(map.insert(const_cast<char*>("key3"), const_cast<char*>("value3")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(map.size() == 3);
+}
+
+FOSSIL_TEST_CASE(cpp_test_mapof_class_remove_multiple) {
+    fossil::tofu::MapOf map("cstr", "cstr");
+    map.insert(const_cast<char*>("key1"), const_cast<char*>("value1"));
+    map.insert(const_cast<char*>("key2"), const_cast<char*>("value2"));
+    map.insert(const_cast<char*>("key3"), const_cast<char*>("value3"));
+    ASSUME_ITS_TRUE(map.remove(const_cast<char*>("key1")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(map.remove(const_cast<char*>("key2")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(map.size() == 1);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -138,6 +211,18 @@ FOSSIL_TEST_GROUP(cpp_mapof_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_mapof_tofu_fixture, cpp_test_mapof_is_empty);
     FOSSIL_TEST_ADD(cpp_mapof_tofu_fixture, cpp_test_mapof_insert_multiple);
     FOSSIL_TEST_ADD(cpp_mapof_tofu_fixture, cpp_test_mapof_remove_multiple);
+
+    // Class ToFu Fixture
+    FOSSIL_TEST_ADD(cpp_mapof_tofu_fixture, cpp_test_mapof_class_insert);
+    FOSSIL_TEST_ADD(cpp_mapof_tofu_fixture, cpp_test_mapof_class_remove);
+    FOSSIL_TEST_ADD(cpp_mapof_tofu_fixture, cpp_test_mapof_class_contains);
+    FOSSIL_TEST_ADD(cpp_mapof_tofu_fixture, cpp_test_mapof_class_get);
+    FOSSIL_TEST_ADD(cpp_mapof_tofu_fixture, cpp_test_mapof_class_set);
+    FOSSIL_TEST_ADD(cpp_mapof_tofu_fixture, cpp_test_mapof_class_size);
+    FOSSIL_TEST_ADD(cpp_mapof_tofu_fixture, cpp_test_mapof_class_not_empty);
+    FOSSIL_TEST_ADD(cpp_mapof_tofu_fixture, cpp_test_mapof_class_is_empty);
+    FOSSIL_TEST_ADD(cpp_mapof_tofu_fixture, cpp_test_mapof_class_insert_multiple);
+    FOSSIL_TEST_ADD(cpp_mapof_tofu_fixture, cpp_test_mapof_class_remove_multiple);
 
     FOSSIL_TEST_REGISTER(cpp_mapof_tofu_fixture);
 } // end of tests

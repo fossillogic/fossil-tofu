@@ -126,6 +126,80 @@ FOSSIL_TEST_CASE(cpp_test_setof_create_move) {
     fossil_setof_destroy(moved);
 }
 
+FOSSIL_TEST_CASE(cpp_test_setof_class_insert) {
+    fossil::tofu::SetOf set("i32");
+    ASSUME_ITS_TRUE(set.insert(const_cast<char*>("42")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(set.size() == 1);
+}
+
+FOSSIL_TEST_CASE(cpp_test_setof_class_remove) {
+    fossil::tofu::SetOf set("i32");
+    set.insert(const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(set.remove(const_cast<char*>("42")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(set.is_empty() == true);
+}
+
+FOSSIL_TEST_CASE(cpp_test_setof_class_contains) {
+    fossil::tofu::SetOf set("i32");
+    set.insert(const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(set.contains(const_cast<char*>("42")) == true);
+    ASSUME_ITS_TRUE(set.contains(const_cast<char*>("99")) == false);
+}
+
+FOSSIL_TEST_CASE(cpp_test_setof_class_not_empty) {
+    fossil::tofu::SetOf set("i32");
+    set.insert(const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(set.not_empty() == true);
+}
+
+FOSSIL_TEST_CASE(cpp_test_setof_class_is_empty) {
+    fossil::tofu::SetOf set("i32");
+    ASSUME_ITS_TRUE(set.is_empty() == true);
+    set.insert(const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(set.is_empty() == false);
+}
+
+FOSSIL_TEST_CASE(cpp_test_setof_class_size) {
+    fossil::tofu::SetOf set("i32");
+    set.insert(const_cast<char*>("1"));
+    set.insert(const_cast<char*>("2"));
+    ASSUME_ITS_TRUE(set.size() == 2);
+}
+
+FOSSIL_TEST_CASE(cpp_test_setof_class_insert_multiple) {
+    fossil::tofu::SetOf set("i32");
+    ASSUME_ITS_TRUE(set.insert(const_cast<char*>("1")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(set.insert(const_cast<char*>("2")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(set.insert(const_cast<char*>("3")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(set.size() == 3);
+}
+
+FOSSIL_TEST_CASE(cpp_test_setof_class_remove_multiple) {
+    fossil::tofu::SetOf set("i32");
+    set.insert(const_cast<char*>("1"));
+    set.insert(const_cast<char*>("2"));
+    set.insert(const_cast<char*>("3"));
+    ASSUME_ITS_TRUE(set.remove(const_cast<char*>("1")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(set.remove(const_cast<char*>("2")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(set.size() == 1);
+}
+
+FOSSIL_TEST_CASE(cpp_test_setof_class_copy_constructor) {
+    fossil::tofu::SetOf original("i32");
+    original.insert(const_cast<char*>("42"));
+    fossil::tofu::SetOf copy(original);
+    ASSUME_ITS_TRUE(copy.size() == 1);
+    ASSUME_ITS_TRUE(copy.contains(const_cast<char*>("42")) == true);
+}
+
+FOSSIL_TEST_CASE(cpp_test_setof_class_move_constructor) {
+    fossil::tofu::SetOf original("i32");
+    original.insert(const_cast<char*>("42"));
+    fossil::tofu::SetOf moved(std::move(original));
+    ASSUME_ITS_TRUE(moved.size() == 1);
+    ASSUME_ITS_TRUE(moved.contains(const_cast<char*>("42")) == true);
+    ASSUME_ITS_TRUE(original.is_empty() == true);
+}
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
@@ -142,6 +216,18 @@ FOSSIL_TEST_GROUP(cpp_setof_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_setof_tofu_fixture, cpp_test_setof_remove_multiple);
     FOSSIL_TEST_ADD(cpp_setof_tofu_fixture, cpp_test_setof_create_copy);
     FOSSIL_TEST_ADD(cpp_setof_tofu_fixture, cpp_test_setof_create_move);
+
+    // Class ToFu Fixture
+    FOSSIL_TEST_ADD(cpp_setof_tofu_fixture, cpp_test_setof_class_insert);
+    FOSSIL_TEST_ADD(cpp_setof_tofu_fixture, cpp_test_setof_class_remove);
+    FOSSIL_TEST_ADD(cpp_setof_tofu_fixture, cpp_test_setof_class_contains);
+    FOSSIL_TEST_ADD(cpp_setof_tofu_fixture, cpp_test_setof_class_not_empty);
+    FOSSIL_TEST_ADD(cpp_setof_tofu_fixture, cpp_test_setof_class_is_empty);
+    FOSSIL_TEST_ADD(cpp_setof_tofu_fixture, cpp_test_setof_class_size);
+    FOSSIL_TEST_ADD(cpp_setof_tofu_fixture, cpp_test_setof_class_insert_multiple);
+    FOSSIL_TEST_ADD(cpp_setof_tofu_fixture, cpp_test_setof_class_remove_multiple);
+    FOSSIL_TEST_ADD(cpp_setof_tofu_fixture, cpp_test_setof_class_copy_constructor);
+    FOSSIL_TEST_ADD(cpp_setof_tofu_fixture, cpp_test_setof_class_move_constructor);
 
     FOSSIL_TEST_REGISTER(cpp_setof_tofu_fixture);
 } // end of tests
