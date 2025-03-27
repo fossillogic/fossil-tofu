@@ -146,7 +146,7 @@ FOSSIL_TEST_CASE(cpp_test_tuple_set_back) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_class_create_destroy) {
-    fossil::tofu::Tuple tuple("i32");
+    fossil::tofu::Tuple tuple(const_cast<char *>("i32"));
     ASSUME_ITS_TRUE(tuple.is_empty());
 }
 
@@ -156,7 +156,7 @@ FOSSIL_TEST_CASE(cpp_test_tuple_class_create_default) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_class_create_copy) {
-    fossil::tofu::Tuple original("i32");
+    fossil::tofu::Tuple original(const_cast<char *>("i32"));
     original.add(const_cast<char *>("42"));
     fossil::tofu::Tuple copy(original);
     ASSUME_ITS_TRUE(copy.size() == 1);
@@ -164,7 +164,7 @@ FOSSIL_TEST_CASE(cpp_test_tuple_class_create_copy) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_class_create_move) {
-    fossil::tofu::Tuple original("i32");
+    fossil::tofu::Tuple original(const_cast<char *>("i32"));
     original.add(const_cast<char *>("42"));
     fossil::tofu::Tuple moved(std::move(original));
     ASSUME_ITS_TRUE(moved.size() == 1);
@@ -173,14 +173,14 @@ FOSSIL_TEST_CASE(cpp_test_tuple_class_create_move) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_class_add) {
-    fossil::tofu::Tuple tuple("i32");
+    fossil::tofu::Tuple tuple(const_cast<char *>("i32"));
     tuple.add(const_cast<char *>("42"));
     ASSUME_ITS_TRUE(tuple.size() == 1);
     ASSUME_ITS_EQUAL_CSTR(tuple.get(0), "42");
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_class_remove) {
-    fossil::tofu::Tuple tuple("i32");
+    fossil::tofu::Tuple tuple(const_cast<char *>("i32"));
     tuple.add(const_cast<char *>("42"));
     tuple.add(const_cast<char *>("84"));
     tuple.remove(0);
@@ -189,7 +189,7 @@ FOSSIL_TEST_CASE(cpp_test_tuple_class_remove) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_class_clear) {
-    fossil::tofu::Tuple tuple("i32");
+    fossil::tofu::Tuple tuple(const_cast<char *>("i32"));
     tuple.add(const_cast<char *>("42"));
     tuple.add(const_cast<char *>("84"));
     tuple.clear();
@@ -197,28 +197,28 @@ FOSSIL_TEST_CASE(cpp_test_tuple_class_clear) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_class_get_front) {
-    fossil::tofu::Tuple tuple("i32");
+    fossil::tofu::Tuple tuple(const_cast<char *>("i32"));
     tuple.add(const_cast<char *>("42"));
     tuple.add(const_cast<char *>("84"));
     ASSUME_ITS_EQUAL_CSTR(tuple.get_front(), "42");
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_class_get_back) {
-    fossil::tofu::Tuple tuple("i32");
+    fossil::tofu::Tuple tuple(const_cast<char *>("i32"));
     tuple.add(const_cast<char *>("42"));
     tuple.add(const_cast<char *>("84"));
     ASSUME_ITS_EQUAL_CSTR(tuple.get_back(), "84");
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_class_set) {
-    fossil::tofu::Tuple tuple("i32");
+    fossil::tofu::Tuple tuple(const_cast<char *>("i32"));
     tuple.add(const_cast<char *>("42"));
     tuple.set(0, const_cast<char *>("84"));
     ASSUME_ITS_EQUAL_CSTR(tuple.get(0), "84");
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_class_set_front) {
-    fossil::tofu::Tuple tuple("i32");
+    fossil::tofu::Tuple tuple(const_cast<char *>("i32"));
     tuple.add(const_cast<char *>("42"));
     tuple.add(const_cast<char *>("84"));
     tuple.set_front(const_cast<char *>("21"));
@@ -226,7 +226,7 @@ FOSSIL_TEST_CASE(cpp_test_tuple_class_set_front) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_tuple_class_set_back) {
-    fossil::tofu::Tuple tuple("i32");
+    fossil::tofu::Tuple tuple(const_cast<char *>("i32"));
     tuple.add(const_cast<char *>("42"));
     tuple.add(const_cast<char *>("84"));
     tuple.set_back(const_cast<char *>("21"));
