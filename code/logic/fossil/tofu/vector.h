@@ -357,7 +357,7 @@ namespace tofu {
          *
          * @param other The vector to move.
          */
-        Vector(Vector&& other) noexcept : vector(fossil_vector_create_move(other.vector)) {
+        Vector(Vector&& other) : vector(fossil_vector_create_move(other.vector)) {
             if (fossil_vector_is_cnullptr(vector)) {
                 throw std::runtime_error("Failed to create vector");
             }
