@@ -152,58 +152,85 @@ FOSSIL_TEST_CASE(cpp_test_stack_top) {
     fossil_stack_destroy(stack);
 }
 
-FOSSIL_TEST_CASE(cpp_test_stack_template_push) {
-    fossil::Stack<int> stack;
-    stack.push(42);
+FOSSIL_TEST_CASE(cpp_test_stack_class_create_with_type) {
+    fossil::tofu::Stack stack(const_cast<char *>("i32"));
+    ASSUME_ITS_TRUE(stack.not_cnullptr());
+    ASSUME_ITS_TRUE(stack.is_empty());
+}
+
+FOSSIL_TEST_CASE(cpp_test_stack_class_create_default) {
+    fossil::tofu::Stack stack;
+    ASSUME_ITS_TRUE(stack.not_cnullptr());
+    ASSUME_ITS_TRUE(stack.is_empty());
+}
+
+FOSSIL_TEST_CASE(cpp_test_stack_class_copy_constructor) {
+    fossil::tofu::Stack original(const_cast<char *>("i32"));
+    original.insert(const_cast<char *>("42"));
+    fossil::tofu::Stack copy(original);
+    ASSUME_ITS_TRUE(copy.not_cnullptr());
+    ASSUME_ITS_TRUE(copy.size() == 1);
+    ASSUME_ITS_EQUAL_CSTR(copy.top().value.data, "42");
+}
+
+FOSSIL_TEST_CASE(cpp_test_stack_class_insert) {
+    fossil::tofu::Stack stack(const_cast<char *>("i32"));
+    ASSUME_ITS_TRUE(stack.insert(const_cast<char *>("42")) == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(stack.size() == 1);
-    ASSUME_ITS_TRUE(stack.peek() == 42);
+    ASSUME_ITS_EQUAL_CSTR(stack.top().value.data, "42");
 }
 
-FOSSIL_TEST_CASE(cpp_test_stack_template_pop) {
-    fossil::Stack<int> stack;
-    stack.push(42);
-    stack.pop();
-    ASSUME_ITS_TRUE(stack.isEmpty() == true);
+FOSSIL_TEST_CASE(cpp_test_stack_class_remove) {
+    fossil::tofu::Stack stack(const_cast<char *>("i32"));
+    stack.insert(const_cast<char *>("42"));
+    ASSUME_ITS_TRUE(stack.remove() == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(stack.is_empty());
 }
 
-FOSSIL_TEST_CASE(cpp_test_stack_template_peek) {
-    fossil::Stack<int> stack;
-    stack.push(42);
-    ASSUME_ITS_TRUE(stack.peek() == 42);
+FOSSIL_TEST_CASE(cpp_test_stack_class_get) {
+    fossil::tofu::Stack stack(const_cast<char *>("i32"));
+    stack.insert(const_cast<char *>("42"));
+    stack.insert(const_cast<char *>("84"));
+    ASSUME_ITS_EQUAL_CSTR(stack.get(0).value.data, "84");
+    ASSUME_ITS_EQUAL_CSTR(stack.get(1).value.data, "42");
 }
 
-FOSSIL_TEST_CASE(cpp_test_stack_template_is_empty) {
-    fossil::Stack<int> stack;
-    ASSUME_ITS_TRUE(stack.isEmpty() == true);
-    stack.push(42);
-    ASSUME_ITS_TRUE(stack.isEmpty() == false);
+FOSSIL_TEST_CASE(cpp_test_stack_class_set) {
+    fossil::tofu::Stack stack(const_cast<char *>("i32"));
+    stack.insert(const_cast<char *>("42"));
+    stack.insert(const_cast<char *>("84"));
+    fossil_tofu_t new_value = fossil_tofu_create(const_cast<char *>("i32"), const_cast<char *>("21"));
+    stack.set(1, new_value);
+    ASSUME_ITS_EQUAL_CSTR(stack.get(1).value.data, "21");
 }
 
-FOSSIL_TEST_CASE(cpp_test_stack_template_size) {
-    fossil::Stack<int> stack;
-    stack.push(42);
-    stack.push(84);
-    ASSUME_ITS_TRUE(stack.size() == 2);
+FOSSIL_TEST_CASE(cpp_test_stack_class_top) {
+    fossil::tofu::Stack stack(const_cast<char *>("i32"));
+    stack.insert(const_cast<char *>("42"));
+    ASSUME_ITS_EQUAL_CSTR(stack.top().value.data, "42");
 }
 
-FOSSIL_TEST_CASE(cpp_test_stack_template_pop_empty) {
-    fossil::Stack<int> stack;
-    try {
-        stack.pop();
-        ASSUME_ITS_TRUE(false); // Should not reach here
-    } catch (const std::underflow_error&) {
-        ASSUME_ITS_TRUE(true); // Exception caught as expected
-    }
+FOSSIL_TEST_CASE(cpp_test_stack_class_is_empty) {
+    fossil::tofu::Stack stack(const_cast<char *>("i32"));
+    ASSUME_ITS_TRUE(stack.is_empty());
+    stack.insert(const_cast<char *>("42"));
+    ASSUME_ITS_TRUE(!stack.is_empty());
 }
 
-FOSSIL_TEST_CASE(cpp_test_stack_template_peek_empty) {
-    fossil::Stack<int> stack;
-    try {
-        stack.peek();
-        ASSUME_ITS_TRUE(false); // Should not reach here
-    } catch (const std::underflow_error&) {
-        ASSUME_ITS_TRUE(true); // Exception caught as expected
-    }
+FOSSIL_TEST_CASE(cpp_test_stack_class_not_empty) {
+    fossil::tofu::Stack stack(const_cast<char *>("i32"));
+    stack.insert(const_cast<char *>("42"));
+    ASSUME_ITS_TRUE(stack.not_empty());
+}
+
+FOSSIL_TEST_CASE(cpp_test_stack_class_not_cnullptr) {
+    fossil::tofu::Stack stack(const_cast<char *>("i32"));
+    ASSUME_ITS_TRUE(stack.not_cnullptr());
+}
+
+FOSSIL_TEST_CASE(cpp_test_stack_class_is_cnullptr) {
+    fossil::tofu::Stack* stack = nullptr;
+    ASSUME_ITS_TRUE(stack == nullptr);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -224,13 +251,19 @@ FOSSIL_TEST_GROUP(cpp_stack_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_create_move);
     FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_get);
     FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_set);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_push);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_pop);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_peek);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_is_empty);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_size);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_pop_empty);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_template_peek_empty);
+
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_class_create_with_type);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_class_create_default);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_class_copy_constructor);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_class_insert);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_class_remove);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_class_get);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_class_set);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_class_top);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_class_is_empty);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_class_not_empty);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_class_not_cnullptr);
+    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_class_is_cnullptr);
 
     FOSSIL_TEST_REGISTER(cpp_stack_tofu_fixture);
 } // end of tests
