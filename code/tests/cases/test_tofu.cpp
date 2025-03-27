@@ -174,50 +174,54 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_reverse) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_tofu_class_create_destroy) {
-    fossil::Tofu<int> tofu("Test Tofu", "Test Description", "cpp_test_id", 42);
-    ASSUME_ITS_EQUAL_CSTR(tofu.getName().c_str(), "Test Tofu");
-    ASSUME_ITS_EQUAL_CSTR(tofu.getDescription().c_str(), "Test Description");
-    ASSUME_ITS_EQUAL_CSTR(tofu.getId().c_str(), "cpp_test_id");
-    ASSUME_ITS_TRUE(tofu.getValue() == 42);
+    fossil::tofu::Tofu tofu;
+    ASSUME_ITS_TRUE(tofu.get_type() == FOSSIL_TOFU_TYPE_ANY);
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_value().c_str(), "");
 }
 
 FOSSIL_TEST_CASE(cpp_test_tofu_class_create_copy) {
-    fossil::Tofu<int> tofu1("Test Tofu", "Test Description", "cpp_test_id", 42);
-    fossil::Tofu<int> tofu2 = tofu1;
-    ASSUME_ITS_TRUE(tofu1 == tofu2);
+    fossil::tofu::Tofu tofu1;
+    tofu1.set_value("42");
+    fossil::tofu::Tofu tofu2 = tofu1;
+    ASSUME_ITS_TRUE(tofu2.get_type() == tofu1.get_type());
+    ASSUME_ITS_EQUAL_CSTR(tofu2.get_value().c_str(), "42");
 }
 
 FOSSIL_TEST_CASE(cpp_test_tofu_class_create_move) {
-    fossil::Tofu<int> tofu1("Test Tofu", "Test Description", "cpp_test_id", 42);
-    fossil::Tofu<int> tofu2 = std::move(tofu1);
-    ASSUME_ITS_TRUE(tofu2.getValue() == 42);
-    ASSUME_ITS_TRUE(tofu1.getName().empty());
+    fossil::tofu::Tofu tofu1;
+    tofu1.set_value("42");
+    fossil::tofu::Tofu tofu2 = std::move(tofu1);
+    ASSUME_ITS_TRUE(tofu2.get_type() == FOSSIL_TOFU_TYPE_ANY);
+    ASSUME_ITS_EQUAL_CSTR(tofu2.get_value().c_str(), "42");
 }
 
 FOSSIL_TEST_CASE(cpp_test_tofu_class_set_get_value) {
-    fossil::Tofu<int> tofu("Test Tofu", "Test Description", "cpp_test_id", 42);
-    tofu.setValue(84);
-    ASSUME_ITS_TRUE(tofu.getValue() == 84);
+    fossil::tofu::Tofu tofu;
+    tofu.set_value("84");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_value().c_str(), "84");
 }
 
 FOSSIL_TEST_CASE(cpp_test_tofu_class_mutability) {
-    fossil::Tofu<int> tofu("Test Tofu", "Test Description", "cpp_test_id", 42);
-    ASSUME_ITS_TRUE(tofu.isMutable() == true);
-    tofu.setMutable(false);
-    ASSUME_ITS_TRUE(tofu.isMutable() == false);
+    fossil::tofu::Tofu tofu;
+    ASSUME_ITS_TRUE(tofu.is_mutable() == true);
+    tofu.set_mutable(false);
+    ASSUME_ITS_TRUE(tofu.is_mutable() == false);
 }
 
 FOSSIL_TEST_CASE(cpp_test_tofu_class_set_get_attribute) {
-    fossil::Tofu<int> tofu("Test Tofu", "Test Description", "cpp_test_id", 42);
-    ASSUME_ITS_EQUAL_CSTR(tofu.getName().c_str(), "Test Tofu");
-    ASSUME_ITS_EQUAL_CSTR(tofu.getDescription().c_str(), "Test Description");
-    ASSUME_ITS_EQUAL_CSTR(tofu.getId().c_str(), "cpp_test_id");
+    fossil::tofu::Tofu tofu;
+    tofu.set_attribute("Test Attribute", "Test Description", "cpp_test_id");
+    fossil_tofu_attribute_t attr = tofu.get_attribute();
+    ASSUME_ITS_EQUAL_CSTR(attr.name, "Test Attribute");
+    ASSUME_ITS_EQUAL_CSTR(attr.description, "Test Description");
+    ASSUME_ITS_EQUAL_CSTR(attr.id, "cpp_test_id");
 }
 
 FOSSIL_TEST_CASE(cpp_test_tofu_class_equals) {
-    fossil::Tofu<int> tofu1("Test Tofu", "Test Description", "cpp_test_id", 42);
-    fossil::Tofu<int> tofu2("Test Tofu", "Test Description", "cpp_test_id", 42);
-    ASSUME_ITS_TRUE(tofu1 == tofu2);
+    fossil::tofu::Tofu tofu1;
+    tofu1.set_value("42");
+    fossil::tofu::Tofu tofu2 = tofu1;
+    ASSUME_ITS_TRUE(tofu1.equals(tofu2) == true);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -238,6 +242,7 @@ FOSSIL_TEST_GROUP(cpp_generic_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_create_default);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_create_copy);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_create_move);
+
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_create_destroy);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_create_copy);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_create_move);
