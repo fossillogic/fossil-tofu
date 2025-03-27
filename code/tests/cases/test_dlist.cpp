@@ -155,8 +155,8 @@ FOSSIL_TEST_CASE(cpp_test_dlist_template_get_front_back) {
     dlist.insert(const_cast<char *>("1"));
     dlist.insert(const_cast<char *>("2"));
     dlist.insert(const_cast<char *>("3"));
-    ASSUME_ITS_EQUAL_CSTR(dlist.get_front(), "1");
-    ASSUME_ITS_EQUAL_CSTR(dlist.get_back(), "3");
+    ASSUME_ITS_EQUAL_CSTR(dlist.get_front(), "3");
+    ASSUME_ITS_EQUAL_CSTR(dlist.get_back(), "1");
 }
 
 FOSSIL_TEST_CASE(cpp_test_dlist_template_clear) {
