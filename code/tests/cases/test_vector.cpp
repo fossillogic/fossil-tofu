@@ -110,79 +110,79 @@ FOSSIL_TEST_CASE(cpp_test_vector_pop_at) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_template_create_destroy) {
-    fossil::Vector<int> vector;
+    fossil::tofu::Vector vector;
     ASSUME_ITS_TRUE(vector.is_empty());
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_template_push_back) {
-    fossil::Vector<int> vector;
-    vector.push_back(42);
-    ASSUME_ITS_TRUE(vector.get_size() == 1);
-    ASSUME_ITS_TRUE(vector.get(0) == 42);
+    fossil::tofu::Vector vector;
+    vector.push_back(const_cast<char *>("42"));
+    ASSUME_ITS_TRUE(vector.size() == 1);
+    ASSUME_ITS_EQUAL_CSTR(vector.get(0), "42");
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_template_push_front) {
-    fossil::Vector<int> vector;
-    vector.push_back(42);
-    vector.push_front(84);
-    ASSUME_ITS_TRUE(vector.get_size() == 2);
-    ASSUME_ITS_TRUE(vector.get(0) == 84);
-    ASSUME_ITS_TRUE(vector.get(1) == 42);
+    fossil::tofu::Vector vector;
+    vector.push_back(const_cast<char *>("42"));
+    vector.push_front(const_cast<char *>("84"));
+    ASSUME_ITS_TRUE(vector.size() == 2);
+    ASSUME_ITS_EQUAL_CSTR(vector.get(0), "84");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(1), "42");
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_template_push_at) {
-    fossil::Vector<int> vector;
-    vector.push_back(42);
-    vector.push_back(126);
-    vector.push_at(1, 84);
-    ASSUME_ITS_TRUE(vector.get_size() == 3);
-    ASSUME_ITS_TRUE(vector.get(0) == 42);
-    ASSUME_ITS_TRUE(vector.get(1) == 84);
-    ASSUME_ITS_TRUE(vector.get(2) == 126);
+    fossil::tofu::Vector vector;
+    vector.push_back(const_cast<char *>("42"));
+    vector.push_back(const_cast<char *>("126"));
+    vector.push_at(1, const_cast<char *>("84"));
+    ASSUME_ITS_TRUE(vector.size() == 3);
+    ASSUME_ITS_EQUAL_CSTR(vector.get(0), "42");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(1), "84");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(2), "126");
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_template_pop_back) {
-    fossil::Vector<int> vector;
-    vector.push_back(42);
-    vector.push_back(84);
+    fossil::tofu::Vector vector;
+    vector.push_back(const_cast<char *>("42"));
+    vector.push_back(const_cast<char *>("84"));
     vector.pop_back();
-    ASSUME_ITS_TRUE(vector.get_size() == 1);
-    ASSUME_ITS_TRUE(vector.get(0) == 42);
+    ASSUME_ITS_TRUE(vector.size() == 1);
+    ASSUME_ITS_EQUAL_CSTR(vector.get(0), "42");
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_template_pop_front) {
-    fossil::Vector<int> vector;
-    vector.push_back(42);
-    vector.push_back(84);
+    fossil::tofu::Vector vector;
+    vector.push_back(const_cast<char *>("42"));
+    vector.push_back(const_cast<char *>("84"));
     vector.pop_front();
-    ASSUME_ITS_TRUE(vector.get_size() == 1);
-    ASSUME_ITS_TRUE(vector.get(0) == 84);
+    ASSUME_ITS_TRUE(vector.size() == 1);
+    ASSUME_ITS_EQUAL_CSTR(vector.get(0), "84");
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_template_pop_at) {
-    fossil::Vector<int> vector;
-    vector.push_back(42);
-    vector.push_back(84);
-    vector.push_back(126);
+    fossil::tofu::Vector vector;
+    vector.push_back(const_cast<char *>("42"));
+    vector.push_back(const_cast<char *>("84"));
+    vector.push_back(const_cast<char *>("126"));
     vector.pop_at(1);
-    ASSUME_ITS_TRUE(vector.get_size() == 2);
-    ASSUME_ITS_TRUE(vector.get(0) == 42);
-    ASSUME_ITS_TRUE(vector.get(1) == 126);
+    ASSUME_ITS_TRUE(vector.size() == 2);
+    ASSUME_ITS_EQUAL_CSTR(vector.get(0), "42");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(1), "126");
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_template_erase) {
-    fossil::Vector<int> vector;
-    vector.push_back(42);
-    vector.push_back(84);
+    fossil::tofu::Vector vector;
+    vector.push_back(const_cast<char *>("42"));
+    vector.push_back(const_cast<char *>("84"));
     vector.erase();
     ASSUME_ITS_TRUE(vector.is_empty());
 }
 
 FOSSIL_TEST_CASE(cpp_test_vector_template_set) {
-    fossil::Vector<int> vector;
-    vector.push_back(42);
-    vector.set(0, 84);
-    ASSUME_ITS_TRUE(vector.get(0) == 84);
+    fossil::tofu::Vector vector;
+    vector.push_back(const_cast<char *>("42"));
+    vector.set(0, const_cast<char *>("84"));
+    ASSUME_ITS_EQUAL_CSTR(vector.get(0), "84");
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
