@@ -92,18 +92,24 @@ int32_t fossil_setof_remove(fossil_setof_t* set, char *data) {
     if (set == NULL || data == NULL) {
         return FOSSIL_TOFU_FAILURE;
     }
+
+    fossil_tofu_t temp_data = fossil_tofu_create(set->type, data);
     fossil_setof_node_t** current = &set->head;
+
     while (*current) {
-        if (fossil_tofu_algorithm_compare(&(*current)->data, data) == 0) {
+        if (fossil_tofu_algorithm_compare(&(*current)->data, &temp_data) == 0) {
             fossil_setof_node_t* temp = *current;
             *current = (*current)->next;
             fossil_tofu_destroy(&temp->data);
             fossil_tofu_free(temp);
             set->size--;
+            fossil_tofu_destroy(&temp_data);
             return FOSSIL_TOFU_SUCCESS;
         }
         current = &((*current)->next);
     }
+
+    fossil_tofu_destroy(&temp_data);
     return FOSSIL_TOFU_FAILURE;
 }
 
@@ -111,13 +117,19 @@ bool fossil_setof_contains(const fossil_setof_t* set, char *data) {
     if (set == NULL || data == NULL) {
         return false;
     }
+
+    fossil_tofu_t temp_data = fossil_tofu_create(set->type, data);
     fossil_setof_node_t* current = set->head;
+
     while (current) {
-        if (fossil_tofu_algorithm_compare(&current->data, data) == 0) {
+        if (fossil_tofu_algorithm_compare(&current->data, &temp_data) == 0) {
+            fossil_tofu_destroy(&temp_data);
             return true;
         }
         current = current->next;
     }
+
+    fossil_tofu_destroy(&temp_data);
     return false;
 }
 
