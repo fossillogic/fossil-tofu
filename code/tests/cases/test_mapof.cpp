@@ -42,55 +42,55 @@ FOSSIL_TEARDOWN(cpp_mapof_tofu_fixture) {
 
 FOSSIL_TEST_CASE(cpp_test_mapof_insert) {
     fossil_mapof_t* map = fossil_mapof_create_container("cstr", "cstr");
-    ASSUME_ITS_TRUE(fossil_mapof_insert(map, "key1", "value1") == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(fossil_mapof_insert(map, const_cast<char*>("key1"), const_cast<char*>("value1")) == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_mapof_size(map) == 1);
     fossil_mapof_destroy(map);
 }
 
 FOSSIL_TEST_CASE(cpp_test_mapof_remove) {
     fossil_mapof_t* map = fossil_mapof_create_container("cstr", "cstr");
-    fossil_mapof_insert(map, "key1", "value1");
-    ASSUME_ITS_TRUE(fossil_mapof_remove(map, "key1") == FOSSIL_TOFU_SUCCESS);
+    fossil_mapof_insert(map, const_cast<char*>("key1"), const_cast<char*>("value1"));
+    ASSUME_ITS_TRUE(fossil_mapof_remove(map, const_cast<char*>("key1")) == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_mapof_is_empty(map) == true);
     fossil_mapof_destroy(map);
 }
 
 FOSSIL_TEST_CASE(cpp_test_mapof_contains) {
     fossil_mapof_t* map = fossil_mapof_create_container("cstr", "cstr");
-    fossil_mapof_insert(map, "key1", "value1");
-    ASSUME_ITS_TRUE(fossil_mapof_contains(map, "key1") == true);
-    ASSUME_ITS_TRUE(fossil_mapof_contains(map, "key2") == false);
+    fossil_mapof_insert(map, const_cast<char*>("key1"), const_cast<char*>("value1"));
+    ASSUME_ITS_TRUE(fossil_mapof_contains(map, const_cast<char*>("key1")) == true);
+    ASSUME_ITS_TRUE(fossil_mapof_contains(map, const_cast<char*>("key2")) == false);
     fossil_mapof_destroy(map);
 }
 
 FOSSIL_TEST_CASE(cpp_test_mapof_get) {
     fossil_mapof_t* map = fossil_mapof_create_container("cstr", "cstr");
-    fossil_mapof_insert(map, "key1", "value1");
-    fossil_tofu_t value = fossil_mapof_get(map, "key1");
+    fossil_mapof_insert(map, const_cast<char*>("key1"), const_cast<char*>("value1"));
+    fossil_tofu_t value = fossil_mapof_get(map, const_cast<char*>("key1"));
     ASSUME_ITS_TRUE(strcmp(fossil_tofu_get_value(&value), "value1") == 0);
     fossil_mapof_destroy(map);
 }
 
 FOSSIL_TEST_CASE(cpp_test_mapof_set) {
     fossil_mapof_t* map = fossil_mapof_create_container("cstr", "cstr");
-    fossil_mapof_insert(map, "key1", "value1");
-    ASSUME_ITS_TRUE(fossil_mapof_set(map, "key1", "value2") == FOSSIL_TOFU_SUCCESS);
-    fossil_tofu_t value = fossil_mapof_get(map, "key1");
+    fossil_mapof_insert(map, const_cast<char*>("key1"), const_cast<char*>("value1"));
+    ASSUME_ITS_TRUE(fossil_mapof_set(map, const_cast<char*>("key1"), const_cast<char*>("value2")) == FOSSIL_TOFU_SUCCESS);
+    fossil_tofu_t value = fossil_mapof_get(map, const_cast<char*>("key1"));
     ASSUME_ITS_TRUE(strcmp(fossil_tofu_get_value(&value), "value2") == 0);
     fossil_mapof_destroy(map);
 }
 
 FOSSIL_TEST_CASE(cpp_test_mapof_size) {
     fossil_mapof_t* map = fossil_mapof_create_container("cstr", "cstr");
-    fossil_mapof_insert(map, "key1", "value1");
-    fossil_mapof_insert(map, "key2", "value2");
+    fossil_mapof_insert(map, const_cast<char*>("key1"), const_cast<char*>("value1"));
+    fossil_mapof_insert(map, const_cast<char*>("key2"), const_cast<char*>("value2"));
     ASSUME_ITS_TRUE(fossil_mapof_size(map) == 2);
     fossil_mapof_destroy(map);
 }
 
 FOSSIL_TEST_CASE(cpp_test_mapof_not_empty) {
     fossil_mapof_t* map = fossil_mapof_create_container("cstr", "cstr");
-    fossil_mapof_insert(map, "key1", "value1");
+    fossil_mapof_insert(map, const_cast<char*>("key1"), const_cast<char*>("value1"));
     ASSUME_ITS_TRUE(fossil_mapof_not_empty(map) == true);
     fossil_mapof_destroy(map);
 }
@@ -98,27 +98,27 @@ FOSSIL_TEST_CASE(cpp_test_mapof_not_empty) {
 FOSSIL_TEST_CASE(cpp_test_mapof_is_empty) {
     fossil_mapof_t* map = fossil_mapof_create_container("cstr", "cstr");
     ASSUME_ITS_TRUE(fossil_mapof_is_empty(map) == true);
-    fossil_mapof_insert(map, "key1", "value1");
+    fossil_mapof_insert(map, const_cast<char*>("key1"), const_cast<char*>("value1"));
     ASSUME_ITS_TRUE(fossil_mapof_is_empty(map) == false);
     fossil_mapof_destroy(map);
 }
 
 FOSSIL_TEST_CASE(cpp_test_mapof_insert_multiple) {
     fossil_mapof_t* map = fossil_mapof_create_container("cstr", "cstr");
-    ASSUME_ITS_TRUE(fossil_mapof_insert(map, "key1", "value1") == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(fossil_mapof_insert(map, "key2", "value2") == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(fossil_mapof_insert(map, "key3", "value3") == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(fossil_mapof_insert(map, const_cast<char*>("key1"), const_cast<char*>("value1")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(fossil_mapof_insert(map, const_cast<char*>("key2"), const_cast<char*>("value2")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(fossil_mapof_insert(map, const_cast<char*>("key3"), const_cast<char*>("value3")) == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_mapof_size(map) == 3);
     fossil_mapof_destroy(map);
 }
 
 FOSSIL_TEST_CASE(cpp_test_mapof_remove_multiple) {
     fossil_mapof_t* map = fossil_mapof_create_container("cstr", "cstr");
-    fossil_mapof_insert(map, "key1", "value1");
-    fossil_mapof_insert(map, "key2", "value2");
-    fossil_mapof_insert(map, "key3", "value3");
-    ASSUME_ITS_TRUE(fossil_mapof_remove(map, "key1") == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(fossil_mapof_remove(map, "key2") == FOSSIL_TOFU_SUCCESS);
+    fossil_mapof_insert(map, const_cast<char*>("key1"), const_cast<char*>("value1"));
+    fossil_mapof_insert(map, const_cast<char*>("key2"), const_cast<char*>("value2"));
+    fossil_mapof_insert(map, const_cast<char*>("key3"), const_cast<char*>("value3"));
+    ASSUME_ITS_TRUE(fossil_mapof_remove(map, const_cast<char*>("key1")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(fossil_mapof_remove(map, const_cast<char*>("key2")) == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_mapof_size(map) == 1);
     fossil_mapof_destroy(map);
 }
