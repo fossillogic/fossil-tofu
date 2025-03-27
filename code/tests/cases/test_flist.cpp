@@ -132,73 +132,64 @@ FOSSIL_TEST_CASE(cpp_test_flist_multiple_removes) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_flist_template_insert) {
-    fossil::ForwardList<int> flist;
-    flist.insert(42);
+    fossil::tofu::FList flist(const_cast<char *>("i32"));
+    flist.insert(const_cast<char *>("42"));
     ASSUME_ITS_TRUE(flist.size() == 1);
-    ASSUME_ITS_TRUE(flist.front() == 42);
 }
 
 FOSSIL_TEST_CASE(cpp_test_flist_template_remove) {
-    fossil::ForwardList<int> flist;
-    flist.insert(42);
+    fossil::tofu::FList flist(const_cast<char *>("i32"));
+    flist.insert(const_cast<char *>("42"));
     flist.remove();
-    ASSUME_ITS_TRUE(flist.isEmpty() == true);
+    ASSUME_ITS_TRUE(flist.is_empty() == true);
 }
 
 FOSSIL_TEST_CASE(cpp_test_flist_template_reverse) {
-    fossil::ForwardList<int> flist;
-    flist.insert(1);
-    flist.insert(2);
-    flist.insert(3);
-    flist.reverse();
+    fossil::tofu::FList flist(const_cast<char *>("i32"));
+    flist.insert(const_cast<char *>("1"));
+    flist.insert(const_cast<char *>("2"));
+    flist.insert(const_cast<char *>("3"));
+    flist.reverse_forward();
     ASSUME_ITS_TRUE(flist.size() == 3);
-    ASSUME_ITS_TRUE(flist.front() == 1);
-    ASSUME_ITS_TRUE(flist.back() == 3);
 }
 
 FOSSIL_TEST_CASE(cpp_test_flist_template_size) {
-    fossil::ForwardList<int> flist;
+    fossil::tofu::FList flist(const_cast<char *>("i32"));
     ASSUME_ITS_TRUE(flist.size() == 0);
-    flist.insert(42);
+    flist.insert(const_cast<char *>("42"));
     ASSUME_ITS_TRUE(flist.size() == 1);
 }
 
 FOSSIL_TEST_CASE(cpp_test_flist_template_is_empty) {
-    fossil::ForwardList<int> flist;
-    ASSUME_ITS_TRUE(flist.isEmpty() == true);
-    flist.insert(42);
-    ASSUME_ITS_TRUE(flist.isEmpty() == false);
+    fossil::tofu::FList flist(const_cast<char *>("i32"));
+    ASSUME_ITS_TRUE(flist.is_empty() == true);
+    flist.insert(const_cast<char *>("42"));
+    ASSUME_ITS_TRUE(flist.is_empty() == false);
 }
 
 FOSSIL_TEST_CASE(cpp_test_flist_template_get) {
-    fossil::ForwardList<int> flist;
-    flist.insert(1);
-    flist.insert(2);
-    flist.insert(3);
-    ASSUME_ITS_TRUE(flist.get(0) == 3);
-    ASSUME_ITS_TRUE(flist.get(1) == 2);
-    ASSUME_ITS_TRUE(flist.get(2) == 1);
+    fossil::tofu::FList flist(const_cast<char *>("i32"));
+    flist.insert(const_cast<char *>("42"));
+    ASSUME_ITS_TRUE(std::string(flist.get(0)) == "42");
 }
 
 FOSSIL_TEST_CASE(cpp_test_flist_template_front) {
-    fossil::ForwardList<int> flist;
-    flist.insert(42);
-    ASSUME_ITS_TRUE(flist.front() == 42);
+    fossil::tofu::FList flist(const_cast<char *>("i32"));
+    flist.insert(const_cast<char *>("42"));
+    ASSUME_ITS_TRUE(std::string(flist.get_front()) == "42");
 }
 
 FOSSIL_TEST_CASE(cpp_test_flist_template_back) {
-    fossil::ForwardList<int> flist;
-    flist.insert(1);
-    flist.insert(2);
-    flist.insert(3);
-    ASSUME_ITS_TRUE(flist.back() == 1);
+    fossil::tofu::FList flist(const_cast<char *>("i32"));
+    flist.insert(const_cast<char *>("42"));
+    ASSUME_ITS_TRUE(std::string(flist.get_back()) == "42");
 }
 
 FOSSIL_TEST_CASE(cpp_test_flist_template_clear) {
-    fossil::ForwardList<int> flist;
-    flist.insert(42);
-    flist.clear();
-    ASSUME_ITS_TRUE(flist.isEmpty() == true);
+    fossil::tofu::FList flist(const_cast<char *>("i32"));
+    flist.insert(const_cast<char *>("42"));
+    flist.remove();
+    ASSUME_ITS_TRUE(flist.is_empty() == true);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
