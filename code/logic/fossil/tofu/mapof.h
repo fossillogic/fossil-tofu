@@ -25,18 +25,17 @@ extern "C"
 // Type definitions
 // *****************************************************************************
 
-// Map structure
 typedef struct fossil_mapof_node_t {
-    char* key; // Key for the map entry
-    fossil_tofu_t value; // Value stored in the map node
-    struct fossil_mapof_node_t* next; // Pointer to the next node
+    fossil_tofu_t key;
+    fossil_tofu_t value;
+    struct fossil_mapof_node_t* next;
 } fossil_mapof_node_t;
 
 typedef struct fossil_mapof_t {
-    char* key_type; // Type of the keys
-    char* value_type; // Type of the values
-    fossil_mapof_node_t* head; // Pointer to the head node of the map
-    size_t size; // Number of elements in the map
+    char* key_type;
+    char* value_type;
+    fossil_mapof_node_t* head;
+    size_t size;
 } fossil_mapof_t;
 
 // *****************************************************************************

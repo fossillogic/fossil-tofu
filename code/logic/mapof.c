@@ -17,14 +17,12 @@
 #include <string.h>
 
 // *****************************************************************************
-// Function prototypes
+// Function definitions
 // *****************************************************************************
 
 fossil_mapof_t* fossil_mapof_create_container(char* key_type, char* value_type) {
     fossil_mapof_t* map = (fossil_mapof_t*)fossil_tofu_alloc(sizeof(fossil_mapof_t));
-    if (map == NULL) {
-        return NULL;
-    }
+    if (!map) return NULL;
     map->key_type = key_type;
     map->value_type = value_type;
     map->head = NULL;
@@ -37,97 +35,91 @@ fossil_mapof_t* fossil_mapof_create_default(void) {
 }
 
 fossil_mapof_t* fossil_mapof_create_copy(const fossil_mapof_t* other) {
-    fossil_mapof_t* map = (fossil_mapof_t*)fossil_tofu_alloc(sizeof(fossil_mapof_t));
-    if (map == NULL) {
-        return NULL;
-    }
-    map->key_type = other->key_type;
-    map->value_type = other->value_type;
-    map->head = NULL;
-    map->size = 0;
+    if (!other) return NULL;
+
+    fossil_mapof_t* map = fossil_mapof_create_container(other->key_type, other->value_type);
+    if (!map) return NULL;
+
     fossil_mapof_node_t* current = other->head;
-    while (current != NULL) {
-        fossil_mapof_insert(map, current->key, fossil_tofu_get_value(&current->value));
+    while (current) {
+        fossil_mapof_insert(map, fossil_tofu_get_value(&current->key), fossil_tofu_get_value(&current->value));
         current = current->next;
     }
     return map;
 }
 
 fossil_mapof_t* fossil_mapof_create_move(fossil_mapof_t* other) {
-    fossil_mapof_t* map = (fossil_mapof_t*)fossil_tofu_alloc(sizeof(fossil_mapof_t));
-    if (map == NULL) {
-        return NULL;
-    }
-    map->key_type = other->key_type;
-    map->value_type = other->value_type;
+    if (!other) return NULL;
+
+    fossil_mapof_t* map = fossil_mapof_create_container(other->key_type, other->value_type);
+    if (!map) return NULL;
+
     map->head = other->head;
-    other->head = NULL;
     map->size = other->size;
+    other->head = NULL;
     other->size = 0;
+
     return map;
 }
 
 void fossil_mapof_destroy(fossil_mapof_t* map) {
-    if (map == NULL) {
-        return;
-    }
-    while (map->head != NULL) {
+    if (!map) return;
+
+    while (map->head) {
         fossil_mapof_node_t* temp = map->head;
         map->head = map->head->next;
+        fossil_tofu_destroy(&temp->key);
         fossil_tofu_destroy(&temp->value);
-        fossil_tofu_free(temp->key);
         fossil_tofu_free(temp);
     }
+
     fossil_tofu_free(map);
 }
 
 int32_t fossil_mapof_insert(fossil_mapof_t* map, char *key, char *value) {
-    if (map == NULL || key == NULL || value == NULL) {
-        return FOSSIL_TOFU_FAILURE;
-    }
+    if (!map || !key || !value) return FOSSIL_TOFU_FAILURE;
+
     fossil_mapof_node_t* node = (fossil_mapof_node_t*)fossil_tofu_alloc(sizeof(fossil_mapof_node_t));
-    if (node == NULL) {
-        return FOSSIL_TOFU_FAILURE;
-    }
-    node->key = key;
-    if (node->key == NULL) {
-        fossil_tofu_free(node);
-        return FOSSIL_TOFU_FAILURE;
-    }
+    if (!node) return FOSSIL_TOFU_FAILURE;
+
+    node->key = fossil_tofu_create(map->key_type, key);
     node->value = fossil_tofu_create(map->value_type, value);
     node->next = map->head;
     map->head = node;
     map->size++;
+
     return FOSSIL_TOFU_SUCCESS;
 }
 
 int32_t fossil_mapof_remove(fossil_mapof_t* map, char *key) {
-    if (map == NULL || key == NULL) {
-        return FOSSIL_TOFU_FAILURE;
-    }
+    if (!map || !key) return FOSSIL_TOFU_FAILURE;
+
+    fossil_tofu_t temp_data = fossil_tofu_create(map->key_type, key);
+
     fossil_mapof_node_t** current = &map->head;
     while (*current) {
-        if (strcmp((*current)->key, key) == 0) {
+        if (fossil_tofu_algorithm_compare(&(*current)->key, &temp_data) == 0) {
             fossil_mapof_node_t* temp = *current;
             *current = (*current)->next;
+            fossil_tofu_destroy(&temp->key);
             fossil_tofu_destroy(&temp->value);
-            fossil_tofu_free(temp->key);
             fossil_tofu_free(temp);
             map->size--;
             return FOSSIL_TOFU_SUCCESS;
         }
-        current = &((*current)->next);
+        current = &(*current)->next;
     }
     return FOSSIL_TOFU_FAILURE;
 }
 
 bool fossil_mapof_contains(const fossil_mapof_t* map, char *key) {
-    if (map == NULL || key == NULL) {
-        return false;
-    }
+    if (!map || !key) return false;
+
+    fossil_tofu_t temp_data = fossil_tofu_create(map->key_type, key);
+
     fossil_mapof_node_t* current = map->head;
     while (current) {
-        if (strcmp(current->key, key) == 0) {
+        if (fossil_tofu_algorithm_compare(&current->key, &temp_data) == 0) {
             return true;
         }
         current = current->next;
@@ -136,12 +128,13 @@ bool fossil_mapof_contains(const fossil_mapof_t* map, char *key) {
 }
 
 fossil_tofu_t fossil_mapof_get(const fossil_mapof_t* map, char *key) {
-    if (map == NULL || key == NULL) {
-        return fossil_tofu_create(map->value_type, NULL);
-    }
+    if (!map || !key) return fossil_tofu_create(map->value_type, NULL);
+
+    fossil_tofu_t temp_data = fossil_tofu_create(map->key_type, key);
+
     fossil_mapof_node_t* current = map->head;
     while (current) {
-        if (strcmp(current->key, key) == 0) {
+        if (fossil_tofu_algorithm_compare(&current->key, &temp_data) == 0) {
             return current->value;
         }
         current = current->next;
@@ -150,12 +143,13 @@ fossil_tofu_t fossil_mapof_get(const fossil_mapof_t* map, char *key) {
 }
 
 int32_t fossil_mapof_set(fossil_mapof_t* map, char *key, char *value) {
-    if (map == NULL || key == NULL || value == NULL) {
-        return FOSSIL_TOFU_FAILURE;
-    }
+    if (!map || !key || !value) return FOSSIL_TOFU_FAILURE;
+
+    fossil_tofu_t temp_data = fossil_tofu_create(map->key_type, key);
+
     fossil_mapof_node_t* current = map->head;
     while (current) {
-        if (strcmp(current->key, key) == 0) {
+        if (fossil_tofu_algorithm_compare(&current->key, &temp_data) == 0) {
             fossil_tofu_destroy(&current->value);
             current->value = fossil_tofu_create(map->value_type, value);
             return FOSSIL_TOFU_SUCCESS;
@@ -166,13 +160,13 @@ int32_t fossil_mapof_set(fossil_mapof_t* map, char *key, char *value) {
 }
 
 size_t fossil_mapof_size(const fossil_mapof_t* map) {
-    return map == NULL ? 0 : map->size;
+    return map ? map->size : 0;
 }
 
 bool fossil_mapof_not_empty(const fossil_mapof_t* map) {
-    return map != NULL && map->head != NULL;
+    return map && map->head != NULL;
 }
 
 bool fossil_mapof_is_empty(const fossil_mapof_t* map) {
-    return map == NULL || map->head == NULL;
+    return !map || map->head == NULL;
 }
