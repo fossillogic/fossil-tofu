@@ -89,7 +89,7 @@ int32_t fossil_mapof_insert(fossil_mapof_t* map, char *key, char *value) {
     if (node == NULL) {
         return FOSSIL_TOFU_FAILURE;
     }
-    node->key = fossil_tofu_copy(key);
+    node->key = key;
     if (node->key == NULL) {
         fossil_tofu_free(node);
         return FOSSIL_TOFU_FAILURE;
