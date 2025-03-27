@@ -81,77 +81,72 @@ FOSSIL_TEST_CASE(cpp_test_pqueue_is_cnullptr) {
     ASSUME_ITS_TRUE(fossil_pqueue_is_cnullptr(pqueue) == true);
 }
 
-FOSSIL_TEST_CASE(cpp_test_pqueue_get_front) {
-    fossil::PQueue<int> pqueue;
-    pqueue.insert(42, 0);
-    ASSUME_ITS_TRUE(pqueue.get_front() == 42);
+FOSSIL_TEST_CASE(cpp_test_pqueue_class_insert) {
+    fossil::tofu::PQueue pqueue(const_cast<char *>("i32"));
+    pqueue.insert(const_cast<char *>("42"), 0);
+    ASSUME_ITS_TRUE(pqueue.size() == 1);
 }
 
-FOSSIL_TEST_CASE(cpp_test_pqueue_get_back) {
-    fossil::PQueue<int> pqueue;
-    pqueue.insert(42, 0);
-    pqueue.insert(84, 1);
-    ASSUME_ITS_TRUE(pqueue.get_back() == 84);
+FOSSIL_TEST_CASE(cpp_test_pqueue_class_remove) {
+    fossil::tofu::PQueue pqueue(const_cast<char *>("i32"));
+    pqueue.insert(const_cast<char *>("42"), 0);
+    pqueue.remove(0);
+    ASSUME_ITS_TRUE(pqueue.is_empty() == true);
 }
 
-FOSSIL_TEST_CASE(cpp_test_pqueue_get_at) {
-    fossil::PQueue<int> pqueue;
-    pqueue.insert(42, 0);
-    pqueue.insert(84, 1);
-    ASSUME_ITS_TRUE(pqueue.get_at(1) == 84);
+FOSSIL_TEST_CASE(cpp_test_pqueue_class_not_empty) {
+    fossil::tofu::PQueue pqueue(const_cast<char *>("i32"));
+    pqueue.insert(const_cast<char *>("42"), 0);
+    ASSUME_ITS_TRUE(pqueue.not_empty() == true);
 }
 
-FOSSIL_TEST_CASE(cpp_test_pqueue_set_front) {
-    fossil::PQueue<int> pqueue;
-    pqueue.insert(42, 0);
-    pqueue.set_front(84);
-    ASSUME_ITS_TRUE(pqueue.get_front() == 84);
+FOSSIL_TEST_CASE(cpp_test_pqueue_class_is_empty) {
+    fossil::tofu::PQueue pqueue(const_cast<char *>("i32"));
+    ASSUME_ITS_TRUE(pqueue.is_empty() == true);
+    pqueue.insert(const_cast<char *>("42"), 0);
+    ASSUME_ITS_TRUE(pqueue.is_empty() == false);
 }
 
-FOSSIL_TEST_CASE(cpp_test_pqueue_set_back) {
-    fossil::PQueue<int> pqueue;
-    pqueue.insert(42, 0);
-    pqueue.insert(84, 1);
-    pqueue.set_back(126);
-    ASSUME_ITS_TRUE(pqueue.get_back() == 126);
+FOSSIL_TEST_CASE(cpp_test_pqueue_class_get_front) {
+    fossil::tofu::PQueue pqueue(const_cast<char *>("i32"));
+    pqueue.insert(const_cast<char *>("42"), 0);
+    ASSUME_ITS_TRUE(std::string(pqueue.get_front()) == "42");
 }
 
-FOSSIL_TEST_CASE(cpp_test_pqueue_set_at) {
-    fossil::PQueue<int> pqueue;
-    pqueue.insert(42, 0);
-    pqueue.insert(84, 1);
-    pqueue.set_at(1, 126);
-    ASSUME_ITS_TRUE(pqueue.get_at(1) == 126);
+FOSSIL_TEST_CASE(cpp_test_pqueue_class_get_back) {
+    fossil::tofu::PQueue pqueue(const_cast<char *>("i32"));
+    pqueue.insert(const_cast<char *>("42"), 0);
+    ASSUME_ITS_TRUE(std::string(pqueue.get_back()) == "42");
 }
 
-FOSSIL_TEST_CASE(cpp_test_pqueue_copy_constructor) {
-    fossil::PQueue<int> pqueue;
-    pqueue.insert(42, 0);
-    fossil::PQueue<int> pqueue_copy(pqueue);
-    ASSUME_ITS_TRUE(pqueue_copy.get_front() == 42);
+FOSSIL_TEST_CASE(cpp_test_pqueue_class_set_front) {
+    fossil::tofu::PQueue pqueue(const_cast<char *>("i32"));
+    pqueue.insert(const_cast<char *>("42"), 0);
+    pqueue.set_front(const_cast<char *>("84"));
+    ASSUME_ITS_TRUE(std::string(pqueue.get_front()) == "84");
 }
 
-FOSSIL_TEST_CASE(cpp_test_pqueue_move_constructor) {
-    fossil::PQueue<int> pqueue;
-    pqueue.insert(42, 0);
-    fossil::PQueue<int> pqueue_moved(std::move(pqueue));
-    ASSUME_ITS_TRUE(pqueue_moved.get_front() == 42);
+FOSSIL_TEST_CASE(cpp_test_pqueue_class_set_back) {
+    fossil::tofu::PQueue pqueue(const_cast<char *>("i32"));
+    pqueue.insert(const_cast<char *>("42"), 0);
+    pqueue.set_back(const_cast<char *>("84"));
+    ASSUME_ITS_TRUE(std::string(pqueue.get_back()) == "84");
 }
 
-FOSSIL_TEST_CASE(cpp_test_pqueue_assignment_operator) {
-    fossil::PQueue<int> pqueue;
-    pqueue.insert(42, 0);
-    fossil::PQueue<int> pqueue_assigned;
-    pqueue_assigned = pqueue;
-    ASSUME_ITS_TRUE(pqueue_assigned.get_front() == 42);
+FOSSIL_TEST_CASE(cpp_test_pqueue_class_copy_constructor) {
+    fossil::tofu::PQueue original(const_cast<char *>("i32"));
+    original.insert(const_cast<char *>("42"), 0);
+    fossil::tofu::PQueue copy(original);
+    ASSUME_ITS_TRUE(copy.size() == 1);
+    ASSUME_ITS_TRUE(std::string(copy.get_front()) == "42");
 }
 
-FOSSIL_TEST_CASE(cpp_test_pqueue_move_assignment_operator) {
-    fossil::PQueue<int> pqueue;
-    pqueue.insert(42, 0);
-    fossil::PQueue<int> pqueue_moved;
-    pqueue_moved = std::move(pqueue);
-    ASSUME_ITS_TRUE(pqueue_moved.get_front() == 42);
+FOSSIL_TEST_CASE(cpp_test_pqueue_class_move_constructor) {
+    fossil::tofu::PQueue original(const_cast<char *>("i32"));
+    original.insert(const_cast<char *>("42"), 0);
+    fossil::tofu::PQueue moved(std::move(original));
+    ASSUME_ITS_TRUE(moved.size() == 1);
+    ASSUME_ITS_TRUE(std::string(moved.get_front()) == "42");
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -165,16 +160,17 @@ FOSSIL_TEST_GROUP(cpp_pqueue_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_not_cnullptr);
     FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_is_cnullptr);
     FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_is_empty);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_get_front);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_get_back);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_get_at);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_set_front);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_set_back);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_set_at);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_copy_constructor);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_move_constructor);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_assignment_operator);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_move_assignment_operator);
+
+    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_class_insert);
+    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_class_remove);
+    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_class_not_empty);
+    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_class_is_empty);
+    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_class_get_front);
+    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_class_get_back);
+    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_class_set_front);
+    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_class_set_back);
+    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_class_copy_constructor);
+    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_class_move_constructor);
 
     FOSSIL_TEST_REGISTER(cpp_pqueue_tofu_fixture);
 } // end of tests

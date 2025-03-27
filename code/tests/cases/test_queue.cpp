@@ -82,44 +82,42 @@ FOSSIL_TEST_CASE(cpp_test_queue_is_cnullptr) {
 }
 
 FOSSIL_TEST_CASE(cpp_test_queue_template_insert) {
-    fossil::Queue<int> queue;
-    queue.insert(42);
-    ASSUME_ITS_TRUE(queue.getFront() == 42);
-    ASSUME_ITS_TRUE(queue.getRear() == 42);
+    fossil::tofu::Queue queue(const_cast<char *>("i32"));
+    ASSUME_ITS_TRUE(queue.insert(const_cast<char *>("42")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(queue.size() == 1);
 }
 
 FOSSIL_TEST_CASE(cpp_test_queue_template_remove) {
-    fossil::Queue<int> queue;
-    queue.insert(42);
-    queue.remove();
-    ASSUME_ITS_TRUE(queue.isEmpty() == true);
+    fossil::tofu::Queue queue(const_cast<char *>("i32"));
+    queue.insert(const_cast<char *>("42"));
+    ASSUME_ITS_TRUE(queue.remove() == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(queue.is_empty() == true);
 }
 
 FOSSIL_TEST_CASE(cpp_test_queue_template_not_empty) {
-    fossil::Queue<int> queue;
-    queue.insert(42);
-    ASSUME_ITS_TRUE(queue.isEmpty() == false);
+    fossil::tofu::Queue queue(const_cast<char *>("i32"));
+    queue.insert(const_cast<char *>("42"));
+    ASSUME_ITS_TRUE(queue.not_empty() == true);
 }
 
 FOSSIL_TEST_CASE(cpp_test_queue_template_is_empty) {
-    fossil::Queue<int> queue;
-    ASSUME_ITS_TRUE(queue.isEmpty() == true);
-    queue.insert(42);
-    ASSUME_ITS_TRUE(queue.isEmpty() == false);
+    fossil::tofu::Queue queue(const_cast<char *>("i32"));
+    ASSUME_ITS_TRUE(queue.is_empty() == true);
+    queue.insert(const_cast<char *>("42"));
+    ASSUME_ITS_TRUE(queue.is_empty() == false);
 }
 
 FOSSIL_TEST_CASE(cpp_test_queue_template_get_front) {
-    fossil::Queue<int> queue;
-    queue.insert(42);
-    queue.insert(43);
-    ASSUME_ITS_TRUE(queue.getFront() == 42);
+    fossil::tofu::Queue queue(const_cast<char *>("i32"));
+    queue.insert(const_cast<char *>("42"));
+    ASSUME_ITS_TRUE(std::string(queue.get_front()) == "42");
 }
 
 FOSSIL_TEST_CASE(cpp_test_queue_template_get_rear) {
-    fossil::Queue<int> queue;
-    queue.insert(42);
-    queue.insert(43);
-    ASSUME_ITS_TRUE(queue.getRear() == 43);
+    fossil::tofu::Queue queue(const_cast<char *>("i32"));
+    queue.insert(const_cast<char *>("42"));
+    queue.insert(const_cast<char *>("84"));
+    ASSUME_ITS_TRUE(std::string(queue.get_rear()) == "84");
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -133,6 +131,7 @@ FOSSIL_TEST_GROUP(cpp_queue_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_not_cnullptr);
     FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_is_empty);
     FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_is_cnullptr);
+
     FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_template_insert);
     FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_template_remove);
     FOSSIL_TEST_ADD(cpp_queue_tofu_fixture, cpp_test_queue_template_not_empty);
