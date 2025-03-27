@@ -203,241 +203,188 @@ void fossil_tuple_set_back(fossil_tuple_t* tuple, char *element);
 
 namespace fossil {
 
-/**
- * @brief A dynamic array of elements.
- * 
- * @tparam T The type of elements in the tuple.
- */
-template <typename T>
-class Tuple {
-public:
-    /**
-     * @brief Creates a new tuple with a given initial capacity.
-     * 
-     * @param initial_capacity The initial capacity of the tuple.
-     */
-    Tuple(size_t initial_capacity = 10)
-        : elements(new T[initial_capacity]), element_count(0), capacity(initial_capacity) {}
+namespace tofu {
 
     /**
-     * @brief Creates a new tuple by copying an existing tuple.
-     * 
-     * @param other The tuple to copy.
+     * @class Tuple
+     * @brief A C++ wrapper for the fossil_tuple_t structure, providing a more
+     *        user-friendly interface for managing tuples of ToFu elements.
      */
-    Tuple(const Tuple& other)
-        : elements(new T[other.capacity]), element_count(other.element_count), capacity(other.capacity) {
-        std::copy(other.elements, other.elements + other.element_count, elements);
-    }
+    class Tuple {
+        public:
+            /**
+             * @brief Constructs a Tuple with a specified type.
+             * 
+             * @param type The expected type of elements in the tuple.
+             * @throws std::runtime_error If the tuple creation fails.
+             */
+            Tuple(char *type) {
+                tuple_ = fossil_tuple_create(type);
+                if (!tuple_) {
+                    throw std::runtime_error("Failed to create tuple.");
+                }
+            }
 
-    /**
-     * @brief Creates a new tuple by moving an existing tuple.
-     * 
-     * @param other The tuple to move.
-     */
-    Tuple(Tuple&& other) noexcept
-        : elements(other.elements), element_count(other.element_count), capacity(other.capacity) {
-        other.elements = nullptr;
-        other.element_count = 0;
-        other.capacity = 0;
-    }
+            /**
+             * @brief Constructs a Tuple with default values.
+             * 
+             * @throws std::runtime_error If the tuple creation fails.
+             */
+            Tuple() {
+                tuple_ = fossil_tuple_create_default();
+                if (!tuple_) {
+                    throw std::runtime_error("Failed to create tuple.");
+                }
+            }
 
-    /**
-     * @brief Destroys the tuple and frees the allocated memory.
-     */
-    ~Tuple() {
-        delete[] elements;
-    }
+            /**
+             * @brief Constructs a Tuple by copying another Tuple.
+             * 
+             * @param other The Tuple to copy.
+             * @throws std::runtime_error If the tuple creation fails.
+             */
+            Tuple(const Tuple& other) {
+                tuple_ = fossil_tuple_create_copy(other.tuple_);
+                if (!tuple_) {
+                    throw std::runtime_error("Failed to create tuple.");
+                }
+            }
 
-    /**
-     * @brief Adds an element to the tuple.
-     * 
-     * @param element The element to add.
-     */
-    void add(const T& element) {
-        if (element_count == capacity) {
-            resize(capacity * 2);
-        }
-        elements[element_count++] = element;
-    }
+            /**
+             * @brief Constructs a Tuple by moving another Tuple.
+             * 
+             * @param other The Tuple to move.
+             * @throws std::runtime_error If the tuple creation fails.
+             */
+            Tuple(Tuple&& other) {
+                tuple_ = fossil_tuple_create_move(other.tuple_);
+                if (!tuple_) {
+                    throw std::runtime_error("Failed to create tuple.");
+                }
+            }
 
-    /**
-     * @brief Removes the element at the specified index from the tuple.
-     * 
-     * @param index The index of the element to remove.
-     */
-    void remove(size_t index) {
-        if (index >= element_count) {
-            throw std::out_of_range("Index out of range");
-        }
-        std::move(elements + index + 1, elements + element_count, elements + index);
-        --element_count;
-    }
+            /**
+             * @brief Destroys the Tuple and releases its resources.
+             */
+            ~Tuple() {
+                fossil_tuple_destroy(tuple_);
+            }
 
-    /**
-     * @brief Gets the number of elements in the tuple.
-     * 
-     * @return The number of elements in the tuple.
-     */
-    size_t size() const {
-        return element_count;
-    }
+            /**
+             * @brief Adds an element to the Tuple.
+             * 
+             * @param element The element to add.
+             */
+            void add(char *element) {
+                fossil_tuple_add(tuple_, element);
+            }
 
-    /**
-     * @brief Gets the capacity of the tuple.
-     * 
-     * @return The capacity of the tuple.
-     */
-    size_t get_capacity() const {
-        return capacity;
-    }
+            /**
+             * @brief Removes the element at the specified index from the Tuple.
+             * 
+             * @param index The index of the element to remove.
+             */
+            void remove(size_t index) {
+                fossil_tuple_remove(tuple_, index);
+            }
 
-    /**
-     * @brief Checks if the tuple is empty.
-     * 
-     * @return true if the tuple is empty, false otherwise.
-     */
-    bool is_empty() const {
-        return element_count == 0;
-    }
+            /**
+             * @brief Gets the number of elements in the Tuple.
+             * 
+             * @return The number of elements in the Tuple.
+             */
+            size_t size() const {
+                return fossil_tuple_size(tuple_);
+            }
 
-    /**
-     * @brief Clears all elements from the tuple.
-     */
-    void clear() {
-        element_count = 0;
-    }
+            /**
+             * @brief Gets the capacity of the Tuple.
+             * 
+             * @return The capacity of the Tuple.
+             */
+            size_t capacity() const {
+                return fossil_tuple_capacity(tuple_);
+            }
 
-    /**
-     * @brief Gets the element at the specified index in the tuple.
-     * 
-     * @param index The index of the element to get.
-     * @return The element at the specified index.
-     */
-    T& get(size_t index) {
-        if (index >= element_count) {
-            throw std::out_of_range("Index out of range");
-        }
-        return elements[index];
-    }
+            /**
+             * @brief Checks if the Tuple is empty.
+             * 
+             * @return true if the Tuple is empty, false otherwise.
+             */
+            bool is_empty() const {
+                return fossil_tuple_is_empty(tuple_);
+            }
 
-    /**
-     * @brief Gets the element at the specified index in the tuple.
-     * 
-     * @param index The index of the element to get.
-     * @return The element at the specified index.
-     */
-    const T& get(size_t index) const {
-        if (index >= element_count) {
-            throw std::out_of_range("Index out of range");
-        }
-        return elements[index];
-    }
+            /**
+             * @brief Clears all elements from the Tuple.
+             */
+            void clear() {
+                fossil_tuple_clear(tuple_);
+            }
 
-    /**
-     * @brief Gets the first element in the tuple.
-     * 
-     * @return The first element in the tuple.
-     */
-    T& front() {
-        if (is_empty()) {
-            throw std::out_of_range("Tuple is empty");
-        }
-        return elements[0];
-    }
+            /**
+             * @brief Gets the element at the specified index in the Tuple.
+             * 
+             * @param index The index of the element to get.
+             * @return The element at the specified index.
+             */
+            char *get(size_t index) const {
+                return fossil_tuple_get(tuple_, index);
+            }
 
-    /**
-     * @brief Gets the first element in the tuple.
-     * 
-     * @return The first element in the tuple.
-     */
-    const T& front() const {
-        if (is_empty()) {
-            throw std::out_of_range("Tuple is empty");
-        }
-        return elements[0];
-    }
+            /**
+             * @brief Gets the first element in the Tuple.
+             * 
+             * @return The first element in the Tuple.
+             */
+            char *get_front() const {
+                return fossil_tuple_get_front(tuple_);
+            }
 
-    /**
-     * @brief Gets the last element in the tuple.
-     * 
-     * @return The last element in the tuple.
-     */
-    T& back() {
-        if (is_empty()) {
-            throw std::out_of_range("Tuple is empty");
-        }
-        return elements[element_count - 1];
-    }
+            /**
+             * @brief Gets the last element in the Tuple.
+             * 
+             * @return The last element in the Tuple.
+             */
+            char *get_back() const {
+                return fossil_tuple_get_back(tuple_);
+            }
 
-    /**
-     * @brief Gets the last element in the tuple.
-     * 
-     * @return The last element in the tuple.
-     */
-    const T& back() const {
-        if (is_empty()) {
-            throw std::out_of_range("Tuple is empty");
-        }
-        return elements[element_count - 1];
-    }
+            /**
+             * @brief Sets the element at the specified index in the Tuple.
+             * 
+             * @param index The index at which to set the element.
+             * @param element The element to set.
+             */
+            void set(size_t index, char *element) {
+                fossil_tuple_set(tuple_, index, element);
+            }
 
-    /**
-     * @brief Sets the element at the specified index in the tuple.
-     * 
-     * @param index The index at which to set the element.
-     * @param element The element to set.
-     */
-    void set(size_t index, const T& element) {
-        if (index >= element_count) {
-            throw std::out_of_range("Index out of range");
-        }
-        elements[index] = element;
-    }
+            /**
+             * @brief Sets the first element in the Tuple.
+             * 
+             * @param element The element to set.
+             */
+            void set_front(char *element) {
+                fossil_tuple_set_front(tuple_, element);
+            }
 
-    /**
-     * @brief Sets the first element in the tuple.
-     * 
-     * @param element The element to set.
-     */
-    void set_front(const T& element) {
-        if (is_empty()) {
-            throw std::out_of_range("Tuple is empty");
-        }
-        elements[0] = element;
-    }
+            /**
+             * @brief Sets the last element in the Tuple.
+             * 
+             * @param element The element to set.
+             */
+            void set_back(char *element) {
+                fossil_tuple_set_back(tuple_, element);
+            }
 
-    /**
-     * @brief Sets the last element in the tuple.
-     * 
-     * @param element The element to set.
-     */
-    void set_back(const T& element) {
-        if (is_empty()) {
-            throw std::out_of_range("Tuple is empty");
-        }
-        elements[element_count - 1] = element;
-    }
+        private:
+            fossil_tuple_t* tuple_; /**< Pointer to the underlying fossil_tuple_t structure. */
+    };
 
-private:
-    /**
-     * @brief Resizes the tuple to the specified capacity.
-     * 
-     * @param new_capacity The new capacity of the tuple.
-     */
-    void resize(size_t new_capacity) {
-        T* new_elements = new T[new_capacity];
-        std::move(elements, elements + element_count, new_elements);
-        delete[] elements;
-        elements = new_elements;
-        capacity = new_capacity;
-    }
+} // namespace tofu
 
-    T* elements;
-    size_t element_count;
-    size_t capacity;
-};
-
-}
+} // namespace fossil
 
 #endif
 

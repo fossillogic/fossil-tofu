@@ -20,52 +20,52 @@
 // Function prototypes
 // *****************************************************************************
 
-fossil_set_t* fossil_set_create_container(char* type) {
-    fossil_set_t* set = (fossil_set_t*)fossil_tofu_alloc(sizeof(fossil_set_t));
+fossil_setof_t* fossil_setof_create_container(char* type) {
+    fossil_setof_t* set = (fossil_setof_t*)fossil_tofu_alloc(sizeof(fossil_setof_t));
     if (set == NULL) {
         return NULL;
     }
     set->type = type;
     set->head = NULL;
+    set->size = 0;
     return set;
 }
 
-fossil_set_t* fossil_set_create_default(void) {
-    return fossil_set_create_container("any");
+fossil_setof_t* fossil_setof_create_default(void) {
+    return fossil_setof_create_container("any");
 }
 
-fossil_set_t* fossil_set_create_copy(const fossil_set_t* other) {
-    fossil_set_t* set = (fossil_set_t*)fossil_tofu_alloc(sizeof(fossil_set_t));
+fossil_setof_t* fossil_setof_create_copy(const fossil_setof_t* other) {
+    fossil_setof_t* set = fossil_setof_create_container(other->type);
     if (set == NULL) {
         return NULL;
     }
-    set->type = other->type;
-    set->head = NULL;
-    fossil_set_node_t* current = other->head;
+    fossil_setof_node_t* current = other->head;
     while (current != NULL) {
-        fossil_set_insert(set, current->data.value.data);
+        fossil_setof_insert(set, fossil_tofu_get_value(&current->data));
         current = current->next;
     }
     return set;
 }
 
-fossil_set_t* fossil_set_create_move(fossil_set_t* other) {
-    fossil_set_t* set = (fossil_set_t*)fossil_tofu_alloc(sizeof(fossil_set_t));
+fossil_setof_t* fossil_setof_create_move(fossil_setof_t* other) {
+    fossil_setof_t* set = fossil_setof_create_container(other->type);
     if (set == NULL) {
         return NULL;
     }
-    set->type = other->type;
     set->head = other->head;
     other->head = NULL;
+    set->size = other->size;
+    other->size = 0;
     return set;
 }
 
-void fossil_set_destroy(fossil_set_t* set) {
+void fossil_setof_destroy(fossil_setof_t* set) {
     if (set == NULL) {
         return;
     }
     while (set->head != NULL) {
-        fossil_set_node_t* temp = set->head;
+        fossil_setof_node_t* temp = set->head;
         set->head = set->head->next;
         fossil_tofu_destroy(&temp->data);
         fossil_tofu_free(temp);
@@ -73,112 +73,74 @@ void fossil_set_destroy(fossil_set_t* set) {
     fossil_tofu_free(set);
 }
 
-// *****************************************************************************
-// Utility functions
-// *****************************************************************************
-
-int32_t fossil_set_insert(fossil_set_t* set, char *data) {
-    if (set == NULL) {
+int32_t fossil_setof_insert(fossil_setof_t* set, char *data) {
+    if (set == NULL || data == NULL) {
         return FOSSIL_TOFU_FAILURE;
     }
-    fossil_set_node_t* node = (fossil_set_node_t*)fossil_tofu_alloc(sizeof(fossil_set_node_t));
+    fossil_setof_node_t* node = (fossil_setof_node_t*)fossil_tofu_alloc(sizeof(fossil_setof_node_t));
     if (node == NULL) {
         return FOSSIL_TOFU_FAILURE;
     }
     node->data = fossil_tofu_create(set->type, data);
     node->next = set->head;
     set->head = node;
+    set->size++;
     return FOSSIL_TOFU_SUCCESS;
 }
 
-void fossil_set_erase(fossil_set_t *set) {
-    if (set == NULL) {
-        return;
+int32_t fossil_setof_remove(fossil_setof_t* set, char *data) {
+    if (set == NULL || data == NULL) {
+        return FOSSIL_TOFU_FAILURE;
     }
-    while (set->head != NULL) {
-        fossil_set_node_t* temp = set->head;
-        set->head = set->head->next;
-        fossil_tofu_destroy(&temp->data);
-        fossil_tofu_free(temp);
-    }
-}
 
-size_t fossil_set_size(const fossil_set_t* set) {
-    size_t size = 0;
-    fossil_set_node_t* current = set->head;
-    while (current != NULL) {
-        size++;
-        current = current->next;
-    }
-    return size;
-}
+    fossil_tofu_t temp_data = fossil_tofu_create(set->type, data);
+    fossil_setof_node_t** current = &set->head;
 
-bool fossil_set_not_empty(const fossil_set_t* set) {
-    return set != NULL && set->head != NULL;
-}
-
-bool fossil_set_not_cnullptr(const fossil_set_t* set) {
-    return set != NULL;
-}
-
-bool fossil_set_is_empty(const fossil_set_t* set) {
-    return set == NULL || set->head == NULL;
-}
-
-bool fossil_set_is_cnullptr(const fossil_set_t* set) {
-    return set == NULL;
-}
-
-// *****************************************************************************
-// Getter and setter functions
-// *****************************************************************************
-
-char *fossil_set_get(const fossil_set_t* set, size_t index) {
-    size_t i = 0;
-    fossil_set_node_t* current = set->head;
-    while (current != NULL) {
-        if (i == index) {
-            return fossil_tofu_get_value(&current->data);
+    while (*current) {
+        if (fossil_tofu_algorithm_compare(&(*current)->data, &temp_data) == 0) {
+            fossil_setof_node_t* temp = *current;
+            *current = (*current)->next;
+            fossil_tofu_destroy(&temp->data);
+            fossil_tofu_free(temp);
+            set->size--;
+            fossil_tofu_destroy(&temp_data);
+            return FOSSIL_TOFU_SUCCESS;
         }
-        i++;
-        current = current->next;
+        current = &((*current)->next);
     }
-    return NULL;
+
+    fossil_tofu_destroy(&temp_data);
+    return FOSSIL_TOFU_FAILURE;
 }
 
-char *fossil_set_get_front(const fossil_set_t* set) {
-    return set == NULL || set->head == NULL ? NULL : fossil_tofu_get_value(&set->head->data);
-}
-
-char *fossil_set_get_back(const fossil_set_t* set) {
-    fossil_set_node_t* current = set->head;
-    while (current->next != NULL) {
-        current = current->next;
+bool fossil_setof_contains(const fossil_setof_t* set, char *data) {
+    if (set == NULL || data == NULL) {
+        return false;
     }
-    return fossil_tofu_get_value(&current->data);
-}
 
-void fossil_set_set(fossil_set_t* set, size_t index, char *element) {
-    size_t i = 0;
-    fossil_set_node_t* current = set->head;
-    while (current != NULL) {
-        if (i == index) {
-            fossil_tofu_set_value(&current->data, element);
-            return;
+    fossil_tofu_t temp_data = fossil_tofu_create(set->type, data);
+    fossil_setof_node_t* current = set->head;
+
+    while (current) {
+        if (fossil_tofu_algorithm_compare(&current->data, &temp_data) == 0) {
+            fossil_tofu_destroy(&temp_data);
+            return true;
         }
-        i++;
         current = current->next;
     }
+
+    fossil_tofu_destroy(&temp_data);
+    return false;
 }
 
-void fossil_set_set_front(fossil_set_t* set, char *element) {
-    fossil_tofu_set_value(&set->head->data, element);
+size_t fossil_setof_size(const fossil_setof_t* set) {
+    return set == NULL ? 0 : set->size;
 }
 
-void fossil_set_set_back(fossil_set_t* set, char *element) {
-    fossil_set_node_t* current = set->head;
-    while (current->next != NULL) {
-        current = current->next;
-    }
-    fossil_tofu_set_value(&current->data, element);
+bool fossil_setof_not_empty(const fossil_setof_t* set) {
+    return set != NULL && set->size > 0;
+}
+
+bool fossil_setof_is_empty(const fossil_setof_t* set) {
+    return set == NULL || set->size == 0;
 }

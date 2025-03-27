@@ -414,153 +414,193 @@ char* fossil_tofu_strdup(const char* str);
 
 namespace fossil {
 
-/**
- * @brief A dynamic data structure that can hold various types of data.
- */
-template <typename T>
-class Tofu {
-public:
-    /**
-     * @brief Default constructor.
-     * 
-     * @note Time complexity: O(1)
-     */
-    Tofu(const std::string& name, const std::string& description, const std::string& id, const T& value)
-        : name_(name), description_(description), id_(id), value_(value), mutable_flag_(true) {}
+namespace tofu {
 
-    /**
-     * @brief Destructor.
-     * 
-     * @note Time complexity: O(1)
-     */
-    const std::string& getName() const { return name_; }
-
-    /**
-     * @brief Get the description of the tofu.
-     * 
-     * @return The description of the tofu.
-     * @note Time complexity: O(1)
-     */
-    const std::string& getDescription() const { return description_; }
-
-    /**
-     * @brief Get the unique identifier of the tofu.
-     * 
-     * @return The unique identifier of the tofu.
-     * @note Time complexity: O(1)
-     */
-    const std::string& getId() const { return id_; }
-
-    /**
-     * @brief Get the value of the tofu.
-     * 
-     * @return The value of the tofu.
-     * @note Time complexity: O(1)
-     */
-    const T& getValue() const { return value_; }
-
-    /**
-     * @brief Check if the tofu is mutable.
-     * 
-     * @return `true` if mutable, `false` otherwise.
-     * @note Time complexity: O(1)
-     */
-    bool isMutable() const { return mutable_flag_; }
-
-    /**
-     * @brief Set the value of the tofu.
-     * 
-     * @param value The value to set.
-     * @note Time complexity: O(1)
-     */
-    void setValue(const T& value) {
-        if (mutable_flag_) {
-            value_ = value;
-        } else {
-            throw std::runtime_error("Tofu is immutable");
+    class Tofu {
+    public:
+        /**
+         * @brief Default constructor for Tofu class.
+         * Creates a default tofu object.
+         * @throws std::runtime_error if the tofu creation fails.
+         */
+        Tofu() {
+            tofu_ = fossil_tofu_create_default();
+            if (!tofu_) {
+                throw std::runtime_error("Failed to create default tofu.");
+            }
         }
-    }
 
-    /**
-     * @brief Set the mutability of the tofu.
-     * 
-     * @param mutable_flag The mutability flag to set.
-     * @note Time complexity: O(1)
-     */
-    void setMutable(bool mutable_flag) { mutable_flag_ = mutable_flag; }
+        /**
+         * @brief Copy constructor for Tofu class.
+         * Creates a new tofu object by copying another.
+         * @param other The Tofu object to copy.
+         * @throws std::runtime_error if the tofu copy fails.
+         */
+        Tofu(const Tofu& other) {
+            tofu_ = fossil_tofu_create_copy(other.tofu_);
+            if (!tofu_) {
+                throw std::runtime_error("Failed to copy tofu.");
+            }
+        }
 
-    /**
-     * @brief Get the type of the tofu.
-     * 
-     * @return The type of the tofu.
-     * @note Time complexity: O(1)
-     */
-    bool operator==(const Tofu& other) const {
-        return name_ == other.name_ && description_ == other.description_ && id_ == other.id_ && value_ == other.value_;
-    }
+        /**
+         * @brief Move constructor for Tofu class.
+         * Transfers ownership of the tofu object from another Tofu instance.
+         * @param other The Tofu object to move.
+         */
+        Tofu(Tofu&& other) noexcept {
+            tofu_ = other.tofu_;
+            other.tofu_ = nullptr;
+        }
 
-    /**
-     * @brief Compare two tofu objects for equality.
-     * 
-     * @param other The other tofu object to compare.
-     * @return `true` if the objects are equal, `false` otherwise.
-     * @note Time complexity: O(1)
-     */
-    bool operator!=(const Tofu& other) const {
-        return !(*this == other);
-    }
+        /**
+         * @brief Destructor for Tofu class.
+         * Cleans up the tofu object.
+         */
+        ~Tofu() {
+            if (tofu_) {
+                fossil_tofu_destroy(tofu_);
+            }
+        }
 
-    /**
-     * @brief Compare two tofu objects for inequality.
-     * 
-     * @param other The other tofu object to compare.
-     * @return `true` if the objects are not equal, `false` otherwise.
-     * @note Time complexity: O(1)
-     */
-    bool operator<(const Tofu& other) const {
-        return value_ < other.value_;
-    }
+        /**
+         * @brief Copy assignment operator for Tofu class.
+         * Copies the tofu object from another Tofu instance.
+         * @param other The Tofu object to copy.
+         * @return Reference to the current Tofu object.
+         * @throws std::runtime_error if the tofu copy fails.
+         */
+        Tofu& operator=(const Tofu& other) {
+            if (this != &other) {
+                fossil_tofu_t* new_tofu = fossil_tofu_create_copy(other.tofu_);
+                if (!new_tofu) {
+                    throw std::runtime_error("Failed to copy tofu.");
+                }
+                fossil_tofu_destroy(tofu_);
+                tofu_ = new_tofu;
+            }
+            return *this;
+        }
 
-    /**
-     * @brief Compare two tofu objects for less than.
-     * 
-     * @param other The other tofu object to compare.
-     * @return `true` if the first object is less than the second, `false` otherwise.
-     * @note Time complexity: O(1)
-     */
-    bool operator>(const Tofu& other) const {
-        return value_ > other.value_;
-    }
+        /**
+         * @brief Move assignment operator for Tofu class.
+         * Transfers ownership of the tofu object from another Tofu instance.
+         * @param other The Tofu object to move.
+         * @return Reference to the current Tofu object.
+         */
+        Tofu& operator=(Tofu&& other) noexcept {
+            if (this != &other) {
+                fossil_tofu_destroy(tofu_);
+                tofu_ = other.tofu_;
+                other.tofu_ = nullptr;
+            }
+            return *this;
+        }
 
-    /**
-     * @brief Compare two tofu objects for greater than.
-     * 
-     * @param other The other tofu object to compare.
-     * @return `true` if the first object is greater than the second, `false` otherwise.
-     * @note Time complexity: O(1)
-     */
-    bool operator<=(const Tofu& other) const {
-        return !(*this > other);
-    }
+        /**
+         * @brief Sets the value of the tofu object.
+         * @param value The value to set.
+         * @throws std::runtime_error if setting the value fails.
+         */
+        void set_value(const std::string& value) {
+            if (fossil_tofu_set_value(tofu_, const_cast<char*>(value.c_str())) != FOSSIL_TOFU_SUCCESS) {
+                throw std::runtime_error("Failed to set tofu value.");
+            }
+        }
 
-    /**
-     * @brief Compare two tofu objects for less than or equal to.
-     * 
-     * @param other The other tofu object to compare.
-     * @return `true` if the first object is less than or equal to the second, `false` otherwise.
-     * @note Time complexity: O(1)
-     */
-    bool operator>=(const Tofu& other) const {
-        return !(*this < other);
-    }
+        /**
+         * @brief Gets the value of the tofu object.
+         * @return The value as a string.
+         * @throws std::runtime_error if retrieving the value fails.
+         */
+        std::string get_value() const {
+            char* value = fossil_tofu_get_value(tofu_);
+            if (!value) {
+                throw std::runtime_error("Failed to get tofu value.");
+            }
+            return std::string(value);
+        }
 
-private:
-    std::string name_;
-    std::string description_;
-    std::string id_;
-    T value_;
-    bool mutable_flag_;
-};
+        /**
+         * @brief Checks if the tofu object is mutable.
+         * @return True if mutable, false otherwise.
+         */
+        bool is_mutable() const {
+            return fossil_tofu_is_mutable(tofu_);
+        }
+
+        /**
+         * @brief Sets the mutability of the tofu object.
+         * @param mutable_flag True for mutable, false for immutable.
+         * @throws std::runtime_error if setting mutability fails.
+         */
+        void set_mutable(bool mutable_flag) {
+            if (fossil_tofu_set_mutable(tofu_, mutable_flag) != FOSSIL_TOFU_SUCCESS) {
+                throw std::runtime_error("Failed to set tofu mutability.");
+            }
+        }
+
+        /**
+         * @brief Gets the type of the tofu object.
+         * @return The type as a fossil_tofu_type_t enum value.
+         */
+        fossil_tofu_type_t get_type() const {
+            return fossil_tofu_get_type(tofu_);
+        }
+
+        /**
+         * @brief Gets the type name of the tofu object.
+         * @return The type name as a string.
+         * @throws std::runtime_error if retrieving the type name fails.
+         */
+        std::string get_type_name() const {
+            const char* type_name = fossil_tofu_type_name(get_type());
+            if (!type_name) {
+                throw std::runtime_error("Failed to get tofu type name.");
+            }
+            return std::string(type_name);
+        }
+
+        /**
+         * @brief Sets an attribute for the tofu object.
+         * @param name The attribute name.
+         * @param description The attribute description.
+         * @param id The unique identifier for the attribute.
+         * @throws std::runtime_error if setting the attribute fails.
+         */
+        void set_attribute(const std::string& name, const std::string& description, const std::string& id) {
+            if (fossil_tofu_set_attribute(tofu_, name.c_str(), description.c_str(), id.c_str()) != FOSSIL_TOFU_SUCCESS) {
+                throw std::runtime_error("Failed to set tofu attribute.");
+            }
+        }
+
+        /**
+         * @brief Gets the attribute of the tofu object.
+         * @return The attribute as a fossil_tofu_attribute_t struct.
+         * @throws std::runtime_error if retrieving the attribute fails.
+         */
+        fossil_tofu_attribute_t get_attribute() const {
+            const fossil_tofu_attribute_t* attr = fossil_tofu_get_attribute(tofu_);
+            if (!attr) {
+                throw std::runtime_error("Failed to get tofu attribute.");
+            }
+            return *attr;
+        }
+
+        /**
+         * @brief Compares the current tofu object with another for equality.
+         * @param other The Tofu object to compare with.
+         * @return True if equal, false otherwise.
+         */
+        bool equals(const Tofu& other) const {
+            return fossil_tofu_equals(tofu_, other.tofu_);
+        }
+
+    private:
+        fossil_tofu_t* tofu_; /**< Pointer to the underlying tofu object. */
+    };
+
+} // namespace tofu
 
 } // namespace fossil
 

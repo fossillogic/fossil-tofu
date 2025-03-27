@@ -245,147 +245,203 @@ void fossil_dlist_set_back(fossil_dlist_t* dlist, char *element);
 
 namespace fossil {
 
-/**
- * @brief A doubly linked list.
- * 
- * @tparam T The type of data the doubly linked list will store.
- */
-template <typename T>
-class DList {
-public:
-    /**
-     * @brief Default constructor.
-     */
-    DList() : head(nullptr), tail(nullptr) {}
+namespace tofu {
 
-    /**
-     * @brief Destructor.
-     */
-    ~DList() {
-        clear();
-    }
-
-    /**
-     * @brief Insert data into the doubly linked list.
-     * 
-     * @param data The data to insert.
-     * @note Time complexity: O(1)
-     */
-    void insert(const T& data) {
-        Node* newNode = new Node(data);
-        if (!head) {
-            head = tail = newNode;
-        } else {
-            tail->next = newNode;
-            newNode->prev = tail;
-            tail = newNode;
-        }
-    }
-
-    /**
-     * @brief Remove data from the doubly linked list.
-     * @note Time complexity: O(1)
-     */
-    void remove() {
-        if (!tail) {
-            throw std::underflow_error("List is empty");
-        }
-        Node* toDelete = tail;
-        tail = tail->prev;
-        if (tail) {
-            tail->next = nullptr;
-        } else {
-            head = nullptr;
-        }
-        delete toDelete;
-    }
-
-    /**
-     * @brief Reverse the doubly linked list in the forward direction.
-     * @note Time complexity: O(n)
-     */
-    T get(size_t index) const {
-        Node* current = head;
-        for (size_t i = 0; i < index; ++i) {
-            if (!current) {
-                throw std::out_of_range("Index out of range");
+    class DList {
+    public:
+        /**
+         * Constructor to create a doubly linked list with a specified type.
+         *
+         * @param type The type of data the doubly linked list will store.
+         * @throws std::runtime_error If the list creation fails.
+         */
+        DList(char* type) : dlist(fossil_dlist_create_container(type)) {
+            if (dlist == nullptr) {
+                throw std::runtime_error("Failed to create doubly linked list.");
             }
-            current = current->next;
         }
-        if (!current) {
-            throw std::out_of_range("Index out of range");
+
+        /**
+         * Default constructor to create a doubly linked list with default values.
+         *
+         * @throws std::runtime_error If the list creation fails.
+         */
+        DList() : dlist(fossil_dlist_create_default()) {
+            if (dlist == nullptr) {
+                throw std::runtime_error("Failed to create doubly linked list.");
+            }
         }
-        return current->data;
-    }
 
-    /**
-     * @brief Get the first element in the doubly linked list.
-     * @note Time complexity: O(1)
-     */
-    T get_front() const {
-        if (!head) {
-            throw std::underflow_error("List is empty");
+        /**
+         * Copy constructor to create a new doubly linked list by copying another list.
+         *
+         * @param other The doubly linked list to copy.
+         * @throws std::runtime_error If the list creation fails.
+         */
+        DList(const DList& other) : dlist(fossil_dlist_create_copy(other.dlist)) {
+            if (dlist == nullptr) {
+                throw std::runtime_error("Failed to create doubly linked list.");
+            }
         }
-        return head->data;
-    }
 
-    /**
-     * @brief Get the last element in the doubly linked list.
-     * @note Time complexity: O(1)
-     */
-    T get_back() const {
-        if (!tail) {
-            throw std::underflow_error("List is empty");
+        /**
+         * Move constructor to create a new doubly linked list by moving another list.
+         *
+         * @param other The doubly linked list to move.
+         * @throws std::runtime_error If the list creation fails.
+         */
+        DList(DList&& other) : dlist(fossil_dlist_create_move(other.dlist)) {
+            if (dlist == nullptr) {
+            throw std::runtime_error("Failed to create doubly linked list.");
+            }
         }
-        return tail->data;
-    }
 
-    /**
-     * @brief Set the element at the specified index in the doubly linked list.
-     * @note Time complexity: O(n)
-     */
-    void clear() {
-        while (head) {
-            Node* toDelete = head;
-            head = head->next;
-            delete toDelete;
+        /**
+         * Destructor to destroy the doubly linked list and free allocated memory.
+         */
+        ~DList() {
+            fossil_dlist_destroy(dlist);
         }
-        tail = nullptr;
-    }
 
-    /**
-     * @brief Get the size of the doubly linked list.
-     * @note Time complexity: O(n)
-     */
-    size_t size() const {
-        size_t count = 0;
-        Node* current = head;
-        while (current) {
-            ++count;
-            current = current->next;
+        /**
+         * Insert data into the doubly linked list.
+         *
+         * @param data The data to insert.
+         * @return     The error code indicating the success or failure of the operation.
+         */
+        int32_t insert(char *data) {
+            return fossil_dlist_insert(dlist, data);
         }
-        return count;
-    }
 
-    /**
-     * @brief Check if the doubly linked list is not empty.
-     * @note Time complexity: O(1)
-     */
-    bool is_empty() const {
-        return head == nullptr;
-    }
+        /**
+         * Remove data from the doubly linked list.
+         *
+         * @return The error code indicating the success or failure of the operation.
+         */
+        int32_t remove() {
+            return fossil_dlist_remove(dlist);
+        }
 
-private:
-    struct Node {
-        T data;
-        Node* prev;
-        Node* next;
-        Node(const T& data) : data(data), prev(nullptr), next(nullptr) {}
+        /**
+         * Reverse the doubly linked list in the forward direction.
+         */
+        void reverse_forward() {
+            fossil_dlist_reverse_forward(dlist);
+        }
+
+        /**
+         * Reverse the doubly linked list in the backward direction.
+         */
+        void reverse_backward() {
+            fossil_dlist_reverse_backward(dlist);
+        }
+
+        /**
+         * Get the size of the doubly linked list.
+         *
+         * @return The size of the doubly linked list.
+         */
+        size_t size() const {
+            return fossil_dlist_size(dlist);
+        }
+
+        /**
+         * Check if the doubly linked list is not empty.
+         *
+         * @return True if the doubly linked list is not empty, false otherwise.
+         */
+        bool not_empty() const {
+            return fossil_dlist_not_empty(dlist);
+        }
+
+        /**
+         * Check if the doubly linked list is not a null pointer.
+         *
+         * @return True if the doubly linked list is not a null pointer, false otherwise.
+         */
+        bool not_cnullptr() const {
+            return fossil_dlist_not_cnullptr(dlist);
+        }
+
+        /**
+         * Check if the doubly linked list is empty.
+         *
+         * @return True if the doubly linked list is empty, false otherwise.
+         */
+        bool is_empty() const {
+            return fossil_dlist_is_empty(dlist);
+        }
+
+        /**
+         * Check if the doubly linked list is a null pointer.
+         *
+         * @return True if the doubly linked list is a null pointer, false otherwise.
+         */
+        bool is_cnullptr() const {
+            return fossil_dlist_is_cnullptr(dlist);
+        }
+
+        /**
+         * Get the element at the specified index in the doubly linked list.
+         *
+         * @param index The index of the element to get.
+         * @return      The element at the specified index.
+         */
+        char *get(size_t index) const {
+            return fossil_dlist_get(dlist, index);
+        }
+
+        /**
+         * Get the first element in the doubly linked list.
+         *
+         * @return The first element in the doubly linked list.
+         */
+        char *get_front() const {
+            return fossil_dlist_get_front(dlist);
+        }
+
+        /**
+         * Get the last element in the doubly linked list.
+         *
+         * @return The last element in the doubly linked list.
+         */
+        char *get_back() const {
+            return fossil_dlist_get_back(dlist);
+        }
+
+        /**
+         * Set the element at the specified index in the doubly linked list.
+         *
+         * @param index   The index at which to set the element.
+         * @param element The element to set.
+         */
+        void set(size_t index, char *element) {
+            fossil_dlist_set(dlist, index, element);
+        }
+
+        /**
+         * Set the first element in the doubly linked list.
+         *
+         * @param element The element to set.
+         */
+        void set_front(char *element) {
+            fossil_dlist_set_front(dlist, element);
+        }
+
+        /**
+         * Set the last element in the doubly linked list.
+         *
+         * @param element The element to set.
+         */
+        void set_back(char *element) {
+            fossil_dlist_set_back(dlist, element);
+        }
+
+    private:
+        fossil_dlist_t* dlist;
     };
 
-    Node* head;
-    Node* tail;
-};
+} // namespace tofu
 
 } // namespace fossil
 
