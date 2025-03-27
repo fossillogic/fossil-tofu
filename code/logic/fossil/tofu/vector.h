@@ -309,233 +309,227 @@ void fossil_vector_set_at(fossil_vector_t* vector, size_t index, char *element);
 
 namespace fossil {
 
-/**
- * A dynamic array that can grow and shrink as needed.
- * 
- * @tparam T The type of elements in the vector.
- */
-template <typename T>
-class Vector {
-public:
-    /**
-     * Create a new vector with the specified initial capacity.
-     * 
-     * Time complexity: O(1)
-     *
-     * @param initial_capacity The initial capacity of the vector.
-     */
-    Vector() : data(nullptr), size(0), capacity(0) {}
+namespace tofu {
 
     /**
-     * Create a new vector with the specified initial capacity.
-     * 
-     * Time complexity: O(1)
-     *
-     * @param initial_capacity The initial capacity of the vector.
+     * A wrapper class for the fossil_vector_t structure, providing a C++ interface
+     * for managing dynamic arrays of elements.
      */
-    explicit Vector(size_t initial_capacity) : data(new T[initial_capacity]), size(0), capacity(initial_capacity) {}
-
-    /**
-     * Destroy the vector and fossil_tofu_free allocated memory.
-     * 
-     * Time complexity: O(1)
-     */
-    ~Vector() { delete[] data; }
-
-    /**
-     * Add an element to the end of the vector.
-     * 
-     * Amortized time complexity: O(1)
-     *
-     * @param element The element to add.
-     */
-    void push_back(const T& element) {
-        if (size == capacity) {
-            resize(capacity == 0 ? 1 : capacity * 2);
-        }
-        data[size++] = element;
-    }
-
-    /**
-     * Add an element to the front of the vector.
-     * 
-     * Time complexity: O(n)
-     *
-     * @param element The element to add.
-     */
-    void push_front(const T& element) {
-        if (size == capacity) {
-            resize(capacity == 0 ? 1 : capacity * 2);
-        }
-        for (size_t i = size; i > 0; --i) {
-            data[i] = data[i - 1];
-        }
-        data[0] = element;
-        ++size;
-    }
-
-    /**
-     * Add an element at the specified index in the vector.
-     * 
-     * Time complexity: O(n)
-     *
-     * @param index   The index at which to add the element.
-     * @param element The element to add.
-     */
-    void push_at(size_t index, const T& element) {
-        if (index > size) throw std::out_of_range("Index out of range");
-        if (size == capacity) {
-            resize(capacity == 0 ? 1 : capacity * 2);
-        }
-        for (size_t i = size; i > index; --i) {
-            data[i] = data[i - 1];
-        }
-        data[index] = element;
-        ++size;
-    }
-
-    /**
-     * Remove the last element from the vector.
-     * 
-     * Time complexity: O(1)
-     */
-    void pop_back() {
-        if (size > 0) {
-            --size;
-        }
-    }
-
-    /**
-     * Remove the first element from the vector.
-     * 
-     * Time complexity: O(n)
-     */
-    void pop_front() {
-        if (size > 0) {
-            for (size_t i = 0; i < size - 1; ++i) {
-                data[i] = data[i + 1];
+    class Vector {
+    public:
+        /**
+         * Default constructor. Creates a new vector with default values.
+         * Throws a runtime_error if the vector creation fails.
+         */
+        Vector() : vector(fossil_vector_create_default()) {
+            if (fossil_vector_is_cnullptr(vector)) {
+                throw std::runtime_error("Failed to create vector");
             }
-            --size;
         }
-    }
 
-    /**
-     * Remove the element at the specified index in the vector.
-     * 
-     * Time complexity: O(n)
-     *
-     * @param index The index at which to remove the element.
-     */
-    void pop_at(size_t index) {
-        if (index >= size) throw std::out_of_range("Index out of range");
-        for (size_t i = index; i < size - 1; ++i) {
-            data[i] = data[i + 1];
+        /**
+         * Constructor that creates a new vector with the specified type.
+         * Throws a runtime_error if the vector creation fails.
+         *
+         * @param type The expected type of elements in the vector.
+         */
+        Vector(char* type) : vector(fossil_vector_create_container(type)) {
+            if (fossil_vector_is_cnullptr(vector)) {
+                throw std::runtime_error("Failed to create vector");
+            }
         }
-        --size;
-    }
 
-    /**
-     * Remove all elements from the vector.
-     * 
-     * Time complexity: O(1)
-     */
-    void erase() {
-        size = 0;
-    }
-
-    /**
-     * Check if the vector is empty.
-     * 
-     * Time complexity: O(1)
-     *
-     * @return True if the vector is empty, false otherwise.
-     */
-    bool is_empty() const {
-        return size == 0;
-    }
-
-    /**
-     * Get the size of the vector.
-     * 
-     * Time complexity: O(1)
-     *
-     * @return The size of the vector.
-     */
-    size_t get_size() const {
-        return size;
-    }
-
-    /**
-     * Get the capacity of the vector.
-     * 
-     * Time complexity: O(1)
-     *
-     * @return The capacity of the vector.
-     */
-    size_t get_capacity() const {
-        return capacity;
-    }
-
-    /**
-     * Get the element at the specified index in the vector.
-     * 
-     * Time complexity: O(1)
-     *
-     * @param index The index of the element to get.
-     * @return      The element at the specified index.
-     */
-    T& get(size_t index) {
-        if (index >= size) throw std::out_of_range("Index out of range");
-        return data[index];
-    }
-
-    /**
-     * Get the element at the specified index in the vector.
-     * 
-     * Time complexity: O(1)
-     *
-     * @param index The index of the element to get.
-     * @return      The element at the specified index.
-     */
-    const T& get(size_t index) const {
-        if (index >= size) throw std::out_of_range("Index out of range");
-        return data[index];
-    }
-
-    /**
-     * Get the first element in the vector.
-     * 
-     * Time complexity: O(1)
-     *
-     * @return The first element in the vector.
-     */
-    void set(size_t index, const T& element) {
-        if (index >= size) throw std::out_of_range("Index out of range");
-        data[index] = element;
-    }
-
-private:
-    /**
-     * Resize the vector to the specified new capacity.
-     * 
-     * Time complexity: O(n)
-     *
-     * @param new_capacity The new capacity of the vector.
-     */
-    void resize(size_t new_capacity) {
-        T* new_data = new T[new_capacity];
-        for (size_t i = 0; i < size; ++i) {
-            new_data[i] = data[i];
+        /**
+         * Copy constructor. Creates a new vector by copying an existing vector.
+         * Throws a runtime_error if the vector creation fails.
+         *
+         * @param other The vector to copy.
+         */
+        Vector(const Vector& other) : vector(fossil_vector_create_copy(other.vector)) {
+            if (fossil_vector_is_cnullptr(vector)) {
+                throw std::runtime_error("Failed to create vector");
+            }
         }
-        delete[] data;
-        data = new_data;
-        capacity = new_capacity;
-    }
 
-    T* data;
-    size_t size;
-    size_t capacity;
-};
+        /**
+         * Move constructor. Creates a new vector by moving an existing vector.
+         * Does not throw exceptions.
+         *
+         * @param other The vector to move.
+         */
+        Vector(Vector&& other) noexcept : vector(fossil_vector_create_move(other.vector)) {
+            if (fossil_vector_is_cnullptr(vector)) {
+                throw std::runtime_error("Failed to create vector");
+            }
+        }
+
+        /**
+         * Destructor. Destroys the vector and frees allocated memory.
+         */
+        ~Vector() {
+            fossil_vector_destroy(vector);
+        }
+
+        /**
+         * Adds an element to the end of the vector.
+         *
+         * @param element The element to add.
+         */
+        void push_back(char *element) {
+            fossil_vector_push_back(vector, element);
+        }
+
+        /**
+         * Adds an element to the front of the vector.
+         *
+         * @param element The element to add.
+         */
+        void push_front(char *element) {
+            fossil_vector_push_front(vector, element);
+        }
+
+        /**
+         * Adds an element at the specified index in the vector.
+         *
+         * @param index   The index at which to add the element.
+         * @param element The element to add.
+         */
+        void push_at(size_t index, char *element) {
+            fossil_vector_push_at(vector, index, element);
+        }
+
+        /**
+         * Removes the last element from the vector.
+         */
+        void pop_back() {
+            fossil_vector_pop_back(vector);
+        }
+
+        /**
+         * Removes the first element from the vector.
+         */
+        void pop_front() {
+            fossil_vector_pop_front(vector);
+        }
+
+        /**
+         * Removes the element at the specified index in the vector.
+         *
+         * @param index The index at which to remove the element.
+         */
+        void pop_at(size_t index) {
+            fossil_vector_pop_at(vector, index);
+        }
+
+        /**
+         * Removes all elements from the vector.
+         */
+        void erase() {
+            fossil_vector_erase(vector);
+        }
+
+        /**
+         * Checks if the vector is empty.
+         *
+         * @return True if the vector is empty, false otherwise.
+         */
+        bool is_empty() const {
+            return fossil_vector_is_empty(vector);
+        }
+
+        /**
+         * Gets the size of the vector.
+         *
+         * @return The size of the vector.
+         */
+        size_t size() const {
+            return fossil_vector_size(vector);
+        }
+
+        /**
+         * Gets the element at the specified index in the vector.
+         *
+         * @param index The index of the element to get.
+         * @return      The element at the specified index.
+         */
+        char *get(size_t index) const {
+            return fossil_vector_get(vector, index);
+        }
+
+        /**
+         * Gets the first element in the vector.
+         *
+         * @return The first element in the vector.
+         */
+        char *get_front() const {
+            return fossil_vector_get_front(vector);
+        }
+
+        /**
+         * Gets the last element in the vector.
+         *
+         * @return The last element in the vector.
+         */
+        char *get_back() const {
+            return fossil_vector_get_back(vector);
+        }
+
+        /**
+         * Gets the element at the specified index in the vector.
+         *
+         * @param index The index of the element to get.
+         * @return      The element at the specified index.
+         */
+        char *get_at(size_t index) const {
+            return fossil_vector_get_at(vector, index);
+        }
+
+        /**
+         * Sets the element at the specified index in the vector.
+         *
+         * @param index   The index at which to set the element.
+         * @param element The element to set.
+         */
+        void set(size_t index, char *element) {
+            fossil_vector_set(vector, index, element);
+        }
+
+        /**
+         * Sets the first element in the vector.
+         *
+         * @param element The element to set.
+         */
+        void set_front(char *element) {
+            fossil_vector_set_front(vector, element);
+        }
+
+        /**
+         * Sets the last element in the vector.
+         *
+         * @param element The element to set.
+         */
+        void set_back(char *element) {
+            fossil_vector_set_back(vector, element);
+        }
+
+        /**
+         * Sets the element at the specified index in the vector.
+         *
+         * @param index   The index at which to set the element.
+         * @param element The element to set.
+         */
+        void set_at(size_t index, char *element) {
+            fossil_vector_set_at(vector, index, element);
+        }
+
+    private:
+        /**
+         * A pointer to the underlying fossil_vector_t structure.
+         */
+        fossil_vector_t* vector;
+    };
+
+} // namespace tofu
 
 } // namespace fossil
 
