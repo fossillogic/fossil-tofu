@@ -40,84 +40,130 @@ FOSSIL_TEARDOWN(cpp_cqueue_tofu_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
+// *****************************************************************************
+// Circular Queue Test Cases
+// *****************************************************************************
+
 FOSSIL_TEST_CASE(cpp_test_cqueue_insert) {
-    fossil_cqueue_t* queue = fossil_cqueue_create_container(const_cast<char *>("i32"));
-    ASSUME_ITS_TRUE(fossil_cqueue_insert(queue, const_cast<char *>("42")) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(fossil_cqueue_size(queue) == 1);
-    fossil_cqueue_destroy(queue);
+    fossil_cqueue_t* cqueue = fossil_cqueue_create_container("i32", 5);
+    ASSUME_ITS_TRUE(fossil_cqueue_insert(cqueue, const_cast<char*>("42")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(fossil_cqueue_size(cqueue) == 1);
+    fossil_cqueue_destroy(cqueue);
 }
 
 FOSSIL_TEST_CASE(cpp_test_cqueue_remove) {
-    fossil_cqueue_t* queue = fossil_cqueue_create_container(const_cast<char *>("i32"));
-    fossil_cqueue_insert(queue, const_cast<char *>("42"));
-    ASSUME_ITS_TRUE(fossil_cqueue_remove(queue) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(fossil_cqueue_is_empty(queue) == true);
-    fossil_cqueue_destroy(queue);
+    fossil_cqueue_t* cqueue = fossil_cqueue_create_container("i32", 5);
+    fossil_cqueue_insert(cqueue, const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(fossil_cqueue_remove(cqueue) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(fossil_cqueue_is_empty(cqueue) == true);
+    fossil_cqueue_destroy(cqueue);
 }
 
 FOSSIL_TEST_CASE(cpp_test_cqueue_not_empty) {
-    fossil_cqueue_t* queue = fossil_cqueue_create_container(const_cast<char *>("i32"));
-    fossil_cqueue_insert(queue, const_cast<char *>("42"));
-    ASSUME_ITS_TRUE(fossil_cqueue_not_empty(queue) == true);
-    fossil_cqueue_destroy(queue);
+    fossil_cqueue_t* cqueue = fossil_cqueue_create_container("i32", 5);
+    fossil_cqueue_insert(cqueue, const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(fossil_cqueue_not_empty(cqueue) == true);
+    fossil_cqueue_destroy(cqueue);
 }
 
 FOSSIL_TEST_CASE(cpp_test_cqueue_not_cnullptr) {
-    fossil_cqueue_t* queue = fossil_cqueue_create_container(const_cast<char *>("i32"));
-    ASSUME_ITS_TRUE(fossil_cqueue_not_cnullptr(queue) == true);
-    fossil_cqueue_destroy(queue);
+    fossil_cqueue_t* cqueue = fossil_cqueue_create_container("i32", 5);
+    ASSUME_ITS_TRUE(fossil_cqueue_not_cnullptr(cqueue) == true);
+    fossil_cqueue_destroy(cqueue);
 }
 
 FOSSIL_TEST_CASE(cpp_test_cqueue_is_empty) {
-    fossil_cqueue_t* queue = fossil_cqueue_create_container(const_cast<char *>("i32"));
-    ASSUME_ITS_TRUE(fossil_cqueue_is_empty(queue) == true);
-    fossil_cqueue_insert(queue, const_cast<char *>("42"));
-    ASSUME_ITS_TRUE(fossil_cqueue_is_empty(queue) == false);
-    fossil_cqueue_destroy(queue);
+    fossil_cqueue_t* cqueue = fossil_cqueue_create_container("i32", 5);
+    ASSUME_ITS_TRUE(fossil_cqueue_is_empty(cqueue) == true);
+    fossil_cqueue_insert(cqueue, const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(fossil_cqueue_is_empty(cqueue) == false);
+    fossil_cqueue_destroy(cqueue);
 }
 
 FOSSIL_TEST_CASE(cpp_test_cqueue_is_cnullptr) {
-    fossil_cqueue_t* queue = nullptr;
-    ASSUME_ITS_TRUE(fossil_cqueue_is_cnullptr(queue) == true);
+    fossil_cqueue_t* cqueue = NULL;
+    ASSUME_ITS_TRUE(fossil_cqueue_is_cnullptr(cqueue) == true);
 }
 
-FOSSIL_TEST_CASE(cpp_test_cqueue_template_insert) {
-    fossil::tofu::CQueue queue(const_cast<char *>("i32"));
-    ASSUME_ITS_TRUE(queue.insert(const_cast<char *>("42")) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(queue.size() == 1);
+FOSSIL_TEST_CASE(cpp_test_cqueue_get_front_and_rear) {
+    fossil_cqueue_t* cqueue = fossil_cqueue_create_container("i32", 5);
+    fossil_cqueue_insert(cqueue, const_cast<char*>("1"));
+    fossil_cqueue_insert(cqueue, const_cast<char*>("2"));
+    fossil_cqueue_insert(cqueue, const_cast<char*>("3"));
+
+    ASSUME_ITS_EQUAL_CSTR(fossil_cqueue_get_front(cqueue), "1");
+    ASSUME_ITS_EQUAL_CSTR(fossil_cqueue_get_rear(cqueue), "3");
+
+    fossil_cqueue_destroy(cqueue);
 }
 
-FOSSIL_TEST_CASE(cpp_test_cqueue_template_remove) {
-    fossil::tofu::CQueue queue(const_cast<char *>("i32"));
-    queue.insert(const_cast<char *>("42"));
-    ASSUME_ITS_TRUE(queue.remove() == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(queue.is_empty() == true);
+FOSSIL_TEST_CASE(cpp_test_cqueue_set_front_and_rear) {
+    fossil_cqueue_t* cqueue = fossil_cqueue_create_container("i32", 5);
+    fossil_cqueue_insert(cqueue, const_cast<char*>("1"));
+    fossil_cqueue_insert(cqueue, const_cast<char*>("2"));
+    fossil_cqueue_insert(cqueue, const_cast<char*>("3"));
+
+    fossil_cqueue_set_front(cqueue, const_cast<char*>("42"));
+    fossil_cqueue_set_rear(cqueue, const_cast<char*>("99"));
+
+    ASSUME_ITS_EQUAL_CSTR(fossil_cqueue_get_front(cqueue), "42");
+    ASSUME_ITS_EQUAL_CSTR(fossil_cqueue_get_rear(cqueue), "99");
+
+    fossil_cqueue_destroy(cqueue);
 }
 
-FOSSIL_TEST_CASE(cpp_test_cqueue_template_not_empty) {
-    fossil::tofu::CQueue queue(const_cast<char *>("i32"));
-    queue.insert(const_cast<char *>("42"));
-    ASSUME_ITS_TRUE(queue.not_empty() == true);
+FOSSIL_TEST_CASE(cpp_test_cqueue_class_insert) {
+    fossil::tofu::CQueue cqueue("i32");
+    ASSUME_ITS_TRUE(cqueue.insert(const_cast<char*>("42")) == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(cqueue.size() == 1);
 }
 
-FOSSIL_TEST_CASE(cpp_test_cqueue_template_is_empty) {
-    fossil::tofu::CQueue queue(const_cast<char *>("i32"));
-    ASSUME_ITS_TRUE(queue.is_empty() == true);
-    queue.insert(const_cast<char *>("42"));
-    ASSUME_ITS_TRUE(queue.is_empty() == false);
+FOSSIL_TEST_CASE(cpp_test_cqueue_class_remove) {
+    fossil::tofu::CQueue cqueue("i32");
+    cqueue.insert(const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(cqueue.remove() == FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_TRUE(cqueue.is_empty() == true);
 }
 
-FOSSIL_TEST_CASE(cpp_test_cqueue_template_get_front) {
-    fossil::tofu::CQueue queue(const_cast<char *>("i32"));
-    queue.insert(const_cast<char *>("42"));
-    ASSUME_ITS_TRUE(std::string(queue.get_front()) == "42");
+FOSSIL_TEST_CASE(cpp_test_cqueue_class_not_empty) {
+    fossil::tofu::CQueue cqueue("i32");
+    cqueue.insert(const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(cqueue.not_empty() == true);
 }
 
-FOSSIL_TEST_CASE(cpp_test_cqueue_template_get_rear) {
-    fossil::tofu::CQueue queue(const_cast<char *>("i32"));
-    queue.insert(const_cast<char *>("42"));
-    queue.insert(const_cast<char *>("84"));
-    ASSUME_ITS_TRUE(std::string(queue.get_rear()) == "84");
+FOSSIL_TEST_CASE(cpp_test_cqueue_class_not_cnullptr) {
+    fossil::tofu::CQueue cqueue("i32");
+    ASSUME_ITS_TRUE(cqueue.not_cnullptr() == true);
+}
+
+FOSSIL_TEST_CASE(cpp_test_cqueue_class_is_empty) {
+    fossil::tofu::CQueue cqueue("i32");
+    ASSUME_ITS_TRUE(cqueue.is_empty() == true);
+    cqueue.insert(const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(cqueue.is_empty() == false);
+}
+
+FOSSIL_TEST_CASE(cpp_test_cqueue_class_get_front_and_rear) {
+    fossil::tofu::CQueue cqueue("i32");
+    cqueue.insert(const_cast<char*>("1"));
+    cqueue.insert(const_cast<char*>("2"));
+    cqueue.insert(const_cast<char*>("3"));
+
+    ASSUME_ITS_EQUAL_CSTR(cqueue.get_front(), "1");
+    ASSUME_ITS_EQUAL_CSTR(cqueue.get_rear(), "3");
+}
+
+FOSSIL_TEST_CASE(cpp_test_cqueue_class_set_front_and_rear) {
+    fossil::tofu::CQueue cqueue("i32");
+    cqueue.insert(const_cast<char*>("1"));
+    cqueue.insert(const_cast<char*>("2"));
+    cqueue.insert(const_cast<char*>("3"));
+
+    cqueue.set_front(const_cast<char*>("42"));
+    cqueue.set_rear(const_cast<char*>("99"));
+
+    ASSUME_ITS_EQUAL_CSTR(cqueue.get_front(), "42");
+    ASSUME_ITS_EQUAL_CSTR(cqueue.get_rear(), "99");
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -131,13 +177,16 @@ FOSSIL_TEST_GROUP(cpp_cqueue_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_not_cnullptr);
     FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_is_empty);
     FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_is_cnullptr);
+    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_get_front_and_rear);
+    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_set_front_and_rear);
 
-    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_template_insert);
-    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_template_remove);
-    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_template_not_empty);
-    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_template_is_empty);
-    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_template_get_front);
-    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_template_get_rear);
+    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_class_insert);
+    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_class_remove);
+    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_class_not_empty);
+    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_class_not_cnullptr);
+    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_class_is_empty);
+    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_class_get_front_and_rear);
+    FOSSIL_TEST_ADD(cpp_cqueue_tofu_fixture, cpp_test_cqueue_class_set_front_and_rear);
 
     FOSSIL_TEST_REGISTER(cpp_cqueue_tofu_fixture);
 } // end of tests
