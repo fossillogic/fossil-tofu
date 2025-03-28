@@ -21,6 +21,7 @@
 #include "vector.h"
 #include "dqueue.h"
 #include "pqueue.h"
+#include "cqueue.h"
 #include "queue.h"
 #include "stack.h"
 #include "tuple.h"
