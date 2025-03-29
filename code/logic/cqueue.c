@@ -77,6 +77,9 @@ void fossil_cqueue_destroy(fossil_cqueue_t* queue) {
     if (queue == NULL) {
         return;
     }
+    if (queue->front != NULL) {
+        queue->rear->next = NULL;  // Break the circular link
+    }
     fossil_cqueue_node_t* current = queue->front;
     while (current != NULL) {
         fossil_cqueue_node_t* next = current->next;

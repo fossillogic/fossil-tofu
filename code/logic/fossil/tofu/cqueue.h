@@ -218,8 +218,8 @@ namespace tofu {
          *
          * @param type The type of data the queue will store.
          */
-        CQueue(char* type) {
-            queue = fossil_cqueue_create_container(type, 0);
+        CQueue(char* type, size_t capacity) {
+            queue = fossil_cqueue_create_container(type, capacity);
             if (queue == nullptr) {
                 throw std::runtime_error("Failed to create circular queue.");
             }
