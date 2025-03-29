@@ -3,7 +3,7 @@ if get_option('with_test').enabled()
 
     test_c   = ['unit_runner.c']
     test_cases = [
-        'tofu', 'tuple', 'vector', 'stack', 'queue', 'dqueue', 'pqueue', 'flist', 'dlist', 'clist', 'setof', 'mapof'
+        'tofu', 'tuple', 'vector', 'stack', 'queue', 'cqueue', 'dqueue', 'pqueue', 'flist', 'dlist', 'clist', 'setof', 'mapof'
     ]
 
     foreach cases : test_cases
