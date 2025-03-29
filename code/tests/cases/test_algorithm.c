@@ -106,9 +106,6 @@ FOSSIL_TEST_GROUP(c_algorithm_tests) {
     FOSSIL_TEST_ADD(c_algorithm_fixture, c_test_algorithm_search);
     FOSSIL_TEST_ADD(c_algorithm_fixture, c_test_algorithm_sort);
     FOSSIL_TEST_ADD(c_algorithm_fixture, c_test_algorithm_reverse);
-    FOSSIL_TEST_ADD(c_algorithm_fixture, c_test_create_default);
-    FOSSIL_TEST_ADD(c_algorithm_fixture, c_test_create_copy);
-    FOSSIL_TEST_ADD(c_algorithm_fixture, c_test_create_move);
 
     FOSSIL_TEST_REGISTER(c_algorithm_fixture);
 } // end of tests

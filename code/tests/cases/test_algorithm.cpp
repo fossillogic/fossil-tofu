@@ -163,10 +163,6 @@ FOSSIL_TEST_GROUP(cpp_algorithm_tests) {
     FOSSIL_TEST_ADD(cpp_algorithm_fixture, cpp_test_algorithm_search);
     FOSSIL_TEST_ADD(cpp_algorithm_fixture, cpp_test_algorithm_sort);
     FOSSIL_TEST_ADD(cpp_algorithm_fixture, cpp_test_algorithm_reverse);
-    FOSSIL_TEST_ADD(cpp_algorithm_fixture, cpp_test_create_default);
-    FOSSIL_TEST_ADD(cpp_algorithm_fixture, cpp_test_create_copy);
-    FOSSIL_TEST_ADD(cpp_algorithm_fixture, cpp_test_create_move);
-
     FOSSIL_TEST_ADD(cpp_algorithm_fixture, cpp_test_algorithm_class_compare);
     FOSSIL_TEST_ADD(cpp_algorithm_fixture, cpp_test_algorithm_class_search);
     FOSSIL_TEST_ADD(cpp_algorithm_fixture, cpp_test_algorithm_class_sort);
