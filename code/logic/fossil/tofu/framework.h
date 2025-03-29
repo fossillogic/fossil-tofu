@@ -17,6 +17,9 @@
 // the main tofu type
 #include "tofu.h"
 
+// the algorithm functions
+#include "algorithm.h"
+
 // data structures
 #include "vector.h"
 #include "dqueue.h"
