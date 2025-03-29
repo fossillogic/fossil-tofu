@@ -12,6 +12,7 @@
  * -----------------------------------------------------------------------------
  */
 #include "fossil/tofu/setof.h"
+#include "fossil/tofu/algorithm.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -97,7 +98,7 @@ int32_t fossil_setof_remove(fossil_setof_t* set, char *data) {
     fossil_setof_node_t** current = &set->head;
 
     while (*current) {
-        if (fossil_tofu_algorithm_compare(&(*current)->data, &temp_data) == 0) {
+        if (fossil_algorithm_compare(&(*current)->data, &temp_data) == 0) {
             fossil_setof_node_t* temp = *current;
             *current = (*current)->next;
             fossil_tofu_destroy(&temp->data);
@@ -122,7 +123,7 @@ bool fossil_setof_contains(const fossil_setof_t* set, char *data) {
     fossil_setof_node_t* current = set->head;
 
     while (current) {
-        if (fossil_tofu_algorithm_compare(&current->data, &temp_data) == 0) {
+        if (fossil_algorithm_compare(&current->data, &temp_data) == 0) {
             fossil_tofu_destroy(&temp_data);
             return true;
         }
