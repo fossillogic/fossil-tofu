@@ -1,9 +1,10 @@
 dir = include_directories('.')
 
 fossil_tofu_lib = library('fossil-tofu',
-    files('doublylist.c', 'forwardlist.c', 'circularlist.c',
-          'dqueue.c', 'tuple.c', 'pqueue.c', 'queue.c',
-          'setof.c', 'mapof.c', 'stack.c', 'vector.c', 'tofu.c'),
+    files('dlist.c', 'flist.c', 'clist.c',
+          'dqueue.c', 'pqueue.c', 'queue.c', 'cqueue.c',
+          'setof.c', 'tuple.c', 'mapof.c',
+          'stack.c', 'vector.c', 'tofu.c'),
     install: true,
     include_directories: dir)
 

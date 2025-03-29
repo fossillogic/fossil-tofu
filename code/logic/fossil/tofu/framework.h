@@ -18,16 +18,17 @@
 #include "tofu.h"
 
 // data structures
-#include "circularlist.h"
-#include "forwardlist.h"
-#include "doublylist.h"
+#include "vector.h"
+#include "dqueue.h"
+#include "pqueue.h"
+#include "cqueue.h"
+#include "queue.h"
+#include "stack.h"
 #include "tuple.h"
 #include "setof.h"
 #include "mapof.h"
-#include "dqueue.h"
-#include "pqueue.h"
-#include "queue.h"
-#include "vector.h"
-#include "stack.h"
+#include "clist.h"
+#include "flist.h"
+#include "dlist.h"
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

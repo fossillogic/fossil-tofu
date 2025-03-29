@@ -11,7 +11,7 @@
  * Copyright (C) 2024 Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include "fossil/tofu/forwardlist.h"
+#include "fossil/tofu/flist.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
