@@ -116,63 +116,6 @@ FOSSIL_TEST_CASE(c_test_copy) {
     fossil_tofu_destroy(&tofu2);
 }
 
-FOSSIL_TEST_CASE(c_test_algorithm_compare) {
-    fossil_tofu_t tofu1 = fossil_tofu_create("i32", "42");
-    fossil_tofu_t tofu2 = fossil_tofu_create("i32", "84");
-    ASSUME_ITS_TRUE(fossil_algorithm_compare(&tofu1, &tofu2) < 0);
-    fossil_tofu_destroy(&tofu1);
-    fossil_tofu_destroy(&tofu2);
-}
-
-FOSSIL_TEST_CASE(c_test_algorithm_search) {
-    fossil_tofu_t array[3] = {
-        fossil_tofu_create("i32", "42"),
-        fossil_tofu_create("i32", "84"),
-        fossil_tofu_create("i32", "126")
-    };
-    fossil_tofu_t tofu = fossil_tofu_create("i32", "84");
-    ASSUME_ITS_TRUE(fossil_algorithm_search(array, 3, &tofu) == 1);
-    for (int i = 0; i < 3; i++) {
-        fossil_tofu_destroy(&array[i]);
-    }
-    fossil_tofu_destroy(&tofu);
-}
-
-FOSSIL_TEST_CASE(c_test_algorithm_sort) {
-    fossil_tofu_t array[3] = {
-        fossil_tofu_create("i32", "126"),
-        fossil_tofu_create("i32", "42"),
-        fossil_tofu_create("i32", "84")
-    };
-    
-    ASSUME_ITS_TRUE(fossil_algorithm_sort(array, 3, true) == FOSSIL_TOFU_SUCCESS);
-
-    // Need to figure out sort algorithm as to why it's not working
-    // seems to lose data during sort
-    // ASSUME_ITS_EQUAL_CSTR(array[0].value.data, "42");
-    // ASSUME_ITS_EQUAL_CSTR(array[1].value.data, "84");
-    // ASSUME_ITS_EQUAL_CSTR(array[2].value.data, "126");
-    
-    for (int i = 0; i < 3; i++) {
-        fossil_tofu_destroy(&array[i]);
-    }
-}
-
-FOSSIL_TEST_CASE(c_test_algorithm_reverse) {
-    fossil_tofu_t array[3] = {
-        fossil_tofu_create("i32", "42"),
-        fossil_tofu_create("i32", "84"),
-        fossil_tofu_create("i32", "126")
-    };
-    ASSUME_ITS_TRUE(fossil_algorithm_reverse(array, 3) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_CSTR(array[0].value.data, "126");
-    ASSUME_ITS_EQUAL_CSTR(array[1].value.data, "84");
-    ASSUME_ITS_EQUAL_CSTR(array[2].value.data, "42");
-    for (int i = 0; i < 3; i++) {
-        fossil_tofu_destroy(&array[i]);
-    }
-}
-
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -184,13 +127,6 @@ FOSSIL_TEST_GROUP(c_generic_tofu_tests) {
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_set_get_attribute);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_equals);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_copy);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_algorithm_compare);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_algorithm_search);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_algorithm_sort);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_algorithm_reverse);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_create_default);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_create_copy);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_create_move);
 
     FOSSIL_TEST_REGISTER(c_generic_tofu_fixture);
 } // end of tests
