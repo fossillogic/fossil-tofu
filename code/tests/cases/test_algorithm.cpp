@@ -851,7 +851,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_i8) {
         fossil_tofu_create(const_cast<char*>("i8"), const_cast<char*>("84"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("42"));
 
     for (int i = 0; i < 3; i++) {
@@ -866,7 +866,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_i16) {
         fossil_tofu_create(const_cast<char*>("i16"), const_cast<char*>("84"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("42"));
 
     for (int i = 0; i < 3; i++) {
@@ -881,7 +881,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_i32) {
         fossil_tofu_create(const_cast<char*>("i32"), const_cast<char*>("84"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("42"));
 
     for (int i = 0; i < 3; i++) {
@@ -896,7 +896,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_i64) {
         fossil_tofu_create(const_cast<char*>("i64"), const_cast<char*>("84"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("42"));
 
     for (int i = 0; i < 3; i++) {
@@ -911,7 +911,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_u8) {
         fossil_tofu_create(const_cast<char*>("u8"), const_cast<char*>("84"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("42"));
 
     for (int i = 0; i < 3; i++) {
@@ -926,7 +926,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_u16) {
         fossil_tofu_create(const_cast<char*>("u16"), const_cast<char*>("84"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("42"));
 
     for (int i = 0; i < 3; i++) {
@@ -941,7 +941,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_u32) {
         fossil_tofu_create(const_cast<char*>("u32"), const_cast<char*>("84"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("42"));
 
     for (int i = 0; i < 3; i++) {
@@ -956,7 +956,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_u64) {
         fossil_tofu_create(const_cast<char*>("u64"), const_cast<char*>("84"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("42"));
 
     for (int i = 0; i < 3; i++) {
@@ -971,7 +971,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_hex) {
         fossil_tofu_create(const_cast<char*>("hex"), const_cast<char*>("0x54"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("0x2A"));
 
     for (int i = 0; i < 3; i++) {
@@ -986,7 +986,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_octal) {
         fossil_tofu_create(const_cast<char*>("octal"), const_cast<char*>("0124"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("052"));
 
     for (int i = 0; i < 3; i++) {
@@ -1001,7 +1001,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_float) {
         fossil_tofu_create(const_cast<char*>("float"), const_cast<char*>("84.0"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("42.0"));
 
     for (int i = 0; i < 3; i++) {
@@ -1016,7 +1016,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_double) {
         fossil_tofu_create(const_cast<char*>("double"), const_cast<char*>("84.0"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("42.0"));
 
     for (int i = 0; i < 3; i++) {
@@ -1031,7 +1031,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_wstr) {
         fossil_tofu_create(const_cast<char*>("wstr"), const_cast<char*>("beta"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("alpha"));
 
     for (int i = 0; i < 3; i++) {
@@ -1046,7 +1046,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_cstr) {
         fossil_tofu_create(const_cast<char*>("cstr"), const_cast<char*>("beta"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("alpha"));
 
     for (int i = 0; i < 3; i++) {
@@ -1061,7 +1061,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_bool) {
         fossil_tofu_create(const_cast<char*>("bool"), const_cast<char*>("1"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("0"));
 
     for (int i = 0; i < 3; i++) {
@@ -1076,7 +1076,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_min_size) {
         fossil_tofu_create(const_cast<char*>("size"), const_cast<char*>("84"))
     };
 
-    fossil_tofu_t *min = fossil_algorithm_min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *min = fossil_algorithm_min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, const_cast<char*>("42"));
 
     for (int i = 0; i < 3; i++) {
@@ -1091,7 +1091,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_i8) {
         fossil_tofu_create(const_cast<char*>("i8"), const_cast<char*>("126"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("126"));
 
     for (int i = 0; i < 3; i++) {
@@ -1106,7 +1106,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_i16) {
         fossil_tofu_create(const_cast<char*>("i16"), const_cast<char*>("126"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("126"));
 
     for (int i = 0; i < 3; i++) {
@@ -1121,7 +1121,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_i32) {
         fossil_tofu_create(const_cast<char*>("i32"), const_cast<char*>("126"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("126"));
 
     for (int i = 0; i < 3; i++) {
@@ -1136,7 +1136,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_i64) {
         fossil_tofu_create(const_cast<char*>("i64"), const_cast<char*>("126"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("126"));
 
     for (int i = 0; i < 3; i++) {
@@ -1151,7 +1151,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_u8) {
         fossil_tofu_create(const_cast<char*>("u8"), const_cast<char*>("126"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("126"));
 
     for (int i = 0; i < 3; i++) {
@@ -1166,7 +1166,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_u16) {
         fossil_tofu_create(const_cast<char*>("u16"), const_cast<char*>("126"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("126"));
 
     for (int i = 0; i < 3; i++) {
@@ -1181,7 +1181,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_u32) {
         fossil_tofu_create(const_cast<char*>("u32"), const_cast<char*>("126"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("126"));
 
     for (int i = 0; i < 3; i++) {
@@ -1196,7 +1196,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_u64) {
         fossil_tofu_create(const_cast<char*>("u64"), const_cast<char*>("126"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("126"));
 
     for (int i = 0; i < 3; i++) {
@@ -1211,7 +1211,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_hex) {
         fossil_tofu_create(const_cast<char*>("hex"), const_cast<char*>("0x7E"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("0x7E"));
 
     for (int i = 0; i < 3; i++) {
@@ -1226,7 +1226,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_octal) {
         fossil_tofu_create(const_cast<char*>("octal"), const_cast<char*>("0176"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("0176"));
 
     for (int i = 0; i < 3; i++) {
@@ -1241,7 +1241,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_float) {
         fossil_tofu_create(const_cast<char*>("float"), const_cast<char*>("126.0"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("126.0"));
 
     for (int i = 0; i < 3; i++) {
@@ -1256,7 +1256,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_double) {
         fossil_tofu_create(const_cast<char*>("double"), const_cast<char*>("126.0"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("126.0"));
 
     for (int i = 0; i < 3; i++) {
@@ -1271,7 +1271,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_wstr) {
         fossil_tofu_create(const_cast<char*>("wstr"), const_cast<char*>("gamma"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("gamma"));
 
     for (int i = 0; i < 3; i++) {
@@ -1286,7 +1286,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_cstr) {
         fossil_tofu_create(const_cast<char*>("cstr"), const_cast<char*>("gamma"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("gamma"));
 
     for (int i = 0; i < 3; i++) {
@@ -1301,7 +1301,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_bool) {
         fossil_tofu_create(const_cast<char*>("bool"), const_cast<char*>("0"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("1"));
 
     for (int i = 0; i < 3; i++) {
@@ -1316,7 +1316,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_max_size) {
         fossil_tofu_create(const_cast<char*>("size"), const_cast<char*>("126"))
     };
 
-    fossil_tofu_t *max = fossil_algorithm_max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t *max = fossil_algorithm_max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, const_cast<char*>("126"));
 
     for (int i = 0; i < 3; i++) {
@@ -1397,7 +1397,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_class_min) {
         fossil_tofu_create(const_cast<char*>("i8"), const_cast<char*>("42")),
         fossil_tofu_create(const_cast<char*>("i8"), const_cast<char*>("84"))
     };
-    fossil_tofu_t* min = fossil::tofu::Algorithm::min(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t* min = fossil::tofu::Algorithm::min(array, 3);
     ASSUME_ITS_EQUAL_CSTR(min->value.data, "42");
     for (int i = 0; i < 3; i++) {
         fossil_tofu_destroy(&array[i]);
@@ -1410,7 +1410,7 @@ FOSSIL_TEST_CASE(cpp_test_algorithm_class_max) {
         fossil_tofu_create(const_cast<char*>("i8"), const_cast<char*>("84")),
         fossil_tofu_create(const_cast<char*>("i8"), const_cast<char*>("126"))
     };
-    fossil_tofu_t* max = fossil::tofu::Algorithm::max(array, 3, fossil_algorithm_compare);
+    fossil_tofu_t* max = fossil::tofu::Algorithm::max(array, 3);
     ASSUME_ITS_EQUAL_CSTR(max->value.data, "126");
     for (int i = 0; i < 3; i++) {
         fossil_tofu_destroy(&array[i]);
