@@ -183,7 +183,7 @@ int fossil_algorithm_reverse(fossil_tofu_t *array, size_t size) {
     return FOSSIL_TOFU_SUCCESS;
 }
 
-fossil_tofu_t* fossil_algorithm_min(const fossil_tofu_t *array, size_t size, int (*compare_fn)(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2)) {
+fossil_tofu_t* fossil_algorithm_min(const fossil_tofu_t *array, size_t size) {
     if (array == NULL || size == 0) return NULL;
 
     fossil_tofu_t *min = (fossil_tofu_t*)&array[0];
@@ -249,7 +249,7 @@ fossil_tofu_t* fossil_algorithm_min(const fossil_tofu_t *array, size_t size, int
     return min;
 }
 
-fossil_tofu_t* fossil_algorithm_max(const fossil_tofu_t *array, size_t size, int (*compare_fn)(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2)) {
+fossil_tofu_t* fossil_algorithm_max(const fossil_tofu_t *array, size_t size) {
     if (array == NULL || size == 0) return NULL;
 
     fossil_tofu_t *max = (fossil_tofu_t*)&array[0];
