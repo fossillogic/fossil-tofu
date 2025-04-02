@@ -108,7 +108,7 @@ int32_t fossil_slist_insert(fossil_slist_t* slist, char *data) {
         return FOSSIL_TOFU_FAILURE;
     }
     int level = 0;
-    while ((float)rand() / RAND_MAX < slist->probability && level < slist->max_level) {
+    while ((float)rand() / (float)RAND_MAX < slist->probability && level < slist->max_level) {
         level++;
     }
     fossil_slist_node_t* new_node = (fossil_slist_node_t*)fossil_tofu_alloc(sizeof(fossil_slist_node_t));
