@@ -23,7 +23,7 @@
 #define FOSSIL_SLIST_MAX_LEVEL 16
 #define FOSSIL_SLIST_PROBABILITY 0.5f
 
-static int random_level() {
+static int random_level(void) {
     int level = 1;
     while ((rand() / (RAND_MAX + 1.0)) < FOSSIL_SLIST_PROBABILITY && level < FOSSIL_SLIST_MAX_LEVEL) {
         level++;
@@ -38,7 +38,7 @@ fossil_slist_t* fossil_slist_create_container(char* type) {
     slist->probability = FOSSIL_SLIST_PROBABILITY;
     slist->head = (fossil_slist_node_t*)malloc(sizeof(fossil_slist_node_t));
     slist->head->forward = (fossil_slist_node_t**)calloc(FOSSIL_SLIST_MAX_LEVEL, sizeof(fossil_slist_node_t*));
-    slist->type = strdup(type);
+    slist->type = fossil_tofu_strdup(type);
     return slist;
 }
 
@@ -92,12 +92,12 @@ int32_t fossil_slist_insert(fossil_slist_t* slist, char *data) {
     if (node && strcmp(node->data.value.data, data) == 0) {
         return -1; // Duplicate value
     }
-    int level = random_level();
+    size_t level = random_level();
     if (level > slist->max_level) {
         level = slist->max_level;
     }
     fossil_slist_node_t* new_node = (fossil_slist_node_t*)malloc(sizeof(fossil_slist_node_t));
-    new_node->data.value.data = strdup(data);
+    new_node->data.value.data = fossil_tofu_strdup(data);
     new_node->forward = (fossil_slist_node_t**)calloc(level, sizeof(fossil_slist_node_t*));
     for (int i = 0; i < level; i++) {
         new_node->forward[i] = update[i]->forward[i];
@@ -118,7 +118,7 @@ int32_t fossil_slist_remove(fossil_slist_t* slist, char *data) {
     }
     node = node->forward[0];
     if (node && strcmp(node->data.value.data, data) == 0) {
-        for (int i = 0; i < slist->max_level; i++) {
+        for (size_t i = 0; i < slist->max_level; i++) {
             if (update[i]->forward[i] != node) break;
             update[i]->forward[i] = node->forward[i];
         }
