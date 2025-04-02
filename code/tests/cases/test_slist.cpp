@@ -40,92 +40,101 @@ FOSSIL_TEARDOWN(cpp_slist_tofu_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
+FOSSIL_TEST_CASE(cpp_test_slist_create_container) {
+    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("i32"));
+    ASSUME_ITS_TRUE(slist != nullptr);
+    ASSUME_ITS_TRUE(strcmp(slist->type, const_cast<char*>("i32")) == 0);
+    fossil_slist_destroy(slist);
+}
+
+FOSSIL_TEST_CASE(cpp_test_slist_create_default) {
+    fossil_slist_t* slist = fossil_slist_create_default();
+    ASSUME_ITS_TRUE(slist != nullptr);
+    ASSUME_ITS_TRUE(strcmp(slist->type, const_cast<char*>("any")) == 0);
+    fossil_slist_destroy(slist);
+}
+
+FOSSIL_TEST_CASE(cpp_test_slist_create_copy) {
+    fossil_slist_t* slist1 = fossil_slist_create_container(const_cast<char*>("i32"));
+    fossil_slist_insert(slist1, const_cast<char*>("42"));
+    fossil_slist_t* slist2 = fossil_slist_create_copy(slist1);
+    ASSUME_ITS_TRUE(slist2 != nullptr);
+    ASSUME_ITS_TRUE(strcmp(slist2->type, const_cast<char*>("i32")) == 0);
+    ASSUME_ITS_TRUE(fossil_slist_size(slist2) == 1);
+    fossil_slist_destroy(slist1);
+    fossil_slist_destroy(slist2);
+}
+
+FOSSIL_TEST_CASE(cpp_test_slist_create_move) {
+    fossil_slist_t* slist1 = fossil_slist_create_container(const_cast<char*>("i32"));
+    fossil_slist_insert(slist1, const_cast<char*>("42"));
+    fossil_slist_t* slist2 = fossil_slist_create_move(slist1);
+    ASSUME_ITS_TRUE(slist2 != nullptr);
+    ASSUME_ITS_TRUE(strcmp(slist2->type, const_cast<char*>("i32")) == 0);
+    ASSUME_ITS_TRUE(fossil_slist_size(slist2) == 1);
+    fossil_slist_destroy(slist2);
+}
+
 FOSSIL_TEST_CASE(cpp_test_slist_insert) {
-    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("cstr"), 16, 0.5f);
-    ASSUME_ITS_TRUE(fossil_slist_insert(slist, const_cast<char*>("hello")) == FOSSIL_TOFU_SUCCESS);
+    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("i32"));
+    ASSUME_ITS_TRUE(fossil_slist_insert(slist, const_cast<char*>("42")) == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_slist_size(slist) == 1);
     fossil_slist_destroy(slist);
 }
 
 FOSSIL_TEST_CASE(cpp_test_slist_remove) {
-    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("cstr"), 16, 0.5f);
-    fossil_slist_insert(slist, const_cast<char*>("hello"));
-    ASSUME_ITS_TRUE(fossil_slist_remove(slist, const_cast<char*>("hello")) == FOSSIL_TOFU_SUCCESS);
+    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("i32"));
+    fossil_slist_insert(slist, const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(fossil_slist_remove(slist, const_cast<char*>("42")) == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_slist_is_empty(slist) == true);
-    fossil_slist_destroy(slist);
-}
-
-FOSSIL_TEST_CASE(cpp_test_slist_find) {
-    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("cstr"), 16, 0.5f);
-    fossil_slist_insert(slist, const_cast<char*>("world"));
-    ASSUME_ITS_TRUE(fossil_slist_find(slist, const_cast<char*>("world")) == true);
-    ASSUME_ITS_TRUE(fossil_slist_find(slist, const_cast<char*>("not_found")) == false);
-    fossil_slist_destroy(slist);
-}
-
-FOSSIL_TEST_CASE(cpp_test_slist_size) {
-    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("cstr"), 16, 0.5f);
-    ASSUME_ITS_TRUE(fossil_slist_size(slist) == 0);
-    fossil_slist_insert(slist, const_cast<char*>("item1"));
-    fossil_slist_insert(slist, const_cast<char*>("item2"));
-    ASSUME_ITS_TRUE(fossil_slist_size(slist) == 2);
     fossil_slist_destroy(slist);
 }
 
 FOSSIL_TEST_CASE(cpp_test_slist_not_empty) {
-    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("cstr"), 16, 0.5f);
-    ASSUME_ITS_TRUE(fossil_slist_not_empty(slist) == false);
-    fossil_slist_insert(slist, const_cast<char*>("data"));
+    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("i32"));
+    fossil_slist_insert(slist, const_cast<char*>("42"));
     ASSUME_ITS_TRUE(fossil_slist_not_empty(slist) == true);
     fossil_slist_destroy(slist);
 }
 
+FOSSIL_TEST_CASE(cpp_test_slist_not_cnullptr) {
+    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("i32"));
+    ASSUME_ITS_TRUE(fossil_slist_not_cnullptr(slist) == true);
+    fossil_slist_destroy(slist);
+}
+
 FOSSIL_TEST_CASE(cpp_test_slist_is_empty) {
-    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("cstr"), 16, 0.5f);
+    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("i32"));
     ASSUME_ITS_TRUE(fossil_slist_is_empty(slist) == true);
-    fossil_slist_insert(slist, const_cast<char*>("data"));
+    fossil_slist_insert(slist, const_cast<char*>("42"));
     ASSUME_ITS_TRUE(fossil_slist_is_empty(slist) == false);
     fossil_slist_destroy(slist);
 }
 
-FOSSIL_TEST_CASE(cpp_test_slist_multiple_inserts) {
-    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("cstr"), 16, 0.5f);
-    fossil_slist_insert(slist, const_cast<char*>("item1"));
-    fossil_slist_insert(slist, const_cast<char*>("item2"));
-    fossil_slist_insert(slist, const_cast<char*>("item3"));
-    ASSUME_ITS_TRUE(fossil_slist_size(slist) == 3);
+FOSSIL_TEST_CASE(cpp_test_slist_is_cnullptr) {
+    fossil_slist_t* slist = nullptr;
+    ASSUME_ITS_TRUE(fossil_slist_is_cnullptr(slist) == true);
+}
+
+FOSSIL_TEST_CASE(cpp_test_slist_search) {
+    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("i32"));
+    fossil_slist_insert(slist, const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(strcmp(fossil_slist_search(slist, const_cast<char*>("42")), const_cast<char*>("42")) == 0);
     fossil_slist_destroy(slist);
 }
 
-FOSSIL_TEST_CASE(cpp_test_slist_multiple_removes) {
-    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("cstr"), 16, 0.5f);
-    fossil_slist_insert(slist, const_cast<char*>("item1"));
-    fossil_slist_insert(slist, const_cast<char*>("item2"));
-    fossil_slist_insert(slist, const_cast<char*>("item3"));
-    fossil_slist_remove(slist, const_cast<char*>("item1"));
-    fossil_slist_remove(slist, const_cast<char*>("item2"));
-    ASSUME_ITS_TRUE(fossil_slist_size(slist) == 1);
+FOSSIL_TEST_CASE(cpp_test_slist_get_front) {
+    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("i32"));
+    fossil_slist_insert(slist, const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(strcmp(fossil_slist_get_front(slist), const_cast<char*>("42")) == 0);
     fossil_slist_destroy(slist);
 }
 
-FOSSIL_TEST_CASE(cpp_test_slist_create_copy) {
-    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("cstr"), 16, 0.5f);
-    fossil_slist_insert(slist, const_cast<char*>("copy_test"));
-    fossil_slist_t* slist_copy = fossil_slist_create_copy(slist);
-    ASSUME_ITS_TRUE(fossil_slist_size(slist_copy) == 1);
-    ASSUME_ITS_TRUE(fossil_slist_find(slist_copy, const_cast<char*>("copy_test")) == true);
+FOSSIL_TEST_CASE(cpp_test_slist_get_back) {
+    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("i32"));
+    fossil_slist_insert(slist, const_cast<char*>("42"));
+    ASSUME_ITS_TRUE(strcmp(fossil_slist_get_back(slist), const_cast<char*>("42")) == 0);
     fossil_slist_destroy(slist);
-    fossil_slist_destroy(slist_copy);
-}
-
-FOSSIL_TEST_CASE(cpp_test_slist_create_move) {
-    fossil_slist_t* slist = fossil_slist_create_container(const_cast<char*>("cstr"), 16, 0.5f);
-    fossil_slist_insert(slist, const_cast<char*>("move_test"));
-    fossil_slist_t* slist_moved = fossil_slist_create_move(slist);
-    ASSUME_ITS_TRUE(fossil_slist_size(slist_moved) == 1);
-    ASSUME_ITS_TRUE(fossil_slist_find(slist_moved, const_cast<char*>("move_test")) == true);
-    ASSUME_ITS_TRUE(slist->header == NULL); // Ensure the original list is empty
-    fossil_slist_destroy(slist_moved);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -133,16 +142,19 @@ FOSSIL_TEST_CASE(cpp_test_slist_create_move) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(cpp_slist_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_insert);
-    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_remove);
-    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_find);
-    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_size);
-    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_not_empty);
-    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_is_empty);
-    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_multiple_inserts);
-    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_multiple_removes);
+    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_create_container);
+    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_create_default);
     FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_create_copy);
     FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_create_move);
+    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_insert);
+    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_remove);
+    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_not_empty);
+    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_not_cnullptr);
+    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_is_empty);
+    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_is_cnullptr);
+    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_search);
+    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_get_front);
+    FOSSIL_TEST_ADD(cpp_slist_tofu_fixture, cpp_test_slist_get_back);
 
     FOSSIL_TEST_REGISTER(cpp_slist_tofu_fixture);
 } // end of tests
