@@ -82,7 +82,7 @@ int32_t fossil_slist_insert(fossil_slist_t* slist, char *data) {
     if (!slist || !data) return -1;
     fossil_slist_node_t* update[FOSSIL_SLIST_MAX_LEVEL];
     fossil_slist_node_t* node = slist->head;
-    for (int i = slist->max_level - 1; i >= 0; i--) {
+    for (size_t i = slist->max_level - 1; i >= 0; i--) {
         while (node->forward[i] && strcmp(node->forward[i]->data.value.data, data) < 0) {
             node = node->forward[i];
         }
@@ -99,7 +99,7 @@ int32_t fossil_slist_insert(fossil_slist_t* slist, char *data) {
     fossil_slist_node_t* new_node = (fossil_slist_node_t*)malloc(sizeof(fossil_slist_node_t));
     new_node->data.value.data = fossil_tofu_strdup(data);
     new_node->forward = (fossil_slist_node_t**)calloc(level, sizeof(fossil_slist_node_t*));
-    for (int i = 0; i < level; i++) {
+    for (size_t i = 0; i < level; i++) {
         new_node->forward[i] = update[i]->forward[i];
         update[i]->forward[i] = new_node;
     }
@@ -110,7 +110,7 @@ int32_t fossil_slist_remove(fossil_slist_t* slist, char *data) {
     if (!slist || !data) return -1;
     fossil_slist_node_t* update[FOSSIL_SLIST_MAX_LEVEL];
     fossil_slist_node_t* node = slist->head;
-    for (int i = slist->max_level - 1; i >= 0; i--) {
+    for (size_t i = slist->max_level - 1; i >= 0; i--) {
         while (node->forward[i] && strcmp(node->forward[i]->data.value.data, data) < 0) {
             node = node->forward[i];
         }
@@ -160,7 +160,7 @@ bool fossil_slist_is_cnullptr(const fossil_slist_t* slist) {
 char *fossil_slist_search(const fossil_slist_t* slist, char *key) {
     if (!slist || !key) return NULL;
     fossil_slist_node_t* node = slist->head;
-    for (int i = slist->max_level - 1; i >= 0; i--) {
+    for (size_t i = slist->max_level - 1; i >= 0; i--) {
         while (node->forward[i] && strcmp(node->forward[i]->data.value.data, key) < 0) {
             node = node->forward[i];
         }
