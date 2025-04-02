@@ -48,7 +48,58 @@ int fossil_algorithm_sort(fossil_tofu_t *array, size_t size, bool ascending) {
     // Perform sorting using bubble-sort style
     for (size_t i = 0; i < size - 1; i++) {
         for (size_t j = i + 1; j < size; j++) {
-            int cmp = fossil_algorithm_compare(&array[i], &array[j]);
+            int cmp = 0;
+
+            // Compare based on type
+            switch (array[i].type) {
+                case FOSSIL_TOFU_TYPE_I8:
+                case FOSSIL_TOFU_TYPE_I16:
+                case FOSSIL_TOFU_TYPE_I32:
+                case FOSSIL_TOFU_TYPE_I64:
+                case FOSSIL_TOFU_TYPE_U8:
+                case FOSSIL_TOFU_TYPE_U16:
+                case FOSSIL_TOFU_TYPE_U32:
+                case FOSSIL_TOFU_TYPE_U64:
+                case FOSSIL_TOFU_TYPE_SIZE: {
+                    long long value1 = atoll(array[i].value.data);
+                    long long value2 = atoll(array[j].value.data);
+                    cmp = (value1 > value2) - (value1 < value2);
+                    break;
+                }
+                case FOSSIL_TOFU_TYPE_FLOAT:
+                case FOSSIL_TOFU_TYPE_DOUBLE: {
+                    double value1 = atof(array[i].value.data);
+                    double value2 = atof(array[j].value.data);
+                    cmp = (value1 > value2) - (value1 < value2);
+                    break;
+                }
+                case FOSSIL_TOFU_TYPE_BOOL: {
+                    int value1 = atoi(array[i].value.data);
+                    int value2 = atoi(array[j].value.data);
+                    cmp = (value1 > value2) - (value1 < value2);
+                    break;
+                }
+                case FOSSIL_TOFU_TYPE_HEX:
+                case FOSSIL_TOFU_TYPE_OCTAL: {
+                    long long value1 = strtoll(array[i].value.data, NULL, 
+                        (array[i].type == FOSSIL_TOFU_TYPE_HEX) ? 16 : 8);
+                    long long value2 = strtoll(array[j].value.data, NULL, 
+                        (array[j].type == FOSSIL_TOFU_TYPE_HEX) ? 16 : 8);
+                    cmp = (value1 > value2) - (value1 < value2);
+                    break;
+                }
+                case FOSSIL_TOFU_TYPE_WSTR:
+                case FOSSIL_TOFU_TYPE_CSTR:
+                case FOSSIL_TOFU_TYPE_CCHAR:
+                case FOSSIL_TOFU_TYPE_WCHAR:
+                case FOSSIL_TOFU_TYPE_ANY: {
+                    cmp = strcmp(array[i].value.data, array[j].value.data);
+                    break;
+                }
+                default:
+                    cmp = 0;
+                    break;
+            }
 
             // Determine if we need to swap based on ascending/descending order
             if ((ascending && cmp > 0) || (!ascending && cmp < 0)) {
@@ -132,12 +183,65 @@ int fossil_algorithm_reverse(fossil_tofu_t *array, size_t size) {
     return FOSSIL_TOFU_SUCCESS;
 }
 
-fossil_tofu_t* fossil_algorithm_min(const fossil_tofu_t *array, size_t size, int (*compare_fn)(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2)) {
+fossil_tofu_t* fossil_algorithm_min(const fossil_tofu_t *array, size_t size) {
     if (array == NULL || size == 0) return NULL;
 
     fossil_tofu_t *min = (fossil_tofu_t*)&array[0];
     for (size_t i = 1; i < size; i++) {
-        if (compare_fn(&array[i], min) < 0) {
+        int cmp = 0;
+
+        // Compare based on type
+        switch (array[i].type) {
+            case FOSSIL_TOFU_TYPE_I8:
+            case FOSSIL_TOFU_TYPE_I16:
+            case FOSSIL_TOFU_TYPE_I32:
+            case FOSSIL_TOFU_TYPE_I64:
+            case FOSSIL_TOFU_TYPE_U8:
+            case FOSSIL_TOFU_TYPE_U16:
+            case FOSSIL_TOFU_TYPE_U32:
+            case FOSSIL_TOFU_TYPE_U64:
+            case FOSSIL_TOFU_TYPE_SIZE: {
+                long long value1 = atoll(array[i].value.data);
+                long long value2 = atoll(min->value.data);
+                cmp = (value1 > value2) - (value1 < value2);
+                break;
+            }
+            case FOSSIL_TOFU_TYPE_FLOAT:
+            case FOSSIL_TOFU_TYPE_DOUBLE: {
+                double value1 = atof(array[i].value.data);
+                double value2 = atof(min->value.data);
+                cmp = (value1 > value2) - (value1 < value2);
+                break;
+            }
+            case FOSSIL_TOFU_TYPE_BOOL: {
+                int value1 = atoi(array[i].value.data);
+                int value2 = atoi(min->value.data);
+                cmp = (value1 > value2) - (value1 < value2);
+                break;
+            }
+            case FOSSIL_TOFU_TYPE_HEX:
+            case FOSSIL_TOFU_TYPE_OCTAL: {
+                long long value1 = strtoll(array[i].value.data, NULL, 
+                    (array[i].type == FOSSIL_TOFU_TYPE_HEX) ? 16 : 8);
+                long long value2 = strtoll(min->value.data, NULL, 
+                    (min->type == FOSSIL_TOFU_TYPE_HEX) ? 16 : 8);
+                cmp = (value1 > value2) - (value1 < value2);
+                break;
+            }
+            case FOSSIL_TOFU_TYPE_WSTR:
+            case FOSSIL_TOFU_TYPE_CSTR:
+            case FOSSIL_TOFU_TYPE_CCHAR:
+            case FOSSIL_TOFU_TYPE_WCHAR:
+            case FOSSIL_TOFU_TYPE_ANY: {
+                cmp = strcmp(array[i].value.data, min->value.data);
+                break;
+            }
+            default:
+                cmp = 0;
+                break;
+        }
+
+        if (cmp < 0) {
             min = (fossil_tofu_t*)&array[i];
         }
     }
@@ -145,12 +249,65 @@ fossil_tofu_t* fossil_algorithm_min(const fossil_tofu_t *array, size_t size, int
     return min;
 }
 
-fossil_tofu_t* fossil_algorithm_max(const fossil_tofu_t *array, size_t size, int (*compare_fn)(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2)) {
+fossil_tofu_t* fossil_algorithm_max(const fossil_tofu_t *array, size_t size) {
     if (array == NULL || size == 0) return NULL;
 
     fossil_tofu_t *max = (fossil_tofu_t*)&array[0];
     for (size_t i = 1; i < size; i++) {
-        if (compare_fn(&array[i], max) > 0) {
+        int cmp = 0;
+
+        // Compare based on type
+        switch (array[i].type) {
+            case FOSSIL_TOFU_TYPE_I8:
+            case FOSSIL_TOFU_TYPE_I16:
+            case FOSSIL_TOFU_TYPE_I32:
+            case FOSSIL_TOFU_TYPE_I64:
+            case FOSSIL_TOFU_TYPE_U8:
+            case FOSSIL_TOFU_TYPE_U16:
+            case FOSSIL_TOFU_TYPE_U32:
+            case FOSSIL_TOFU_TYPE_U64:
+            case FOSSIL_TOFU_TYPE_SIZE: {
+                long long value1 = atoll(array[i].value.data);
+                long long value2 = atoll(max->value.data);
+                cmp = (value1 > value2) - (value1 < value2);
+                break;
+            }
+            case FOSSIL_TOFU_TYPE_FLOAT:
+            case FOSSIL_TOFU_TYPE_DOUBLE: {
+                double value1 = atof(array[i].value.data);
+                double value2 = atof(max->value.data);
+                cmp = (value1 > value2) - (value1 < value2);
+                break;
+            }
+            case FOSSIL_TOFU_TYPE_BOOL: {
+                int value1 = atoi(array[i].value.data);
+                int value2 = atoi(max->value.data);
+                cmp = (value1 > value2) - (value1 < value2);
+                break;
+            }
+            case FOSSIL_TOFU_TYPE_HEX:
+            case FOSSIL_TOFU_TYPE_OCTAL: {
+                long long value1 = strtoll(array[i].value.data, NULL, 
+                    (array[i].type == FOSSIL_TOFU_TYPE_HEX) ? 16 : 8);
+                long long value2 = strtoll(max->value.data, NULL, 
+                    (max->type == FOSSIL_TOFU_TYPE_HEX) ? 16 : 8);
+                cmp = (value1 > value2) - (value1 < value2);
+                break;
+            }
+            case FOSSIL_TOFU_TYPE_WSTR:
+            case FOSSIL_TOFU_TYPE_CSTR:
+            case FOSSIL_TOFU_TYPE_CCHAR:
+            case FOSSIL_TOFU_TYPE_WCHAR:
+            case FOSSIL_TOFU_TYPE_ANY: {
+                cmp = strcmp(array[i].value.data, max->value.data);
+                break;
+            }
+            default:
+                cmp = 0;
+                break;
+        }
+
+        if (cmp > 0) {
             max = (fossil_tofu_t*)&array[i];
         }
     }

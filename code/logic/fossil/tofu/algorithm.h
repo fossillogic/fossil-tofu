@@ -100,7 +100,7 @@ int fossil_algorithm_reverse(fossil_tofu_t *array, size_t size);
  * @param compare_fn A function pointer to a comparison function to determine the minimum.
  * @return A pointer to the minimum `fossil_tofu_t` object.
  */
-fossil_tofu_t* fossil_algorithm_min(const fossil_tofu_t *array, size_t size, int (*compare_fn)(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2));
+fossil_tofu_t* fossil_algorithm_min(const fossil_tofu_t *array, size_t size);
 
 /**
  * Function to find the maximum `fossil_tofu_t` object from an array based on a given comparison function.
@@ -110,7 +110,7 @@ fossil_tofu_t* fossil_algorithm_min(const fossil_tofu_t *array, size_t size, int
  * @param compare_fn A function pointer to a comparison function to determine the maximum.
  * @return A pointer to the maximum `fossil_tofu_t` object.
  */
-fossil_tofu_t* fossil_algorithm_max(const fossil_tofu_t *array, size_t size, int (*compare_fn)(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2));
+fossil_tofu_t* fossil_algorithm_max(const fossil_tofu_t *array, size_t size);
 
 /**
  * Function to calculate the sum of numerical values in an array of `fossil_tofu_t` objects.
@@ -227,11 +227,10 @@ namespace tofu {
          *
          * @param array The array of `fossil_tofu_t` objects.
          * @param size The number of elements in the array.
-         * @param compare_fn A function pointer to a comparison function.
          * @return A pointer to the minimum `fossil_tofu_t` object.
          */
-        static fossil_tofu_t* min(const fossil_tofu_t *array, size_t size, int (*compare_fn)(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2)) {
-            return fossil_algorithm_min(array, size, compare_fn);
+        static fossil_tofu_t* min(const fossil_tofu_t *array, size_t size) {
+            return fossil_algorithm_min(array, size);
         }
 
         /**
@@ -239,11 +238,10 @@ namespace tofu {
          *
          * @param array The array of `fossil_tofu_t` objects.
          * @param size The number of elements in the array.
-         * @param compare_fn A function pointer to a comparison function.
          * @return A pointer to the maximum `fossil_tofu_t` object.
          */
-        static fossil_tofu_t* max(const fossil_tofu_t *array, size_t size, int (*compare_fn)(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2)) {
-            return fossil_algorithm_max(array, size, compare_fn);
+        static fossil_tofu_t* max(const fossil_tofu_t *array, size_t size) {
+            return fossil_algorithm_max(array, size);
         }
 
         /**
