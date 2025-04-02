@@ -29,13 +29,13 @@ extern "C"
 typedef struct fossil_slist_node_t {
     fossil_tofu_t data;
     struct fossil_slist_node_t** forward;
-    int level;
+    size_t level;
 } fossil_slist_node_t;
 
 // Skip list structure
 typedef struct fossil_slist_t {
-    fossil_slist_node_t* header;
-    int max_level;
+    fossil_slist_node_t* head;
+    size_t max_level;
     float probability;
     char* type;
 } fossil_slist_t;
@@ -48,12 +48,10 @@ typedef struct fossil_slist_t {
  * Create a new skip list with the specified data type.
  *
  * @param list_type The type of data the skip list will store.
- * @param max_level The maximum level of the skip list.
- * @param probability The probability factor for level generation.
  * @return          The created skip list.
- * @complexity      O(1)
+ * @note            Time complexity: O(1)
  */
-fossil_slist_t* fossil_slist_create_container(char* type, int max_level, float probability);
+fossil_slist_t* fossil_slist_create_container(char* type);
 
 /**
  * Create a new skip list with default values.
@@ -65,9 +63,9 @@ fossil_slist_t* fossil_slist_create_container(char* type, int max_level, float p
 fossil_slist_t* fossil_slist_create_default(void);
 
 /**
- * Create a new skip list by copying an existing skip list.
+ * Create a new skip list by copying an existing list.
  * 
- * Time complexity: O(n)
+ * Time complexity: O(n log n)
  *
  * @param other The skip list to copy.
  * @return      The created skip list.
@@ -75,7 +73,7 @@ fossil_slist_t* fossil_slist_create_default(void);
 fossil_slist_t* fossil_slist_create_copy(const fossil_slist_t* other);
 
 /**
- * Create a new skip list by moving an existing skip list.
+ * Create a new skip list by moving an existing list.
  * 
  * Time complexity: O(1)
  *
@@ -88,7 +86,7 @@ fossil_slist_t* fossil_slist_create_move(fossil_slist_t* other);
  * Erase the contents of the skip list and free allocated memory.
  *
  * @param slist The skip list to erase.
- * @complexity  O(n)
+ * @note        Time complexity: O(n)
  */
 void fossil_slist_destroy(fossil_slist_t* slist);
 
@@ -102,7 +100,7 @@ void fossil_slist_destroy(fossil_slist_t* slist);
  * @param slist The skip list to insert data into.
  * @param data  The data to insert.
  * @return      The error code indicating the success or failure of the operation.
- * @complexity  O(log n)
+ * @note        Time complexity: O(log n)
  */
 int32_t fossil_slist_insert(fossil_slist_t* slist, char *data);
 
@@ -112,7 +110,7 @@ int32_t fossil_slist_insert(fossil_slist_t* slist, char *data);
  * @param slist The skip list to remove data from.
  * @param data  The data to remove.
  * @return      The error code indicating the success or failure of the operation.
- * @complexity  O(log n)
+ * @note        Time complexity: O(log n)
  */
 int32_t fossil_slist_remove(fossil_slist_t* slist, char *data);
 
@@ -121,7 +119,7 @@ int32_t fossil_slist_remove(fossil_slist_t* slist, char *data);
  *
  * @param slist The skip list for which to get the size.
  * @return      The size of the skip list.
- * @complexity  O(n)
+ * @note        Time complexity: O(n)
  */
 size_t fossil_slist_size(const fossil_slist_t* slist);
 
@@ -130,33 +128,71 @@ size_t fossil_slist_size(const fossil_slist_t* slist);
  *
  * @param slist The skip list to check.
  * @return      True if the skip list is not empty, false otherwise.
- * @complexity  O(1)
+ * @note        Time complexity: O(1)
  */
 bool fossil_slist_not_empty(const fossil_slist_t* slist);
+
+/**
+ * Check if the skip list is not a null pointer.
+ *
+ * @param slist The skip list to check.
+ * @return      True if the skip list is not a null pointer, false otherwise.
+ * @note        Time complexity: O(1)
+ */
+bool fossil_slist_not_cnullptr(const fossil_slist_t* slist);
 
 /**
  * Check if the skip list is empty.
  *
  * @param slist The skip list to check.
  * @return      True if the skip list is empty, false otherwise.
- * @complexity  O(1)
+ * @note        Time complexity: O(1)
  */
 bool fossil_slist_is_empty(const fossil_slist_t* slist);
+
+/**
+ * Check if the skip list is a null pointer.
+ *
+ * @param slist The skip list to check.
+ * @return      True if the skip list is a null pointer, false otherwise.
+ * @note        Time complexity: O(1)
+ */
+bool fossil_slist_is_cnullptr(const fossil_slist_t* slist);
 
 // *****************************************************************************
 // Getter and setter functions
 // *****************************************************************************
 
 /**
- * Find an element in the skip list.
+ * Search for an element in the skip list.
  * 
  * Time complexity: O(log n)
  *
- * @param slist The skip list in which to search for the element.
- * @param data  The data to search for.
- * @return      True if the element is found, false otherwise.
+ * @param slist The skip list to search in.
+ * @param key   The key to search for.
+ * @return      The element found or NULL if not found.
  */
-bool fossil_slist_find(const fossil_slist_t* slist, char *data);
+char *fossil_slist_search(const fossil_slist_t* slist, char *key);
+
+/**
+ * Get the first element in the skip list.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param slist The skip list from which to get the first element.
+ * @return      The first element in the skip list.
+ */
+char *fossil_slist_get_front(const fossil_slist_t* slist);
+
+/**
+ * Get the last element in the skip list.
+ * 
+ * Time complexity: O(1)
+ *
+ * @param slist The skip list from which to get the last element.
+ * @return      The last element in the skip list.
+ */
+char *fossil_slist_get_back(const fossil_slist_t* slist);
 
 #ifdef __cplusplus
 }
@@ -169,109 +205,78 @@ namespace tofu {
     class SList {
     public:
         /**
-         * Constructor to create a skip list with a specified data type.
+         * Constructor to create a skip list with a specified type.
          *
          * @param type The type of data the skip list will store.
-         * @param max_level The maximum level of the skip list.
-         * @param probability The probability factor for level generation.
+         * @throws std::runtime_error If the list creation fails.
          */
-        SList(char* type, int max_level, float probability) {
-            slist = fossil_slist_create_container(type, max_level, probability);
+        SList(char* type) : slist(fossil_slist_create_container(type)) {
+            if (slist == nullptr) {
+                throw std::runtime_error("Failed to create skip list.");
+            }
         }
 
         /**
          * Default constructor to create a skip list with default values.
-         */
-        SList() {
-            slist = fossil_slist_create_default();
-        }
-
-        /**
-         * Copy constructor to create a skip list by copying another skip list.
          *
-         * @param other The skip list to copy.
+         * @throws std::runtime_error If the list creation fails.
          */
-        SList(const SList& other) {
-            slist = fossil_slist_create_copy(other.slist);
+        SList() : slist(fossil_slist_create_default()) {
+            if (slist == nullptr) {
+                throw std::runtime_error("Failed to create skip list.");
+            }
         }
 
-        /**
-         * Move constructor to create a skip list by moving another skip list.
-         *
-         * @param other The skip list to move.
-         */
-        SList(SList&& other) noexcept {
-            slist = fossil_slist_create_move(other.slist);
-            other.slist = nullptr;
-        }
-
-        /**
-         * Destructor to destroy the skip list and free allocated memory.
-         */
+        // Destructor to clean up the skip list
         ~SList() {
             fossil_slist_destroy(slist);
         }
 
-        /**
-         * Insert data into the skip list.
-         *
-         * @param data The data to insert.
-         */
-        void insert(char* data) {
-            fossil_slist_insert(slist, data);
+        // Other member functions can be added here
+        // to manipulate the skip list, such as insert, remove, etc.
+        int32_t insert(char *data) {
+            return fossil_slist_insert(slist, data);
         }
 
-        /**
-         * Remove data from the skip list.
-         *
-         * @param data The data to remove.
-         */
-        void remove(char* data) {
-            fossil_slist_remove(slist, data);
+        int32_t remove(char *data) {
+            return fossil_slist_remove(slist, data);
         }
 
-        /**
-         * Get the size of the skip list.
-         *
-         * @return The size of the skip list.
-         */
         size_t size() const {
             return fossil_slist_size(slist);
         }
 
-        /**
-         * Check if the skip list is not empty.
-         *
-         * @return True if the skip list is not empty, false otherwise.
-         */
         bool not_empty() const {
             return fossil_slist_not_empty(slist);
         }
 
-        /**
-         * Check if the skip list is empty.
-         *
-         * @return True if the skip list is empty, false otherwise.
-         */
+        bool not_cnullptr() const {
+            return fossil_slist_not_cnullptr(slist);
+        }
+
         bool is_empty() const {
             return fossil_slist_is_empty(slist);
         }
 
-        /**
-         * Find an element in the skip list.
-         *
-         * @param data The data to search for.
-         * @return True if the element is found, false otherwise.
-         */
-        bool find(char* data) const {
-            return fossil_slist_find(slist, data);
+        bool is_cnullptr() const {
+            return fossil_slist_is_cnullptr(slist);
+        }
+
+        char *search(char *key) const {
+            return fossil_slist_search(slist, key);
+        }
+
+        char *get_front() const {
+            return fossil_slist_get_front(slist);
+        }
+
+        char *get_back() const {
+            return fossil_slist_get_back(slist);
         }
 
     private:
-        /**
-         * Pointer to the underlying fossil_slist_t structure.
-         */
-        fossil_slist_t* slist;
+        fossil_slist_t* slist; // Pointer to the skip list
+
     };
 
 } // namespace tofu
