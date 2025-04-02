@@ -227,55 +227,108 @@ namespace tofu {
             }
         }
 
-        // Destructor to clean up the skip list
+        /**
+         * Destructor to clean up the skip list.
+         */
         ~SList() {
             fossil_slist_destroy(slist);
         }
 
-        // Other member functions can be added here
-        // to manipulate the skip list, such as insert, remove, etc.
+        /**
+         * Insert data into the skip list.
+         *
+         * @param data The data to insert.
+         * @return     The error code indicating the success or failure of the operation.
+         */
         int32_t insert(char *data) {
             return fossil_slist_insert(slist, data);
         }
 
+        /**
+         * Remove data from the skip list.
+         *
+         * @param data The data to remove.
+         * @return     The error code indicating the success or failure of the operation.
+         */
         int32_t remove(char *data) {
             return fossil_slist_remove(slist, data);
         }
 
+        /**
+         * Get the size of the skip list.
+         *
+         * @return The size of the skip list.
+         */
         size_t size() const {
             return fossil_slist_size(slist);
         }
 
+        /**
+         * Check if the skip list is not empty.
+         *
+         * @return True if the skip list is not empty, false otherwise.
+         */
         bool not_empty() const {
             return fossil_slist_not_empty(slist);
         }
 
+        /**
+         * Check if the skip list is not a null pointer.
+         *
+         * @return True if the skip list is not a null pointer, false otherwise.
+         */
         bool not_cnullptr() const {
             return fossil_slist_not_cnullptr(slist);
         }
 
+        /**
+         * Check if the skip list is empty.
+         *
+         * @return True if the skip list is empty, false otherwise.
+         */
         bool is_empty() const {
             return fossil_slist_is_empty(slist);
         }
 
+        /**
+         * Check if the skip list is a null pointer.
+         *
+         * @return True if the skip list is a null pointer, false otherwise.
+         */
         bool is_cnullptr() const {
             return fossil_slist_is_cnullptr(slist);
         }
 
+        /**
+         * Search for an element in the skip list.
+         *
+         * @param key The key to search for.
+         * @return    The element found or NULL if not found.
+         */
         char *search(char *key) const {
             return fossil_slist_search(slist, key);
         }
 
+        /**
+         * Get the first element in the skip list.
+         *
+         * @return The first element in the skip list.
+         */
         char *get_front() const {
             return fossil_slist_get_front(slist);
         }
 
+        /**
+         * Get the last element in the skip list.
+         *
+         * @return The last element in the skip list.
+         */
         char *get_back() const {
             return fossil_slist_get_back(slist);
         }
 
     private:
-        fossil_slist_t* slist; // Pointer to the skip list
+        fossil_slist_t* slist; /**< Pointer to the skip list */
 
     };
 
