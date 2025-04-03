@@ -192,6 +192,7 @@ void fossil_stack_set(fossil_stack_t* stack, size_t index, fossil_tofu_t element
 #ifdef __cplusplus
 }
 #include <stdexcept>
+#include <string>
 
 namespace fossil {
 
@@ -209,8 +210,8 @@ namespace tofu {
              * @param type The type of data the stack will store.
              * @throws std::runtime_error If the stack creation fails.
              */
-            Stack(char* type) {
-                stack_ = fossil_stack_create_container(type);
+            Stack(const std::string& type) {
+                stack_ = fossil_stack_create_container(const_cast<char*>(type.c_str()));
                 if (!stack_) {
                     throw std::runtime_error("Failed to create stack.");
                 }
@@ -254,8 +255,8 @@ namespace tofu {
              * @param data The data to insert.
              * @return     The error code indicating the success or failure of the operation.
              */
-            int32_t insert(char *data) {
-                return fossil_stack_insert(stack_, data);
+            int32_t insert(const std::string& data) {
+                return fossil_stack_insert(stack_, const_cast<char*>(data.c_str()));
             }
 
             /**
