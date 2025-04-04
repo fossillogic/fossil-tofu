@@ -225,6 +225,7 @@ void fossil_pqueue_set_at(fossil_pqueue_t* pqueue, int32_t priority, char *eleme
 #ifdef __cplusplus
 }
 #include <stdexcept>
+#include <string>
 
 namespace fossil {
 
@@ -237,8 +238,8 @@ namespace tofu {
          *
          * @param type The type of data the priority queue will store.
          */
-        PQueue(char* type) {
-            pqueue = fossil_pqueue_create_container(type);
+        PQueue(const std::string& type) {
+            pqueue = fossil_pqueue_create_container(const_cast<char*>(type.c_str()));
             if (pqueue == nullptr) {
                 throw std::runtime_error("Failed to create priority queue.");
             }
@@ -271,11 +272,9 @@ namespace tofu {
          *
          * @param other The priority queue to move.
          */
-        PQueue(PQueue&& other) {
+        PQueue(PQueue&& other) noexcept {
             pqueue = fossil_pqueue_create_move(other.pqueue);
-            if (pqueue == nullptr) {
-                throw std::runtime_error("Failed to create priority queue.");
-            }
+            other.pqueue = nullptr;
         }
 
         /**
@@ -291,8 +290,8 @@ namespace tofu {
          * @param data     The data to insert.
          * @param priority The priority of the data.
          */
-        void insert(char *data, int32_t priority) {
-            fossil_pqueue_insert(pqueue, data, priority);
+        void insert(const std::string& data, int32_t priority) {
+            fossil_pqueue_insert(pqueue, const_cast<char*>(data.c_str()), priority);
         }
 
         /**
@@ -354,8 +353,9 @@ namespace tofu {
          * 
          * @return The element with the highest priority.
          */
-        char *get_front() const {
-            return fossil_pqueue_get_front(pqueue);
+        std::string get_front() const {
+            char* result = fossil_pqueue_get_front(pqueue);
+            return result ? std::string(result) : std::string();
         }
 
         /**
@@ -363,8 +363,9 @@ namespace tofu {
          * 
          * @return The element with the lowest priority.
          */
-        char *get_back() const {
-            return fossil_pqueue_get_back(pqueue);
+        std::string get_back() const {
+            char* result = fossil_pqueue_get_back(pqueue);
+            return result ? std::string(result) : std::string();
         }
 
         /**
@@ -373,8 +374,9 @@ namespace tofu {
          * @param priority The priority of the element to get.
          * @return         The element at the specified priority.
          */
-        char *get_at(int32_t priority) const {
-            return fossil_pqueue_get_at(pqueue, priority);
+        std::string get_at(int32_t priority) const {
+            char* result = fossil_pqueue_get_at(pqueue, priority);
+            return result ? std::string(result) : std::string();
         }
 
         /**
@@ -382,8 +384,8 @@ namespace tofu {
          * 
          * @param element The element to set.
          */
-        void set_front(char *element) {
-            fossil_pqueue_set_front(pqueue, element);
+        void set_front(const std::string& element) {
+            fossil_pqueue_set_front(pqueue, const_cast<char*>(element.c_str()));
         }
 
         /**
@@ -391,8 +393,8 @@ namespace tofu {
          * 
          * @param element The element to set.
          */
-        void set_back(char *element) {
-            fossil_pqueue_set_back(pqueue, element);
+        void set_back(const std::string& element) {
+            fossil_pqueue_set_back(pqueue, const_cast<char*>(element.c_str()));
         }
 
         /**
@@ -401,8 +403,8 @@ namespace tofu {
          * @param priority The priority at which to set the element.
          * @param element  The element to set.
          */
-        void set_at(int32_t priority, char *element) {
-            fossil_pqueue_set_at(pqueue, priority, element);
+        void set_at(int32_t priority, const std::string& element) {
+            fossil_pqueue_set_at(pqueue, priority, const_cast<char*>(element.c_str()));
         }
 
     private:
