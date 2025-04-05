@@ -1598,6 +1598,116 @@ FOSSIL_TEST_CASE(cpp_test_flist_multiple_removes_any) {
     fossil_flist_destroy(flist);
 }
 
+FOSSIL_TEST_CASE(cpp_test_flist_class_insert_and_get) {
+    fossil::tofu::FList flist("i32");
+    flist.insert("10");
+    flist.insert("20");
+    flist.insert("30");
+    ASSUME_ITS_TRUE(flist.size() == 3);
+    ASSUME_ITS_TRUE(flist.get(0) == "10");
+    ASSUME_ITS_TRUE(flist.get(1) == "20");
+    ASSUME_ITS_TRUE(flist.get(2) == "30");
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_class_remove) {
+    fossil::tofu::FList flist("i32");
+    flist.insert("10");
+    flist.insert("20");
+    flist.insert("30");
+    flist.remove();
+    ASSUME_ITS_TRUE(flist.size() == 2);
+    ASSUME_ITS_TRUE(flist.get(0) == "10");
+    ASSUME_ITS_TRUE(flist.get(1) == "20");
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_class_reverse_forward) {
+    fossil::tofu::FList flist("i32");
+    flist.insert("10");
+    flist.insert("20");
+    flist.insert("30");
+    flist.reverse_forward();
+    ASSUME_ITS_TRUE(flist.get(0) == "30");
+    ASSUME_ITS_TRUE(flist.get(1) == "20");
+    ASSUME_ITS_TRUE(flist.get(2) == "10");
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_class_reverse_backward) {
+    fossil::tofu::FList flist("i32");
+    flist.insert("10");
+    flist.insert("20");
+    flist.insert("30");
+    flist.reverse_backward();
+    ASSUME_ITS_TRUE(flist.get(0) == "30");
+    ASSUME_ITS_TRUE(flist.get(1) == "20");
+    ASSUME_ITS_TRUE(flist.get(2) == "10");
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_class_set_and_get) {
+    fossil::tofu::FList flist("i32");
+    flist.insert("10");
+    flist.insert("20");
+    flist.insert("30");
+    flist.set(1, "25");
+    ASSUME_ITS_TRUE(flist.get(0) == "10");
+    ASSUME_ITS_TRUE(flist.get(1) == "25");
+    ASSUME_ITS_TRUE(flist.get(2) == "30");
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_class_set_front_and_back) {
+    fossil::tofu::FList flist("i32");
+    flist.insert("10");
+    flist.insert("20");
+    flist.insert("30");
+    flist.set_front("5");
+    flist.set_back("35");
+    ASSUME_ITS_TRUE(flist.get_front() == "5");
+    ASSUME_ITS_TRUE(flist.get_back() == "35");
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_class_is_empty) {
+    fossil::tofu::FList flist("i32");
+    ASSUME_ITS_TRUE(flist.is_empty());
+    flist.insert("10");
+    ASSUME_ITS_TRUE(!flist.is_empty());
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_class_not_empty) {
+    fossil::tofu::FList flist("i32");
+    ASSUME_ITS_TRUE(!flist.not_empty());
+    flist.insert("10");
+    ASSUME_ITS_TRUE(flist.not_empty());
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_class_get_front_and_back) {
+    fossil::tofu::FList flist("i32");
+    flist.insert("10");
+    flist.insert("20");
+    flist.insert("30");
+    ASSUME_ITS_TRUE(flist.get_front() == "10");
+    ASSUME_ITS_TRUE(flist.get_back() == "30");
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_class_copy_constructor) {
+    fossil::tofu::FList flist1("i32");
+    flist1.insert("10");
+    flist1.insert("20");
+    fossil::tofu::FList flist2(flist1);
+    ASSUME_ITS_TRUE(flist2.size() == 2);
+    ASSUME_ITS_TRUE(flist2.get(0) == "10");
+    ASSUME_ITS_TRUE(flist2.get(1) == "20");
+}
+
+FOSSIL_TEST_CASE(cpp_test_flist_class_move_constructor) {
+    fossil::tofu::FList flist1("i32");
+    flist1.insert("10");
+    flist1.insert("20");
+    fossil::tofu::FList flist2(std::move(flist1));
+    ASSUME_ITS_TRUE(flist2.size() == 2);
+    ASSUME_ITS_TRUE(flist2.get(0) == "10");
+    ASSUME_ITS_TRUE(flist2.get(1) == "20");
+    ASSUME_ITS_TRUE(flist1.is_cnullptr());
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -1799,6 +1909,18 @@ FOSSIL_TEST_GROUP(cpp_flist_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_multiple_removes_bool);
     FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_multiple_removes_size);
     FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_multiple_removes_any);
+
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_class_insert_and_get);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_class_remove);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_class_reverse_forward);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_class_reverse_backward);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_class_set_and_get);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_class_set_front_and_back);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_class_is_empty);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_class_not_empty);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_class_get_front_and_back);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_class_copy_constructor);
+    FOSSIL_TEST_ADD(cpp_flist_tofu_fixture, cpp_test_flist_class_move_constructor);
 
     FOSSIL_TEST_REGISTER(cpp_flist_tofu_fixture);
 } // end of tests
