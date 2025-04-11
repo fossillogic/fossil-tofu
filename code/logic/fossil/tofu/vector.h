@@ -306,6 +306,7 @@ void fossil_vector_set_at(fossil_vector_t* vector, size_t index, char *element);
 #ifdef __cplusplus
 }
 #include <stdexcept>
+#include <string>
 
 namespace fossil {
 
@@ -333,7 +334,7 @@ namespace tofu {
          *
          * @param type The expected type of elements in the vector.
          */
-        Vector(char* type) : vector(fossil_vector_create_container(type)) {
+        Vector(const std::string& type) : vector(fossil_vector_create_container(const_cast<char*>(type.c_str()))) {
             if (fossil_vector_is_cnullptr(vector)) {
                 throw std::runtime_error("Failed to create vector");
             }
@@ -357,17 +358,17 @@ namespace tofu {
          *
          * @param other The vector to move.
          */
-        Vector(Vector&& other) : vector(fossil_vector_create_move(other.vector)) {
-            if (fossil_vector_is_cnullptr(vector)) {
-                throw std::runtime_error("Failed to create vector");
-            }
+        Vector(Vector&& other) noexcept : vector(fossil_vector_create_move(other.vector)) {
+            other.vector = nullptr;
         }
 
         /**
          * Destructor. Destroys the vector and frees allocated memory.
          */
         ~Vector() {
-            fossil_vector_destroy(vector);
+            if (vector) {
+                fossil_vector_destroy(vector);
+            }
         }
 
         /**
@@ -375,8 +376,8 @@ namespace tofu {
          *
          * @param element The element to add.
          */
-        void push_back(char *element) {
-            fossil_vector_push_back(vector, element);
+        void push_back(const std::string& element) {
+            fossil_vector_push_back(vector, const_cast<char*>(element.c_str()));
         }
 
         /**
@@ -384,8 +385,8 @@ namespace tofu {
          *
          * @param element The element to add.
          */
-        void push_front(char *element) {
-            fossil_vector_push_front(vector, element);
+        void push_front(const std::string& element) {
+            fossil_vector_push_front(vector, const_cast<char*>(element.c_str()));
         }
 
         /**
@@ -394,8 +395,8 @@ namespace tofu {
          * @param index   The index at which to add the element.
          * @param element The element to add.
          */
-        void push_at(size_t index, char *element) {
-            fossil_vector_push_at(vector, index, element);
+        void push_at(size_t index, const std::string& element) {
+            fossil_vector_push_at(vector, index, const_cast<char*>(element.c_str()));
         }
 
         /**
@@ -452,26 +453,8 @@ namespace tofu {
          * @param index The index of the element to get.
          * @return      The element at the specified index.
          */
-        char *get(size_t index) const {
-            return fossil_vector_get(vector, index);
-        }
-
-        /**
-         * Gets the first element in the vector.
-         *
-         * @return The first element in the vector.
-         */
-        char *get_front() const {
-            return fossil_vector_get_front(vector);
-        }
-
-        /**
-         * Gets the last element in the vector.
-         *
-         * @return The last element in the vector.
-         */
-        char *get_back() const {
-            return fossil_vector_get_back(vector);
+        std::string get(size_t index) const {
+            return std::string(fossil_vector_get(vector, index));
         }
 
         /**
@@ -480,8 +463,36 @@ namespace tofu {
          * @param index The index of the element to get.
          * @return      The element at the specified index.
          */
-        char *get_at(size_t index) const {
-            return fossil_vector_get_at(vector, index);
+        char *get(size_t index) {
+            return fossil_vector_get(vector, index);
+        }
+
+        /**
+         * Gets the first element in the vector.
+         *
+         * @return The first element in the vector.
+         */
+        std::string get_front() const {
+            return std::string(fossil_vector_get_front(vector));
+        }
+
+        /**
+         * Gets the last element in the vector.
+         *
+         * @return The last element in the vector.
+         */
+        std::string get_back() const {
+            return std::string(fossil_vector_get_back(vector));
+        }
+
+        /**
+         * Gets the element at the specified index in the vector.
+         *
+         * @param index The index of the element to get.
+         * @return      The element at the specified index.
+         */
+        std::string get_at(size_t index) const {
+            return std::string(fossil_vector_get_at(vector, index));
         }
 
         /**
@@ -490,8 +501,8 @@ namespace tofu {
          * @param index   The index at which to set the element.
          * @param element The element to set.
          */
-        void set(size_t index, char *element) {
-            fossil_vector_set(vector, index, element);
+        void set(size_t index, const std::string& element) {
+            fossil_vector_set(vector, index, const_cast<char*>(element.c_str()));
         }
 
         /**
@@ -499,8 +510,8 @@ namespace tofu {
          *
          * @param element The element to set.
          */
-        void set_front(char *element) {
-            fossil_vector_set_front(vector, element);
+        void set_front(const std::string& element) {
+            fossil_vector_set_front(vector, const_cast<char*>(element.c_str()));
         }
 
         /**
@@ -508,8 +519,8 @@ namespace tofu {
          *
          * @param element The element to set.
          */
-        void set_back(char *element) {
-            fossil_vector_set_back(vector, element);
+        void set_back(const std::string& element) {
+            fossil_vector_set_back(vector, const_cast<char*>(element.c_str()));
         }
 
         /**
@@ -518,8 +529,8 @@ namespace tofu {
          * @param index   The index at which to set the element.
          * @param element The element to set.
          */
-        void set_at(size_t index, char *element) {
-            fossil_vector_set_at(vector, index, element);
+        void set_at(size_t index, const std::string& element) {
+            fossil_vector_set_at(vector, index, const_cast<char*>(element.c_str()));
         }
 
     private:

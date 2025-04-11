@@ -203,6 +203,7 @@ void fossil_queue_set_rear(fossil_queue_t* queue, char *element);
 #ifdef __cplusplus
 }
 #include <stdexcept>
+#include <string>
 
 namespace fossil {
 
@@ -215,8 +216,8 @@ namespace tofu {
          *
          * @param type The type of data the queue will store.
          */
-        Queue(char* type) {
-            queue = fossil_queue_create_container(type);
+        Queue(const std::string& type) {
+            queue = fossil_queue_create_container(const_cast<char*>(type.c_str()));
             if (queue == nullptr) {
                 throw std::runtime_error("Failed to create queue.");
             }
@@ -267,8 +268,8 @@ namespace tofu {
          * @param data The data to insert.
          * @return     The error code indicating the success or failure of the operation.
          */
-        int32_t insert(char *data) {
-            return fossil_queue_insert(queue, data);
+        int32_t insert(const std::string& data) {
+            return fossil_queue_insert(queue, const_cast<char*>(data.c_str()));
         }
 
         /**
@@ -330,8 +331,9 @@ namespace tofu {
          *
          * @return The element at the front of the queue.
          */
-        char *get_front() const {
-            return fossil_queue_get_front(queue);
+        std::string get_front() const {
+            char* front = fossil_queue_get_front(queue);
+            return front ? std::string(front) : std::string();
         }
 
         /**
@@ -339,8 +341,9 @@ namespace tofu {
          *
          * @return The element at the rear of the queue.
          */
-        char *get_rear() const {
-            return fossil_queue_get_rear(queue);
+        std::string get_rear() const {
+            char* rear = fossil_queue_get_rear(queue);
+            return rear ? std::string(rear) : std::string();
         }
 
         /**
@@ -348,8 +351,8 @@ namespace tofu {
          *
          * @param element The element to set at the front.
          */
-        void set_front(char *element) {
-            fossil_queue_set_front(queue, element);
+        void set_front(const std::string& element) {
+            fossil_queue_set_front(queue, const_cast<char*>(element.c_str()));
         }
 
         /**
@@ -357,8 +360,8 @@ namespace tofu {
          *
          * @param element The element to set at the rear.
          */
-        void set_rear(char *element) {
-            fossil_queue_set_rear(queue, element);
+        void set_rear(const std::string& element) {
+            fossil_queue_set_rear(queue, const_cast<char*>(element.c_str()));
         }
 
     private:

@@ -133,125 +133,101 @@ bool fossil_setof_is_empty(const fossil_setof_t* set);
 #ifdef __cplusplus
 }
 #include <stdexcept>
+#include <string>
 
 namespace fossil {
 
 namespace tofu {
 
+    /**
+     * @class SetOf
+     * @brief A C++ wrapper class for managing a set of elements using the Fossil Logic library.
+     */
     class SetOf {
     public:
         /**
          * @brief Constructs a new SetOf object with the specified type.
-         *
+         * 
          * @param type The type of elements that the set will contain.
+         * @throws std::runtime_error If the set container cannot be created.
          */
-        SetOf(char* type) {
-            set = fossil_setof_create_container(type);
-            if (set == nullptr) {
-                throw std::runtime_error("Failed to create set container");
+        SetOf(const std::string& type) {
+            set_ = fossil_setof_create_container(const_cast<char*>(type.c_str()));
+            if (!set_) {
+                throw std::runtime_error("Failed to create set container.");
             }
         }
 
         /**
-         * @brief Constructs a new SetOf object with default settings.
-         */
-        SetOf() {
-            set = fossil_setof_create_default();
-            if (set == nullptr) {
-                throw std::runtime_error("Failed to create set container");
-            }
-        }
-
-        /**
-         * @brief Constructs a new SetOf object by copying another SetOf object.
-         *
-         * @param other The SetOf object to copy.
-         */
-        SetOf(const SetOf& other) {
-            set = fossil_setof_create_copy(other.set);
-            if (set == nullptr) {
-                throw std::runtime_error("Failed to create set container");
-            }
-        }
-
-        /**
-         * @brief Constructs a new SetOf object by moving another SetOf object.
-         *
-         * @param other The SetOf object to move.
-         */
-        SetOf(SetOf&& other) {
-            set = fossil_setof_create_move(other.set);
-            if (set == nullptr) {
-                throw std::runtime_error("Failed to create set container");
-            }
-        }
-
-        /**
-         * @brief Destroys the SetOf object and frees its resources.
+         * @brief Destroys the SetOf object and releases its resources.
          */
         ~SetOf() {
-            fossil_setof_destroy(set);
+            fossil_setof_destroy(set_);
         }
 
         /**
-         * @brief Inserts data into the set.
-         *
-         * @param data The data to insert.
-         * @return An integer indicating success (0) or failure (non-zero).
+         * @brief Inserts a new element into the set.
+         * 
+         * @param data The element to insert into the set.
+         * @throws std::runtime_error If the insertion fails.
          */
-        int32_t insert(char *data) {
-            return fossil_setof_insert(set, data);
+        void insert(const std::string& data) {
+            if (fossil_setof_insert(set_, const_cast<char*>(data.c_str())) != 0) {
+                throw std::runtime_error("Failed to insert data into set.");
+            }
         }
 
         /**
-         * @brief Removes data from the set.
-         *
-         * @param data The data to remove.
-         * @return An integer indicating success (0) or failure (non-zero).
+         * @brief Removes an element from the set.
+         * 
+         * @param data The element to remove from the set.
+         * @throws std::runtime_error If the removal fails.
          */
-        int32_t remove(char *data) {
-            return fossil_setof_remove(set, data);
+        void remove(const std::string& data) {
+            if (fossil_setof_remove(set_, const_cast<char*>(data.c_str())) != 0) {
+                throw std::runtime_error("Failed to remove data from set.");
+            }
         }
 
         /**
-         * @brief Checks if the set contains the specified data.
-         *
-         * @param data The data to check for.
-         * @return True if the set contains the data, false otherwise.
+         * @brief Checks if the set contains the specified element.
+         * 
+         * @param data The element to check for.
+         * @return True if the set contains the element, false otherwise.
          */
-        bool contains(char *data) {
-            return fossil_setof_contains(set, data);
+        bool contains(const std::string& data) const {
+            return fossil_setof_contains(set_, const_cast<char*>(data.c_str()));
         }
 
         /**
          * @brief Gets the number of elements in the set.
-         *
+         * 
          * @return The number of elements in the set.
          */
-        size_t size() {
-            return fossil_setof_size(set);
+        size_t size() const {
+            return fossil_setof_size(set_);
         }
 
         /**
          * @brief Checks if the set is not empty.
-         *
+         * 
          * @return True if the set is not empty, false otherwise.
          */
-        bool not_empty() {
-            return fossil_setof_not_empty(set);
+        bool not_empty() const {
+            return fossil_setof_not_empty(set_);
         }
 
         /**
          * @brief Checks if the set is empty.
-         *
+         * 
          * @return True if the set is empty, false otherwise.
          */
-        bool is_empty() {
-            return fossil_setof_is_empty(set);
+        bool is_empty() const {
+            return fossil_setof_is_empty(set_);
         }
 
     private:
-        fossil_setof_t* set; ///< Pointer to the underlying set structure.
+        fossil_setof_t* set_; /**< Pointer to the underlying C set structure. */
     };
 
 } // namespace tofu
