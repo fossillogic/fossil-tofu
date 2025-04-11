@@ -426,12 +426,12 @@ namespace tofu {
         }
 
         std::string get_front() const {
-            const char* front = fossil_flist_front(flist);
+            const char* front = fossil_flist_get_front(flist);
             return front ? std::string(front) : "";
         }
         
         std::string get_back() const {
-            const char* back = fossil_flist_back(flist);
+            const char* back = fossil_flist_get_back(flist);
             return back ? std::string(back) : "";
         }
 
