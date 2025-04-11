@@ -425,6 +425,16 @@ namespace tofu {
             fossil_flist_set_back(flist, const_cast<char*>(value.c_str()));
         }
 
+        std::string get_front() const {
+            const char* front = fossil_flist_front(flist);
+            return front ? std::string(front) : "";
+        }
+        
+        std::string get_back() const {
+            const char* back = fossil_flist_back(flist);
+            return back ? std::string(back) : "";
+        }
+
         /**
          * Copy assignment operator.
          */
