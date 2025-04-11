@@ -258,7 +258,7 @@ namespace tofu {
          * @param type The type of data the forward list will store.
          */
         FList(const std::string& type) {
-            flist = fossil_flist_create_container(type.c_str());
+            flist = fossil_flist_create_container(const_cast<char*>(type.c_str()));
         }
     
         /**
@@ -300,7 +300,7 @@ namespace tofu {
          * @param data The data to insert.
          */
         void insert(const std::string& data) {
-            fossil_flist_insert(flist, data.c_str());
+            fossil_flist_insert(flist, const_cast<char*>(data.c_str()));
         }
     
         /**
