@@ -376,63 +376,90 @@ namespace tofu {
          * @return      The element at the specified index as a string.
          */
         std::string get(size_t index) const {
-            const char* result = fossil_flist_get(flist, index);
-            return result ? std::string(result) : "";
+            return fossil_flist_get(flist, index);
         }
-    
+
         /**
          * Get the first element in the forward list.
          *
          * @return The first element in the forward list as a string.
          */
-        std::string get_front() const {
-            const char* result = fossil_flist_get_front(flist);
-            return result ? std::string(result) : "";
+        std::string front() const {
+            return fossil_flist_get_front(flist);
         }
-    
+
         /**
          * Get the last element in the forward list.
          *
          * @return The last element in the forward list as a string.
          */
-        std::string get_back() const {
-            const char* result = fossil_flist_get_back(flist);
-            return result ? std::string(result) : "";
+        std::string back() const {
+            return fossil_flist_get_back(flist);
         }
-    
+
         /**
          * Set the element at the specified index in the forward list.
          *
-         * @param index   The index at which to set the element.
-         * @param element The element to set.
+         * @param index The index at which to set the element.
+         * @param value The element to set.
          */
-        void set(size_t index, const std::string& element) {
-            fossil_flist_set(flist, index, element.c_str());
+        void set(size_t index, const std::string& value) {
+            fossil_flist_set(flist, index, const_cast<char*>(value.c_str()));
         }
-    
+
         /**
          * Set the first element in the forward list.
          *
-         * @param element The element to set.
+         * @param value The element to set.
          */
-        void set_front(const std::string& element) {
-            fossil_flist_set_front(flist, element.c_str());
+        void set_front(const std::string& value) {
+            fossil_flist_set_front(flist, const_cast<char*>(value.c_str()));
         }
-    
+
         /**
          * Set the last element in the forward list.
          *
-         * @param element The element to set.
+         * @param value The element to set.
          */
-        void set_back(const std::string& element) {
-            fossil_flist_set_back(flist, element.c_str());
+        void set_back(const std::string& value) {
+            fossil_flist_set_back(flist, const_cast<char*>(value.c_str()));
         }
-    
-    private:
+
         /**
-         * Pointer to the underlying fossil_flist_t structure.
+         * Copy assignment operator.
          */
-        fossil_flist_t* flist;
+        FList& operator=(const FList& other) {
+            if (this != &other) {
+                fossil_flist_destroy(flist);
+                flist = fossil_flist_create_copy(other.flist);
+            }
+            return *this;
+        }
+
+        /**
+         * Move assignment operator.
+         */
+        FList& operator=(FList&& other) noexcept {
+            if (this != &other) {
+                fossil_flist_destroy(flist);
+                flist = other.flist;
+                other.flist = nullptr;
+            }
+            return *this;
+        }
+
+        /**
+         * Get raw pointer to underlying fossil_flist_t.
+         */
+        fossil_flist_t* raw() { return flist; }
+
+        /**
+         * Get const raw pointer to underlying fossil_flist_t.
+         */
+        const fossil_flist_t* raw() const { return flist; }
+
+    private:
+        fossil_flist_t* flist = nullptr;
     };
 
 } // namespace tofu
