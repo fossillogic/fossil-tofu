@@ -115,17 +115,12 @@ FOSSIL_TEST(c_test_tofu_struct_equals) {
 
 FOSSIL_TEST(c_test_tofu_struct_type_info) {
     fossil_tofu_t tofu = fossil_tofu_create("i32", "42");
-    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_type_name(&tofu), "Signed 32-bit Integer");
-    const char* type_info = fossil_tofu_get_type_info(&tofu);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_type_name(&tofu), "Signed 32-bit Integer");
+    const char* type_info = fossil_tofu_type_info(&tofu);
     ASSUME_ITS_TRUE(type_info != NULL && type_info[0] != '\0');
     ASSUME_ITS_EQUAL_CSTR(type_info, "Signed 32-bit Integer");
     fossil_tofu_destroy(&tofu);
 }
-
-
-
-
-
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
