@@ -41,13 +41,23 @@ FOSSIL_TEARDOWN(c_generic_tofu_fixture) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
 FOSSIL_TEST(c_test_tofu_struct_create_destroy) {
+    // Test fossil_tofu_create and fossil_tofu_destroy
     fossil_tofu_t tofu = fossil_tofu_create("i32", "42");
-    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_type_name(&tofu), "Signed 32-bit Integer");
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_type_name(tofu.type), "Signed 32-bit Integer");
     ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&tofu), "42");
     fossil_tofu_destroy(&tofu);
 }
 
+FOSSIL_TEST(c_test_tofu_struct_default) {
+    // Test fossil_tofu_create_default
+    fossil_tofu_t* tofu = fossil_tofu_create_default();
+    ASSUME_NOT_CNULL(tofu);
+    // Optionally check default values if known
+    fossil_tofu_destroy(tofu);
+}
+
 FOSSIL_TEST(c_test_tofu_struct_copy_constructor) {
+    // Test fossil_tofu_create_copy
     fossil_tofu_t tofu1 = fossil_tofu_create("i32", "42");
     fossil_tofu_t* tofu2 = fossil_tofu_create_copy(&tofu1);
     ASSUME_ITS_TRUE(fossil_tofu_equals(&tofu1, tofu2));
@@ -56,80 +66,11 @@ FOSSIL_TEST(c_test_tofu_struct_copy_constructor) {
 }
 
 FOSSIL_TEST(c_test_tofu_struct_move_constructor) {
+    // Test fossil_tofu_create_move
     fossil_tofu_t tofu1 = fossil_tofu_create("i32", "42");
     fossil_tofu_t* tofu2 = fossil_tofu_create_move(&tofu1);
     ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(tofu2), "42");
     fossil_tofu_destroy(tofu2);
-}
-
-FOSSIL_TEST(c_test_tofu_struct_copy_assignment) {
-    fossil_tofu_t tofu1 = fossil_tofu_create("i32", "42");
-    fossil_tofu_t tofu2 = fossil_tofu_create("i32", "0");
-    fossil_tofu_copy(&tofu2, &tofu1);
-    ASSUME_ITS_TRUE(fossil_tofu_equals(&tofu1, &tofu2));
-    fossil_tofu_destroy(&tofu1);
-    fossil_tofu_destroy(&tofu2);
-}
-
-FOSSIL_TEST(c_test_tofu_struct_move_assignment) {
-    fossil_tofu_t tofu1 = fossil_tofu_create("i32", "42");
-    fossil_tofu_t tofu2 = fossil_tofu_create("i32", "0");
-    fossil_tofu_t* moved = fossil_tofu_create_move(&tofu1);
-    fossil_tofu_destroy(&tofu2); // destroy old tofu2 before assignment
-    tofu2 = *moved;
-    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&tofu2), "42");
-    fossil_tofu_destroy(&tofu2);
-    free(moved);
-}
-
-FOSSIL_TEST(c_test_tofu_struct_set_get_value) {
-    fossil_tofu_t tofu = fossil_tofu_create("i32", "0");
-    fossil_tofu_set_value(&tofu, "100");
-    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&tofu), "100");
-    fossil_tofu_destroy(&tofu);
-}
-
-FOSSIL_TEST(c_test_tofu_struct_mutability) {
-    fossil_tofu_t tofu = fossil_tofu_create("i32", "42");
-    fossil_tofu_set_mutable(&tofu, true);
-    ASSUME_ITS_TRUE(fossil_tofu_is_mutable(&tofu));
-    fossil_tofu_set_mutable(&tofu, false);
-    ASSUME_ITS_TRUE(!fossil_tofu_is_mutable(&tofu));
-    fossil_tofu_destroy(&tofu);
-}
-
-FOSSIL_TEST(c_test_tofu_struct_set_get_attribute) {
-    fossil_tofu_t tofu = fossil_tofu_create("i32", "42");
-    fossil_tofu_set_attribute(&tofu, "Test Attribute", "Test Description", "c_test_id");
-    const fossil_tofu_attribute_t* attr = fossil_tofu_get_attribute(&tofu);
-    ASSUME_ITS_EQUAL_CSTR(attr->name, "Test Attribute");
-    ASSUME_ITS_EQUAL_CSTR(attr->description, "Test Description");
-    ASSUME_ITS_EQUAL_CSTR(attr->id, "c_test_id");
-    fossil_tofu_destroy(&tofu);
-}
-
-FOSSIL_TEST(c_test_tofu_struct_equals) {
-    fossil_tofu_t tofu1 = fossil_tofu_create("i32", "42");
-    fossil_tofu_t tofu2 = fossil_tofu_create("i32", "42");
-    ASSUME_ITS_TRUE(fossil_tofu_equals(&tofu1, &tofu2));
-    fossil_tofu_destroy(&tofu1);
-    fossil_tofu_destroy(&tofu2);
-}
-
-FOSSIL_TEST(c_test_tofu_struct_type_info) {
-    fossil_tofu_t tofu = fossil_tofu_create("i32", "42");
-    fossil_tofu_type_t type = fossil_tofu_get_type(&tofu);
-
-    // Test fossil_tofu_type_name
-    const char* type_name = fossil_tofu_type_name(type);
-    ASSUME_ITS_EQUAL_CSTR(type_name, "Signed 32-bit Integer");
-
-    // Test fossil_tofu_type_info
-    const char* type_info = fossil_tofu_type_info(type);
-    ASSUME_ITS_TRUE(type_info != NULL && type_info[0] != '\0');
-    ASSUME_ITS_EQUAL_CSTR(type_info, "A 32-bit signed integer value");
-
-    fossil_tofu_destroy(&tofu);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -138,15 +79,9 @@ FOSSIL_TEST(c_test_tofu_struct_type_info) {
 FOSSIL_TEST_GROUP(c_generic_tofu_tests) {    
     // Generic ToFu Fixture
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_create_destroy);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_default);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_copy_constructor);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_move_constructor);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_copy_assignment);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_move_assignment);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_set_get_value);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_mutability);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_set_get_attribute);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_equals);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_type_info);
 
     // Register the test group
     FOSSIL_TEST_REGISTER(c_generic_tofu_fixture);

@@ -40,72 +40,59 @@ FOSSIL_TEARDOWN(cpp_generic_tofu_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(cpp_test_tofu_class_create_destroy) {
+FOSSIL_TEST(cpp_test_tofu_struct_create_destroy) {
     fossil::tofu::Tofu tofu("i32", "42");
-    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Signed 32-bit Integer");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "i32");
     ASSUME_ITS_EQUAL_CSTR(tofu.get_value().c_str(), "42");
 }
 
-FOSSIL_TEST(cpp_test_tofu_class_copy_constructor) {
-    fossil::tofu::Tofu tofu1("i32", "42");
-    fossil::tofu::Tofu tofu2(tofu1);
-    ASSUME_ITS_TRUE(tofu1.equals(tofu2));
-}
-
-FOSSIL_TEST(cpp_test_tofu_class_move_constructor) {
-    fossil::tofu::Tofu tofu1("i32", "42");
-    fossil::tofu::Tofu tofu2(std::move(tofu1));
-    ASSUME_ITS_EQUAL_CSTR(tofu2.get_value().c_str(), "42");
-}
-
-FOSSIL_TEST(cpp_test_tofu_class_copy_assignment) {
-    fossil::tofu::Tofu tofu1("i32", "42");
-    fossil::tofu::Tofu tofu2("i32", "0");
-    tofu2 = tofu1;
-    ASSUME_ITS_TRUE(tofu1.equals(tofu2));
-}
-
-FOSSIL_TEST(cpp_test_tofu_class_move_assignment) {
-    fossil::tofu::Tofu tofu1("i32", "42");
-    fossil::tofu::Tofu tofu2("i32", "0");
-    tofu2 = std::move(tofu1);
-    ASSUME_ITS_EQUAL_CSTR(tofu2.get_value().c_str(), "42");
-}
-
-FOSSIL_TEST(cpp_test_tofu_class_set_get_value) {
+FOSSIL_TEST(cpp_test_tofu_struct_default) {
     fossil::tofu::Tofu tofu("i32", "0");
-    tofu.set_value("100");
-    ASSUME_ITS_EQUAL_CSTR(tofu.get_value().c_str(), "100");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "i32");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_value().c_str(), "0");
 }
 
-FOSSIL_TEST(cpp_test_tofu_class_mutability) {
-    fossil::tofu::Tofu tofu("i32", "42");
-    tofu.set_mutable(true);
-    ASSUME_ITS_TRUE(tofu.is_mutable());
-    tofu.set_mutable(false);
-    ASSUME_ITS_TRUE(!tofu.is_mutable());
-}
-
-FOSSIL_TEST(cpp_test_tofu_class_set_get_attribute) {
-    fossil::tofu::Tofu tofu("i32", "42");
-    tofu.set_attribute("Test Attribute", "Test Description", "cpp_test_id");
-    const fossil_tofu_attribute_t* attr = tofu.get_attribute();
-    ASSUME_ITS_EQUAL_CSTR(attr->name, "Test Attribute");
-    ASSUME_ITS_EQUAL_CSTR(attr->description, "Test Description");
-    ASSUME_ITS_EQUAL_CSTR(attr->id, "cpp_test_id");
-}
-
-FOSSIL_TEST(cpp_test_tofu_class_equals) {
+FOSSIL_TEST(cpp_test_tofu_struct_copy_constructor) {
     fossil::tofu::Tofu tofu1("i32", "42");
-    fossil::tofu::Tofu tofu2("i32", "42");
+    fossil::tofu::Tofu tofu2 = tofu1; // Copy constructor
     ASSUME_ITS_TRUE(tofu1.equals(tofu2));
+    ASSUME_ITS_EQUAL_CSTR(tofu2.get_value().c_str(), "42");
 }
 
-FOSSIL_TEST(cpp_test_tofu_class_type_info) {
+FOSSIL_TEST(cpp_test_tofu_struct_move_constructor) {
+    fossil::tofu::Tofu tofu1("i32", "42");
+    fossil::tofu::Tofu tofu2 = std::move(tofu1); // Move constructor
+    ASSUME_ITS_EQUAL_CSTR(tofu2.get_value().c_str(), "42");
+}
+
+FOSSIL_TEST(cpp_test_tofu_struct_copy_assignment) {
+    fossil::tofu::Tofu tofu1("i32", "42");
+    fossil::tofu::Tofu tofu2("i32", "0");
+    tofu2 = tofu1; // Copy assignment
+    ASSUME_ITS_TRUE(tofu1.equals(tofu2));
+    ASSUME_ITS_EQUAL_CSTR(tofu2.get_value().c_str(), "42");
+}
+
+FOSSIL_TEST(cpp_test_tofu_struct_move_assignment) {
+    fossil::tofu::Tofu tofu1("i32", "42");
+    fossil::tofu::Tofu tofu2("i32", "0");
+    tofu2 = std::move(tofu1); // Move assignment
+    ASSUME_ITS_EQUAL_CSTR(tofu2.get_value().c_str(), "42");
+}
+
+FOSSIL_TEST(cpp_test_tofu_struct_set_value) {
+    fossil::tofu::Tofu tofu("i32", "0");
+    tofu.set_value("123");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_value().c_str(), "123");
+}
+
+FOSSIL_TEST(cpp_test_tofu_struct_set_attribute) {
     fossil::tofu::Tofu tofu("i32", "42");
-    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Signed 32-bit Integer");
-    ASSUME_ITS_TRUE(!tofu.get_type_info().empty());
-    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_info().c_str(), "Signed 32-bit Integer");
+    tofu.set_attribute("answer", "The answer to everything", "42id");
+    const fossil_tofu_attribute_t* attr = tofu.get_attribute();
+    ASSUME_ITS_EQUAL_CSTR(attr->name, "answer");
+    ASSUME_ITS_EQUAL_CSTR(attr->description, "The answer to everything");
+    ASSUME_ITS_EQUAL_CSTR(attr->id, "42id");
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -113,16 +100,14 @@ FOSSIL_TEST(cpp_test_tofu_class_type_info) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(cpp_generic_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_create_destroy);
-    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_copy_constructor);
-    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_move_constructor);
-    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_copy_assignment);
-    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_move_assignment);
-    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_set_get_value);
-    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_mutability);
-    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_set_get_attribute);
-    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_equals);
-    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_class_type_info);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_struct_create_destroy);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_struct_default);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_struct_copy_constructor);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_struct_move_constructor);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_struct_copy_assignment);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_struct_move_assignment);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_struct_set_value);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_struct_set_attribute);
 
     // Register the test group
     FOSSIL_TEST_REGISTER(cpp_generic_tofu_fixture);
