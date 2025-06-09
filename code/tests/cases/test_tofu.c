@@ -42,7 +42,7 @@ FOSSIL_TEARDOWN(c_generic_tofu_fixture) {
 
 FOSSIL_TEST(c_test_tofu_struct_create_destroy) {
     fossil_tofu_t tofu = fossil_tofu_create("i32", "42");
-    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_type_name(&tofu), "Signed 32-bit Integer");
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_type_name(&tofu), "Signed 32-bit Integer");
     ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&tofu), "42");
     fossil_tofu_destroy(&tofu);
 }
