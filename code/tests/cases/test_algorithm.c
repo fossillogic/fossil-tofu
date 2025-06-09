@@ -1331,6 +1331,7 @@ FOSSIL_TEST_GROUP(c_algorithm_tests) {
     // Generic ToFu Fixture
     FOSSIL_TEST_ADD(c_algorithm_fixture, c_test_algorithm_compare_i8);
     FOSSIL_TEST_ADD(c_algorithm_fixture, c_test_algorithm_compare_i16);
+    FOSSIL_TEST_ADD(c_algorithm_fixture, c_test_algorithm_compare_i32);
     FOSSIL_TEST_ADD(c_algorithm_fixture, c_test_algorithm_compare_i64);
     FOSSIL_TEST_ADD(c_algorithm_fixture, c_test_algorithm_compare_u8);
     FOSSIL_TEST_ADD(c_algorithm_fixture, c_test_algorithm_compare_u16);
