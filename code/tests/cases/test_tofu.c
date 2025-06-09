@@ -74,9 +74,12 @@ FOSSIL_TEST(c_test_tofu_struct_copy_assignment) {
 FOSSIL_TEST(c_test_tofu_struct_move_assignment) {
     fossil_tofu_t tofu1 = fossil_tofu_create("i32", "42");
     fossil_tofu_t tofu2 = fossil_tofu_create("i32", "0");
-    fossil_tofu_move(&tofu2, &tofu1);
+    fossil_tofu_t* moved = fossil_tofu_create_move(&tofu1);
+    fossil_tofu_destroy(&tofu2); // destroy old tofu2 before assignment
+    tofu2 = *moved;
     ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&tofu2), "42");
     fossil_tofu_destroy(&tofu2);
+    free(moved);
 }
 
 FOSSIL_TEST(c_test_tofu_struct_set_get_value) {
