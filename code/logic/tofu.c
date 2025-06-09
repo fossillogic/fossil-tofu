@@ -257,8 +257,8 @@ const char* fossil_tofu_type_name(fossil_tofu_type_t type) {
 }
 
 const char* fossil_tofu_type_info(fossil_tofu_type_t type) {
-    if (type >= 0 && type < sizeof(_TOFU_TYPE_NAME) / sizeof(_TOFU_TYPE_NAME[0])) {
-        return _TOFU_TYPE_NAME[type];
+    if (type >= 0 && type < sizeof(_TOFU_TYPE_INFO) / sizeof(_TOFU_TYPE_INFO[0])) {
+        return _TOFU_TYPE_INFO[type];
     }
     return "No type info available.";
 }
