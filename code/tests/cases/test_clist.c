@@ -11,7 +11,7 @@
  * Copyright (C) 2024 Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/test/framework.h>
+#include <fossil/pizza/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -22,7 +22,7 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST_SUITE(c_clist_tofu_fixture);
+FOSSIL_SUITE(c_clist_tofu_fixture);
 
 FOSSIL_SETUP(c_clist_tofu_fixture) {
     // Setup the test fixture
@@ -40,14 +40,14 @@ FOSSIL_TEARDOWN(c_clist_tofu_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST_CASE(c_test_clist_insert) {
+FOSSIL_TEST(c_test_clist_insert) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     ASSUME_ITS_TRUE(fossil_clist_insert(clist, "42") == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_clist_size(clist) == 1);
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST_CASE(c_test_clist_remove) {
+FOSSIL_TEST(c_test_clist_remove) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     fossil_clist_insert(clist, "42");
     ASSUME_ITS_TRUE(fossil_clist_remove(clist) == FOSSIL_TOFU_SUCCESS);
@@ -55,20 +55,20 @@ FOSSIL_TEST_CASE(c_test_clist_remove) {
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST_CASE(c_test_clist_not_empty) {
+FOSSIL_TEST(c_test_clist_not_empty) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     fossil_clist_insert(clist, "42");
     ASSUME_ITS_TRUE(fossil_clist_not_empty(clist) == true);
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST_CASE(c_test_clist_not_cnullptr) {
+FOSSIL_TEST(c_test_clist_not_cnullptr) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     ASSUME_ITS_TRUE(fossil_clist_not_cnullptr(clist) == true);
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST_CASE(c_test_clist_is_empty) {
+FOSSIL_TEST(c_test_clist_is_empty) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     ASSUME_ITS_TRUE(fossil_clist_is_empty(clist) == true);
     fossil_clist_insert(clist, "42");
@@ -76,12 +76,12 @@ FOSSIL_TEST_CASE(c_test_clist_is_empty) {
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST_CASE(c_test_clist_is_cnullptr) {
+FOSSIL_TEST(c_test_clist_is_cnullptr) {
     fossil_clist_t* clist = NULL;
     ASSUME_ITS_TRUE(fossil_clist_is_cnullptr(clist) == true);
 }
 
-FOSSIL_TEST_CASE(c_test_clist_reverse) {
+FOSSIL_TEST(c_test_clist_reverse) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     fossil_clist_insert(clist, "1");
     fossil_clist_insert(clist, "2");
@@ -92,7 +92,7 @@ FOSSIL_TEST_CASE(c_test_clist_reverse) {
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST_CASE(c_test_clist_size) {
+FOSSIL_TEST(c_test_clist_size) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     fossil_clist_insert(clist, "1");
     fossil_clist_insert(clist, "2");
@@ -100,7 +100,7 @@ FOSSIL_TEST_CASE(c_test_clist_size) {
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST_CASE(c_test_clist_insert_multiple) {
+FOSSIL_TEST(c_test_clist_insert_multiple) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     ASSUME_ITS_TRUE(fossil_clist_insert(clist, "1") == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_clist_insert(clist, "2") == FOSSIL_TOFU_SUCCESS);
@@ -109,7 +109,7 @@ FOSSIL_TEST_CASE(c_test_clist_insert_multiple) {
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST_CASE(c_test_clist_remove_multiple) {
+FOSSIL_TEST(c_test_clist_remove_multiple) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     fossil_clist_insert(clist, "1");
     fossil_clist_insert(clist, "2");

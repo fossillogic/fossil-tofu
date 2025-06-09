@@ -11,7 +11,7 @@
  * Copyright (C) 2024 Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/test/framework.h>
+#include <fossil/pizza/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -22,7 +22,7 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST_SUITE(c_slist_tofu_fixture);
+FOSSIL_SUITE(c_slist_tofu_fixture);
 
 FOSSIL_SETUP(c_slist_tofu_fixture) {
     // Setup the test fixture
@@ -40,21 +40,21 @@ FOSSIL_TEARDOWN(c_slist_tofu_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST_CASE(c_test_slist_create_container) {
+FOSSIL_TEST(c_test_slist_create_container) {
     fossil_slist_t* slist = fossil_slist_create_container("i32");
     ASSUME_ITS_TRUE(slist != NULL);
     ASSUME_ITS_TRUE(strcmp(slist->type, "i32") == 0);
     fossil_slist_destroy(slist);
 }
 
-FOSSIL_TEST_CASE(c_test_slist_create_default) {
+FOSSIL_TEST(c_test_slist_create_default) {
     fossil_slist_t* slist = fossil_slist_create_default();
     ASSUME_ITS_TRUE(slist != NULL);
     ASSUME_ITS_TRUE(strcmp(slist->type, "any") == 0);
     fossil_slist_destroy(slist);
 }
 
-FOSSIL_TEST_CASE(c_test_slist_create_copy) {
+FOSSIL_TEST(c_test_slist_create_copy) {
     fossil_slist_t* slist1 = fossil_slist_create_container("i32");
     fossil_slist_insert(slist1, "42");
     fossil_slist_t* slist2 = fossil_slist_create_copy(slist1);
@@ -65,7 +65,7 @@ FOSSIL_TEST_CASE(c_test_slist_create_copy) {
     fossil_slist_destroy(slist2);
 }
 
-FOSSIL_TEST_CASE(c_test_slist_create_move) {
+FOSSIL_TEST(c_test_slist_create_move) {
     fossil_slist_t* slist1 = fossil_slist_create_container("i32");
     fossil_slist_insert(slist1, "42");
     fossil_slist_t* slist2 = fossil_slist_create_move(slist1);
@@ -75,14 +75,14 @@ FOSSIL_TEST_CASE(c_test_slist_create_move) {
     fossil_slist_destroy(slist2);
 }
 
-FOSSIL_TEST_CASE(c_test_slist_insert) {
+FOSSIL_TEST(c_test_slist_insert) {
     fossil_slist_t* slist = fossil_slist_create_container("i32");
     ASSUME_ITS_TRUE(fossil_slist_insert(slist, "42") == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_slist_size(slist) == 1);
     fossil_slist_destroy(slist);
 }
 
-FOSSIL_TEST_CASE(c_test_slist_remove) {
+FOSSIL_TEST(c_test_slist_remove) {
     fossil_slist_t* slist = fossil_slist_create_container("i32");
     fossil_slist_insert(slist, "42");
     ASSUME_ITS_TRUE(fossil_slist_remove(slist, "42") == FOSSIL_TOFU_SUCCESS);
@@ -90,20 +90,20 @@ FOSSIL_TEST_CASE(c_test_slist_remove) {
     fossil_slist_destroy(slist);
 }
 
-FOSSIL_TEST_CASE(c_test_slist_not_empty) {
+FOSSIL_TEST(c_test_slist_not_empty) {
     fossil_slist_t* slist = fossil_slist_create_container("i32");
     fossil_slist_insert(slist, "42");
     ASSUME_ITS_TRUE(fossil_slist_not_empty(slist) == true);
     fossil_slist_destroy(slist);
 }
 
-FOSSIL_TEST_CASE(c_test_slist_not_cnullptr) {
+FOSSIL_TEST(c_test_slist_not_cnullptr) {
     fossil_slist_t* slist = fossil_slist_create_container("i32");
     ASSUME_ITS_TRUE(fossil_slist_not_cnullptr(slist) == true);
     fossil_slist_destroy(slist);
 }
 
-FOSSIL_TEST_CASE(c_test_slist_is_empty) {
+FOSSIL_TEST(c_test_slist_is_empty) {
     fossil_slist_t* slist = fossil_slist_create_container("i32");
     ASSUME_ITS_TRUE(fossil_slist_is_empty(slist) == true);
     fossil_slist_insert(slist, "42");
@@ -111,26 +111,26 @@ FOSSIL_TEST_CASE(c_test_slist_is_empty) {
     fossil_slist_destroy(slist);
 }
 
-FOSSIL_TEST_CASE(c_test_slist_is_cnullptr) {
+FOSSIL_TEST(c_test_slist_is_cnullptr) {
     fossil_slist_t* slist = NULL;
     ASSUME_ITS_TRUE(fossil_slist_is_cnullptr(slist) == true);
 }
 
-FOSSIL_TEST_CASE(c_test_slist_search) {
+FOSSIL_TEST(c_test_slist_search) {
     fossil_slist_t* slist = fossil_slist_create_container("i32");
     fossil_slist_insert(slist, "42");
     ASSUME_ITS_TRUE(strcmp(fossil_slist_search(slist, "42"), "42") == 0);
     fossil_slist_destroy(slist);
 }
 
-FOSSIL_TEST_CASE(c_test_slist_get_front) {
+FOSSIL_TEST(c_test_slist_get_front) {
     fossil_slist_t* slist = fossil_slist_create_container("i32");
     fossil_slist_insert(slist, "42");
     ASSUME_ITS_TRUE(strcmp(fossil_slist_get_front(slist), "42") == 0);
     fossil_slist_destroy(slist);
 }
 
-FOSSIL_TEST_CASE(c_test_slist_get_back) {
+FOSSIL_TEST(c_test_slist_get_back) {
     fossil_slist_t* slist = fossil_slist_create_container("i32");
     fossil_slist_insert(slist, "42");
     ASSUME_ITS_TRUE(strcmp(fossil_slist_get_back(slist), "42") == 0);

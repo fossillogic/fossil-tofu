@@ -11,7 +11,7 @@
  * Copyright (C) 2024 Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/test/framework.h>
+#include <fossil/pizza/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -22,7 +22,7 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST_SUITE(c_dlist_tofu_fixture);
+FOSSIL_SUITE(c_dlist_tofu_fixture);
 
 FOSSIL_SETUP(c_dlist_tofu_fixture) {
     // Setup the test fixture
@@ -40,14 +40,14 @@ FOSSIL_TEARDOWN(c_dlist_tofu_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST_CASE(c_test_dlist_insert) {
+FOSSIL_TEST(c_test_dlist_insert) {
     fossil_dlist_t* dlist = fossil_dlist_create_container("i32");
     ASSUME_ITS_TRUE(fossil_dlist_insert(dlist, "42") == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_dlist_size(dlist) == 1);
     fossil_dlist_destroy(dlist);
 }
 
-FOSSIL_TEST_CASE(c_test_dlist_remove) {
+FOSSIL_TEST(c_test_dlist_remove) {
     fossil_dlist_t* dlist = fossil_dlist_create_container("i32");
     fossil_dlist_insert(dlist, "42");
     ASSUME_ITS_TRUE(fossil_dlist_remove(dlist) == FOSSIL_TOFU_SUCCESS);
@@ -55,20 +55,20 @@ FOSSIL_TEST_CASE(c_test_dlist_remove) {
     fossil_dlist_destroy(dlist);
 }
 
-FOSSIL_TEST_CASE(c_test_dlist_not_empty) {
+FOSSIL_TEST(c_test_dlist_not_empty) {
     fossil_dlist_t* dlist = fossil_dlist_create_container("i32");
     fossil_dlist_insert(dlist, "42");
     ASSUME_ITS_TRUE(fossil_dlist_not_empty(dlist) == true);
     fossil_dlist_destroy(dlist);
 }
 
-FOSSIL_TEST_CASE(c_test_dlist_not_cnullptr) {
+FOSSIL_TEST(c_test_dlist_not_cnullptr) {
     fossil_dlist_t* dlist = fossil_dlist_create_container("i32");
     ASSUME_ITS_TRUE(fossil_dlist_not_cnullptr(dlist) == true);
     fossil_dlist_destroy(dlist);
 }
 
-FOSSIL_TEST_CASE(c_test_dlist_is_empty) {
+FOSSIL_TEST(c_test_dlist_is_empty) {
     fossil_dlist_t* dlist = fossil_dlist_create_container("i32");
     ASSUME_ITS_TRUE(fossil_dlist_is_empty(dlist) == true);
     fossil_dlist_insert(dlist, "42");
@@ -76,12 +76,12 @@ FOSSIL_TEST_CASE(c_test_dlist_is_empty) {
     fossil_dlist_destroy(dlist);
 }
 
-FOSSIL_TEST_CASE(c_test_dlist_is_cnullptr) {
+FOSSIL_TEST(c_test_dlist_is_cnullptr) {
     fossil_dlist_t* dlist = NULL;
     ASSUME_ITS_TRUE(fossil_dlist_is_cnullptr(dlist) == true);
 }
 
-FOSSIL_TEST_CASE(c_test_dlist_reverse_forward) {
+FOSSIL_TEST(c_test_dlist_reverse_forward) {
     fossil_dlist_t* dlist = fossil_dlist_create_container("i32");
     fossil_dlist_insert(dlist, "1");
     fossil_dlist_insert(dlist, "2");
@@ -92,7 +92,7 @@ FOSSIL_TEST_CASE(c_test_dlist_reverse_forward) {
     fossil_dlist_destroy(dlist);
 }
 
-FOSSIL_TEST_CASE(c_test_dlist_reverse_backward) {
+FOSSIL_TEST(c_test_dlist_reverse_backward) {
     fossil_dlist_t* dlist = fossil_dlist_create_container("i32");
     fossil_dlist_insert(dlist, "1");
     fossil_dlist_insert(dlist, "2");
@@ -103,7 +103,7 @@ FOSSIL_TEST_CASE(c_test_dlist_reverse_backward) {
     fossil_dlist_destroy(dlist);
 }
 
-FOSSIL_TEST_CASE(c_test_dlist_size) {
+FOSSIL_TEST(c_test_dlist_size) {
     fossil_dlist_t* dlist = fossil_dlist_create_container("i32");
     fossil_dlist_insert(dlist, "1");
     fossil_dlist_insert(dlist, "2");
@@ -111,7 +111,7 @@ FOSSIL_TEST_CASE(c_test_dlist_size) {
     fossil_dlist_destroy(dlist);
 }
 
-FOSSIL_TEST_CASE(c_test_dlist_insert_multiple) {
+FOSSIL_TEST(c_test_dlist_insert_multiple) {
     fossil_dlist_t* dlist = fossil_dlist_create_container("i32");
     ASSUME_ITS_TRUE(fossil_dlist_insert(dlist, "1") == FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_dlist_insert(dlist, "2") == FOSSIL_TOFU_SUCCESS);
@@ -120,7 +120,7 @@ FOSSIL_TEST_CASE(c_test_dlist_insert_multiple) {
     fossil_dlist_destroy(dlist);
 }
 
-FOSSIL_TEST_CASE(c_test_dlist_remove_multiple) {
+FOSSIL_TEST(c_test_dlist_remove_multiple) {
     fossil_dlist_t* dlist = fossil_dlist_create_container("i32");
     fossil_dlist_insert(dlist, "1");
     fossil_dlist_insert(dlist, "2");
