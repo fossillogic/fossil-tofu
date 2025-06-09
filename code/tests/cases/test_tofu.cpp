@@ -42,13 +42,13 @@ FOSSIL_TEARDOWN(cpp_generic_tofu_fixture) {
 
 FOSSIL_TEST(cpp_test_tofu_struct_create_destroy) {
     fossil::tofu::Tofu tofu("i32", "42");
-    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "i32");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Signed 32-bit Integer");
     ASSUME_ITS_EQUAL_CSTR(tofu.get_value().c_str(), "42");
 }
 
 FOSSIL_TEST(cpp_test_tofu_struct_default) {
     fossil::tofu::Tofu tofu("i32", "0");
-    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "i32");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Signed 32-bit Integer");
     ASSUME_ITS_EQUAL_CSTR(tofu.get_value().c_str(), "0");
 }
 
@@ -95,6 +95,59 @@ FOSSIL_TEST(cpp_test_tofu_struct_set_attribute) {
     ASSUME_ITS_EQUAL_CSTR(attr->id, "42id");
 }
 
+FOSSIL_TEST(cpp_test_tofu_set_and_get_value) {
+    fossil::tofu::Tofu tofu("i16", "123");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_value().c_str(), "123");
+    tofu.set_value("456");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_value().c_str(), "456");
+}
+
+FOSSIL_TEST(cpp_test_tofu_mutability) {
+    fossil::tofu::Tofu tofu("u8", "99");
+    ASSUME_ITS_TRUE(tofu.is_mutable());
+    tofu.set_mutable(false);
+    ASSUME_ITS_FALSE(tofu.is_mutable());
+    try {
+        tofu.set_value("100");
+        ASSUME_ITS_TRUE(false); // Should not reach here
+    } catch (const std::runtime_error&) {
+        ASSUME_ITS_TRUE(true); // Exception expected
+    }
+}
+
+FOSSIL_TEST(cpp_test_tofu_type_and_info) {
+    fossil::tofu::Tofu tofu("float", "3.14");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Float");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_info().c_str(), "A single-precision floating point value");
+}
+
+FOSSIL_TEST(cpp_test_tofu_set_and_get_attribute) {
+    fossil::tofu::Tofu tofu("u16", "65535");
+    tofu.set_attribute("Custom Name", "Custom Description", "custom_id");
+    const fossil_tofu_attribute_t* attr = tofu.get_attribute();
+    ASSUME_ITS_EQUAL_CSTR(attr->name, "Custom Name");
+    ASSUME_ITS_EQUAL_CSTR(attr->description, "Custom Description");
+    ASSUME_ITS_EQUAL_CSTR(attr->id, "custom_id");
+}
+
+FOSSIL_TEST(cpp_test_tofu_equals_and_copy) {
+    fossil::tofu::Tofu tofu1("i8", "7");
+    fossil::tofu::Tofu tofu2("i8", "7");
+    ASSUME_ITS_TRUE(tofu1.equals(tofu2));
+    tofu2.set_value("8");
+    ASSUME_ITS_FALSE(tofu1.equals(tofu2));
+
+    fossil::tofu::Tofu tofu3("i16", "22");
+    fossil::tofu::Tofu tofu4 = tofu3; // Copy constructor
+    ASSUME_ITS_TRUE(tofu3.equals(tofu4));
+}
+
+FOSSIL_TEST(cpp_test_tofu_validate_type) {
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_validate_type("i32"), FOSSIL_TOFU_TYPE_I32);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_validate_type("double"), FOSSIL_TOFU_TYPE_DOUBLE);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_validate_type("any"), FOSSIL_TOFU_TYPE_ANY);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -108,6 +161,12 @@ FOSSIL_TEST_GROUP(cpp_generic_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_struct_move_assignment);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_struct_set_value);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_struct_set_attribute);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_set_and_get_value);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_mutability);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_type_and_info);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_set_and_get_attribute);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_equals_and_copy);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_validate_type);
 
     // Register the test group
     FOSSIL_TEST_REGISTER(cpp_generic_tofu_fixture);
