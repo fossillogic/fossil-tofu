@@ -349,8 +349,6 @@ tofu_memory_t fossil_tofu_realloc(tofu_memory_t ptr, size_t size) {
 void fossil_tofu_free(tofu_memory_t ptr) {
     if (ptr) {
         free(ptr);
-    } else {
-        fprintf(stderr, "Warning: Attempted to free a NULL pointer\n");
     }
 } // end of fun
 
