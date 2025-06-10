@@ -58,6 +58,7 @@ fossil_clist_t* fossil_clist_create_move(fossil_clist_t* other) {
     }
     clist->type = other->type;
     clist->head = other->head;
+    other->type = NULL; // Prevent double free of type
     other->head = NULL;
     return clist;
 }
@@ -143,7 +144,7 @@ size_t fossil_clist_size(const fossil_clist_t* clist) {
 }
 
 bool fossil_clist_not_empty(const fossil_clist_t* clist) {
-    return clist->head != NULL;
+    return (clist != NULL) && (clist->head != NULL);
 }
 
 bool fossil_clist_not_cnullptr(const fossil_clist_t* clist) {
@@ -151,7 +152,7 @@ bool fossil_clist_not_cnullptr(const fossil_clist_t* clist) {
 }
 
 bool fossil_clist_is_empty(const fossil_clist_t* clist) {
-    return clist->head == NULL;
+    return (clist == NULL) || (clist->head == NULL);
 }
 
 bool fossil_clist_is_cnullptr(const fossil_clist_t* clist) {
