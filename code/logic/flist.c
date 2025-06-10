@@ -172,7 +172,7 @@ bool fossil_flist_is_cnullptr(const fossil_flist_t* flist) {
 }
 
 char *fossil_flist_get(const fossil_flist_t* flist, size_t index) {
-    if (!flist || index < 0) {
+    if (!flist) {
         return NULL;  // Error
     }
     fossil_flist_node_t* current = flist->head;
@@ -206,14 +206,14 @@ char *fossil_flist_get_back(const fossil_flist_t* flist) {
 }
 
 void fossil_flist_set(fossil_flist_t* flist, size_t index, char *element) {
-    if (!flist || index < 0) {
+    if (!flist) {
         return;  // Error
     }
     fossil_flist_node_t* current = flist->head;
     size_t count = 0;
     while (current) {
         if (count == index) {
-            free(current->data.value.data);  // Free old data
+            fossil_tofu_free(current->data.value.data);  // Free old data
             current->data.value.data = fossil_tofu_strdup(element);  // Set new data
             return;  // Element set successfully
         }
