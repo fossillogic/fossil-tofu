@@ -21,7 +21,7 @@
 // *****************************************************************************
 
 fossil_cqueue_t* fossil_cqueue_create_container(char* type, size_t capacity) {
-    fossil_cqueue_t* queue = (fossil_cqueue_t*)malloc(sizeof(fossil_cqueue_t));
+    fossil_cqueue_t* queue = (fossil_cqueue_t*)fossil_tofu_alloc(sizeof(fossil_cqueue_t));
     if (queue == NULL) {
         return NULL;
     }
@@ -38,7 +38,7 @@ fossil_cqueue_t* fossil_cqueue_create_default(void) {
 }
 
 fossil_cqueue_t* fossil_cqueue_create_copy(const fossil_cqueue_t* other) {
-    fossil_cqueue_t* queue = (fossil_cqueue_t*)malloc(sizeof(fossil_cqueue_t));
+    fossil_cqueue_t* queue = (fossil_cqueue_t*)fossil_tofu_alloc(sizeof(fossil_cqueue_t));
     if (queue == NULL) {
         return NULL;
     }
@@ -59,7 +59,7 @@ fossil_cqueue_t* fossil_cqueue_create_copy(const fossil_cqueue_t* other) {
 }
 
 fossil_cqueue_t* fossil_cqueue_create_move(fossil_cqueue_t* other) {
-    fossil_cqueue_t* queue = (fossil_cqueue_t*)malloc(sizeof(fossil_cqueue_t));
+    fossil_cqueue_t* queue = (fossil_cqueue_t*)fossil_tofu_alloc(sizeof(fossil_cqueue_t));
     if (queue == NULL) {
         return NULL;
     }
@@ -84,11 +84,11 @@ void fossil_cqueue_destroy(fossil_cqueue_t* queue) {
     while (current != NULL) {
         fossil_cqueue_node_t* next = current->next;
         fossil_tofu_destroy(&current->data);
-        free(current);
+        fossil_tofu_free(current);
         current = next;
     }
-    free(queue->type);
-    free(queue);
+    fossil_tofu_free(queue->type);
+    fossil_tofu_free(queue);
 }
 
 // *****************************************************************************
@@ -99,7 +99,7 @@ int32_t fossil_cqueue_insert(fossil_cqueue_t* queue, char *data) {
     if (queue->size >= queue->capacity) {
         return FOSSIL_TOFU_FAILURE;  // Queue is full
     }
-    fossil_cqueue_node_t* node = (fossil_cqueue_node_t*)malloc(sizeof(fossil_cqueue_node_t));
+    fossil_cqueue_node_t* node = (fossil_cqueue_node_t*)fossil_tofu_alloc(sizeof(fossil_cqueue_node_t));
     if (node == NULL) {
         return FOSSIL_TOFU_FAILURE;  // Memory allocation failed
     }
@@ -131,7 +131,7 @@ int32_t fossil_cqueue_remove(fossil_cqueue_t* queue) {
         queue->rear->next = queue->front;  // Maintain circular link
     }
     fossil_tofu_destroy(&node->data);
-    free(node);
+    fossil_tofu_free(node);
     queue->size--;
     return FOSSIL_TOFU_SUCCESS;
 }

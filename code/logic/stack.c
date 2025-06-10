@@ -57,7 +57,7 @@ fossil_stack_t* fossil_stack_create_copy(const fossil_stack_t* other) {
         return stack;
     }
 
-    char** data_array = (char**)malloc(sizeof(char*) * count);
+    char** data_array = (char**)fossil_tofu_alloc(sizeof(char*) * count);
     if (data_array == NULL) {
         fossil_tofu_free(stack);
         return NULL;

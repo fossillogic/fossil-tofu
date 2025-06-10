@@ -17,7 +17,7 @@
 #include <string.h>
 
 fossil_flist_t* fossil_flist_create_container(char* type) {
-    fossil_flist_t* flist = (fossil_flist_t*)malloc(sizeof(fossil_flist_t));
+    fossil_flist_t* flist = (fossil_flist_t*)fossil_tofu_alloc(sizeof(fossil_flist_t));
     if (!flist) {
         return NULL;
     }
@@ -80,7 +80,7 @@ int32_t fossil_flist_insert(fossil_flist_t* flist, char *data) {
     if (!flist || !data) {
         return -1;  // Error
     }
-    fossil_flist_node_t* new_node = (fossil_flist_node_t*)malloc(sizeof(fossil_flist_node_t));
+    fossil_flist_node_t* new_node = (fossil_flist_node_t*)fossil_tofu_alloc(sizeof(fossil_flist_node_t));
     if (!new_node) {
         return -1;  // Error
     }
@@ -226,7 +226,7 @@ void fossil_flist_set_front(fossil_flist_t* flist, char *element) {
     if (!flist || !flist->head) {
         return;  // Error
     }
-    free(flist->head->data.value.data);  // Free old data
+    fossil_tofu_free(flist->head->data.value.data);  // Free old data
     flist->head->data.value.data = fossil_tofu_strdup(element);  // Set new data
 }
 
