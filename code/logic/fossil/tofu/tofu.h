@@ -36,6 +36,14 @@ enum {
     FOSSIL_TOFU_FAILURE = -1
 };
 
+// Error codes for the "tofu" data structure.
+enum {
+    FOSSIL_TOFU_ERROR_INVALID_ARGUMENT = -2,
+    FOSSIL_TOFU_ERROR_MEMORY_ALLOCATION = -3,
+    FOSSIL_TOFU_ERROR_TYPE_MISMATCH = -4,
+    FOSSIL_TOFU_ERROR_NOT_FOUND = -5
+};
+
 // Enumerated types for representing various data types in the "tofu" data structure.
 typedef enum {
     FOSSIL_TOFU_TYPE_I8,
