@@ -35,17 +35,48 @@ fossil_stack_t* fossil_stack_create_default(void) {
 }
 
 fossil_stack_t* fossil_stack_create_copy(const fossil_stack_t* other) {
+    if (other == NULL) {
+        return NULL;
+    }
     fossil_stack_t* stack = (fossil_stack_t*)fossil_tofu_alloc(sizeof(fossil_stack_t));
     if (stack == NULL) {
         return NULL;
     }
     stack->type = other->type;
     stack->top = NULL;
+
+    // To preserve order, first collect data in an array
+    size_t count = 0;
     fossil_stack_node_t* current = other->top;
     while (current != NULL) {
-        fossil_stack_insert(stack, current->data.value.data);
+        count++;
         current = current->next;
     }
+
+    if (count == 0) {
+        return stack;
+    }
+
+    char** data_array = (char**)malloc(sizeof(char*) * count);
+    if (data_array == NULL) {
+        fossil_tofu_free(stack);
+        return NULL;
+    }
+
+    current = other->top;
+    for (size_t i = 0; i < count; ++i) {
+        // Deep copy the string data
+        data_array[i] = fossil_tofu_strdup(current->data.value.data);
+        current = current->next;
+    }
+
+    // Insert in reverse order to preserve stack order
+    for (int i = count - 1; i >= 0; --i) {
+        fossil_stack_insert(stack, data_array[i]);
+        fossil_tofu_free(data_array[i]);
+    }
+    fossil_tofu_free(data_array);
+
     return stack;
 }
 
@@ -56,6 +87,7 @@ fossil_stack_t* fossil_stack_create_move(fossil_stack_t* other) {
     }
     stack->type = other->type;
     stack->top = other->top;
+    other->type = NULL;
     other->top = NULL;
     return stack;
 }
@@ -78,16 +110,25 @@ void fossil_stack_destroy(fossil_stack_t* stack) {
 // *****************************************************************************
 
 int32_t fossil_stack_insert(fossil_stack_t* stack, char *data) {
-    if (stack == NULL) {
+    if (stack == NULL || data == NULL) {
         return FOSSIL_TOFU_FAILURE;
     }
-    fossil_stack_node_t* node = (fossil_stack_node_t*)fossil_tofu_alloc(sizeof(fossil_stack_node_t));
-    if (node == NULL) {
+    // Ensure no duplicate data is inserted (compare string values)
+    fossil_stack_node_t* current = stack->top;
+    while (current != NULL) {
+        if (strcmp(current->data.value.data, data) == 0) {
+            // Duplicate found, do not insert
+            return FOSSIL_TOFU_FAILURE;
+        }
+        current = current->next;
+    }
+    fossil_stack_node_t* new_node = (fossil_stack_node_t*)fossil_tofu_alloc(sizeof(fossil_stack_node_t));
+    if (new_node == NULL) {
         return FOSSIL_TOFU_FAILURE;
     }
-    node->data = fossil_tofu_create(stack->type, data);
-    node->next = stack->top;
-    stack->top = node;
+    new_node->data = fossil_tofu_create(stack->type, data);
+    new_node->next = stack->top;
+    stack->top = new_node;
     return FOSSIL_TOFU_SUCCESS;
 }
 
@@ -95,6 +136,15 @@ int32_t fossil_stack_remove(fossil_stack_t* stack) {
     if (stack == NULL || stack->top == NULL) {
         return FOSSIL_TOFU_FAILURE;
     }
+    // If only one node is left, remove it
+    if (stack->top->next == NULL) {
+        fossil_stack_node_t* temp = stack->top;
+        stack->top = NULL;
+        fossil_tofu_destroy(&temp->data);
+        fossil_tofu_free(temp);
+        return FOSSIL_TOFU_SUCCESS;
+    }
+    // Remove only the top node
     fossil_stack_node_t* temp = stack->top;
     stack->top = stack->top->next;
     fossil_tofu_destroy(&temp->data);
@@ -104,7 +154,7 @@ int32_t fossil_stack_remove(fossil_stack_t* stack) {
 
 size_t fossil_stack_size(const fossil_stack_t* stack) {
     if (stack == NULL) {
-        return FOSSIL_TOFU_SUCCESS;
+        return 0;
     }
     size_t size = 0;
     fossil_stack_node_t* current = stack->top;
