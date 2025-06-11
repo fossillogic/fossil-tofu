@@ -274,7 +274,6 @@ namespace tofu {
          */
         PQueue(PQueue&& other) noexcept {
             pqueue = fossil_pqueue_create_move(other.pqueue);
-            other.pqueue = nullptr;
         }
 
         /**
