@@ -225,6 +225,7 @@ void fossil_dqueue_set_back(fossil_dqueue_t* dqueue, char *element);
 #ifdef __cplusplus
 }
 #include <stdexcept>
+#include <string>
 
 namespace fossil {
 
@@ -236,6 +237,19 @@ namespace tofu {
      */
     class DQueue {
     public:
+        /**
+         * Constructor with a specified data type.
+         * Creates a new double-ended queue with the specified data type.
+         * 
+         * @param type The type of data the double-ended queue will store.
+         * @throws std::runtime_error if the queue creation fails.
+         */
+        DQueue(const std::string& type) : dqueue(fossil_dqueue_create_container(const_cast<char*>(type.c_str()))) {
+            if (dqueue == nullptr) {
+                throw std::runtime_error("Failed to create a new double-ended queue with type: " + type);
+            }
+        }
+
         /**
          * Default constructor.
          * Creates a new double-ended queue with default values.
@@ -267,8 +281,8 @@ namespace tofu {
          * 
          * @param other The queue to move.
          */
-        DQueue(DQueue&& other) noexcept : dqueue(fossil_dqueue_create_move(other.dqueue)) {
-            other.dqueue = nullptr;
+        DQueue(DQueue&& other) noexcept {
+            dqueue = fossil_dqueue_create_move(other.dqueue);
         }
 
         /**
@@ -308,8 +322,8 @@ namespace tofu {
         DQueue& operator=(DQueue&& other) noexcept {
             if (this != &other) {
                 fossil_dqueue_destroy(dqueue);
-                dqueue = fossil_dqueue_create_move(other.dqueue);
-                other.dqueue = nullptr;
+                dqueue = other.dqueue;
+                other.dqueue = nullptr; // Prevent double free
             }
             return *this;
         }
@@ -320,8 +334,8 @@ namespace tofu {
          * @param data The data to insert.
          * @throws std::runtime_error if the insertion fails.
          */
-        void insert(char *data) {
-            if (fossil_dqueue_insert(dqueue, data) != 0) {
+        void insert(const std::string& data) {
+            if (fossil_dqueue_insert(dqueue, const_cast<char*>(data.c_str())) != 0) {
                 throw std::runtime_error("Failed to insert data into the double-ended queue.");
             }
         }
@@ -386,56 +400,59 @@ namespace tofu {
          * Gets the element at the specified index in the queue.
          * 
          * @param index The index of the element to get.
-         * @return The element at the specified index.
+         * @return The element at the specified index as std::string.
          */
-        char *get(size_t index) const {
-            return fossil_dqueue_get(dqueue, index);
+        std::string get(size_t index) const {
+            char* result = fossil_dqueue_get(dqueue, index);
+            return result ? std::string(result) : std::string();
         }
 
         /**
          * Gets the first element in the queue.
          * 
-         * @return The first element in the queue.
+         * @return The first element in the queue as std::string.
          */
-        char *get_front() const {
-            return fossil_dqueue_get_front(dqueue);
+        std::string get_front() const {
+            char* result = fossil_dqueue_get_front(dqueue);
+            return result ? std::string(result) : std::string();
         }
 
         /**
          * Gets the last element in the queue.
          * 
-         * @return The last element in the queue.
+         * @return The last element in the queue as std::string.
          */
-        char *get_back() const {
-            return fossil_dqueue_get_back(dqueue);
+        std::string get_back() const {
+            char* result = fossil_dqueue_get_back(dqueue);
+            return result ? std::string(result) : std::string();
         }
 
         /**
          * Sets the element at the specified index in the queue.
          * 
          * @param index   The index at which to set the element.
-         * @param element The element to set.
+         * @param element The element to set as std::string.
          */
-        void set(size_t index, char *element) {
-            fossil_dqueue_set(dqueue, index, element);
+        void set(size_t index, const std::string& element) {
+            fossil_dqueue_set(dqueue, index, const_cast<char*>(element.c_str()));
         }
 
         /**
          * Sets the first element in the queue.
          * 
-         * @param element The element to set.
+         * @param element The element to set as std::string.
          */
-        void set_front(char *element) {
-            fossil_dqueue_set_front(dqueue, element);
+        void set_front(const std::string& element) {
+            fossil_dqueue_set_front(dqueue, const_cast<char*>(element.c_str()));
         }
 
         /**
          * Sets the last element in the queue.
          * 
-         * @param element The element to set.
+         * @param element The element to set as std::string.
          */
-        void set_back(char *element) {
-            fossil_dqueue_set_back(dqueue, element);
+        void set_back(const std::string& element) {
+            fossil_dqueue_set_back(dqueue, const_cast<char*>(element.c_str()));
         }
 
     private:

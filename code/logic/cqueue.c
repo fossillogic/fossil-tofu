@@ -38,9 +38,12 @@ fossil_cqueue_t* fossil_cqueue_create_default(void) {
 }
 
 fossil_cqueue_t* fossil_cqueue_create_copy(const fossil_cqueue_t* other) {
+    if (other == NULL) {
+        return NULL;  // Cannot copy a null queue
+    }
     fossil_cqueue_t* queue = (fossil_cqueue_t*)fossil_tofu_alloc(sizeof(fossil_cqueue_t));
     if (queue == NULL) {
-        return NULL;
+        return NULL;  // Memory allocation failed
     }
     queue->type = fossil_tofu_strdup(other->type);
     queue->capacity = other->capacity;
@@ -48,17 +51,37 @@ fossil_cqueue_t* fossil_cqueue_create_copy(const fossil_cqueue_t* other) {
     queue->front = NULL;
     queue->rear = NULL;
 
-    fossil_cqueue_node_t* current = other->front;
-    if (current != NULL) {
+    // Copy nodes
+    if (other->front != NULL) {
+        fossil_cqueue_node_t* current = other->front;
         do {
-            fossil_cqueue_insert(queue, current->data.value.data);
+            fossil_cqueue_node_t* node = (fossil_cqueue_node_t*)fossil_tofu_alloc(sizeof(fossil_cqueue_node_t));
+            if (node == NULL) {
+                fossil_cqueue_destroy(queue);
+                return NULL;  // Memory allocation failed
+            }
+            node->data = fossil_tofu_create(queue->type, fossil_tofu_get_value(&current->data));
+            node->next = NULL;
+
+            if (queue->front == NULL) {
+                queue->front = node;
+                queue->rear = node;
+                node->next = node;  // Circular link
+            } else {
+                queue->rear->next = node;
+                queue->rear = node;
+                node->next = queue->front;  // Circular link
+            }
             current = current->next;
-        } while (current != other->front);  // Continue until we reach the head node again
+        } while (current != other->front);
     }
     return queue;
 }
 
 fossil_cqueue_t* fossil_cqueue_create_move(fossil_cqueue_t* other) {
+    if (other == NULL) {
+        return NULL;
+    }
     fossil_cqueue_t* queue = (fossil_cqueue_t*)fossil_tofu_alloc(sizeof(fossil_cqueue_t));
     if (queue == NULL) {
         return NULL;
@@ -68,8 +91,14 @@ fossil_cqueue_t* fossil_cqueue_create_move(fossil_cqueue_t* other) {
     queue->size = other->size;
     queue->front = other->front;
     queue->rear = other->rear;
+
+    // Empty the old queue
+    other->type = NULL;
+    other->capacity = 0;
+    other->size = 0;
     other->front = NULL;
     other->rear = NULL;
+
     return queue;
 }
 
@@ -141,7 +170,7 @@ size_t fossil_cqueue_size(const fossil_cqueue_t* queue) {
 }
 
 bool fossil_cqueue_not_empty(const fossil_cqueue_t* queue) {
-    return queue->size > 0;
+    return (queue != NULL) && (queue->size > 0);
 }
 
 bool fossil_cqueue_not_cnullptr(const fossil_cqueue_t* queue) {
@@ -149,7 +178,7 @@ bool fossil_cqueue_not_cnullptr(const fossil_cqueue_t* queue) {
 }
 
 bool fossil_cqueue_is_empty(const fossil_cqueue_t* queue) {
-    return queue->size == 0;
+    return (queue == NULL) || (queue->size == 0);
 }
 
 bool fossil_cqueue_is_cnullptr(const fossil_cqueue_t* queue) {

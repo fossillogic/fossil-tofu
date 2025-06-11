@@ -52,6 +52,9 @@ fossil_dqueue_t* fossil_dqueue_create_copy(const fossil_dqueue_t* other) {
 }
 
 fossil_dqueue_t* fossil_dqueue_create_move(fossil_dqueue_t* other) {
+    if (other == NULL) {
+        return NULL;
+    }
     fossil_dqueue_t* dqueue = (fossil_dqueue_t*)fossil_tofu_alloc(sizeof(fossil_dqueue_t));
     if (dqueue == NULL) {
         return NULL;
@@ -59,8 +62,12 @@ fossil_dqueue_t* fossil_dqueue_create_move(fossil_dqueue_t* other) {
     dqueue->type = other->type;
     dqueue->front = other->front;
     dqueue->rear = other->rear;
+
+    // Ensure 'other' is left in a valid, empty state
+    other->type = NULL;
     other->front = NULL;
     other->rear = NULL;
+
     return dqueue;
 }
 
@@ -130,7 +137,7 @@ size_t fossil_dqueue_size(const fossil_dqueue_t* dqueue) {
 }
 
 bool fossil_dqueue_not_empty(const fossil_dqueue_t* dqueue) {
-    return dqueue->front != NULL;
+    return dqueue != NULL && dqueue->front != NULL;
 }
 
 bool fossil_dqueue_not_cnullptr(const fossil_dqueue_t* dqueue) {
@@ -138,7 +145,7 @@ bool fossil_dqueue_not_cnullptr(const fossil_dqueue_t* dqueue) {
 }
 
 bool fossil_dqueue_is_empty(const fossil_dqueue_t* dqueue) {
-    return dqueue->front == NULL;
+    return dqueue == NULL || dqueue->front == NULL;
 }
 
 bool fossil_dqueue_is_cnullptr(const fossil_dqueue_t* dqueue) {
