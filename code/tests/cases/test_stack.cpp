@@ -57,10 +57,12 @@ FOSSIL_TEST(cpp_test_stack_create_default) {
 
 FOSSIL_TEST(cpp_test_stack_insert_and_remove) {
     Stack stack("i32");
-    ASSUME_ITS_EQUAL_I32(stack.insert("10"), FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_I32(stack.insert("20"), FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_I32(stack.size(), 2);
-    ASSUME_ITS_EQUAL_I32(stack.remove(), FOSSIL_TOFU_SUCCESS);
+    int32_t result = stack.insert("42");
+    ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_EQUAL_I32(stack.size(), 1);
+    result = stack.remove();
+    ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_EQUAL_I32(stack.size(), 0);
 }
 
 FOSSIL_TEST(cpp_test_stack_copy_constructor) {
