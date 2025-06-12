@@ -56,10 +56,12 @@ FOSSIL_TEST(c_test_stack_create_default) {
 
 FOSSIL_TEST(c_test_stack_insert_and_remove) {
     fossil_stack_t* stack = fossil_stack_create_container("i32");
-    ASSUME_ITS_EQUAL_I32(fossil_stack_insert(stack, "10"), FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_I32(fossil_stack_insert(stack, "20"), FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_I32(fossil_stack_size(stack), 2);
-    ASSUME_ITS_EQUAL_I32(fossil_stack_remove(stack), FOSSIL_TOFU_SUCCESS);
+    int32_t result = fossil_stack_insert(stack, "42");
+    ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_EQUAL_I32(fossil_stack_size(stack), 1);
+    result = fossil_stack_remove(stack);
+    ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_EQUAL_I32(fossil_stack_size(stack), 0);
     fossil_stack_destroy(stack);
 }
 
