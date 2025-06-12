@@ -179,10 +179,10 @@ namespace tofu {
          * @param key_type The type of the keys.
          * @param value_type The type of the values.
          */
-        MapOf(char* key_type, char* value_type) {
-            map = fossil_mapof_create_container(key_type, value_type);
+        MapOf(const std::string& key_type, const std::string& value_type) {
+            map = fossil_mapof_create_container(const_cast<char*>(key_type.c_str()), const_cast<char*>(value_type.c_str()));
             if (map == nullptr) {
-                throw std::runtime_error("Failed to create map container");
+            throw std::runtime_error("Failed to create map container");
             }
         }
 
@@ -234,8 +234,8 @@ namespace tofu {
          * @param value The value to insert.
          * @return 0 on success, non-zero on failure.
          */
-        int32_t insert(char *key, char *value) {
-            return fossil_mapof_insert(map, key, value);
+        int32_t insert(const std::string& key, const std::string& value) {
+            return fossil_mapof_insert(map, const_cast<char*>(key.c_str()), const_cast<char*>(value.c_str()));
         }
 
         /**
@@ -244,8 +244,8 @@ namespace tofu {
          * @param key The key to remove.
          * @return 0 on success, non-zero on failure.
          */
-        int32_t remove(char *key) {
-            return fossil_mapof_remove(map, key);
+        int32_t remove(const std::string& key) {
+            return fossil_mapof_remove(map, const_cast<char*>(key.c_str()));
         }
 
         /**
@@ -254,8 +254,8 @@ namespace tofu {
          * @param key The key to check.
          * @return True if the key is found, false otherwise.
          */
-        bool contains(char *key) {
-            return fossil_mapof_contains(map, key);
+        bool contains(const std::string& key) {
+            return fossil_mapof_contains(map, const_cast<char*>(key.c_str()));
         }
 
         /**
@@ -264,8 +264,8 @@ namespace tofu {
          * @param key The key to look up.
          * @return The value associated with the key.
          */
-        fossil_tofu_t get(char *key) {
-            return fossil_mapof_get(map, key);
+        fossil_tofu_t get(const std::string& key) {
+            return fossil_mapof_get(map, const_cast<char*>(key.c_str()));
         }
 
         /**
@@ -275,8 +275,8 @@ namespace tofu {
          * @param value The value to set.
          * @return 0 on success, non-zero on failure.
          */
-        int32_t set(char *key, char *value) {
-            return fossil_mapof_set(map, key, value);
+        int32_t set(const std::string& key, const std::string& value) {
+            return fossil_mapof_set(map, const_cast<char*>(key.c_str()), const_cast<char*>(value.c_str()));
         }
 
         /**

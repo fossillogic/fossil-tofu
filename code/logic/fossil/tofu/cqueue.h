@@ -206,6 +206,7 @@ void fossil_cqueue_set_rear(fossil_cqueue_t* queue, char *element);
 #ifdef __cplusplus
 }
 #include <stdexcept>
+#include <string>
 
 namespace fossil {
 
@@ -217,9 +218,10 @@ namespace tofu {
          * Create a new circular queue with the specified data type.
          *
          * @param type The type of data the queue will store.
+         * @param capacity The maximum number of elements the queue can hold.
          */
-        CQueue(char* type, size_t capacity) {
-            queue = fossil_cqueue_create_container(type, capacity);
+        CQueue(const std::string& type, size_t capacity) {
+            queue = fossil_cqueue_create_container(const_cast<char*>(type.c_str()), capacity);
             if (queue == nullptr) {
                 throw std::runtime_error("Failed to create circular queue.");
             }
@@ -254,7 +256,6 @@ namespace tofu {
          */
         CQueue(CQueue&& other) noexcept {
             queue = fossil_cqueue_create_move(other.queue);
-            other.queue = nullptr;
         }
 
         /**
@@ -270,8 +271,8 @@ namespace tofu {
          * @param data The data to insert.
          * @return     The error code indicating the success or failure of the operation.
          */
-        int32_t insert(char *data) {
-            return fossil_cqueue_insert(queue, data);
+        int32_t insert(const std::string& data) {
+            return fossil_cqueue_insert(queue, const_cast<char*>(data.c_str()));
         }
 
         /**
@@ -331,37 +332,57 @@ namespace tofu {
         /**
          * Get the element at the front of the circular queue.
          *
-         * @return The element at the front of the circular queue.
+         * @return The element at the front of the circular queue as std::string.
          */
-        char *get_front() const {
-            return fossil_cqueue_get_front(queue);
+        std::string get_front() const {
+            char* result = fossil_cqueue_get_front(queue);
+            return result ? std::string(result) : std::string();
         }
 
         /**
          * Get the element at the rear of the circular queue.
          *
-         * @return The element at the rear of the circular queue.
+         * @return The element at the rear of the circular queue as std::string.
          */
-        char *get_rear() const {
-            return fossil_cqueue_get_rear(queue);
+        std::string get_rear() const {
+            char* result = fossil_cqueue_get_rear(queue);
+            return result ? std::string(result) : std::string();
         }
 
         /**
          * Set the element at the front of the circular queue.
          *
-         * @param element The element to set at the front.
+         * @param element The element to set at the front as std::string.
          */
-        void set_front(char *element) {
-            fossil_cqueue_set_front(queue, element);
+        void set_front(const std::string& element) {
+            fossil_cqueue_set_front(queue, const_cast<char*>(element.c_str()));
         }
 
         /**
          * Set the element at the rear of the circular queue.
          *
-         * @param element The element to set at the rear.
+         * @param element The element to set at the rear as std::string.
          */
-        void set_rear(char *element) {
-            fossil_cqueue_set_rear(queue, element);
+        void set_rear(const std::string& element) {
+            fossil_cqueue_set_rear(queue, const_cast<char*>(element.c_str()));
+        }
+
+        /**
+         * Get the type of data the circular queue stores.
+         *
+         * @return The type as std::string.
+         */
+        std::string type() const {
+            return queue && queue->type ? std::string(queue->type) : std::string();
+        }
+
+        /**
+         * Get the capacity of the circular queue.
+         *
+         * @return The capacity.
+         */
+        size_t capacity() const {
+            return queue ? queue->capacity : 0;
         }
 
     private:

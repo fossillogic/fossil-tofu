@@ -36,6 +36,14 @@ enum {
     FOSSIL_TOFU_FAILURE = -1
 };
 
+// Error codes for the "tofu" data structure.
+enum {
+    FOSSIL_TOFU_ERROR_INVALID_ARGUMENT = -2,
+    FOSSIL_TOFU_ERROR_MEMORY_ALLOCATION = -3,
+    FOSSIL_TOFU_ERROR_TYPE_MISMATCH = -4,
+    FOSSIL_TOFU_ERROR_NOT_FOUND = -5
+};
+
 // Enumerated types for representing various data types in the "tofu" data structure.
 typedef enum {
     FOSSIL_TOFU_TYPE_I8,
@@ -460,6 +468,53 @@ public:
      */
     void display() const {
         fossil_tofu_display(&tofu_);
+    }
+
+    // Operator overloads
+
+    // Equality operator
+    bool operator==(const Tofu& other) const {
+        return equals(other);
+    }
+
+    // Inequality operator
+    bool operator!=(const Tofu& other) const {
+        return !equals(other);
+    }
+
+    // Less-than operator (compares type first, then value lexicographically)
+    bool operator<(const Tofu& other) const {
+        if (tofu_.type != other.tofu_.type)
+            return tofu_.type < other.tofu_.type;
+        const char* val1 = fossil_tofu_get_value(&tofu_);
+        const char* val2 = fossil_tofu_get_value(&other.tofu_);
+        if (!val1 && !val2) return false;
+        if (!val1) return true;
+        if (!val2) return false;
+        return std::string(val1) < std::string(val2);
+    }
+
+    // Greater-than operator
+    bool operator>(const Tofu& other) const {
+        return other < *this;
+    }
+
+    // Less-than or equal operator
+    bool operator<=(const Tofu& other) const {
+        return !(other < *this);
+    }
+
+    // Greater-than or equal operator
+    bool operator>=(const Tofu& other) const {
+        return !(*this < other);
+    }
+
+    /**
+     * @brief Provides access to the underlying C struct for advanced use cases.
+     * @return const reference to the internal fossil_tofu_t struct.
+     */
+    const fossil_tofu_t& get_c_struct() const {
+        return tofu_;
     }
 
 private:

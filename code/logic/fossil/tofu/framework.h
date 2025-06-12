@@ -20,19 +20,42 @@
 // the algorithm functions
 #include "algorithm.h"
 
-// data structures
+// array family
 #include "vector.h"
+#include "tuple.h"
+// TODO: Add array implementation when available
+// TODO: Add matrix implementation when available
+// TODO: Add sparse matrix implementation when available
+// TODO: Add linked array implementation when available
+
+// queue family
 #include "dqueue.h"
 #include "pqueue.h"
 #include "cqueue.h"
 #include "queue.h"
+
+// stack family
 #include "stack.h"
-#include "tuple.h"
+
+// key-value family
 #include "setof.h"
 #include "mapof.h"
+// TODO: Add trie implementation when available
+// TODO: Add bloom filter implementation when available
+
+// linked list family
 #include "clist.h"
-#include "slist.h"
 #include "flist.h"
 #include "dlist.h"
+//
+// TODO: Add cross-list implementation when available
+// TODO: Add skip-list implementation when available
+// TODO: Add xor-linked list implementation when available
+// TODO: Add intrusive list implementation when available
+// TODO: Add unrolled linked list implementation when available
+//
+
+// tree family
+// TODO add tree family headers when implemented
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

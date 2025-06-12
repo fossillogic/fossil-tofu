@@ -218,8 +218,8 @@ namespace tofu {
              * @param type The expected type of elements in the tuple.
              * @throws std::runtime_error If the tuple creation fails.
              */
-            Tuple(char *type) {
-                tuple_ = fossil_tuple_create(type);
+            Tuple(const std::string& type) {
+                tuple_ = fossil_tuple_create(const_cast<char*>(type.c_str()));
                 if (!tuple_) {
                     throw std::runtime_error("Failed to create tuple.");
                 }
@@ -275,8 +275,8 @@ namespace tofu {
              * 
              * @param element The element to add.
              */
-            void add(char *element) {
-                fossil_tuple_add(tuple_, element);
+            void add(const std::string& element) {
+                fossil_tuple_add(tuple_, const_cast<char*>(element.c_str()));
             }
 
             /**
@@ -328,8 +328,9 @@ namespace tofu {
              * @param index The index of the element to get.
              * @return The element at the specified index.
              */
-            char *get(size_t index) const {
-                return fossil_tuple_get(tuple_, index);
+            std::string get(size_t index) const {
+                char* result = fossil_tuple_get(tuple_, index);
+                return result ? std::string(result) : std::string();
             }
 
             /**
@@ -337,8 +338,9 @@ namespace tofu {
              * 
              * @return The first element in the Tuple.
              */
-            char *get_front() const {
-                return fossil_tuple_get_front(tuple_);
+            std::string get_front() const {
+                char* result = fossil_tuple_get_front(tuple_);
+                return result ? std::string(result) : std::string();
             }
 
             /**
@@ -346,8 +348,9 @@ namespace tofu {
              * 
              * @return The last element in the Tuple.
              */
-            char *get_back() const {
-                return fossil_tuple_get_back(tuple_);
+            std::string get_back() const {
+                char* result = fossil_tuple_get_back(tuple_);
+                return result ? std::string(result) : std::string();
             }
 
             /**
@@ -356,8 +359,8 @@ namespace tofu {
              * @param index The index at which to set the element.
              * @param element The element to set.
              */
-            void set(size_t index, char *element) {
-                fossil_tuple_set(tuple_, index, element);
+            void set(size_t index, const std::string& element) {
+                fossil_tuple_set(tuple_, index, const_cast<char*>(element.c_str()));
             }
 
             /**
@@ -365,8 +368,8 @@ namespace tofu {
              * 
              * @param element The element to set.
              */
-            void set_front(char *element) {
-                fossil_tuple_set_front(tuple_, element);
+            void set_front(const std::string& element) {
+                fossil_tuple_set_front(tuple_, const_cast<char*>(element.c_str()));
             }
 
             /**
@@ -374,8 +377,8 @@ namespace tofu {
              * 
              * @param element The element to set.
              */
-            void set_back(char *element) {
-                fossil_tuple_set_back(tuple_, element);
+            void set_back(const std::string& element) {
+                fossil_tuple_set_back(tuple_, const_cast<char*>(element.c_str()));
             }
 
         private:

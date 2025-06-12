@@ -79,9 +79,6 @@ void fossil_vector_destroy(fossil_vector_t* vector) {
     if (vector == NULL) {
         return;
     }
-    for (size_t i = 0; i < vector->size; i++) {
-        fossil_tofu_destroy(&vector->data[i]);
-    }
     fossil_tofu_free(vector->data);
     fossil_tofu_free(vector);
 }

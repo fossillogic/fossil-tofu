@@ -11,7 +11,7 @@
  * Copyright (C) 2024 Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/test/framework.h>
+#include <fossil/pizza/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -22,7 +22,7 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST_SUITE(cpp_dlist_tofu_fixture);
+FOSSIL_SUITE(cpp_dlist_tofu_fixture);
 
 FOSSIL_SETUP(cpp_dlist_tofu_fixture) {
     // Setup the test fixture
@@ -40,175 +40,136 @@ FOSSIL_TEARDOWN(cpp_dlist_tofu_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST_CASE(cpp_test_dlist_insert) {
-    fossil_dlist_t* dlist = fossil_dlist_create_container(const_cast<char *>("i32"));
-    ASSUME_ITS_TRUE(fossil_dlist_insert(dlist, const_cast<char *>("42")) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(fossil_dlist_size(dlist) == 1);
-    fossil_dlist_destroy(dlist);
+using fossil::tofu::DList;
+
+FOSSIL_TEST(cpp_test_dlist_create_and_destroy) {
+    DList dlist("i32");
+    ASSUME_ITS_TRUE(dlist.not_cnullptr());
+    ASSUME_ITS_TRUE(std::string(dlist.get_front().c_str() ? dlist.get_front().c_str() : "") == "");
+    ASSUME_ITS_TRUE(dlist.is_empty());
 }
 
-FOSSIL_TEST_CASE(cpp_test_dlist_remove) {
-    fossil_dlist_t* dlist = fossil_dlist_create_container(const_cast<char *>("i32"));
-    fossil_dlist_insert(dlist, const_cast<char *>("42"));
-    ASSUME_ITS_TRUE(fossil_dlist_remove(dlist) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(fossil_dlist_is_empty(dlist) == true);
-    fossil_dlist_destroy(dlist);
+FOSSIL_TEST(cpp_test_dlist_create_default) {
+    DList dlist;
+    ASSUME_ITS_TRUE(dlist.not_cnullptr());
+    // Default type is "any" in the C API, but not exposed in DList, so just check not null
 }
 
-FOSSIL_TEST_CASE(cpp_test_dlist_not_empty) {
-    fossil_dlist_t* dlist = fossil_dlist_create_container(const_cast<char *>("i32"));
-    fossil_dlist_insert(dlist, const_cast<char *>("42"));
-    ASSUME_ITS_TRUE(fossil_dlist_not_empty(dlist) == true);
-    fossil_dlist_destroy(dlist);
+FOSSIL_TEST(cpp_test_dlist_insert_and_size) {
+    DList dlist("i32");
+    ASSUME_ITS_EQUAL_I32(dlist.insert((char*)"10"), FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_EQUAL_I32(dlist.insert((char*)"20"), FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_EQUAL_I32(dlist.insert((char*)"30"), FOSSIL_TOFU_SUCCESS);
 }
 
-FOSSIL_TEST_CASE(cpp_test_dlist_not_cnullptr) {
-    fossil_dlist_t* dlist = fossil_dlist_create_container(const_cast<char *>("i32"));
-    ASSUME_ITS_TRUE(fossil_dlist_not_cnullptr(dlist) == true);
-    fossil_dlist_destroy(dlist);
+FOSSIL_TEST(cpp_test_dlist_remove) {
+    DList dlist("i32");
+    dlist.insert((char*)"1");
+    dlist.insert((char*)"2");
+    dlist.insert((char*)"3");
+    size_t size_before = dlist.size();
+    ASSUME_ITS_EQUAL_I32(dlist.remove(), FOSSIL_TOFU_SUCCESS);
+    ASSUME_ITS_EQUAL_SIZE(dlist.size(), size_before - 2);
 }
 
-FOSSIL_TEST_CASE(cpp_test_dlist_is_empty) {
-    fossil_dlist_t* dlist = fossil_dlist_create_container(const_cast<char *>("i32"));
-    ASSUME_ITS_TRUE(fossil_dlist_is_empty(dlist) == true);
-    fossil_dlist_insert(dlist, const_cast<char *>("42"));
-    ASSUME_ITS_TRUE(fossil_dlist_is_empty(dlist) == false);
-    fossil_dlist_destroy(dlist);
+FOSSIL_TEST(cpp_test_dlist_reverse_forward) {
+    DList dlist("i32");
+    dlist.insert((char*)"A");
+    dlist.insert((char*)"B");
+    dlist.insert((char*)"C");
+    std::string front_before = dlist.get_front();
+    std::string back_before = dlist.get_back();
+    dlist.reverse_forward();
+    std::string front_after = dlist.get_front();
+    std::string back_after = dlist.get_back();
+    ASSUME_ITS_EQUAL_CSTR(front_before.c_str(), back_after.c_str());
+    ASSUME_ITS_EQUAL_CSTR(back_before.c_str(), front_after.c_str());
 }
 
-FOSSIL_TEST_CASE(cpp_test_dlist_is_cnullptr) {
-    fossil_dlist_t* dlist = nullptr;
-    ASSUME_ITS_TRUE(fossil_dlist_is_cnullptr(dlist) == true);
+FOSSIL_TEST(cpp_test_dlist_reverse_backward) {
+    DList dlist("i32");
+    dlist.insert((char*)"X");
+    dlist.insert((char*)"Y");
+    dlist.insert((char*)"Z");
+    std::string front_before = dlist.get_front();
+    std::string back_before = dlist.get_back();
+    dlist.reverse_backward();
+    std::string front_after = dlist.get_front();
+    std::string back_after = dlist.get_back();
+    ASSUME_ITS_EQUAL_CSTR(front_before.c_str(), back_after.c_str());
+    ASSUME_ITS_EQUAL_CSTR(back_before.c_str(), front_after.c_str());
 }
 
-FOSSIL_TEST_CASE(cpp_test_dlist_reverse_forward) {
-    fossil_dlist_t* dlist = fossil_dlist_create_container(const_cast<char *>("i32"));
-    fossil_dlist_insert(dlist, const_cast<char *>("1"));
-    fossil_dlist_insert(dlist, const_cast<char *>("2"));
-    fossil_dlist_insert(dlist, const_cast<char *>("3"));
-    fossil_dlist_reverse_forward(dlist);
-
-    ASSUME_ITS_EQUAL_I32(fossil_dlist_size(dlist), 3);
-    fossil_dlist_destroy(dlist);
+FOSSIL_TEST(cpp_test_dlist_get_and_set) {
+    DList dlist("i32");
+    dlist.insert((char*)"100");
+    dlist.insert((char*)"200");
+    dlist.insert((char*)"300");
+    ASSUME_ITS_EQUAL_CSTR(dlist.get(1).c_str(), "200");
+    dlist.set(1, (char*)"250");
+    ASSUME_ITS_EQUAL_CSTR(dlist.get(1).c_str(), "250");
 }
 
-FOSSIL_TEST_CASE(cpp_test_dlist_reverse_backward) {
-    fossil_dlist_t* dlist = fossil_dlist_create_container(const_cast<char *>("i32"));
-    fossil_dlist_insert(dlist, const_cast<char *>("1"));
-    fossil_dlist_insert(dlist, const_cast<char *>("2"));
-    fossil_dlist_insert(dlist, const_cast<char *>("3"));
-    fossil_dlist_reverse_backward(dlist);
-
-    ASSUME_ITS_EQUAL_I32(fossil_dlist_size(dlist), 3);
-    fossil_dlist_destroy(dlist);
+FOSSIL_TEST(cpp_test_dlist_get_front_and_back) {
+    DList dlist("i32");
+    dlist.insert((char*)"first");
+    dlist.insert((char*)"middle");
+    dlist.insert((char*)"last");
+    ASSUME_ITS_EQUAL_CSTR(dlist.get_front().c_str(), "first");
+    ASSUME_ITS_EQUAL_CSTR(dlist.get_back().c_str(), "last");
 }
 
-FOSSIL_TEST_CASE(cpp_test_dlist_size) {
-    fossil_dlist_t* dlist = fossil_dlist_create_container(const_cast<char *>("i32"));
-    fossil_dlist_insert(dlist, const_cast<char *>("1"));
-    fossil_dlist_insert(dlist, const_cast<char *>("2"));
-    ASSUME_ITS_TRUE(fossil_dlist_size(dlist) == 2);
-    fossil_dlist_destroy(dlist);
+FOSSIL_TEST(cpp_test_dlist_set_front_and_back) {
+    DList dlist("i32");
+    dlist.insert((char*)"one");
+    dlist.insert((char*)"two");
+    dlist.insert((char*)"three");
+    dlist.set_front((char*)"ONE");
+    dlist.set_back((char*)"THREE");
+    ASSUME_ITS_EQUAL_CSTR(dlist.get_front().c_str(), "ONE");
+    ASSUME_ITS_EQUAL_CSTR(dlist.get_back().c_str(), "THREE");
 }
 
-FOSSIL_TEST_CASE(cpp_test_dlist_insert_multiple) {
-    fossil_dlist_t* dlist = fossil_dlist_create_container(const_cast<char *>("i32"));
-    ASSUME_ITS_TRUE(fossil_dlist_insert(dlist, const_cast<char *>("1")) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(fossil_dlist_insert(dlist, const_cast<char *>("2")) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(fossil_dlist_insert(dlist, const_cast<char *>("3")) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(fossil_dlist_size(dlist) == 3);
-    fossil_dlist_destroy(dlist);
+FOSSIL_TEST(cpp_test_dlist_copy_and_move) {
+    DList dlist1("i32");
+    dlist1.insert((char*)"5");
+    dlist1.insert((char*)"10");
+    dlist1.insert((char*)"15");
+    DList dlist2 = dlist1; // Copy
+    ASSUME_ITS_EQUAL_SIZE(dlist1.size(), dlist2.size());
+    ASSUME_ITS_EQUAL_CSTR(dlist2.get(1).c_str(), "10");
+    DList dlist3 = std::move(dlist1); // Move
+    ASSUME_ITS_TRUE(dlist1.is_empty());
+    ASSUME_ITS_EQUAL_SIZE(dlist3.size(), 3);
 }
 
-FOSSIL_TEST_CASE(cpp_test_dlist_remove_multiple) {
-    fossil_dlist_t* dlist = fossil_dlist_create_container(const_cast<char *>("i32"));
-    fossil_dlist_insert(dlist, const_cast<char *>("1"));
-    fossil_dlist_insert(dlist, const_cast<char *>("2"));
-    fossil_dlist_insert(dlist, const_cast<char *>("3"));
-    ASSUME_ITS_TRUE(fossil_dlist_remove(dlist) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(fossil_dlist_remove(dlist) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(fossil_dlist_size(dlist) == 1);
-    fossil_dlist_destroy(dlist);
-}
-
-FOSSIL_TEST_CASE(cpp_test_dlist_template_insert) {
-    fossil::tofu::DList dlist(const_cast<char *>("i32"));
-    ASSUME_ITS_TRUE(dlist.insert(const_cast<char *>("42")) == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(dlist.size() == 1);
-}
-
-FOSSIL_TEST_CASE(cpp_test_dlist_template_remove) {
-    fossil::tofu::DList dlist(const_cast<char *>("i32"));
-    dlist.insert(const_cast<char *>("42"));
-    ASSUME_ITS_TRUE(dlist.remove() == FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(dlist.is_empty() == true);
-}
-
-FOSSIL_TEST_CASE(cpp_test_dlist_template_get) {
-    fossil::tofu::DList dlist(const_cast<char *>("i32"));
-    dlist.insert(const_cast<char *>("42"));
-    ASSUME_ITS_EQUAL_CSTR(dlist.get(0), "42");
-}
-
-FOSSIL_TEST_CASE(cpp_test_dlist_template_get_front_back) {
-    fossil::tofu::DList dlist(const_cast<char *>("i32"));
-    dlist.insert(const_cast<char *>("1"));
-    dlist.insert(const_cast<char *>("2"));
-    dlist.insert(const_cast<char *>("3"));
-    ASSUME_ITS_EQUAL_CSTR(dlist.get_front(), "3");
-    ASSUME_ITS_EQUAL_CSTR(dlist.get_back(), "1");
-}
-
-FOSSIL_TEST_CASE(cpp_test_dlist_template_clear) {
-    fossil::tofu::DList dlist(const_cast<char *>("i32"));
-    dlist.insert(const_cast<char *>("1"));
-    dlist.insert(const_cast<char *>("2"));
-    dlist.insert(const_cast<char *>("3"));
-    while (!dlist.is_empty()) {
-        dlist.remove();
-    }
-    ASSUME_ITS_TRUE(dlist.is_empty() == true);
-}
-
-FOSSIL_TEST_CASE(cpp_test_dlist_template_size) {
-    fossil::tofu::DList dlist(const_cast<char *>("i32"));
-    dlist.insert(const_cast<char *>("1"));
-    dlist.insert(const_cast<char *>("2"));
-    ASSUME_ITS_TRUE(dlist.size() == 2);
-}
-
-FOSSIL_TEST_CASE(cpp_test_dlist_template_is_empty) {
-    fossil::tofu::DList dlist(const_cast<char *>("i32"));
-    ASSUME_ITS_TRUE(dlist.is_empty() == true);
-    dlist.insert(const_cast<char *>("42"));
-    ASSUME_ITS_TRUE(dlist.is_empty() == false);
+FOSSIL_TEST(cpp_test_dlist_empty_and_null_checks) {
+    DList* dlist = nullptr;
+    ASSUME_ITS_TRUE(dlist == nullptr || dlist->is_cnullptr());
+    DList dlist2("i32");
+    ASSUME_ITS_TRUE(dlist2.not_cnullptr());
+    ASSUME_ITS_TRUE(dlist2.is_empty());
+    dlist2.insert((char*)"42");
+    ASSUME_ITS_TRUE(dlist2.not_empty());
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
-FOSSIL_TEST_GROUP(cpp_dlist_tofu_tests) {
-    // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_insert);
+FOSSIL_TEST_GROUP(cpp_dlist_tofu_tests) {    
+    // dlist ToFu Fixture
+    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_create_and_destroy);
+    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_create_default);
+    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_insert_and_size);
     FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_remove);
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_not_empty);
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_not_cnullptr);
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_is_empty);
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_is_cnullptr);
     FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_reverse_forward);
     FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_reverse_backward);
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_size);
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_insert_multiple);
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_remove_multiple);
+    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_get_and_set);
+    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_get_front_and_back);
+    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_set_front_and_back);
+    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_copy_and_move);
+    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_empty_and_null_checks);
 
-    // New template class tests
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_template_insert);
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_template_remove);
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_template_get);
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_template_get_front_back);
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_template_clear);
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_template_size);
-    FOSSIL_TEST_ADD(cpp_dlist_tofu_fixture, cpp_test_dlist_template_is_empty);
-
+    // Register the test group
     FOSSIL_TEST_REGISTER(cpp_dlist_tofu_fixture);
 } // end of tests

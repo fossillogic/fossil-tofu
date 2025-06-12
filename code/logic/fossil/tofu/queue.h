@@ -252,7 +252,6 @@ namespace tofu {
          */
         Queue(Queue&& other) noexcept {
             queue = fossil_queue_create_move(other.queue);
-            other.queue = nullptr;
         }
 
         /**

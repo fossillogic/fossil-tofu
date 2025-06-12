@@ -458,16 +458,6 @@ namespace tofu {
         }
 
         /**
-         * Gets the element at the specified index in the vector.
-         *
-         * @param index The index of the element to get.
-         * @return      The element at the specified index.
-         */
-        char *get(size_t index) {
-            return fossil_vector_get(vector, index);
-        }
-
-        /**
          * Gets the first element in the vector.
          *
          * @return The first element in the vector.

@@ -255,7 +255,7 @@ namespace tofu {
          * @param type The type of data the doubly linked list will store.
          * @throws std::runtime_error If the list creation fails.
          */
-        DList(char* type) : dlist(fossil_dlist_create_container(type)) {
+        DList(std::string type) : dlist(fossil_dlist_create_container(const_cast<char*>(type.c_str()))) {
             if (dlist == nullptr) {
                 throw std::runtime_error("Failed to create doubly linked list.");
             }
@@ -309,8 +309,8 @@ namespace tofu {
          * @param data The data to insert.
          * @return     The error code indicating the success or failure of the operation.
          */
-        int32_t insert(char *data) {
-            return fossil_dlist_insert(dlist, data);
+        int32_t insert(const std::string& data) {
+            return fossil_dlist_insert(dlist, const_cast<char*>(data.c_str()));
         }
 
         /**
@@ -385,56 +385,59 @@ namespace tofu {
          * Get the element at the specified index in the doubly linked list.
          *
          * @param index The index of the element to get.
-         * @return      The element at the specified index.
+         * @return      The element at the specified index as std::string.
          */
-        char *get(size_t index) const {
-            return fossil_dlist_get(dlist, index);
+        std::string get(size_t index) const {
+            char* result = fossil_dlist_get(dlist, index);
+            return result ? std::string(result) : std::string();
         }
 
         /**
          * Get the first element in the doubly linked list.
          *
-         * @return The first element in the doubly linked list.
+         * @return The first element in the doubly linked list as std::string.
          */
-        char *get_front() const {
-            return fossil_dlist_get_front(dlist);
+        std::string get_front() const {
+            char* result = fossil_dlist_get_front(dlist);
+            return result ? std::string(result) : std::string();
         }
 
         /**
          * Get the last element in the doubly linked list.
          *
-         * @return The last element in the doubly linked list.
+         * @return The last element in the doubly linked list as std::string.
          */
-        char *get_back() const {
-            return fossil_dlist_get_back(dlist);
+        std::string get_back() const {
+            char* result = fossil_dlist_get_back(dlist);
+            return result ? std::string(result) : std::string();
         }
 
         /**
          * Set the element at the specified index in the doubly linked list.
          *
          * @param index   The index at which to set the element.
-         * @param element The element to set.
+         * @param element The element to set as std::string.
          */
-        void set(size_t index, char *element) {
-            fossil_dlist_set(dlist, index, element);
+        void set(size_t index, const std::string& element) {
+            fossil_dlist_set(dlist, index, const_cast<char*>(element.c_str()));
         }
 
         /**
          * Set the first element in the doubly linked list.
          *
-         * @param element The element to set.
+         * @param element The element to set as std::string.
          */
-        void set_front(char *element) {
-            fossil_dlist_set_front(dlist, element);
+        void set_front(const std::string& element) {
+            fossil_dlist_set_front(dlist, const_cast<char*>(element.c_str()));
         }
 
         /**
          * Set the last element in the doubly linked list.
          *
-         * @param element The element to set.
+         * @param element The element to set as std::string.
          */
-        void set_back(char *element) {
-            fossil_dlist_set_back(dlist, element);
+        void set_back(const std::string& element) {
+            fossil_dlist_set_back(dlist, const_cast<char*>(element.c_str()));
         }
 
     private:

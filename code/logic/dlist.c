@@ -59,6 +59,7 @@ fossil_dlist_t* fossil_dlist_create_move(fossil_dlist_t* other) {
     dlist->type = other->type;
     dlist->head = other->head;
     dlist->tail = other->tail;
+    other->type = NULL;
     other->head = NULL;
     other->tail = NULL;
     return dlist;
@@ -87,13 +88,17 @@ int32_t fossil_dlist_insert(fossil_dlist_t* dlist, char *data) {
     }
     node->data = fossil_tofu_create(dlist->type, data);
     node->prev = NULL;
-    node->next = dlist->head;
+    node->next = NULL;
+
     if (dlist->head == NULL) {
+        // List is empty, node becomes both head and tail
         dlist->head = node;
         dlist->tail = node;
     } else {
-        dlist->head->prev = node;
-        dlist->head = node;
+        // Insert at the end (tail)
+        node->prev = dlist->tail;
+        dlist->tail->next = node;
+        dlist->tail = node;
     }
     return FOSSIL_TOFU_SUCCESS;
 }
@@ -147,12 +152,16 @@ void fossil_dlist_reverse_backward(fossil_dlist_t* dlist) {
 }
 
 size_t fossil_dlist_size(const fossil_dlist_t* dlist) {
+    if (dlist == NULL) {
+        return 0;
+    }
     size_t size = 0;
     fossil_dlist_node_t* current = dlist->head;
     while (current != NULL) {
         size++;
         current = current->next;
     }
+    // Each node is counted exactly once, no duplicates.
     return size;
 }
 
