@@ -103,10 +103,7 @@ FOSSIL_TEST(c_test_algorithm_transform) {
     array[1] = fossil_tofu_create("i32", "20");
     int result = fossil_algorithm_transform(array, 2, increment_transform);
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_SUCCESS);
-    // Defensive: Ensure null-termination for Windows safety
-    for (int i = 0; i < 2; ++i) {
-        fossil_tofu_get_value(&array[i])[31] = '\0';
-    }
+    // No manual null-termination needed; handled in increment_transform
     ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&array[0]), "11");
     ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&array[1]), "21");
     fossil_tofu_destroy(&array[0]);
@@ -121,7 +118,7 @@ static void* accumulate_sum(const fossil_tofu_t *tofu, void *accum) {
             *sum += atoi(val);
         }
     }
-    return sum;
+    return accum;
 }
 
 FOSSIL_TEST(c_test_algorithm_accumulate) {
@@ -154,12 +151,17 @@ FOSSIL_TEST(c_test_algorithm_filter) {
     int rc = fossil_algorithm_filter(array, 4, filter_even, &result, &result_size);
     ASSUME_ITS_EQUAL_I32(rc, FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_EQUAL_I32(result_size, 2);
-    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&result[0]), "2");
-    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&result[1]), "4");
+    ASSUME_ITS_TRUE(result != NULL);
+    if (result != NULL && result_size >= 2) {
+        ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&result[0]), "2");
+        ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&result[1]), "4");
+    }
     for (size_t i = 0; i < 4; ++i) fossil_tofu_destroy(&array[i]);
-    for (size_t i = 0; i < result_size; ++i) fossil_tofu_destroy(&result[i]);
-    free(result);
-    result = NULL;
+    if (result != NULL) {
+        for (size_t i = 0; i < result_size; ++i) fossil_tofu_destroy(&result[i]);
+        free(result);
+        result = NULL;
+    }
 }
 
 FOSSIL_TEST(c_test_algorithm_reverse) {
@@ -187,6 +189,7 @@ FOSSIL_TEST(c_test_algorithm_min) {
     if (min != NULL) {
         ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(min), "2");
     }
+    // Use min before destroying array elements
     fossil_tofu_destroy(&array[0]);
     fossil_tofu_destroy(&array[1]);
     fossil_tofu_destroy(&array[2]);
@@ -202,13 +205,14 @@ FOSSIL_TEST(c_test_algorithm_max) {
     if (max != NULL) {
         ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(max), "8");
     }
+    // Use max before destroying array elements
     fossil_tofu_destroy(&array[0]);
     fossil_tofu_destroy(&array[1]);
     fossil_tofu_destroy(&array[2]);
 }
 
 static void* sum_fn(const fossil_tofu_t *tofu) {
-    int *value = (int*)fossil_tofu_alloc(sizeof(int));
+    int *value = (int*)malloc(sizeof(int));
     if (!value) return NULL;
     const char *str = fossil_tofu_get_value(tofu);
     *value = (str != NULL) ? atoi(str) : 0;
