@@ -42,6 +42,9 @@ FOSSIL_TEARDOWN(cpp_algorithm_tofu_fixture) {
 
 using fossil::tofu::Algorithm;
 
+// TODO: Add performance tests for each algorithm
+// TODO: Make it so Algorithm class can play with the ToFu class directly
+
 FOSSIL_TEST(cpp_test_algorithm_compare) {
     fossil_tofu_t tofu1 = fossil_tofu_create(const_cast<char *>("i32"), const_cast<char *>("10"));
     fossil_tofu_t tofu2 = fossil_tofu_create(const_cast<char *>("i32"), const_cast<char *>("20"));
