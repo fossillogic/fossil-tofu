@@ -10,31 +10,12 @@ ToFu is a versatile, platform-independent library offering a comprehensive suite
 4. **High Performance**: Implemented in C and C++ to maximize performance and resource efficiency, suitable for both desktop and embedded applications.
 5. **Extensive Documentation and Examples**: Includes comprehensive documentation and example code to help developers get started quickly and effectively.
 
-## Generic Tofu Type
+## ***Prerequisites***
 
-ToFu introduces the `fossil_tofu_t` type, a generic container type that supports various operations:
+To get started, ensure you have the following installed:
 
-- **Creation**: Functions to create and initialize `fossil_tofu_t` objects.
-- **Memorization**: Caching mechanisms to improve performance.
-- **Printing and Destruction**: Utility functions for output and memory management.
-- **Comparison and Copying**: Utilities for comparing and duplicating `fossil_tofu_t` objects.
-
-## Algorithms and Utilities
-
-ToFu provides a rich set of algorithms and utility functions:
-
-- **Transformation and Accumulation**: Functions for transforming and accumulating data in arrays.
-- **Filtering and Searching**: Capabilities for filtering elements and searching with custom predicates.
-- **Array Operations**: Includes reversing, swapping, and shuffling array elements.
-- **Iterator Support**: Provides iterator functionality for traversing data structures.
-- **Memory Management**: Includes custom allocation, reallocation, and free functions.
-- **String Operations**: Utility functions like `fossil_tofu_strdup` for string manipulation.
-
-## Prerequisites
-
-To get started with Fossil ToFu, ensure you have the following installed:
-
-- **Meson Build System**: If you don’t have Meson installed, follow the installation instructions on the official [Meson website](https://mesonbuild.com/Getting-meson.html).
+- **Meson Build System**: If you don’t have Meson `1.8.0` or newer installed, follow the installation instructions on the official [Meson website](https://mesonbuild.com/Getting-meson.html).
+- **Conan Package Manager**: If you prefer using Conan, ensure it is installed by following the instructions on the official [Conan website](https://docs.conan.io/en/latest/installation.html).
 
 ### Adding Dependency
 
