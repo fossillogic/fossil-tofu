@@ -11,3 +11,5 @@ fossil_tofu_lib = library('fossil_tofu',
 fossil_tofu_dep = declare_dependency(
     link_with: [fossil_tofu_lib],
     include_directories: dir)
+
+meson.override_dependency('fossil-tofu', fossil_tofu_dep)
