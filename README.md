@@ -23,14 +23,6 @@ To get started, ensure you have the following installed:
 
 To add a git-wrap, place a `.wrap` file in `subprojects` with the Git repo URL and revision, then use `dependency('fossil-tofu')` in `meson.build` so Meson can fetch and build it automatically.
 
-#### Adding via Conan GitHub repository
-
- packages directly from a GitHub repository if it contains a valid `conanfile.py`.
-
-```bash
-conan install git+https://github.com/fossillogic/fossil-tofu.git#v0.2.2 --name fossil_tofu --build=missing
-```
-
 #### Integrate the Dependency:
 
 Add the `fossil-tofu.wrap` file in your `subprojects` directory and include the following content:
