@@ -33,13 +33,6 @@
 #include <ctype.h>
 #include <time.h>
 
-FSON_TYPE_OBJECT,
-
-    /* New in FSON v2 */
-    FSON_TYPE_ENUM,       /* Symbol from a fixed set */
-    FSON_TYPE_DATETIME,   /* ISO 8601 datetime */
-    FSON_TYPE_DURATION,   /* Time span (e.g. "30s", "5m", "1h") */
-    
 // Lookup table for valid strings corresponding to each tofu type.
 static char *_TOFU_TYPE_ID[] = {
     "i8",
