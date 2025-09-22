@@ -31,7 +31,6 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <ctype.h>
-#include <wchar.h>
 #include <time.h>
 
 FSON_TYPE_OBJECT,
