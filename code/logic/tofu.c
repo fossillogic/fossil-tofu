@@ -52,7 +52,6 @@ static char *_TOFU_TYPE_ID[] = {
     "wstr",
     "cstr",
     "cchar",
-    "wchar",
     "bool",
     "size",
     "any"
@@ -75,7 +74,6 @@ static char *_TOFU_TYPE_NAME[] = {
     "C String",
     "Byte",
     "Char",
-    "Wide Char",
     "Boolean",
     "Size",
     "Any"
@@ -98,7 +96,6 @@ static char *_TOFU_TYPE_INFO[] = {
     "A C string value",
     "A byte value",
     "A character value",
-    "A wide character value",
     "A boolean value",
     "A size value",
     "A generic value"
