@@ -124,7 +124,7 @@ FOSSIL_TEST(c_test_tofu_set_and_get_attribute) {
 
 FOSSIL_TEST(c_test_tofu_validate_type) {
     ASSUME_ITS_EQUAL_I32(fossil_tofu_validate_type("i32"), FOSSIL_TOFU_TYPE_I32);
-    ASSUME_ITS_EQUAL_I32(fossil_tofu_validate_type("double"), FOSSIL_TOFU_TYPE_DOUBLE);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_validate_type("f64"), FOSSIL_TOFU_TYPE_F64);
     ASSUME_ITS_EQUAL_I32(fossil_tofu_validate_type("any"), FOSSIL_TOFU_TYPE_ANY);
 }
 
