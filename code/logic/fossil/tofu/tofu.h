@@ -76,7 +76,8 @@ typedef enum {
     FOSSIL_TOFU_TYPE_CCHAR,     // Single character
     FOSSIL_TOFU_TYPE_BOOL,      // Boolean value
     FOSSIL_TOFU_TYPE_SIZE,      // Size type (e.g., size_t)
-    FOSSIL_TOFU_TYPE_BLOB,      // Arbitrary binary data
+    FOSSIL_TOFU_TYPE_DATETIME,  // ISO 8601 datetime */
+    FOSSIL_TOFU_TYPE_DURATION,  // Time span (e.g. "30s", "5m", "1h") */
     FOSSIL_TOFU_TYPE_ANY        // Any type (generic)
 } fossil_tofu_type_t;
 
