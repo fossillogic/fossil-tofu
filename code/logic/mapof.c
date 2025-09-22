@@ -23,7 +23,6 @@
  * -----------------------------------------------------------------------------
  */
 #include "fossil/tofu/mapof.h"
-#include "fossil/tofu/algorithm.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -110,7 +109,7 @@ int32_t fossil_mapof_remove(fossil_mapof_t* map, char *key) {
 
     fossil_mapof_node_t** current = &map->head;
     while (*current) {
-        if (fossil_algorithm_compare(&(*current)->key, &temp_data) == 0) {
+        if (fossil_tofu_compare(&(*current)->key, &temp_data) == 0) {
             fossil_mapof_node_t* temp = *current;
             *current = (*current)->next;
             fossil_tofu_destroy(&temp->key);
@@ -131,7 +130,7 @@ bool fossil_mapof_contains(const fossil_mapof_t* map, char *key) {
 
     fossil_mapof_node_t* current = map->head;
     while (current) {
-        if (fossil_algorithm_compare(&current->key, &temp_data) == 0) {
+        if (fossil_tofu_compare(&current->key, &temp_data) == 0) {
             return true;
         }
         current = current->next;
@@ -146,7 +145,7 @@ fossil_tofu_t fossil_mapof_get(const fossil_mapof_t* map, char *key) {
 
     fossil_mapof_node_t* current = map->head;
     while (current) {
-        if (fossil_algorithm_compare(&current->key, &temp_data) == 0) {
+        if (fossil_tofu_compare(&current->key, &temp_data) == 0) {
             return current->value;
         }
         current = current->next;
@@ -161,7 +160,7 @@ int32_t fossil_mapof_set(fossil_mapof_t* map, char *key, char *value) {
 
     fossil_mapof_node_t* current = map->head;
     while (current) {
-        if (fossil_algorithm_compare(&current->key, &temp_data) == 0) {
+        if (fossil_tofu_compare(&current->key, &temp_data) == 0) {
             fossil_tofu_destroy(&current->value);
             current->value = fossil_tofu_create(map->value_type, value);
             return FOSSIL_TOFU_SUCCESS;

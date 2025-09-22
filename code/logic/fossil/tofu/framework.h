@@ -28,9 +28,6 @@
 // the main tofu type
 #include "tofu.h"
 
-// the algorithm functions
-#include "algorithm.h"
-
 // array family
 #include "vector.h"
 #include "tuple.h"

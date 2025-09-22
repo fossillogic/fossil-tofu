@@ -127,7 +127,7 @@ FOSSIL_TEST(cpp_test_tofu_mutability) {
 }
 
 FOSSIL_TEST(cpp_test_tofu_type_and_info) {
-    fossil::tofu::Tofu tofu("float", "3.14");
+    fossil::tofu::Tofu tofu("f32", "3.14");
     ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Float");
     ASSUME_ITS_EQUAL_CSTR(tofu.get_type_info().c_str(), "A single-precision floating point value");
 }
@@ -141,22 +141,62 @@ FOSSIL_TEST(cpp_test_tofu_set_and_get_attribute) {
     ASSUME_ITS_EQUAL_CSTR(attr->id, "custom_id");
 }
 
-FOSSIL_TEST(cpp_test_tofu_equals_and_copy) {
-    fossil::tofu::Tofu tofu1("i8", "7");
-    fossil::tofu::Tofu tofu2("i8", "7");
-    ASSUME_ITS_TRUE(tofu1.equals(tofu2));
-    tofu2.set_value("8");
-    ASSUME_ITS_FALSE(tofu1.equals(tofu2));
-
-    fossil::tofu::Tofu tofu3("i16", "22");
-    fossil::tofu::Tofu tofu4 = tofu3; // Copy constructor
-    ASSUME_ITS_TRUE(tofu3.equals(tofu4));
-}
-
 FOSSIL_TEST(cpp_test_tofu_validate_type) {
     ASSUME_ITS_EQUAL_I32(fossil_tofu_validate_type("i32"), FOSSIL_TOFU_TYPE_I32);
-    ASSUME_ITS_EQUAL_I32(fossil_tofu_validate_type("double"), FOSSIL_TOFU_TYPE_DOUBLE);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_validate_type("f64"), FOSSIL_TOFU_TYPE_F64);
     ASSUME_ITS_EQUAL_I32(fossil_tofu_validate_type("any"), FOSSIL_TOFU_TYPE_ANY);
+}
+
+FOSSIL_TEST(cpp_test_tofu_create_invalid_type) {
+    try {
+        fossil::tofu::Tofu tofu("invalid_type", "value");
+        ASSUME_ITS_TRUE(false); // Should not reach here
+    } catch (const std::runtime_error&) {
+        ASSUME_ITS_TRUE(true); // Exception expected
+    }
+}
+
+FOSSIL_TEST(cpp_test_tofu_compare_equal_and_not_equal) {
+    fossil::tofu::Tofu tofu1("i16", "123");
+    fossil::tofu::Tofu tofu2("i16", "123");
+    fossil::tofu::Tofu tofu3("i16", "456");
+    fossil::tofu::Tofu tofu4("u16", "123");
+    ASSUME_ITS_EQUAL_I32(tofu1.compare(tofu2), 0);
+    ASSUME_ITS_TRUE(tofu1.compare(tofu3) < 0);
+    ASSUME_ITS_TRUE(tofu1.compare(tofu4) < 0);
+}
+
+FOSSIL_TEST(cpp_test_tofu_set_value_immutable) {
+    fossil::tofu::Tofu tofu("i8", "1");
+    tofu.set_mutable(false);
+    try {
+        tofu.set_value("2");
+        ASSUME_ITS_TRUE(false); // Should not reach here
+    } catch (const std::runtime_error&) {
+        ASSUME_ITS_TRUE(true); // Exception expected
+    }
+}
+
+FOSSIL_TEST(cpp_test_tofu_get_value_or_default) {
+    fossil::tofu::Tofu tofu("i8", "1");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_value_or_default("default").c_str(), "1");
+}
+
+FOSSIL_TEST(cpp_test_tofu_is_empty) {
+    fossil::tofu::Tofu tofu("i8", "");
+    ASSUME_ITS_TRUE(tofu.is_empty());
+}
+
+FOSSIL_TEST(cpp_test_tofu_clone) {
+    fossil::tofu::Tofu tofu("i8", "1");
+    fossil::tofu::Tofu clone = tofu.clone();
+    ASSUME_ITS_TRUE(tofu.equals(clone));
+}
+
+FOSSIL_TEST(cpp_test_tofu_lock) {
+    fossil::tofu::Tofu tofu("i8", "1");
+    tofu.lock();
+    ASSUME_ITS_FALSE(tofu.is_mutable());
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -176,8 +216,14 @@ FOSSIL_TEST_GROUP(cpp_generic_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_mutability);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_type_and_info);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_set_and_get_attribute);
-    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_equals_and_copy);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_validate_type);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_create_invalid_type);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_compare_equal_and_not_equal);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_set_value_immutable);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_get_value_or_default);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_is_empty);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_clone);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_lock);
 
     // Register the test group
     FOSSIL_TEST_REGISTER(cpp_generic_tofu_fixture);
