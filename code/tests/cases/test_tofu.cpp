@@ -127,7 +127,7 @@ FOSSIL_TEST(cpp_test_tofu_mutability) {
 }
 
 FOSSIL_TEST(cpp_test_tofu_type_and_info) {
-    fossil::tofu::Tofu tofu("float", "3.14");
+    fossil::tofu::Tofu tofu("f32", "3.14");
     ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Float");
     ASSUME_ITS_EQUAL_CSTR(tofu.get_type_info().c_str(), "A single-precision floating point value");
 }
