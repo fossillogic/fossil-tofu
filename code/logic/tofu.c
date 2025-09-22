@@ -150,10 +150,10 @@ uint64_t fossil_tofu_hash64(const char *data) {
 // Managment functions
 // *****************************************************************************
 
-fossil_tofu_t* fossil_tofu_create(const char* type, const char* value) {
+fossil_tofu_t fossil_tofu_create(char* type, char* value) {
     if (!type || !value) {
         fprintf(stderr, "Error: NULL argument passed to fossil_tofu_create\n");
-        return NULL;
+        return (fossil_tofu_t){0};
     }
 
     fossil_tofu_type_t type_enum = fossil_tofu_validate_type(type);
@@ -162,50 +162,41 @@ fossil_tofu_t* fossil_tofu_create(const char* type, const char* value) {
         type_enum = FOSSIL_TOFU_TYPE_ANY;
     }
 
-    fossil_tofu_t* tofu = (fossil_tofu_t*)fossil_tofu_alloc(sizeof(fossil_tofu_t));
-    if (!tofu) {
-        fprintf(stderr, "Memory allocation failed for tofu\n");
-        return NULL;
-    }
-
-    tofu->type = type_enum;
-    tofu->value.data = fossil_tofu_strdup(value);
-    if (!tofu->value.data) {
+    fossil_tofu_t tofu = {0};
+    tofu.type = type_enum;
+    tofu.value.data = fossil_tofu_strdup(value);
+    if (!tofu.value.data) {
         fprintf(stderr, "Memory allocation failed for value.data\n");
-        fossil_tofu_free(tofu);
-        return NULL;
+        return (fossil_tofu_t){0};
     }
-    tofu->value.mutable_flag = true;
-    tofu->value.hash = fossil_tofu_hash64(value);
+    tofu.value.mutable_flag = true;
+    tofu.value.hash = fossil_tofu_hash64(value);
 
-    tofu->attribute.name = fossil_tofu_strdup(_TOFU_TYPE_NAME[tofu->type]);
-    if (!tofu->attribute.name) {
+    tofu.attribute.name = fossil_tofu_strdup(_TOFU_TYPE_NAME[tofu.type]);
+    if (!tofu.attribute.name) {
         fprintf(stderr, "Memory allocation failed for attribute.name\n");
-        fossil_tofu_free(tofu->value.data);
-        fossil_tofu_free(tofu);
-        return NULL;
+        fossil_tofu_free(tofu.value.data);
+        return (fossil_tofu_t){0};
     }
 
-    tofu->attribute.description = fossil_tofu_strdup(_TOFU_TYPE_INFO[tofu->type]);
-    if (!tofu->attribute.description) {
+    tofu.attribute.description = fossil_tofu_strdup(_TOFU_TYPE_INFO[tofu.type]);
+    if (!tofu.attribute.description) {
         fprintf(stderr, "Memory allocation failed for attribute.description\n");
-        fossil_tofu_free(tofu->attribute.name);
-        fossil_tofu_free(tofu->value.data);
-        fossil_tofu_free(tofu);
-        return NULL;
+        fossil_tofu_free(tofu.attribute.name);
+        fossil_tofu_free(tofu.value.data);
+        return (fossil_tofu_t){0};
     }
 
-    tofu->attribute.id = fossil_tofu_strdup(_TOFU_TYPE_ID[tofu->type]);
-    if (!tofu->attribute.id) {
+    tofu.attribute.id = fossil_tofu_strdup(_TOFU_TYPE_ID[tofu.type]);
+    if (!tofu.attribute.id) {
         fprintf(stderr, "Memory allocation failed for attribute.id\n");
-        fossil_tofu_free(tofu->attribute.description);
-        fossil_tofu_free(tofu->attribute.name);
-        fossil_tofu_free(tofu->value.data);
-        fossil_tofu_free(tofu);
-        return NULL;
+        fossil_tofu_free(tofu.attribute.description);
+        fossil_tofu_free(tofu.attribute.name);
+        fossil_tofu_free(tofu.value.data);
+        return (fossil_tofu_t){0};
     }
 
-    tofu->attribute.required = false;
+    tofu.attribute.required = false;
 
     return tofu;
 }
@@ -335,7 +326,7 @@ void fossil_tofu_destroy(fossil_tofu_t *tofu) {
 // Utility functions
 // *****************************************************************************
 
-int fossil_tofu_set_value(fossil_tofu_t *tofu, const char *value) {
+int fossil_tofu_set_value(fossil_tofu_t *tofu, char *value) {
     if (tofu == NULL) return FOSSIL_TOFU_ERROR_NULL_POINTER;
     if (!tofu->value.mutable_flag) return FOSSIL_TOFU_ERROR_IMMUTABLE;
     if (value == NULL) return FOSSIL_TOFU_ERROR_INVALID_ARGUMENT;
@@ -346,7 +337,7 @@ int fossil_tofu_set_value(fossil_tofu_t *tofu, const char *value) {
     return FOSSIL_TOFU_SUCCESS;
 }
 
-const char* fossil_tofu_get_value(const fossil_tofu_t *tofu) {
+char *fossil_tofu_get_value(const fossil_tofu_t *tofu) {
     if (tofu == NULL) return NULL;
     return tofu->value.data;
 }
@@ -558,13 +549,19 @@ fossil_tofu_t* fossil_tofu_parse(const char *fson_text) {
         type_buf[type_len] = '\0';
 
         // Create tofu object
-        fossil_tofu_t *tofu = fossil_tofu_create(type_buf, value_buf);
-        return tofu;
-    }
+        fossil_tofu_t tofu = fossil_tofu_create(type_buf, value_buf);
+        fossil_tofu_t *tofu_ptr = (fossil_tofu_t*)fossil_tofu_alloc(sizeof(fossil_tofu_t));
+        if (!tofu_ptr) return NULL;
+        *tofu_ptr = tofu;
+        return tofu_ptr;
+        }
 
-    // Fallback: treat as cstr
-    fossil_tofu_t *tofu = fossil_tofu_create("cstr", fson_text);
-    return tofu;
+        // Fallback: treat as cstr
+        fossil_tofu_t tofu = fossil_tofu_create("cstr", fson_text);
+        fossil_tofu_t *tofu_ptr = (fossil_tofu_t*)fossil_tofu_alloc(sizeof(fossil_tofu_t));
+        if (!tofu_ptr) return NULL;
+        *tofu_ptr = tofu;
+        return tofu_ptr;
 }
 
 int fossil_tofu_convert_type(fossil_tofu_t *tofu, fossil_tofu_type_t new_type) {
