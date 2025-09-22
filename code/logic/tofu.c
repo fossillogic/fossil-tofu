@@ -60,9 +60,6 @@ static char *_TOFU_TYPE_ID[] = {
     "char",
     "bool",
     "size",
-    "blob",
-    "object",
-    "enum",
     "datetime",
     "duration",
     "any"
@@ -86,9 +83,6 @@ static char *_TOFU_TYPE_NAME[] = {
     "Char",
     "Boolean",
     "Size",
-    "Blob",
-    "Object",
-    "Enumeration",
     "Date time",
     "Duration",
     "Any"
@@ -112,9 +106,6 @@ static char *_TOFU_TYPE_INFO[] = {
     "A character value",
     "A boolean value",
     "A size value",
-    "Arbitrary binary data",
-    "An object",
-    "An enumeration value",
     "A date and time",
     "A duration",
     "A generic value"
