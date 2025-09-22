@@ -565,7 +565,7 @@ fossil_tofu_t* fossil_tofu_parse(const char *fson_text) {
         }
 
         // Fallback: treat as cstr
-        fossil_tofu_t tofu = fossil_tofu_create("cstr", (const char*)fson_text);
+        fossil_tofu_t tofu = fossil_tofu_create("cstr", fossil_tofu_strdup(fson_text));
         fossil_tofu_t *tofu_ptr = (fossil_tofu_t*)fossil_tofu_alloc(sizeof(fossil_tofu_t));
         if (!tofu_ptr) return NULL;
         *tofu_ptr = tofu;
