@@ -41,52 +41,57 @@ extern "C"
 // Type definitions
 // *****************************************************************************
 
-// Consistent return values for functions in the "tofu" data structure.
-enum {
-    FOSSIL_TOFU_SUCCESS = 0,
-    FOSSIL_TOFU_FAILURE = -1
-};
-
 // Error codes for the "tofu" data structure.
 enum {
-    FOSSIL_TOFU_ERROR_INVALID_ARGUMENT = -2,
-    FOSSIL_TOFU_ERROR_MEMORY_ALLOCATION = -3,
-    FOSSIL_TOFU_ERROR_TYPE_MISMATCH = -4,
-    FOSSIL_TOFU_ERROR_NOT_FOUND = -5
+    FOSSIL_TOFU_SUCCESS = 0,                      // Operation successful
+    FOSSIL_TOFU_FAILURE = -1,                     // General failure
+    FOSSIL_TOFU_ERROR_INVALID_ARGUMENT = -2,      // Invalid argument provided to function
+    FOSSIL_TOFU_ERROR_MEMORY_ALLOCATION = -3,     // Memory allocation failed
+    FOSSIL_TOFU_ERROR_TYPE_MISMATCH = -4,         // Type mismatch encountered
+    FOSSIL_TOFU_ERROR_NOT_FOUND = -5,             // Requested item not found
+    FOSSIL_TOFU_ERROR_OVERFLOW = -6,       // Value too large for the type
+    FOSSIL_TOFU_ERROR_UNDERFLOW = -7,      // Value too small for the type
+    FOSSIL_TOFU_ERROR_IMMUTABLE = -8,      // Tried to modify an immutable value
+    FOSSIL_TOFU_ERROR_NULL_POINTER = -9,   // NULL pointer provided where not allowed
+    FOSSIL_TOFU_ERROR_UNSUPPORTED = -10,   // Operation not supported for this type
+    FOSSIL_TOFU_ERROR_CAPACITY = -11,      // Container reached max capacity
+    FOSSIL_TOFU_ERROR_PARSE = -12          // Failed to parse input into a value
 };
 
 // Enumerated types for representing various data types in the "tofu" data structure.
 typedef enum {
-    FOSSIL_TOFU_TYPE_I8,
-    FOSSIL_TOFU_TYPE_I16,
-    FOSSIL_TOFU_TYPE_I32,
-    FOSSIL_TOFU_TYPE_I64,
-    FOSSIL_TOFU_TYPE_U8,
-    FOSSIL_TOFU_TYPE_U16,
-    FOSSIL_TOFU_TYPE_U32,
-    FOSSIL_TOFU_TYPE_U64,
-    FOSSIL_TOFU_TYPE_HEX,
-    FOSSIL_TOFU_TYPE_OCTAL,
-    FOSSIL_TOFU_TYPE_FLOAT,
-    FOSSIL_TOFU_TYPE_DOUBLE,
-    FOSSIL_TOFU_TYPE_WSTR,
-    FOSSIL_TOFU_TYPE_CSTR,
-    FOSSIL_TOFU_TYPE_CCHAR,
-    FOSSIL_TOFU_TYPE_BOOL,
-    FOSSIL_TOFU_TYPE_SIZE,
-    FOSSIL_TOFU_TYPE_ANY
+    FOSSIL_TOFU_TYPE_I8,        // 8-bit signed integer
+    FOSSIL_TOFU_TYPE_I16,       // 16-bit signed integer
+    FOSSIL_TOFU_TYPE_I32,       // 32-bit signed integer
+    FOSSIL_TOFU_TYPE_I64,       // 64-bit signed integer
+    FOSSIL_TOFU_TYPE_U8,        // 8-bit unsigned integer
+    FOSSIL_TOFU_TYPE_U16,       // 16-bit unsigned integer
+    FOSSIL_TOFU_TYPE_U32,       // 32-bit unsigned integer
+    FOSSIL_TOFU_TYPE_U64,       // 64-bit unsigned integer
+    FOSSIL_TOFU_TYPE_HEX,       // Hexadecimal value (string or integer)
+    FOSSIL_TOFU_TYPE_OCTAL,     // Octal value (string or integer)
+    FOSSIL_TOFU_TYPE_FLOAT,     // Single-precision floating point
+    FOSSIL_TOFU_TYPE_DOUBLE,    // Double-precision floating point
+    FOSSIL_TOFU_TYPE_CSTR,      // C-style string (null-terminated)
+    FOSSIL_TOFU_TYPE_CCHAR,     // Single character
+    FOSSIL_TOFU_TYPE_BOOL,      // Boolean value
+    FOSSIL_TOFU_TYPE_SIZE,      // Size type (e.g., size_t)
+    FOSSIL_TOFU_TYPE_BLOB,      // Arbitrary binary data
+    FOSSIL_TOFU_TYPE_ANY        // Any type (generic)
 } fossil_tofu_type_t;
 
 typedef struct {
-    char *data;
-    bool mutable_flag;
+    char *data;        // Pointer to the data
+    bool mutable_flag; // Whether the data is mutable_flag or immutable
+    uint64_t hash;     // Unique 64-bit hash value for the tofu
 } fossil_tofu_value_t;
 
 // Struct for tofu attributes
 typedef struct {
-    char* name; // Name of the attribute
-    char* description; // Description of the attribute
-    char* id; // Unique identifier for the attribute
+    char* name;          // Name of the attribute
+    char* description;   // Description of the attribute
+    char* id;            // Unique identifier for the attribute
+    bool required;       // Whether this attribute must be set
 } fossil_tofu_attribute_t;
 
 // Struct for tofu
@@ -270,6 +275,88 @@ bool fossil_tofu_equals(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2);
  * @note O(1) - Constant time complexity.
  */
 int fossil_tofu_copy(fossil_tofu_t *dest, const fossil_tofu_t *src);
+
+/**
+ * @brief Computes a 64-bit hash for a tofu object.
+ *
+ * @param tofu The tofu object.
+ * @return The 64-bit hash value.
+ * @note O(n) - Linear complexity based on value length.
+ */
+uint64_t fossil_tofu_hash(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Checks if two tofu objects have identical hashes.
+ *
+ * @param tofu1 The first tofu object.
+ * @param tofu2 The second tofu object.
+ * @return true if hashes match, false otherwise.
+ * @note O(1)
+ */
+bool fossil_tofu_hash_equals(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2);
+
+/**
+ * @brief Serializes a tofu object to a JSON-like string.
+ *
+ * @param tofu The tofu object to serialize.
+ * @return A newly allocated string containing the serialized representation.
+ *         Caller must free the string.
+ * @note O(n) - Linear complexity based on data size.
+ */
+char* fossil_tofu_serialize(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Parses a string into a tofu object.
+ *
+ * @param serialized The serialized string.
+ * @return A newly allocated tofu object or NULL on failure.
+ * @note O(n) - Linear complexity based on input size.
+ */
+fossil_tofu_t* fossil_tofu_parse(const char *serialized);
+
+/**
+ * @brief Converts a tofu value to a new type.
+ *
+ * @param tofu The tofu object to convert.
+ * @param new_type The target type.
+ * @return FOSSIL_TOFU_SUCCESS on success, error code otherwise.
+ * @note O(1) for most conversions, O(n) for string conversions.
+ */
+int fossil_tofu_convert_type(fossil_tofu_t *tofu, fossil_tofu_type_t new_type);
+
+/**
+ * @brief Gets the value as a string or returns a default if NULL.
+ */
+const char* fossil_tofu_get_value_or_default(const fossil_tofu_t *tofu, const char *default_value);
+
+/**
+ * @brief Validates the tofu object (type + value consistency).
+ *
+ * @param tofu The tofu object.
+ * @return FOSSIL_TOFU_SUCCESS if valid, error code otherwise.
+ */
+int fossil_tofu_validate(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Checks if the tofu is empty (no data).
+ *
+ * @param tofu The tofu object.
+ * @return true if empty, false otherwise.
+ */
+bool fossil_tofu_is_empty(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Deep clones a tofu object, including its data and attributes.
+ *
+ * @param tofu The tofu object to clone.
+ * @return A newly allocated tofu object or NULL on failure.
+ */
+fossil_tofu_t* fossil_tofu_clone(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Permanently locks a tofu object to make it immutable.
+ */
+int fossil_tofu_lock(fossil_tofu_t *tofu);
 
 // *****************************************************************************
 // Memory management functions
@@ -470,6 +557,102 @@ public:
     void set_attribute(const std::string& name, const std::string& description, const std::string& id) {
         if (fossil_tofu_set_attribute(&tofu_, name.c_str(), description.c_str(), id.c_str()) != FOSSIL_TOFU_SUCCESS) {
             throw std::runtime_error("Failed to set attribute");
+        }
+    }
+
+    /**
+     * @brief Computes a 64-bit hash for this Tofu object.
+     */
+    uint64_t hash() const {
+        return fossil_tofu_hash(&tofu_);
+    }
+
+    /**
+     * @brief Checks if this Tofu object has the same hash as another.
+     */
+    bool hash_equals(const Tofu& other) const {
+        return fossil_tofu_hash_equals(&tofu_, &other.tofu_);
+    }
+
+    /**
+     * @brief Serializes this Tofu object to a JSON-like string.
+     */
+    std::string serialize() const {
+        char* serialized = fossil_tofu_serialize(&tofu_);
+        std::string result = serialized ? std::string(serialized) : std::string();
+        if (serialized) fossil_tofu_free(serialized);
+        return result;
+    }
+
+    /**
+     * @brief Parses a serialized string into a new Tofu object.
+     * Throws std::runtime_error on failure.
+     */
+    static Tofu parse(const std::string& serialized) {
+        fossil_tofu_t* parsed = fossil_tofu_parse(serialized.c_str());
+        if (!parsed) throw std::runtime_error("Failed to parse Tofu");
+        Tofu result(*parsed);
+        fossil_tofu_destroy(parsed);
+        fossil_tofu_free(parsed);
+        return result;
+    }
+
+    /**
+     * @brief Converts the value of this Tofu object to a new type.
+     * Throws std::runtime_error on failure.
+     */
+    void convert_type(fossil_tofu_type_t new_type) {
+        if (fossil_tofu_convert_type(&tofu_, new_type) != FOSSIL_TOFU_SUCCESS) {
+            throw std::runtime_error("Failed to convert Tofu type");
+        }
+    }
+
+    /**
+     * @brief Gets the value as a string, or returns the provided default if NULL.
+     */
+    std::string get_value_or_default(const std::string& default_value) const {
+        const char* val = fossil_tofu_get_value_or_default(&tofu_, default_value.c_str());
+        return val ? std::string(val) : default_value;
+    }
+
+    /**
+     * @brief Validates the Tofu object (type + value consistency).
+     * Throws std::runtime_error if invalid.
+     */
+    void validate() const {
+        int result = fossil_tofu_validate(&tofu_);
+        if (result != FOSSIL_TOFU_SUCCESS) {
+            throw std::runtime_error("Tofu validation failed");
+        }
+    }
+
+    /**
+     * @brief Checks if the Tofu object is empty (no data).
+     */
+    bool is_empty() const {
+        return fossil_tofu_is_empty(&tofu_);
+    }
+
+    /**
+     * @brief Deep clones this Tofu object.
+     * Throws std::runtime_error on failure.
+     */
+    Tofu clone() const {
+        fossil_tofu_t* cloned = fossil_tofu_clone(&tofu_);
+        if (!cloned) throw std::runtime_error("Failed to clone Tofu");
+        Tofu result(*cloned);
+        fossil_tofu_destroy(cloned);
+        fossil_tofu_free(cloned);
+        return result;
+    }
+
+    /**
+     * @brief Permanently locks this Tofu object to make it immutable.
+     * Throws std::runtime_error on failure.
+     */
+    void lock() {
+        if (fossil_tofu_lock(&tofu_) != FOSSIL_TOFU_SUCCESS) {
+            throw std::runtime_error("Failed to lock Tofu");
         }
     }
 
