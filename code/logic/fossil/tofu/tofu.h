@@ -286,15 +286,6 @@ bool fossil_tofu_equals(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2);
 int fossil_tofu_copy(fossil_tofu_t *dest, const fossil_tofu_t *src);
 
 /**
- * @brief Computes a 64-bit hash for a tofu object.
- *
- * @param tofu The tofu object.
- * @return The 64-bit hash value.
- * @note O(n) - Linear complexity based on value length.
- */
-uint64_t fossil_tofu_hash(const fossil_tofu_t *tofu);
-
-/**
  * @brief Checks if two tofu objects have identical hashes.
  *
  * @param tofu1 The first tofu object.
@@ -564,13 +555,6 @@ public:
         if (fossil_tofu_set_attribute(&tofu_, name.c_str(), description.c_str(), id.c_str()) != FOSSIL_TOFU_SUCCESS) {
             throw std::runtime_error("Failed to set attribute");
         }
-    }
-
-    /**
-     * @brief Computes a 64-bit hash for this Tofu object.
-     */
-    uint64_t hash() const {
-        return fossil_tofu_hash(&tofu_);
     }
 
     /**
