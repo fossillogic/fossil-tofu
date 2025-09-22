@@ -516,7 +516,7 @@ fossil_tofu_t* fossil_tofu_parse(const char *fson_text) {
         // Parse first key: type: value
         const char *key_start = fson_text;
         while (*fson_text && *fson_text != ':') fson_text++;
-        size_t key_len = fson_text - key_start;
+        // size_t key_len = fson_text - key_start; // Unused variable removed
         if (*fson_text != ':') return NULL;
         fson_text++; // skip ':'
 
@@ -567,7 +567,7 @@ fossil_tofu_t* fossil_tofu_parse(const char *fson_text) {
         }
 
         // Fallback: treat as cstr
-        fossil_tofu_t tofu = fossil_tofu_create("cstr", fson_text);
+        fossil_tofu_t tofu = fossil_tofu_create("cstr", (const char*)fson_text);
         fossil_tofu_t *tofu_ptr = (fossil_tofu_t*)fossil_tofu_alloc(sizeof(fossil_tofu_t));
         if (!tofu_ptr) return NULL;
         *tofu_ptr = tofu;
