@@ -454,11 +454,6 @@ int fossil_tofu_copy(fossil_tofu_t *dest, const fossil_tofu_t *src) {
 // Extended API
 // *****************************************************************************
 
-bool fossil_tofu_hash_equals(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2) {
-    if (!tofu1 || !tofu2) return false;
-    return fossil_tofu_hash(tofu1) == fossil_tofu_hash(tofu2);
-}
-
 char* fossil_tofu_serialize(const fossil_tofu_t *tofu) {
     if (!tofu) return NULL;
 

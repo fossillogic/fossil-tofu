@@ -286,16 +286,6 @@ bool fossil_tofu_equals(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2);
 int fossil_tofu_copy(fossil_tofu_t *dest, const fossil_tofu_t *src);
 
 /**
- * @brief Checks if two tofu objects have identical hashes.
- *
- * @param tofu1 The first tofu object.
- * @param tofu2 The second tofu object.
- * @return true if hashes match, false otherwise.
- * @note O(1)
- */
-bool fossil_tofu_hash_equals(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2);
-
-/**
  * @brief Serializes a tofu object to a JSON-like string.
  *
  * @param tofu The tofu object to serialize.
@@ -555,13 +545,6 @@ public:
         if (fossil_tofu_set_attribute(&tofu_, name.c_str(), description.c_str(), id.c_str()) != FOSSIL_TOFU_SUCCESS) {
             throw std::runtime_error("Failed to set attribute");
         }
-    }
-
-    /**
-     * @brief Checks if this Tofu object has the same hash as another.
-     */
-    bool hash_equals(const Tofu& other) const {
-        return fossil_tofu_hash_equals(&tofu_, &other.tofu_);
     }
 
     /**
