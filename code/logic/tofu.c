@@ -167,7 +167,11 @@ fossil_tofu_t fossil_tofu_create(char* type, char* value) {
     tofu.value.data = fossil_tofu_strdup(value);
     if (!tofu.value.data) {
         fprintf(stderr, "Memory allocation failed for value.data\n");
-        return (fossil_tofu_t){0};
+        tofu.value.data = NULL;
+        tofu.attribute.name = NULL;
+        tofu.attribute.description = NULL;
+        tofu.attribute.id = NULL;
+        return tofu;
     }
     tofu.value.mutable_flag = true;
     tofu.value.hash = fossil_tofu_hash64(value);
@@ -176,7 +180,11 @@ fossil_tofu_t fossil_tofu_create(char* type, char* value) {
     if (!tofu.attribute.name) {
         fprintf(stderr, "Memory allocation failed for attribute.name\n");
         fossil_tofu_free(tofu.value.data);
-        return (fossil_tofu_t){0};
+        tofu.value.data = NULL;
+        tofu.attribute.name = NULL;
+        tofu.attribute.description = NULL;
+        tofu.attribute.id = NULL;
+        return tofu;
     }
 
     tofu.attribute.description = fossil_tofu_strdup(_TOFU_TYPE_INFO[tofu.type]);
@@ -184,7 +192,11 @@ fossil_tofu_t fossil_tofu_create(char* type, char* value) {
         fprintf(stderr, "Memory allocation failed for attribute.description\n");
         fossil_tofu_free(tofu.attribute.name);
         fossil_tofu_free(tofu.value.data);
-        return (fossil_tofu_t){0};
+        tofu.value.data = NULL;
+        tofu.attribute.name = NULL;
+        tofu.attribute.description = NULL;
+        tofu.attribute.id = NULL;
+        return tofu;
     }
 
     tofu.attribute.id = fossil_tofu_strdup(_TOFU_TYPE_ID[tofu.type]);
@@ -193,7 +205,11 @@ fossil_tofu_t fossil_tofu_create(char* type, char* value) {
         fossil_tofu_free(tofu.attribute.description);
         fossil_tofu_free(tofu.attribute.name);
         fossil_tofu_free(tofu.value.data);
-        return (fossil_tofu_t){0};
+        tofu.value.data = NULL;
+        tofu.attribute.name = NULL;
+        tofu.attribute.description = NULL;
+        tofu.attribute.id = NULL;
+        return tofu;
     }
 
     tofu.attribute.required = false;
@@ -249,6 +265,9 @@ fossil_tofu_t* fossil_tofu_create_copy(const fossil_tofu_t* other) {
     tofu->type = other->type;
     tofu->value.data = fossil_tofu_strdup(other->value.data);
     if (!tofu->value.data) {
+        tofu->attribute.name = NULL;
+        tofu->attribute.description = NULL;
+        tofu->attribute.id = NULL;
         fossil_tofu_free(tofu);
         return NULL;
     }
@@ -259,6 +278,8 @@ fossil_tofu_t* fossil_tofu_create_copy(const fossil_tofu_t* other) {
     tofu->attribute.name = fossil_tofu_strdup(other->attribute.name);
     if (!tofu->attribute.name) {
         fossil_tofu_free(tofu->value.data);
+        tofu->attribute.description = NULL;
+        tofu->attribute.id = NULL;
         fossil_tofu_free(tofu);
         return NULL;
     }
@@ -266,6 +287,7 @@ fossil_tofu_t* fossil_tofu_create_copy(const fossil_tofu_t* other) {
     if (!tofu->attribute.description) {
         fossil_tofu_free(tofu->attribute.name);
         fossil_tofu_free(tofu->value.data);
+        tofu->attribute.id = NULL;
         fossil_tofu_free(tofu);
         return NULL;
     }
@@ -316,10 +338,22 @@ fossil_tofu_t* fossil_tofu_create_move(fossil_tofu_t* other) {
 
 void fossil_tofu_destroy(fossil_tofu_t *tofu) {
     if (tofu == NULL) return;
-    fossil_tofu_free(tofu->value.data);
-    fossil_tofu_free(tofu->attribute.name);
-    fossil_tofu_free(tofu->attribute.description);
-    fossil_tofu_free(tofu->attribute.id);
+    if (tofu->value.data) {
+        fossil_tofu_free(tofu->value.data);
+        tofu->value.data = NULL;
+    }
+    if (tofu->attribute.name) {
+        fossil_tofu_free(tofu->attribute.name);
+        tofu->attribute.name = NULL;
+    }
+    if (tofu->attribute.description) {
+        fossil_tofu_free(tofu->attribute.description);
+        tofu->attribute.description = NULL;
+    }
+    if (tofu->attribute.id) {
+        fossil_tofu_free(tofu->attribute.id);
+        tofu->attribute.id = NULL;
+    }
 }
 
 // *****************************************************************************
