@@ -99,7 +99,7 @@ FOSSIL_TEST(c_test_tofu_mutability) {
     fossil_tofu_set_mutable(&tofu, false);
     ASSUME_ITS_FALSE(fossil_tofu_is_mutable(&tofu));
     int result = fossil_tofu_set_value(&tofu, "100");
-    ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_FAILURE);
+    ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_ERROR_IMMUTABLE);
     fossil_tofu_destroy(&tofu);
 }
 
