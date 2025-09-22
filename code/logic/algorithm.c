@@ -102,7 +102,6 @@ int fossil_algorithm_sort(fossil_tofu_t *array, size_t size, bool ascending) {
                 case FOSSIL_TOFU_TYPE_WSTR:
                 case FOSSIL_TOFU_TYPE_CSTR:
                 case FOSSIL_TOFU_TYPE_CCHAR:
-                case FOSSIL_TOFU_TYPE_WCHAR:
                 case FOSSIL_TOFU_TYPE_ANY: {
                     cmp = strcmp(array[i].value.data, array[j].value.data);
                     break;
@@ -242,7 +241,6 @@ fossil_tofu_t* fossil_algorithm_min(const fossil_tofu_t *array, size_t size) {
             case FOSSIL_TOFU_TYPE_WSTR:
             case FOSSIL_TOFU_TYPE_CSTR:
             case FOSSIL_TOFU_TYPE_CCHAR:
-            case FOSSIL_TOFU_TYPE_WCHAR:
             case FOSSIL_TOFU_TYPE_ANY: {
                 cmp = strcmp(array[i].value.data, min->value.data);
                 break;
@@ -308,7 +306,6 @@ fossil_tofu_t* fossil_algorithm_max(const fossil_tofu_t *array, size_t size) {
             case FOSSIL_TOFU_TYPE_WSTR:
             case FOSSIL_TOFU_TYPE_CSTR:
             case FOSSIL_TOFU_TYPE_CCHAR:
-            case FOSSIL_TOFU_TYPE_WCHAR:
             case FOSSIL_TOFU_TYPE_ANY: {
                 cmp = strcmp(array[i].value.data, max->value.data);
                 break;
