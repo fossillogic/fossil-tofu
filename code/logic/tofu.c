@@ -115,6 +115,45 @@ fossil_tofu_type_t fossil_tofu_validate_type(const char *type_str) {
     return FOSSIL_TOFU_TYPE_ANY;
 }
 
+/**
+ * @brief Computes a 64-bit hash of arbitrary data with optional seeding.
+ *
+ * This function implements a high-quality, parallelized 64-bit hash algorithm
+ * designed for speed, low collision rate, and good avalanche properties.
+ *
+ * ## Algorithm Overview
+ * - **Seed Mixing:** The user-provided seed is diffused through a SplitMix64 step
+ *   to maximize entropy even for small or predictable seeds.
+ * - **Parallel Accumulators:** Two independent 64-bit accumulators (`v1` and `v2`)
+ *   are initialized with different constants and updated in parallel. This improves
+ *   mixing and reduces hash clustering for large inputs.
+ * - **Chunk Processing:** Data is processed in 16-byte chunks whenever possible,
+ *   with each 64-bit lane mixed into a different accumulator. Each accumulator uses
+ *   a unique prime multiplier and a left-rotate step for diffusion.
+ * - **Tail Handling:** Remaining bytes (<16) are handled carefully to ensure every
+ *   bit affects the final result.
+ * - **Finalization:** The two accumulators are merged using a mix function and
+ *   passed through `mix64()`, a SplitMix64-style avalanche function, producing the
+ *   final hash value.
+ *
+ * ## Properties
+ * - **Deterministic:** Same input and seed will always produce the same result.
+ * - **Seedable:** A nonzero seed can be used to create independent hash streams.
+ * - **Good Avalanche:** Small changes in input produce large, unpredictable
+ *   differences in output.
+ * - **Portable:** Requires only 64-bit integer operations; no platform-specific
+ *   intrinsics or dependencies.
+ *
+ * @param data Pointer to input buffer (must not be NULL).
+ * @param len  Length of input buffer in bytes.
+ * @param seed Optional 64-bit seed to randomize the hash (0 for unseeded).
+ * @return 64-bit hash value of the input data.
+ *
+ * @note Complexity: O(n) – linear in the number of input bytes.
+ * @note This function is not cryptographically secure. Use a proper cryptographic
+ *       hash (e.g., SHA-256) if resistance to deliberate collisions is required.
+ */
+
 static inline uint64_t mix64(uint64_t x) {
     x ^= x >> 30;
     x *= 0xbf58476d1ce4e5b9ULL;
