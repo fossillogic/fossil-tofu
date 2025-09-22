@@ -435,6 +435,13 @@ public:
     }
 
     /**
+     * @brief Constructs a Tofu object from a fossil_tofu_t struct.
+     */
+    Tofu(const fossil_tofu_t& tofu) {
+        tofu_ = *fossil_tofu_create_copy(&tofu);
+    }
+
+    /**
      * @brief Destructor. Automatically destroys the internal C Tofu object.
      */
     ~Tofu() {
