@@ -34,7 +34,13 @@
 #include <wchar.h>
 #include <time.h>
 
+FSON_TYPE_OBJECT,
 
+    /* New in FSON v2 */
+    FSON_TYPE_ENUM,       /* Symbol from a fixed set */
+    FSON_TYPE_DATETIME,   /* ISO 8601 datetime */
+    FSON_TYPE_DURATION,   /* Time span (e.g. "30s", "5m", "1h") */
+    
 // Lookup table for valid strings corresponding to each tofu type.
 static char *_TOFU_TYPE_ID[] = {
     "i8",
@@ -55,6 +61,10 @@ static char *_TOFU_TYPE_ID[] = {
     "bool",
     "size",
     "blob",
+    "object",
+    "enum",
+    "datetime",
+    "duration",
     "any"
 };
 
@@ -77,6 +87,10 @@ static char *_TOFU_TYPE_NAME[] = {
     "Boolean",
     "Size",
     "Blob",
+    "Object",
+    "Enumeration",
+    "Date time",
+    "Duration",
     "Any"
 };
 
@@ -99,6 +113,10 @@ static char *_TOFU_TYPE_INFO[] = {
     "A boolean value",
     "A size value",
     "Arbitrary binary data",
+    "An object",
+    "An enumeration value",
+    "A date and time",
+    "A duration",
     "A generic value"
 };
 
