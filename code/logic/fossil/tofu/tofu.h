@@ -154,6 +154,15 @@ void fossil_tofu_destroy(fossil_tofu_t *tofu);
 // *****************************************************************************
 
 /**
+ * Function to compare two `fossil_tofu_t` objects.
+ *
+ * @param tofu1 The first `fossil_tofu_t` object.
+ * @param tofu2 The second `fossil_tofu_t` object.
+ * @return A negative value if tofu1 < tofu2, 0 if tofu1 == tofu2, or a positive value if tofu1 > tofu2.
+ */
+int fossil_tofu_compare(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2);
+
+/**
  * Function to set the value of a `fossil_tofu_t` object.
  *
  * @param tofu Pointer to the `fossil_tofu_t` object.

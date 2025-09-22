@@ -326,6 +326,16 @@ void fossil_tofu_destroy(fossil_tofu_t *tofu) {
 // Utility functions
 // *****************************************************************************
 
+int fossil_tofu_compare(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2) {
+    if (tofu1 == NULL || tofu2 == NULL || tofu1->value.data == NULL || tofu2->value.data == NULL) return FOSSIL_TOFU_SUCCESS;
+
+    if (tofu1->type != tofu2->type) {
+        return (int)tofu1->type - (int)tofu2->type;
+    }
+
+    return strcmp(tofu1->value.data, tofu2->value.data);
+}
+
 int fossil_tofu_set_value(fossil_tofu_t *tofu, char *value) {
     if (tofu == NULL) return FOSSIL_TOFU_ERROR_NULL_POINTER;
     if (!tofu->value.mutable_flag) return FOSSIL_TOFU_ERROR_IMMUTABLE;
