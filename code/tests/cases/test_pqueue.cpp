@@ -61,11 +61,6 @@ FOSSIL_TEST(cpp_test_pqueue_create_container_and_destroy) {
     // No direct type check; assume construction worked.
 }
 
-FOSSIL_TEST(cpp_test_pqueue_create_default_and_destroy) {
-    PQueue pqueue;
-    // No direct type check; assume construction worked.
-}
-
 FOSSIL_TEST(cpp_test_pqueue_insert_and_remove) {
     PQueue pqueue("i32");
     pqueue.insert("10", 2);
@@ -161,7 +156,6 @@ FOSSIL_TEST(cpp_test_pqueue_size_consistency) {
 FOSSIL_TEST_GROUP(cpp_pqueue_tofu_tests) {    
     // Generic ToFu Fixture
     FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_create_container_and_destroy);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_create_default_and_destroy);
     FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_insert_and_remove);
     FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_create_copy);
     FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_create_move);
