@@ -514,9 +514,7 @@ fossil_tofu_t* fossil_tofu_parse(const char *fson_text) {
         while (isspace((unsigned char)*fson_text)) fson_text++;
 
         // Parse first key: type: value
-        const char *key_start = fson_text;
         while (*fson_text && *fson_text != ':') fson_text++;
-        // size_t key_len = fson_text - key_start; // Unused variable removed
         if (*fson_text != ':') return NULL;
         fson_text++; // skip ':'
 
@@ -572,130 +570,6 @@ fossil_tofu_t* fossil_tofu_parse(const char *fson_text) {
         if (!tofu_ptr) return NULL;
         *tofu_ptr = tofu;
         return tofu_ptr;
-}
-
-int fossil_tofu_convert_type(fossil_tofu_t *tofu, fossil_tofu_type_t new_type) {
-    if (!tofu || !tofu->value.data) return FOSSIL_TOFU_ERROR_NULL_POINTER;
-
-    char *endptr = NULL;
-    char buf[64];
-    switch (new_type) {
-        case FOSSIL_TOFU_TYPE_I8: {
-            long v = strtol(tofu->value.data, &endptr, 10);
-            if (*endptr != '\0') return FOSSIL_TOFU_ERROR_PARSE;
-            if (v < INT8_MIN) return FOSSIL_TOFU_ERROR_UNDERFLOW;
-            if (v > INT8_MAX) return FOSSIL_TOFU_ERROR_OVERFLOW;
-            snprintf(buf, sizeof(buf), "%d", (int8_t)v);
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_I16: {
-            long v = strtol(tofu->value.data, &endptr, 10);
-            if (*endptr != '\0') return FOSSIL_TOFU_ERROR_PARSE;
-            if (v < INT16_MIN) return FOSSIL_TOFU_ERROR_UNDERFLOW;
-            if (v > INT16_MAX) return FOSSIL_TOFU_ERROR_OVERFLOW;
-            snprintf(buf, sizeof(buf), "%d", (int16_t)v);
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_I32: {
-            long v = strtol(tofu->value.data, &endptr, 10);
-            if (*endptr != '\0') return FOSSIL_TOFU_ERROR_PARSE;
-            if (v < INT32_MIN) return FOSSIL_TOFU_ERROR_UNDERFLOW;
-            if (v > INT32_MAX) return FOSSIL_TOFU_ERROR_OVERFLOW;
-            snprintf(buf, sizeof(buf), "%d", (int32_t)v);
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_I64: {
-            long long v = strtoll(tofu->value.data, &endptr, 10);
-            if (*endptr != '\0') return FOSSIL_TOFU_ERROR_PARSE;
-            snprintf(buf, sizeof(buf), "%lld", v);
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_U8: {
-            unsigned long v = strtoul(tofu->value.data, &endptr, 10);
-            if (*endptr != '\0') return FOSSIL_TOFU_ERROR_PARSE;
-            if (v > UINT8_MAX) return FOSSIL_TOFU_ERROR_OVERFLOW;
-            snprintf(buf, sizeof(buf), "%u", (uint8_t)v);
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_U16: {
-            unsigned long v = strtoul(tofu->value.data, &endptr, 10);
-            if (*endptr != '\0') return FOSSIL_TOFU_ERROR_PARSE;
-            if (v > UINT16_MAX) return FOSSIL_TOFU_ERROR_OVERFLOW;
-            snprintf(buf, sizeof(buf), "%u", (uint16_t)v);
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_U32: {
-            unsigned long v = strtoul(tofu->value.data, &endptr, 10);
-            if (*endptr != '\0') return FOSSIL_TOFU_ERROR_PARSE;
-            if (v > UINT32_MAX) return FOSSIL_TOFU_ERROR_OVERFLOW;
-            snprintf(buf, sizeof(buf), "%u", (uint32_t)v);
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_U64: {
-            unsigned long long v = strtoull(tofu->value.data, &endptr, 10);
-            if (*endptr != '\0') return FOSSIL_TOFU_ERROR_PARSE;
-            snprintf(buf, sizeof(buf), "%llu", v);
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_HEX: {
-            unsigned long long v = strtoull(tofu->value.data, &endptr, 16);
-            if (*endptr != '\0') return FOSSIL_TOFU_ERROR_PARSE;
-            snprintf(buf, sizeof(buf), "%llx", v);
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_OCTAL: {
-            unsigned long long v = strtoull(tofu->value.data, &endptr, 8);
-            if (*endptr != '\0') return FOSSIL_TOFU_ERROR_PARSE;
-            snprintf(buf, sizeof(buf), "%llo", v);
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_FLOAT: {
-            float f = strtof(tofu->value.data, &endptr);
-            if (*endptr != '\0') return FOSSIL_TOFU_ERROR_PARSE;
-            snprintf(buf, sizeof(buf), "%.7g", f);
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_DOUBLE: {
-            double d = strtod(tofu->value.data, &endptr);
-            if (*endptr != '\0') return FOSSIL_TOFU_ERROR_PARSE;
-            snprintf(buf, sizeof(buf), "%.17g", d);
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_BOOL: {
-            if (strcmp(tofu->value.data, "true") == 0 || strcmp(tofu->value.data, "1") == 0)
-                strcpy(buf, "true");
-            else if (strcmp(tofu->value.data, "false") == 0 || strcmp(tofu->value.data, "0") == 0)
-                strcpy(buf, "false");
-            else return FOSSIL_TOFU_ERROR_PARSE;
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_CSTR: {
-            strncpy(buf, tofu->value.data, sizeof(buf) - 1);
-            buf[sizeof(buf) - 1] = '\0';
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_CCHAR: {
-            if (strlen(tofu->value.data) != 1) return FOSSIL_TOFU_ERROR_TYPE_MISMATCH;
-            buf[0] = tofu->value.data[0];
-            buf[1] = '\0';
-            break;
-        }
-        case FOSSIL_TOFU_TYPE_SIZE: {
-            unsigned long v = strtoul(tofu->value.data, &endptr, 10);
-            if (*endptr != '\0') return FOSSIL_TOFU_ERROR_PARSE;
-            snprintf(buf, sizeof(buf), "%zu", (size_t)v);
-            break;
-        }
-        default:
-            return FOSSIL_TOFU_ERROR_UNSUPPORTED;
-    }
-
-    fossil_tofu_free(tofu->value.data);
-    tofu->value.data = fossil_tofu_strdup(buf);
-    if (!tofu->value.data) return FOSSIL_TOFU_ERROR_MEMORY_ALLOCATION;
-    tofu->type = new_type;
-    tofu->value.hash = fossil_tofu_hash(tofu);
-    return FOSSIL_TOFU_SUCCESS;
 }
 
 const char* fossil_tofu_get_value_or_default(const fossil_tofu_t *tofu, const char *default_value) {

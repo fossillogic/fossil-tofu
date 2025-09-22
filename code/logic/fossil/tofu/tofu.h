@@ -324,16 +324,6 @@ char* fossil_tofu_serialize(const fossil_tofu_t *tofu);
 fossil_tofu_t* fossil_tofu_parse(const char *serialized);
 
 /**
- * @brief Converts a tofu value to a new type.
- *
- * @param tofu The tofu object to convert.
- * @param new_type The target type.
- * @return FOSSIL_TOFU_SUCCESS on success, error code otherwise.
- * @note O(1) for most conversions, O(n) for string conversions.
- */
-int fossil_tofu_convert_type(fossil_tofu_t *tofu, fossil_tofu_type_t new_type);
-
-/**
  * @brief Gets the value as a string or returns a default if NULL.
  */
 const char* fossil_tofu_get_value_or_default(const fossil_tofu_t *tofu, const char *default_value);
@@ -506,6 +496,14 @@ public:
     }
 
     /**
+     * @brief Compares this Tofu object with another.
+     * Returns negative if this < other, 0 if equal, positive if this > other.
+     */
+    int compare(const Tofu& other) const {
+        return fossil_tofu_compare(&tofu_, &other.tofu_);
+    }
+
+    /**
      * @brief Checks if the value of this Tofu object is mutable.
      */
     bool is_mutable() const {
@@ -604,16 +602,6 @@ public:
         fossil_tofu_destroy(parsed);
         fossil_tofu_free(parsed);
         return result;
-    }
-
-    /**
-     * @brief Converts the value of this Tofu object to a new type.
-     * Throws std::runtime_error on failure.
-     */
-    void convert_type(fossil_tofu_type_t new_type) {
-        if (fossil_tofu_convert_type(&tofu_, new_type) != FOSSIL_TOFU_SUCCESS) {
-            throw std::runtime_error("Failed to convert Tofu type");
-        }
     }
 
     /**
