@@ -104,7 +104,7 @@ FOSSIL_TEST(c_test_tofu_mutability) {
 }
 
 FOSSIL_TEST(c_test_tofu_type_and_info) {
-    fossil_tofu_t tofu = fossil_tofu_create("float", "3.14");
+    fossil_tofu_t tofu = fossil_tofu_create("f32", "3.14");
     ASSUME_ITS_EQUAL_I32(fossil_tofu_get_type(&tofu), FOSSIL_TOFU_TYPE_FLOAT);
     ASSUME_ITS_EQUAL_CSTR(fossil_tofu_type_name(tofu.type), "Float");
     ASSUME_ITS_EQUAL_CSTR(fossil_tofu_type_info(tofu.type), "A single-precision floating point value");
