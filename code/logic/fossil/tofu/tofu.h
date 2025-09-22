@@ -28,7 +28,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stddef.h>
-#include <wchar.h>
 
 #define INITIAL_CAPACITY 10
 
@@ -70,6 +69,7 @@ typedef enum {
     FOSSIL_TOFU_TYPE_U64,       // 64-bit unsigned integer
     FOSSIL_TOFU_TYPE_HEX,       // Hexadecimal value (string or integer)
     FOSSIL_TOFU_TYPE_OCTAL,     // Octal value (string or integer)
+    FOSSIL_TOFU_TYPE_BINARY,    // Binary value (compatible with C11 and C23 implmentations)
     FOSSIL_TOFU_TYPE_FLOAT,     // Single-precision floating point
     FOSSIL_TOFU_TYPE_DOUBLE,    // Double-precision floating point
     FOSSIL_TOFU_TYPE_CSTR,      // C-style string (null-terminated)
