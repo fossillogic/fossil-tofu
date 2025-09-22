@@ -29,7 +29,7 @@ Add the `fossil-tofu.wrap` file in your `subprojects` directory and include the 
 ```ini
 [wrap-git]
 url = https://github.com/fossillogic/fossil-tofu.git
-revision = v0.2.
+revision = v0.2.1
 
 [provide]
 dependency_names = fossil-tofu
