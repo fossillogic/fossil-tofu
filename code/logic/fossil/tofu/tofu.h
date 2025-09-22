@@ -329,14 +329,6 @@ fossil_tofu_t* fossil_tofu_parse(const char *serialized);
 const char* fossil_tofu_get_value_or_default(const fossil_tofu_t *tofu, const char *default_value);
 
 /**
- * @brief Validates the tofu object (type + value consistency).
- *
- * @param tofu The tofu object.
- * @return FOSSIL_TOFU_SUCCESS if valid, error code otherwise.
- */
-int fossil_tofu_validate(const fossil_tofu_t *tofu);
-
-/**
  * @brief Checks if the tofu is empty (no data).
  *
  * @param tofu The tofu object.
@@ -610,17 +602,6 @@ public:
     std::string get_value_or_default(const std::string& default_value) const {
         const char* val = fossil_tofu_get_value_or_default(&tofu_, default_value.c_str());
         return val ? std::string(val) : default_value;
-    }
-
-    /**
-     * @brief Validates the Tofu object (type + value consistency).
-     * Throws std::runtime_error if invalid.
-     */
-    void validate() const {
-        int result = fossil_tofu_validate(&tofu_);
-        if (result != FOSSIL_TOFU_SUCCESS) {
-            throw std::runtime_error("Tofu validation failed");
-        }
     }
 
     /**
