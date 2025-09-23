@@ -23,15 +23,6 @@
  * -----------------------------------------------------------------------------
  */
 #include "fossil/tofu/tofu.h"
-#include <inttypes.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdint.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <time.h>
 
 // Lookup table for valid strings corresponding to each tofu type.
 static char *_TOFU_TYPE_ID[] = {

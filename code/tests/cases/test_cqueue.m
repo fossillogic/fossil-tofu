@@ -33,13 +33,13 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_SUITE(c_cqueue_tofu_fixture);
+FOSSIL_SUITE(objc_cqueue_tofu_fixture);
 
-FOSSIL_SETUP(c_cqueue_tofu_fixture) {
+FOSSIL_SETUP(objc_cqueue_tofu_fixture) {
     // Setup the test fixture
 }
 
-FOSSIL_TEARDOWN(c_cqueue_tofu_fixture) {
+FOSSIL_TEARDOWN(objc_cqueue_tofu_fixture) {
     // Teardown the test fixture
 }
 
@@ -51,7 +51,7 @@ FOSSIL_TEARDOWN(c_cqueue_tofu_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(c_test_cqueue_create_container_and_destroy) {
+FOSSIL_TEST(objc_test_cqueue_create_container_and_destroy) {
     fossil_cqueue_t* queue = fossil_cqueue_create_container("i32", 3);
     ASSUME_NOT_CNULL(queue);
     ASSUME_ITS_EQUAL_CSTR(queue->type, "i32");
@@ -60,14 +60,14 @@ FOSSIL_TEST(c_test_cqueue_create_container_and_destroy) {
     fossil_cqueue_destroy(queue);
 }
 
-FOSSIL_TEST(c_test_cqueue_create_default_and_destroy) {
+FOSSIL_TEST(objc_test_cqueue_create_default_and_destroy) {
     fossil_cqueue_t* queue = fossil_cqueue_create_default();
     ASSUME_NOT_CNULL(queue);
     ASSUME_ITS_EQUAL_CSTR(queue->type, "any");
     fossil_cqueue_destroy(queue);
 }
 
-FOSSIL_TEST(c_test_cqueue_insert_and_remove) {
+FOSSIL_TEST(objc_test_cqueue_insert_and_remove) {
     fossil_cqueue_t* queue = fossil_cqueue_create_container("i32", 2);
     int32_t result1 = fossil_cqueue_insert(queue, "10");
     int32_t result2 = fossil_cqueue_insert(queue, "20");
@@ -84,7 +84,7 @@ FOSSIL_TEST(c_test_cqueue_insert_and_remove) {
     fossil_cqueue_destroy(queue);
 }
 
-FOSSIL_TEST(c_test_cqueue_create_copy) {
+FOSSIL_TEST(objc_test_cqueue_create_copy) {
     fossil_cqueue_t* queue1 = fossil_cqueue_create_container("i32", 3);
     fossil_cqueue_insert(queue1, "1");
     fossil_cqueue_insert(queue1, "2");
@@ -97,7 +97,7 @@ FOSSIL_TEST(c_test_cqueue_create_copy) {
     fossil_cqueue_destroy(queue2);
 }
 
-FOSSIL_TEST(c_test_cqueue_create_move) {
+FOSSIL_TEST(objc_test_cqueue_create_move) {
     fossil_cqueue_t* queue1 = fossil_cqueue_create_container("i32", 2);
     fossil_cqueue_insert(queue1, "42");
     fossil_cqueue_t* queue2 = fossil_cqueue_create_move(queue1);
@@ -109,7 +109,7 @@ FOSSIL_TEST(c_test_cqueue_create_move) {
     fossil_cqueue_destroy(queue1);
 }
 
-FOSSIL_TEST(c_test_cqueue_not_empty_and_is_empty) {
+FOSSIL_TEST(objc_test_cqueue_not_empty_and_is_empty) {
     fossil_cqueue_t* queue = fossil_cqueue_create_container("i32", 2);
     ASSUME_ITS_TRUE(fossil_cqueue_is_empty(queue));
     ASSUME_ITS_FALSE(fossil_cqueue_not_empty(queue));
@@ -121,7 +121,7 @@ FOSSIL_TEST(c_test_cqueue_not_empty_and_is_empty) {
     fossil_cqueue_destroy(queue);
 }
 
-FOSSIL_TEST(c_test_cqueue_not_cnullptr_and_is_cnullptr) {
+FOSSIL_TEST(objc_test_cqueue_not_cnullptr_and_is_cnullptr) {
     fossil_cqueue_t* queue = fossil_cqueue_create_container("i32", 1);
     ASSUME_ITS_TRUE(fossil_cqueue_not_cnullptr(queue));
     ASSUME_ITS_FALSE(fossil_cqueue_is_cnullptr(queue));
@@ -131,7 +131,7 @@ FOSSIL_TEST(c_test_cqueue_not_cnullptr_and_is_cnullptr) {
     ASSUME_ITS_TRUE(fossil_cqueue_is_cnullptr(queue));
 }
 
-FOSSIL_TEST(c_test_cqueue_set_front_and_set_rear) {
+FOSSIL_TEST(objc_test_cqueue_set_front_and_set_rear) {
     fossil_cqueue_t* queue = fossil_cqueue_create_container("i32", 2);
     fossil_cqueue_insert(queue, "100");
     fossil_cqueue_insert(queue, "200");
@@ -142,21 +142,21 @@ FOSSIL_TEST(c_test_cqueue_set_front_and_set_rear) {
     fossil_cqueue_destroy(queue);
 }
 
-FOSSIL_TEST(c_test_cqueue_get_front_and_get_rear_empty) {
+FOSSIL_TEST(objc_test_cqueue_get_front_and_get_rear_empty) {
     fossil_cqueue_t* queue = fossil_cqueue_create_container("i32", 1);
     ASSUME_ITS_CNULL(fossil_cqueue_get_front(queue));
     ASSUME_ITS_CNULL(fossil_cqueue_get_rear(queue));
     fossil_cqueue_destroy(queue);
 }
 
-FOSSIL_TEST(c_test_cqueue_remove_empty) {
+FOSSIL_TEST(objc_test_cqueue_remove_empty) {
     fossil_cqueue_t* queue = fossil_cqueue_create_container("i32", 1);
     int32_t result = fossil_cqueue_remove(queue);
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_FAILURE);
     fossil_cqueue_destroy(queue);
 }
 
-FOSSIL_TEST(c_test_cqueue_size_consistency) {
+FOSSIL_TEST(objc_test_cqueue_size_consistency) {
     fossil_cqueue_t* queue = fossil_cqueue_create_container("i32", 3);
     ASSUME_ITS_EQUAL_I32(fossil_cqueue_size(queue), 0);
     fossil_cqueue_insert(queue, "1");
@@ -173,20 +173,20 @@ FOSSIL_TEST(c_test_cqueue_size_consistency) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
-FOSSIL_TEST_GROUP(c_cqueue_tofu_tests) {    
+FOSSIL_TEST_GROUP(objc_cqueue_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(c_cqueue_tofu_fixture, c_test_cqueue_create_container_and_destroy);
-    FOSSIL_TEST_ADD(c_cqueue_tofu_fixture, c_test_cqueue_create_default_and_destroy);
-    FOSSIL_TEST_ADD(c_cqueue_tofu_fixture, c_test_cqueue_insert_and_remove);
-    FOSSIL_TEST_ADD(c_cqueue_tofu_fixture, c_test_cqueue_create_copy);
-    FOSSIL_TEST_ADD(c_cqueue_tofu_fixture, c_test_cqueue_create_move);
-    FOSSIL_TEST_ADD(c_cqueue_tofu_fixture, c_test_cqueue_not_empty_and_is_empty);
-    FOSSIL_TEST_ADD(c_cqueue_tofu_fixture, c_test_cqueue_not_cnullptr_and_is_cnullptr);
-    FOSSIL_TEST_ADD(c_cqueue_tofu_fixture, c_test_cqueue_set_front_and_set_rear);
-    FOSSIL_TEST_ADD(c_cqueue_tofu_fixture, c_test_cqueue_get_front_and_get_rear_empty);
-    FOSSIL_TEST_ADD(c_cqueue_tofu_fixture, c_test_cqueue_remove_empty);
-    FOSSIL_TEST_ADD(c_cqueue_tofu_fixture, c_test_cqueue_size_consistency);
+    FOSSIL_TEST_ADD(objc_cqueue_tofu_fixture, objc_test_cqueue_create_container_and_destroy);
+    FOSSIL_TEST_ADD(objc_cqueue_tofu_fixture, objc_test_cqueue_create_default_and_destroy);
+    FOSSIL_TEST_ADD(objc_cqueue_tofu_fixture, objc_test_cqueue_insert_and_remove);
+    FOSSIL_TEST_ADD(objc_cqueue_tofu_fixture, objc_test_cqueue_create_copy);
+    FOSSIL_TEST_ADD(objc_cqueue_tofu_fixture, objc_test_cqueue_create_move);
+    FOSSIL_TEST_ADD(objc_cqueue_tofu_fixture, objc_test_cqueue_not_empty_and_is_empty);
+    FOSSIL_TEST_ADD(objc_cqueue_tofu_fixture, objc_test_cqueue_not_cnullptr_and_is_cnullptr);
+    FOSSIL_TEST_ADD(objc_cqueue_tofu_fixture, objc_test_cqueue_set_front_and_set_rear);
+    FOSSIL_TEST_ADD(objc_cqueue_tofu_fixture, objc_test_cqueue_get_front_and_get_rear_empty);
+    FOSSIL_TEST_ADD(objc_cqueue_tofu_fixture, objc_test_cqueue_remove_empty);
+    FOSSIL_TEST_ADD(objc_cqueue_tofu_fixture, objc_test_cqueue_size_consistency);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(c_cqueue_tofu_fixture);
+    FOSSIL_TEST_REGISTER(objc_cqueue_tofu_fixture);
 } // end of tests

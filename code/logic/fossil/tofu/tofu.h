@@ -25,9 +25,15 @@
 #ifndef FOSSIL_TOFU_TYPE_H
 #define FOSSIL_TOFU_TYPE_H
 
+#include <inttypes.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdint.h>
 #include <stddef.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <time.h>
 
 #define INITIAL_CAPACITY 10
 

@@ -33,13 +33,13 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_SUITE(cpp_stack_tofu_fixture);
+FOSSIL_SUITE(objcpp_stack_tofu_fixture);
 
-FOSSIL_SETUP(cpp_stack_tofu_fixture) {
+FOSSIL_SETUP(objcpp_stack_tofu_fixture) {
     // Setup the test fixture
 }
 
-FOSSIL_TEARDOWN(cpp_stack_tofu_fixture) {
+FOSSIL_TEARDOWN(objcpp_stack_tofu_fixture) {
     // Teardown the test fixture
 }
 
@@ -54,19 +54,19 @@ FOSSIL_TEARDOWN(cpp_stack_tofu_fixture) {
 using fossil::tofu::Stack;
 using fossil::tofu::Tofu;
 
-FOSSIL_TEST(cpp_test_stack_create_destroy) {
+FOSSIL_TEST(objcpp_test_stack_create_destroy) {
     Stack stack("i32");
     ASSUME_ITS_TRUE(stack.not_cnullptr());
     // No explicit destroy needed, handled by destructor
 }
 
-FOSSIL_TEST(cpp_test_stack_create_default) {
+FOSSIL_TEST(objcpp_test_stack_create_default) {
     Stack stack;
     ASSUME_ITS_TRUE(stack.not_cnullptr());
     // Can't check type directly, but default constructor should succeed
 }
 
-FOSSIL_TEST(cpp_test_stack_insert_and_remove) {
+FOSSIL_TEST(objcpp_test_stack_insert_and_remove) {
     Stack stack("i32");
     int32_t result = stack.insert("42");
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_SUCCESS);
@@ -76,7 +76,7 @@ FOSSIL_TEST(cpp_test_stack_insert_and_remove) {
     ASSUME_ITS_EQUAL_I32(stack.size(), 0);
 }
 
-FOSSIL_TEST(cpp_test_stack_copy_constructor) {
+FOSSIL_TEST(objcpp_test_stack_copy_constructor) {
     Stack stack1("i32");
     stack1.insert("1");
     stack1.insert("2");
@@ -84,7 +84,7 @@ FOSSIL_TEST(cpp_test_stack_copy_constructor) {
     ASSUME_ITS_EQUAL_I32(stack1.size(), stack2.size());
 }
 
-FOSSIL_TEST(cpp_test_stack_move_constructor) {
+FOSSIL_TEST(objcpp_test_stack_move_constructor) {
     Stack stack1("i32");
     stack1.insert("5");
     stack1.insert("6");
@@ -93,7 +93,7 @@ FOSSIL_TEST(cpp_test_stack_move_constructor) {
     // stack1 is in a valid but unspecified state after move
 }
 
-FOSSIL_TEST(cpp_test_stack_top_and_get_set) {
+FOSSIL_TEST(objcpp_test_stack_top_and_get_set) {
     Stack stack("i32");
     stack.insert("100");
     stack.insert("200");
@@ -104,7 +104,7 @@ FOSSIL_TEST(cpp_test_stack_top_and_get_set) {
     Tofu new_elem("i32", "300");
 }
 
-FOSSIL_TEST(cpp_test_stack_empty_and_not_empty) {
+FOSSIL_TEST(objcpp_test_stack_empty_and_not_empty) {
     Stack stack("i32");
     ASSUME_ITS_TRUE(stack.is_empty());
     stack.insert("1");
@@ -113,31 +113,31 @@ FOSSIL_TEST(cpp_test_stack_empty_and_not_empty) {
     ASSUME_ITS_TRUE(stack.is_empty());
 }
 
-FOSSIL_TEST(cpp_test_stack_insert_null_stack) {
+FOSSIL_TEST(objcpp_test_stack_insert_null_stack) {
     fossil_stack_t* null_stack = nullptr;
     int32_t result = fossil_stack_insert(null_stack, const_cast<char *>("42"));
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_FAILURE);
 }
 
-FOSSIL_TEST(cpp_test_stack_remove_null_stack) {
+FOSSIL_TEST(objcpp_test_stack_remove_null_stack) {
     fossil_stack_t* null_stack = nullptr;
     int32_t result = fossil_stack_remove(null_stack);
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_FAILURE);
 }
 
-FOSSIL_TEST(cpp_test_stack_remove_empty_stack) {
+FOSSIL_TEST(objcpp_test_stack_remove_empty_stack) {
     Stack stack("i32");
     int32_t result = stack.remove();
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_FAILURE);
 }
 
-FOSSIL_TEST(cpp_test_stack_size_null_stack) {
+FOSSIL_TEST(objcpp_test_stack_size_null_stack) {
     fossil_stack_t* null_stack = nullptr;
     size_t size = fossil_stack_size(null_stack);
     ASSUME_ITS_EQUAL_I32(size, FOSSIL_TOFU_SUCCESS);
 }
 
-FOSSIL_TEST(cpp_test_stack_not_empty_and_is_empty_variants) {
+FOSSIL_TEST(objcpp_test_stack_not_empty_and_is_empty_variants) {
     Stack stack("i32");
     ASSUME_ITS_FALSE(stack.not_empty());
     ASSUME_ITS_TRUE(stack.is_empty());
@@ -146,7 +146,7 @@ FOSSIL_TEST(cpp_test_stack_not_empty_and_is_empty_variants) {
     ASSUME_ITS_FALSE(stack.is_empty());
 }
 
-FOSSIL_TEST(cpp_test_stack_not_cnullptr_and_is_cnullptr) {
+FOSSIL_TEST(objcpp_test_stack_not_cnullptr_and_is_cnullptr) {
     Stack stack("i32");
     ASSUME_ITS_TRUE(stack.not_cnullptr());
     ASSUME_ITS_FALSE(stack.is_cnullptr());
@@ -156,20 +156,20 @@ FOSSIL_TEST(cpp_test_stack_not_cnullptr_and_is_cnullptr) {
     ASSUME_ITS_TRUE(fossil_stack_is_cnullptr(raw));
 }
 
-FOSSIL_TEST(cpp_test_stack_top_empty_stack) {
+FOSSIL_TEST(objcpp_test_stack_top_empty_stack) {
     Stack stack("i32");
     fossil_tofu_t top = stack.top();
     ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&top), "");
 }
 
-FOSSIL_TEST(cpp_test_stack_get_out_of_bounds) {
+FOSSIL_TEST(objcpp_test_stack_get_out_of_bounds) {
     Stack stack("i32");
     stack.insert("1");
     fossil_tofu_t elem = stack.get(5);
     ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&elem), "");
 }
 
-FOSSIL_TEST(cpp_test_stack_set_out_of_bounds) {
+FOSSIL_TEST(objcpp_test_stack_set_out_of_bounds) {
     Stack stack("i32");
     stack.insert("1");
     Tofu new_elem("i32", "999");
@@ -181,25 +181,25 @@ FOSSIL_TEST(cpp_test_stack_set_out_of_bounds) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
-FOSSIL_TEST_GROUP(cpp_stack_tofu_tests) {    
+FOSSIL_TEST_GROUP(objcpp_stack_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_create_destroy);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_create_default);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_insert_and_remove);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_copy_constructor);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_move_constructor);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_top_and_get_set);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_empty_and_not_empty);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_insert_null_stack);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_remove_null_stack);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_remove_empty_stack);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_size_null_stack);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_not_empty_and_is_empty_variants);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_not_cnullptr_and_is_cnullptr);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_top_empty_stack);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_get_out_of_bounds);
-    FOSSIL_TEST_ADD(cpp_stack_tofu_fixture, cpp_test_stack_set_out_of_bounds);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_create_destroy);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_create_default);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_insert_and_remove);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_copy_constructor);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_move_constructor);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_top_and_get_set);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_empty_and_not_empty);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_insert_null_stack);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_remove_null_stack);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_remove_empty_stack);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_size_null_stack);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_not_empty_and_is_empty_variants);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_not_cnullptr_and_is_cnullptr);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_top_empty_stack);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_get_out_of_bounds);
+    FOSSIL_TEST_ADD(objcpp_stack_tofu_fixture, objcpp_test_stack_set_out_of_bounds);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(cpp_stack_tofu_fixture);
+    FOSSIL_TEST_REGISTER(objcpp_stack_tofu_fixture);
 } // end of tests

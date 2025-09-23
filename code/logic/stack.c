@@ -23,9 +23,6 @@
  * -----------------------------------------------------------------------------
  */
 #include "fossil/tofu/stack.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 fossil_stack_t* fossil_stack_create_container(char* type) {
     fossil_stack_t* stack = (fossil_stack_t*)malloc(sizeof(fossil_stack_t));
