@@ -55,13 +55,13 @@ using fossil::tofu::Queue;
 
 FOSSIL_TEST(objcpp_test_queue_create_container_and_destroy) {
     Queue queue("i32");
-    ASSUME_ITS_EQUAL_CSTR(queue.get_front().objc_str(), "");
+    ASSUME_ITS_EQUAL_CSTR(queue.get_front().c_str(), "");
     // Type checking is not exposed in the C++ wrapper, so we skip it.
 }
 
 FOSSIL_TEST(objcpp_test_queue_create_default_and_destroy) {
     Queue queue;
-    ASSUME_ITS_EQUAL_CSTR(queue.get_front().objc_str(), "");
+    ASSUME_ITS_EQUAL_CSTR(queue.get_front().c_str(), "");
     // Type checking is not exposed in the C++ wrapper, so we skip it.
 }
 
@@ -72,11 +72,11 @@ FOSSIL_TEST(objcpp_test_queue_insert_and_remove) {
     ASSUME_ITS_EQUAL_I32(result1, FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_EQUAL_I32(result2, FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_EQUAL_I32(queue.size(), 2);
-    ASSUME_ITS_EQUAL_CSTR(queue.get_front().objc_str(), "10");
-    ASSUME_ITS_EQUAL_CSTR(queue.get_rear().objc_str(), "20");
+    ASSUME_ITS_EQUAL_CSTR(queue.get_front().c_str(), "10");
+    ASSUME_ITS_EQUAL_CSTR(queue.get_rear().c_str(), "20");
     queue.remove();
     ASSUME_ITS_EQUAL_I32(queue.size(), 1);
-    ASSUME_ITS_EQUAL_CSTR(queue.get_front().objc_str(), "20");
+    ASSUME_ITS_EQUAL_CSTR(queue.get_front().c_str(), "20");
 }
 
 FOSSIL_TEST(objcpp_test_queue_create_copy) {
@@ -85,8 +85,8 @@ FOSSIL_TEST(objcpp_test_queue_create_copy) {
     queue1.insert("2");
     Queue queue2(queue1);
     ASSUME_ITS_EQUAL_I32(queue2.size(), 2);
-    ASSUME_ITS_EQUAL_CSTR(queue2.get_front().objc_str(), "1");
-    ASSUME_ITS_EQUAL_CSTR(queue2.get_rear().objc_str(), "2");
+    ASSUME_ITS_EQUAL_CSTR(queue2.get_front().c_str(), "1");
+    ASSUME_ITS_EQUAL_CSTR(queue2.get_rear().c_str(), "2");
 }
 
 FOSSIL_TEST(objcpp_test_queue_create_move) {
@@ -94,7 +94,7 @@ FOSSIL_TEST(objcpp_test_queue_create_move) {
     queue1.insert("42");
     Queue queue2(std::move(queue1));
     ASSUME_ITS_EQUAL_I32(queue2.size(), 1);
-    ASSUME_ITS_EQUAL_CSTR(queue2.get_front().objc_str(), "42");
+    ASSUME_ITS_EQUAL_CSTR(queue2.get_front().c_str(), "42");
     // After move, queue1 is in a valid but unspecified state; skip further checks.
 }
 
@@ -124,14 +124,14 @@ FOSSIL_TEST(objcpp_test_queue_set_front_and_set_rear) {
     queue.insert("200");
     queue.set_front("111");
     queue.set_rear("222");
-    ASSUME_ITS_EQUAL_CSTR(queue.get_front().objc_str(), "111");
-    ASSUME_ITS_EQUAL_CSTR(queue.get_rear().objc_str(), "222");
+    ASSUME_ITS_EQUAL_CSTR(queue.get_front().c_str(), "111");
+    ASSUME_ITS_EQUAL_CSTR(queue.get_rear().c_str(), "222");
 }
 
 FOSSIL_TEST(objcpp_test_queue_get_front_and_get_rear_empty) {
     Queue queue("i32");
-    ASSUME_ITS_EQUAL_CSTR(queue.get_front().objc_str(), "");
-    ASSUME_ITS_EQUAL_CSTR(queue.get_rear().objc_str(), "");
+    ASSUME_ITS_EQUAL_CSTR(queue.get_front().c_str(), "");
+    ASSUME_ITS_EQUAL_CSTR(queue.get_rear().c_str(), "");
 }
 
 FOSSIL_TEST(objcpp_test_queue_remove_empty) {

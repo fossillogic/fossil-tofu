@@ -69,9 +69,9 @@ FOSSIL_TEST(objcpp_test_tuple_add_and_get) {
     tuple.add("20");
     tuple.add("30");
     ASSUME_ITS_EQUAL_I32(tuple.size(), 3);
-    ASSUME_ITS_EQUAL_CSTR(tuple.get(0).objc_str(), "10");
-    ASSUME_ITS_EQUAL_CSTR(tuple.get(1).objc_str(), "20");
-    ASSUME_ITS_EQUAL_CSTR(tuple.get(2).objc_str(), "30");
+    ASSUME_ITS_EQUAL_CSTR(tuple.get(0).c_str(), "10");
+    ASSUME_ITS_EQUAL_CSTR(tuple.get(1).c_str(), "20");
+    ASSUME_ITS_EQUAL_CSTR(tuple.get(2).c_str(), "30");
 }
 
 FOSSIL_TEST(objcpp_test_tuple_get_front_and_back) {
@@ -79,8 +79,8 @@ FOSSIL_TEST(objcpp_test_tuple_get_front_and_back) {
     tuple.add("100");
     tuple.add("200");
     tuple.add("300");
-    ASSUME_ITS_EQUAL_CSTR(tuple.get_front().objc_str(), "100");
-    ASSUME_ITS_EQUAL_CSTR(tuple.get_back().objc_str(), "300");
+    ASSUME_ITS_EQUAL_CSTR(tuple.get_front().c_str(), "100");
+    ASSUME_ITS_EQUAL_CSTR(tuple.get_back().c_str(), "300");
 }
 
 FOSSIL_TEST(objcpp_test_tuple_set_and_get) {
@@ -89,11 +89,11 @@ FOSSIL_TEST(objcpp_test_tuple_set_and_get) {
     tuple.add("2");
     tuple.add("3");
     tuple.set(1, "42");
-    ASSUME_ITS_EQUAL_CSTR(tuple.get(1).objc_str(), "42");
+    ASSUME_ITS_EQUAL_CSTR(tuple.get(1).c_str(), "42");
     tuple.set_front("99");
-    ASSUME_ITS_EQUAL_CSTR(tuple.get(0).objc_str(), "99");
+    ASSUME_ITS_EQUAL_CSTR(tuple.get(0).c_str(), "99");
     tuple.set_back("77");
-    ASSUME_ITS_EQUAL_CSTR(tuple.get(2).objc_str(), "77");
+    ASSUME_ITS_EQUAL_CSTR(tuple.get(2).c_str(), "77");
 }
 
 FOSSIL_TEST(objcpp_test_tuple_remove) {
@@ -103,8 +103,8 @@ FOSSIL_TEST(objcpp_test_tuple_remove) {
     tuple.add("c");
     tuple.remove(1); // remove "b"
     ASSUME_ITS_EQUAL_I32(tuple.size(), 2);
-    ASSUME_ITS_EQUAL_CSTR(tuple.get(0).objc_str(), "a");
-    ASSUME_ITS_EQUAL_CSTR(tuple.get(1).objc_str(), "c");
+    ASSUME_ITS_EQUAL_CSTR(tuple.get(0).c_str(), "a");
+    ASSUME_ITS_EQUAL_CSTR(tuple.get(1).c_str(), "c");
 }
 
 FOSSIL_TEST(objcpp_test_tuple_clear_and_is_empty) {
@@ -134,8 +134,8 @@ FOSSIL_TEST(objcpp_test_tuple_copy_constructor) {
     tuple1.add("2");
     Tuple tuple2 = tuple1;
     ASSUME_ITS_EQUAL_I32(tuple2.size(), 2);
-    ASSUME_ITS_EQUAL_CSTR(tuple2.get(0).objc_str(), "1");
-    ASSUME_ITS_EQUAL_CSTR(tuple2.get(1).objc_str(), "2");
+    ASSUME_ITS_EQUAL_CSTR(tuple2.get(0).c_str(), "1");
+    ASSUME_ITS_EQUAL_CSTR(tuple2.get(1).c_str(), "2");
 }
 
 FOSSIL_TEST(objcpp_test_tuple_move_constructor) {
@@ -144,8 +144,8 @@ FOSSIL_TEST(objcpp_test_tuple_move_constructor) {
     tuple1.add("6");
     Tuple tuple2 = std::move(tuple1);
     ASSUME_ITS_EQUAL_I32(tuple2.size(), 2);
-    ASSUME_ITS_EQUAL_CSTR(tuple2.get(0).objc_str(), "5");
-    ASSUME_ITS_EQUAL_CSTR(tuple2.get(1).objc_str(), "6");
+    ASSUME_ITS_EQUAL_CSTR(tuple2.get(0).c_str(), "5");
+    ASSUME_ITS_EQUAL_CSTR(tuple2.get(1).c_str(), "6");
     // tuple1 should be empty now
     ASSUME_ITS_EQUAL_I32(tuple1.size(), 0);
 }
