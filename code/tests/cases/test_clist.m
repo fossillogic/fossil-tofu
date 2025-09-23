@@ -33,13 +33,13 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_SUITE(c_clist_tofu_fixture);
+FOSSIL_SUITE(objc_clist_tofu_fixture);
 
-FOSSIL_SETUP(c_clist_tofu_fixture) {
+FOSSIL_SETUP(objc_clist_tofu_fixture) {
     // Setup the test fixture
 }
 
-FOSSIL_TEARDOWN(c_clist_tofu_fixture) {
+FOSSIL_TEARDOWN(objc_clist_tofu_fixture) {
     // Teardown the test fixture
 }
 
@@ -51,7 +51,7 @@ FOSSIL_TEARDOWN(c_clist_tofu_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(c_test_clist_create_and_destroy) {
+FOSSIL_TEST(objc_test_clist_create_and_destroy) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     ASSUME_NOT_CNULL(clist);
     ASSUME_ITS_EQUAL_CSTR(clist->type, "i32");
@@ -59,14 +59,14 @@ FOSSIL_TEST(c_test_clist_create_and_destroy) {
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST(c_test_clist_create_default) {
+FOSSIL_TEST(objc_test_clist_create_default) {
     fossil_clist_t* clist = fossil_clist_create_default();
     ASSUME_NOT_CNULL(clist);
     ASSUME_ITS_EQUAL_CSTR(clist->type, "any");
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST(c_test_clist_insert_and_size) {
+FOSSIL_TEST(objc_test_clist_insert_and_size) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     ASSUME_ITS_EQUAL_I32(fossil_clist_insert(clist, "10"), FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_EQUAL_I32(fossil_clist_insert(clist, "20"), FOSSIL_TOFU_SUCCESS);
@@ -74,7 +74,7 @@ FOSSIL_TEST(c_test_clist_insert_and_size) {
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST(c_test_clist_remove) {
+FOSSIL_TEST(objc_test_clist_remove) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     fossil_clist_insert(clist, "1");
     fossil_clist_insert(clist, "2");
@@ -85,7 +85,7 @@ FOSSIL_TEST(c_test_clist_remove) {
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST(c_test_clist_reverse) {
+FOSSIL_TEST(objc_test_clist_reverse) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     fossil_clist_insert(clist, "A");
     fossil_clist_insert(clist, "B");
@@ -100,7 +100,7 @@ FOSSIL_TEST(c_test_clist_reverse) {
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST(c_test_clist_get_and_set) {
+FOSSIL_TEST(objc_test_clist_get_and_set) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     fossil_clist_insert(clist, "100");
     fossil_clist_insert(clist, "200");
@@ -111,7 +111,7 @@ FOSSIL_TEST(c_test_clist_get_and_set) {
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST(c_test_clist_get_front_and_back) {
+FOSSIL_TEST(objc_test_clist_get_front_and_back) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     fossil_clist_insert(clist, "first");
     fossil_clist_insert(clist, "middle");
@@ -121,7 +121,7 @@ FOSSIL_TEST(c_test_clist_get_front_and_back) {
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST(c_test_clist_set_front_and_back) {
+FOSSIL_TEST(objc_test_clist_set_front_and_back) {
     fossil_clist_t* clist = fossil_clist_create_container("i32");
     fossil_clist_insert(clist, "one");
     fossil_clist_insert(clist, "two");
@@ -133,7 +133,7 @@ FOSSIL_TEST(c_test_clist_set_front_and_back) {
     fossil_clist_destroy(clist);
 }
 
-FOSSIL_TEST(c_test_clist_copy_and_move) {
+FOSSIL_TEST(objc_test_clist_copy_and_move) {
     fossil_clist_t* clist1 = fossil_clist_create_container("i32");
     fossil_clist_insert(clist1, "5");
     fossil_clist_insert(clist1, "10");
@@ -149,7 +149,7 @@ FOSSIL_TEST(c_test_clist_copy_and_move) {
     fossil_clist_destroy(clist1);
 }
 
-FOSSIL_TEST(c_test_clist_empty_and_null_checks) {
+FOSSIL_TEST(objc_test_clist_empty_and_null_checks) {
     fossil_clist_t* clist = NULL;
     ASSUME_ITS_TRUE(fossil_clist_is_cnullptr(clist));
     clist = fossil_clist_create_container("i32");
@@ -163,19 +163,19 @@ FOSSIL_TEST(c_test_clist_empty_and_null_checks) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
-FOSSIL_TEST_GROUP(c_clist_tofu_tests) {    
+FOSSIL_TEST_GROUP(objc_clist_tofu_tests) {    
     // clist ToFu Fixture
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_create_and_destroy);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_create_default);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_insert_and_size);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_remove);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_reverse);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_get_and_set);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_get_front_and_back);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_set_front_and_back);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_copy_and_move);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_empty_and_null_checks);
+    FOSSIL_TEST_ADD(objc_clist_tofu_fixture, objc_test_clist_create_and_destroy);
+    FOSSIL_TEST_ADD(objc_clist_tofu_fixture, objc_test_clist_create_default);
+    FOSSIL_TEST_ADD(objc_clist_tofu_fixture, objc_test_clist_insert_and_size);
+    FOSSIL_TEST_ADD(objc_clist_tofu_fixture, objc_test_clist_remove);
+    FOSSIL_TEST_ADD(objc_clist_tofu_fixture, objc_test_clist_reverse);
+    FOSSIL_TEST_ADD(objc_clist_tofu_fixture, objc_test_clist_get_and_set);
+    FOSSIL_TEST_ADD(objc_clist_tofu_fixture, objc_test_clist_get_front_and_back);
+    FOSSIL_TEST_ADD(objc_clist_tofu_fixture, objc_test_clist_set_front_and_back);
+    FOSSIL_TEST_ADD(objc_clist_tofu_fixture, objc_test_clist_copy_and_move);
+    FOSSIL_TEST_ADD(objc_clist_tofu_fixture, objc_test_clist_empty_and_null_checks);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(c_clist_tofu_fixture);
+    FOSSIL_TEST_REGISTER(objc_clist_tofu_fixture);
 } // end of tests
