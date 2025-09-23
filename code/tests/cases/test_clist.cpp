@@ -158,6 +158,111 @@ FOSSIL_TEST(cpp_test_clist_empty_and_null_checks) {
     ASSUME_ITS_TRUE(clist2.not_empty());
 }
 
+FOSSIL_TEST(cpp_test_clist_exception_on_create_invalid_type) {
+    try {
+        CList clist(""); // Empty type string, may be invalid
+        ASSUME_ITS_TRUE(clist.not_cnullptr());
+    } catch (const std::exception& e) {
+        ASSUME_ITS_TRUE(true); // Exception thrown as expected
+    }
+}
+
+FOSSIL_TEST(cpp_test_clist_exception_on_copy_null) {
+    CList* clist_null = nullptr;
+    try {
+        CList clist_copy(*clist_null);
+        ASSUME_ITS_TRUE(false); // Should not reach here
+    } catch (const std::exception& e) {
+        ASSUME_ITS_TRUE(true); // Exception thrown as expected
+    }
+}
+
+FOSSIL_TEST(cpp_test_clist_get_out_of_range_throws) {
+    CList clist("i32");
+    clist.insert("A");
+    try {
+        clist.get(5); // Out of range
+        ASSUME_ITS_TRUE(false); // Should not reach here
+    } catch (const std::out_of_range& e) {
+        ASSUME_ITS_TRUE(true); // Exception thrown as expected
+    }
+}
+
+FOSSIL_TEST(cpp_test_clist_get_front_empty_throws) {
+    CList clist("i32");
+    try {
+        clist.get_front();
+        ASSUME_ITS_TRUE(false); // Should not reach here
+    } catch (const std::runtime_error& e) {
+        ASSUME_ITS_TRUE(true); // Exception thrown as expected
+    }
+}
+
+FOSSIL_TEST(cpp_test_clist_get_back_empty_throws) {
+    CList clist("i32");
+    try {
+        clist.get_back();
+        ASSUME_ITS_TRUE(false); // Should not reach here
+    } catch (const std::runtime_error& e) {
+        ASSUME_ITS_TRUE(true); // Exception thrown as expected
+    }
+}
+
+FOSSIL_TEST(cpp_test_clist_set_out_of_range_does_not_throw) {
+    CList clist("i32");
+    clist.insert("A");
+    try {
+        clist.set(5, "B"); // Out of range, should not throw
+        ASSUME_ITS_EQUAL_CSTR(clist.get(0).c_str(), "A");
+    } catch (...) {
+        ASSUME_ITS_TRUE(false); // Should not throw
+    }
+}
+
+FOSSIL_TEST(cpp_test_clist_set_front_and_back_empty_list) {
+    CList clist("i32");
+    try {
+        clist.set_front("X"); // Should not throw
+        clist.set_back("Y");  // Should not throw
+        ASSUME_ITS_TRUE(clist.is_empty());
+    } catch (...) {
+        ASSUME_ITS_TRUE(false); // Should not throw
+    }
+}
+
+FOSSIL_TEST(cpp_test_clist_multiple_reverse) {
+    CList clist("i32");
+    clist.insert("1");
+    clist.insert("2");
+    clist.insert("3");
+    clist.reverse();
+    clist.reverse();
+    ASSUME_ITS_EQUAL_CSTR(clist.get_front().c_str(), "1");
+    ASSUME_ITS_EQUAL_CSTR(clist.get_back().c_str(), "3");
+}
+
+FOSSIL_TEST(cpp_test_clist_large_insert_and_access) {
+    CList clist("i32");
+    for (int i = 0; i < 100; ++i) {
+        clist.insert(std::to_string(i));
+    }
+    ASSUME_ITS_EQUAL_SIZE(clist.size(), 100);
+    ASSUME_ITS_EQUAL_CSTR(clist.get(99).c_str(), "99");
+    ASSUME_ITS_EQUAL_CSTR(clist.get_front().c_str(), "0");
+    ASSUME_ITS_EQUAL_CSTR(clist.get_back().c_str(), "99");
+}
+
+FOSSIL_TEST(cpp_test_clist_remove_until_empty) {
+    CList clist("i32");
+    clist.insert("A");
+    clist.insert("B");
+    clist.insert("C");
+    while (!clist.is_empty()) {
+        clist.remove();
+    }
+    ASSUME_ITS_TRUE(clist.is_empty());
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -173,6 +278,16 @@ FOSSIL_TEST_GROUP(cpp_clist_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_set_front_and_back);
     FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_copy_and_move);
     FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_empty_and_null_checks);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_exception_on_create_invalid_type);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_exception_on_copy_null);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_get_out_of_range_throws);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_get_front_empty_throws);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_get_back_empty_throws);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_set_out_of_range_does_not_throw);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_set_front_and_back_empty_list);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_multiple_reverse);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_large_insert_and_access);
+    FOSSIL_TEST_ADD(cpp_clist_tofu_fixture, cpp_test_clist_remove_until_empty);
 
     // Register the test group
     FOSSIL_TEST_REGISTER(cpp_clist_tofu_fixture);

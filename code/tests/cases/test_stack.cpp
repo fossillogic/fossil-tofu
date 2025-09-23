@@ -102,11 +102,6 @@ FOSSIL_TEST(cpp_test_stack_top_and_get_set) {
     fossil_tofu_t elem = stack.get(1);
     ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&elem), "100");
     Tofu new_elem("i32", "300");
-    // stack.set(0, new_elem.get_c_struct());
-    // elem = stack.get(0);
-    // ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&elem), "300");
-    // top = stack.top();
-    // ASSUME_ITS_EQUAL_CSTR(fossil_tofu_get_value(&top), "300");
 }
 
 FOSSIL_TEST(cpp_test_stack_empty_and_not_empty) {
