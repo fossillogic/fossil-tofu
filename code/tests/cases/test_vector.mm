@@ -64,9 +64,9 @@ FOSSIL_TEST(objcpp_test_vector_push_and_get) {
     vector.push_back("20");
     vector.push_back("30");
     ASSUME_ITS_EQUAL_I32(vector.size(), 3);
-    ASSUME_ITS_EQUAL_CSTR(vector.get(0).objc_str(), "10");
-    ASSUME_ITS_EQUAL_CSTR(vector.get(1).objc_str(), "20");
-    ASSUME_ITS_EQUAL_CSTR(vector.get(2).objc_str(), "30");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(0).c_str(), "10");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(1).c_str(), "20");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(2).c_str(), "30");
 }
 
 FOSSIL_TEST(objcpp_test_vector_push_front_and_pop_front) {
@@ -74,9 +74,9 @@ FOSSIL_TEST(objcpp_test_vector_push_front_and_pop_front) {
     vector.push_front("1");
     vector.push_front("2");
     vector.push_front("3");
-    ASSUME_ITS_EQUAL_CSTR(vector.get_front().objc_str(), "3");
+    ASSUME_ITS_EQUAL_CSTR(vector.get_front().c_str(), "3");
     vector.pop_front();
-    ASSUME_ITS_EQUAL_CSTR(vector.get_front().objc_str(), "2");
+    ASSUME_ITS_EQUAL_CSTR(vector.get_front().c_str(), "2");
 }
 
 FOSSIL_TEST(objcpp_test_vector_push_at_and_pop_at) {
@@ -85,9 +85,9 @@ FOSSIL_TEST(objcpp_test_vector_push_at_and_pop_at) {
     vector.push_back("b");
     vector.push_back("d");
     vector.push_at(2, "c"); // Insert "c" at index 2
-    ASSUME_ITS_EQUAL_CSTR(vector.get(2).objc_str(), "c");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(2).c_str(), "c");
     vector.pop_at(1); // Remove "b"
-    ASSUME_ITS_EQUAL_CSTR(vector.get(1).objc_str(), "c");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(1).c_str(), "c");
 }
 
 FOSSIL_TEST(objcpp_test_vector_set_and_get) {
@@ -95,11 +95,11 @@ FOSSIL_TEST(objcpp_test_vector_set_and_get) {
     vector.push_back("100");
     vector.push_back("200");
     vector.set(1, "250");
-    ASSUME_ITS_EQUAL_CSTR(vector.get(1).objc_str(), "250");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(1).c_str(), "250");
     vector.set_front("50");
-    ASSUME_ITS_EQUAL_CSTR(vector.get_front().objc_str(), "50");
+    ASSUME_ITS_EQUAL_CSTR(vector.get_front().c_str(), "50");
     vector.set_back("300");
-    ASSUME_ITS_EQUAL_CSTR(vector.get_back().objc_str(), "300");
+    ASSUME_ITS_EQUAL_CSTR(vector.get_back().c_str(), "300");
 }
 
 FOSSIL_TEST(objcpp_test_vector_erase_and_empty) {
@@ -116,7 +116,7 @@ FOSSIL_TEST(objcpp_test_vector_copy_and_move) {
     vector1.push_back("10");
     Vector vector2 = vector1;
     ASSUME_ITS_EQUAL_I32(vector2.size(), 2);
-    ASSUME_ITS_EQUAL_CSTR(vector2.get(1).objc_str(), "10");
+    ASSUME_ITS_EQUAL_CSTR(vector2.get(1).c_str(), "10");
     Vector vector3 = std::move(vector2);
     ASSUME_ITS_EQUAL_I32(vector3.size(), 2);
     // vector2 is now empty after move
@@ -129,7 +129,7 @@ FOSSIL_TEST(objcpp_test_vector_pop_back) {
     vector.push_back("3");
     vector.pop_back();
     ASSUME_ITS_EQUAL_I32(vector.size(), 2);
-    ASSUME_ITS_EQUAL_CSTR(vector.get_back().objc_str(), "2");
+    ASSUME_ITS_EQUAL_CSTR(vector.get_back().c_str(), "2");
 }
 
 FOSSIL_TEST(objcpp_test_vector_push_beyond_initial_capacity) {
@@ -143,7 +143,7 @@ FOSSIL_TEST(objcpp_test_vector_push_beyond_initial_capacity) {
     for (int i = 0; i < INITIAL_CAPACITY + 5; ++i) {
         char buf[16];
         snprintf(buf, sizeof(buf), "%d", i);
-        ASSUME_ITS_EQUAL_CSTR(vector.get(i).objc_str(), buf);
+        ASSUME_ITS_EQUAL_CSTR(vector.get(i).c_str(), buf);
     }
 }
 
@@ -183,9 +183,9 @@ FOSSIL_TEST(objcpp_test_vector_set_at_various_positions) {
     vector.set_at(0, "x");
     vector.set_at(1, "y");
     vector.set_at(2, "z");
-    ASSUME_ITS_EQUAL_CSTR(vector.get(0).objc_str(), "x");
-    ASSUME_ITS_EQUAL_CSTR(vector.get(1).objc_str(), "y");
-    ASSUME_ITS_EQUAL_CSTR(vector.get(2).objc_str(), "z");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(0).c_str(), "x");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(1).c_str(), "y");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(2).c_str(), "z");
 }
 
 FOSSIL_TEST(objcpp_test_vector_push_at_beginning_and_end) {
@@ -193,9 +193,9 @@ FOSSIL_TEST(objcpp_test_vector_push_at_beginning_and_end) {
     vector.push_back("middle");
     vector.push_at(0, "start");
     vector.push_at(2, "end");
-    ASSUME_ITS_EQUAL_CSTR(vector.get(0).objc_str(), "start");
-    ASSUME_ITS_EQUAL_CSTR(vector.get(1).objc_str(), "middle");
-    ASSUME_ITS_EQUAL_CSTR(vector.get(2).objc_str(), "end");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(0).c_str(), "start");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(1).c_str(), "middle");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(2).c_str(), "end");
 }
 
 FOSSIL_TEST(objcpp_test_vector_pop_at_various_positions) {
@@ -205,11 +205,11 @@ FOSSIL_TEST(objcpp_test_vector_pop_at_various_positions) {
     vector.push_back("c");
     vector.push_back("d");
     vector.pop_at(1); // Remove "b"
-    ASSUME_ITS_EQUAL_CSTR(vector.get(1).objc_str(), "c");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(1).c_str(), "c");
     vector.pop_at(0); // Remove "a"
-    ASSUME_ITS_EQUAL_CSTR(vector.get(0).objc_str(), "c");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(0).c_str(), "c");
     vector.pop_at(1); // Remove "d"
-    ASSUME_ITS_EQUAL_CSTR(vector.get(0).objc_str(), "c");
+    ASSUME_ITS_EQUAL_CSTR(vector.get(0).c_str(), "c");
     ASSUME_ITS_EQUAL_I32(vector.size(), 1);
 }
 
