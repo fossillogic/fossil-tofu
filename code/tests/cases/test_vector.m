@@ -33,13 +33,13 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_SUITE(c_vector_tofu_fixture);
+FOSSIL_SUITE(objc_vector_tofu_fixture);
 
-FOSSIL_SETUP(c_vector_tofu_fixture) {
+FOSSIL_SETUP(objc_vector_tofu_fixture) {
     // Setup the test fixture
 }
 
-FOSSIL_TEARDOWN(c_vector_tofu_fixture) {
+FOSSIL_TEARDOWN(objc_vector_tofu_fixture) {
     // Teardown the test fixture
 }
 
@@ -51,7 +51,7 @@ FOSSIL_TEARDOWN(c_vector_tofu_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(c_test_vector_create_and_destroy) {
+FOSSIL_TEST(objc_test_vector_create_and_destroy) {
     fossil_vector_t* vector = fossil_vector_create_container("i32");
     ASSUME_NOT_CNULL(vector);
     ASSUME_ITS_EQUAL_I32(fossil_vector_size(vector), 0);
@@ -59,7 +59,7 @@ FOSSIL_TEST(c_test_vector_create_and_destroy) {
     fossil_vector_destroy(vector);
 }
 
-FOSSIL_TEST(c_test_vector_push_and_get) {
+FOSSIL_TEST(objc_test_vector_push_and_get) {
     fossil_vector_t* vector = fossil_vector_create_container("i32");
     fossil_vector_push_back(vector, "10");
     fossil_vector_push_back(vector, "20");
@@ -71,7 +71,7 @@ FOSSIL_TEST(c_test_vector_push_and_get) {
     fossil_vector_destroy(vector);
 }
 
-FOSSIL_TEST(c_test_vector_push_front_and_pop_front) {
+FOSSIL_TEST(objc_test_vector_push_front_and_pop_front) {
     fossil_vector_t* vector = fossil_vector_create_container("i32");
     fossil_vector_push_front(vector, "1");
     fossil_vector_push_front(vector, "2");
@@ -82,7 +82,7 @@ FOSSIL_TEST(c_test_vector_push_front_and_pop_front) {
     fossil_vector_destroy(vector);
 }
 
-FOSSIL_TEST(c_test_vector_push_at_and_pop_at) {
+FOSSIL_TEST(objc_test_vector_push_at_and_pop_at) {
     fossil_vector_t* vector = fossil_vector_create_container("i32");
     fossil_vector_push_back(vector, "a");
     fossil_vector_push_back(vector, "b");
@@ -94,7 +94,7 @@ FOSSIL_TEST(c_test_vector_push_at_and_pop_at) {
     fossil_vector_destroy(vector);
 }
 
-FOSSIL_TEST(c_test_vector_set_and_get) {
+FOSSIL_TEST(objc_test_vector_set_and_get) {
     fossil_vector_t* vector = fossil_vector_create_container("i32");
     fossil_vector_push_back(vector, "100");
     fossil_vector_push_back(vector, "200");
@@ -107,7 +107,7 @@ FOSSIL_TEST(c_test_vector_set_and_get) {
     fossil_vector_destroy(vector);
 }
 
-FOSSIL_TEST(c_test_vector_erase_and_empty) {
+FOSSIL_TEST(objc_test_vector_erase_and_empty) {
     fossil_vector_t* vector = fossil_vector_create_container("i32");
     fossil_vector_push_back(vector, "1");
     fossil_vector_push_back(vector, "2");
@@ -116,7 +116,7 @@ FOSSIL_TEST(c_test_vector_erase_and_empty) {
     fossil_vector_destroy(vector);
 }
 
-FOSSIL_TEST(c_test_vector_copy_and_move) {
+FOSSIL_TEST(objc_test_vector_copy_and_move) {
     fossil_vector_t* vector1 = fossil_vector_create_container("i32");
     fossil_vector_push_back(vector1, "5");
     fossil_vector_push_back(vector1, "10");
@@ -130,7 +130,7 @@ FOSSIL_TEST(c_test_vector_copy_and_move) {
     // vector2 is now empty after move
 }
 
-FOSSIL_TEST(c_test_vector_pop_back) {
+FOSSIL_TEST(objc_test_vector_pop_back) {
     fossil_vector_t* vector = fossil_vector_create_container("i32");
     fossil_vector_push_back(vector, "1");
     fossil_vector_push_back(vector, "2");
@@ -141,7 +141,7 @@ FOSSIL_TEST(c_test_vector_pop_back) {
     fossil_vector_destroy(vector);
 }
 
-FOSSIL_TEST(c_test_vector_push_beyond_initial_capacity) {
+FOSSIL_TEST(objc_test_vector_push_beyond_initial_capacity) {
     fossil_vector_t* vector = fossil_vector_create_container("i32");
     // Push more elements than INITIAL_CAPACITY to test resizing
     for (int i = 0; i < INITIAL_CAPACITY + 5; ++i) {
@@ -158,7 +158,7 @@ FOSSIL_TEST(c_test_vector_push_beyond_initial_capacity) {
     fossil_vector_destroy(vector);
 }
 
-FOSSIL_TEST(c_test_vector_pop_until_empty) {
+FOSSIL_TEST(objc_test_vector_pop_until_empty) {
     fossil_vector_t* vector = fossil_vector_create_container("i32");
     fossil_vector_push_back(vector, "1");
     fossil_vector_push_back(vector, "2");
@@ -170,7 +170,7 @@ FOSSIL_TEST(c_test_vector_pop_until_empty) {
     fossil_vector_destroy(vector);
 }
 
-FOSSIL_TEST(c_test_vector_pop_front_until_empty) {
+FOSSIL_TEST(objc_test_vector_pop_front_until_empty) {
     fossil_vector_t* vector = fossil_vector_create_container("i32");
     fossil_vector_push_back(vector, "a");
     fossil_vector_push_back(vector, "b");
@@ -182,7 +182,7 @@ FOSSIL_TEST(c_test_vector_pop_front_until_empty) {
     fossil_vector_destroy(vector);
 }
 
-FOSSIL_TEST(c_test_vector_null_pointer_safety) {
+FOSSIL_TEST(objc_test_vector_null_pointer_safety) {
     fossil_vector_t* vector = NULL;
     ASSUME_ITS_TRUE(fossil_vector_is_cnullptr(vector));
     ASSUME_ITS_FALSE(fossil_vector_not_cnullptr(vector));
@@ -194,7 +194,7 @@ FOSSIL_TEST(c_test_vector_null_pointer_safety) {
     fossil_vector_erase(vector);    // Should not crash
 }
 
-FOSSIL_TEST(c_test_vector_set_at_various_positions) {
+FOSSIL_TEST(objc_test_vector_set_at_various_positions) {
     fossil_vector_t* vector = fossil_vector_create_container("i32");
     fossil_vector_push_back(vector, "a");
     fossil_vector_push_back(vector, "b");
@@ -208,7 +208,7 @@ FOSSIL_TEST(c_test_vector_set_at_various_positions) {
     fossil_vector_destroy(vector);
 }
 
-FOSSIL_TEST(c_test_vector_push_at_beginning_and_end) {
+FOSSIL_TEST(objc_test_vector_push_at_beginning_and_end) {
     fossil_vector_t* vector = fossil_vector_create_container("i32");
     fossil_vector_push_back(vector, "middle");
     fossil_vector_push_at(vector, 0, "start");
@@ -219,7 +219,7 @@ FOSSIL_TEST(c_test_vector_push_at_beginning_and_end) {
     fossil_vector_destroy(vector);
 }
 
-FOSSIL_TEST(c_test_vector_pop_at_various_positions) {
+FOSSIL_TEST(objc_test_vector_pop_at_various_positions) {
     fossil_vector_t* vector = fossil_vector_create_container("i32");
     fossil_vector_push_back(vector, "a");
     fossil_vector_push_back(vector, "b");
@@ -239,24 +239,24 @@ FOSSIL_TEST(c_test_vector_pop_at_various_positions) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
-FOSSIL_TEST_GROUP(c_vector_tofu_tests) {    
+FOSSIL_TEST_GROUP(objc_vector_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_create_and_destroy);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_push_and_get);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_push_front_and_pop_front);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_push_at_and_pop_at);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_set_and_get);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_erase_and_empty);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_copy_and_move);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_pop_back);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_push_beyond_initial_capacity);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_pop_until_empty);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_pop_front_until_empty);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_null_pointer_safety);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_set_at_various_positions);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_push_at_beginning_and_end);
-    FOSSIL_TEST_ADD(c_vector_tofu_fixture, c_test_vector_pop_at_various_positions);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_create_and_destroy);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_push_and_get);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_push_front_and_pop_front);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_push_at_and_pop_at);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_set_and_get);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_erase_and_empty);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_copy_and_move);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_pop_back);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_push_beyond_initial_capacity);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_pop_until_empty);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_pop_front_until_empty);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_null_pointer_safety);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_set_at_various_positions);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_push_at_beginning_and_end);
+    FOSSIL_TEST_ADD(objc_vector_tofu_fixture, objc_test_vector_pop_at_various_positions);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(c_vector_tofu_fixture);
+    FOSSIL_TEST_REGISTER(objc_vector_tofu_fixture);
 } // end of tests

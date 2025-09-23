@@ -33,13 +33,13 @@
 // mock objects are set here.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_SUITE(c_tuple_tofu_fixture);
+FOSSIL_SUITE(objc_tuple_tofu_fixture);
 
-FOSSIL_SETUP(c_tuple_tofu_fixture) {
+FOSSIL_SETUP(objc_tuple_tofu_fixture) {
     // Setup the test fixture
 }
 
-FOSSIL_TEARDOWN(c_tuple_tofu_fixture) {
+FOSSIL_TEARDOWN(objc_tuple_tofu_fixture) {
     // Teardown the test fixture
 }
 
@@ -51,21 +51,21 @@ FOSSIL_TEARDOWN(c_tuple_tofu_fixture) {
 // as samples for library usage.
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
-FOSSIL_TEST(c_test_tuple_create_and_destroy) {
+FOSSIL_TEST(objc_test_tuple_create_and_destroy) {
     fossil_tuple_t* tuple = fossil_tuple_create("i32");
     ASSUME_NOT_CNULL(tuple);
     ASSUME_ITS_EQUAL_I32(fossil_tuple_size(tuple), 0);
     fossil_tuple_destroy(tuple);
 }
 
-FOSSIL_TEST(c_test_tuple_create_default) {
+FOSSIL_TEST(objc_test_tuple_create_default) {
     fossil_tuple_t* tuple = fossil_tuple_create_default();
     ASSUME_NOT_CNULL(tuple);
     ASSUME_ITS_EQUAL_I32(fossil_tuple_size(tuple), 0);
     fossil_tuple_destroy(tuple);
 }
 
-FOSSIL_TEST(c_test_tuple_add_and_get) {
+FOSSIL_TEST(objc_test_tuple_add_and_get) {
     fossil_tuple_t* tuple = fossil_tuple_create("i32");
     fossil_tuple_add(tuple, "10");
     fossil_tuple_add(tuple, "20");
@@ -77,7 +77,7 @@ FOSSIL_TEST(c_test_tuple_add_and_get) {
     fossil_tuple_destroy(tuple);
 }
 
-FOSSIL_TEST(c_test_tuple_get_front_and_back) {
+FOSSIL_TEST(objc_test_tuple_get_front_and_back) {
     fossil_tuple_t* tuple = fossil_tuple_create("i32");
     fossil_tuple_add(tuple, "100");
     fossil_tuple_add(tuple, "200");
@@ -87,7 +87,7 @@ FOSSIL_TEST(c_test_tuple_get_front_and_back) {
     fossil_tuple_destroy(tuple);
 }
 
-FOSSIL_TEST(c_test_tuple_set_and_get) {
+FOSSIL_TEST(objc_test_tuple_set_and_get) {
     fossil_tuple_t* tuple = fossil_tuple_create("i32");
     fossil_tuple_add(tuple, "1");
     fossil_tuple_add(tuple, "2");
@@ -101,7 +101,7 @@ FOSSIL_TEST(c_test_tuple_set_and_get) {
     fossil_tuple_destroy(tuple);
 }
 
-FOSSIL_TEST(c_test_tuple_remove) {
+FOSSIL_TEST(objc_test_tuple_remove) {
     fossil_tuple_t* tuple = fossil_tuple_create("i32");
     fossil_tuple_add(tuple, "a");
     fossil_tuple_add(tuple, "b");
@@ -113,7 +113,7 @@ FOSSIL_TEST(c_test_tuple_remove) {
     fossil_tuple_destroy(tuple);
 }
 
-FOSSIL_TEST(c_test_tuple_clear_and_is_empty) {
+FOSSIL_TEST(objc_test_tuple_clear_and_is_empty) {
     fossil_tuple_t* tuple = fossil_tuple_create("i32");
     fossil_tuple_add(tuple, "x");
     fossil_tuple_add(tuple, "y");
@@ -124,7 +124,7 @@ FOSSIL_TEST(c_test_tuple_clear_and_is_empty) {
     fossil_tuple_destroy(tuple);
 }
 
-FOSSIL_TEST(c_test_tuple_capacity_growth) {
+FOSSIL_TEST(objc_test_tuple_capacity_growth) {
     fossil_tuple_t* tuple = fossil_tuple_create("i32");
     size_t initial_capacity = fossil_tuple_capacity(tuple);
     for (int i = 0; i < (int)initial_capacity + 2; ++i) {
@@ -136,7 +136,7 @@ FOSSIL_TEST(c_test_tuple_capacity_growth) {
     fossil_tuple_destroy(tuple);
 }
 
-FOSSIL_TEST(c_test_tuple_copy_constructor) {
+FOSSIL_TEST(objc_test_tuple_copy_constructor) {
     fossil_tuple_t* tuple1 = fossil_tuple_create("i32");
     fossil_tuple_add(tuple1, "1");
     fossil_tuple_add(tuple1, "2");
@@ -148,7 +148,7 @@ FOSSIL_TEST(c_test_tuple_copy_constructor) {
     fossil_tuple_destroy(tuple2);
 }
 
-FOSSIL_TEST(c_test_tuple_move_constructor) {
+FOSSIL_TEST(objc_test_tuple_move_constructor) {
     fossil_tuple_t* tuple1 = fossil_tuple_create("i32");
     fossil_tuple_add(tuple1, "5");
     fossil_tuple_add(tuple1, "6");
@@ -165,19 +165,19 @@ FOSSIL_TEST(c_test_tuple_move_constructor) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
-FOSSIL_TEST_GROUP(c_tuple_tofu_tests) {    
+FOSSIL_TEST_GROUP(objc_tuple_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_create_and_destroy);
-    FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_create_default);
-    FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_add_and_get);
-    FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_get_front_and_back);
-    FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_set_and_get);
-    FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_remove);
-    FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_clear_and_is_empty);
-    FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_capacity_growth);
-    FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_copy_constructor);
-    FOSSIL_TEST_ADD(c_tuple_tofu_fixture, c_test_tuple_move_constructor);
+    FOSSIL_TEST_ADD(objc_tuple_tofu_fixture, objc_test_tuple_create_and_destroy);
+    FOSSIL_TEST_ADD(objc_tuple_tofu_fixture, objc_test_tuple_create_default);
+    FOSSIL_TEST_ADD(objc_tuple_tofu_fixture, objc_test_tuple_add_and_get);
+    FOSSIL_TEST_ADD(objc_tuple_tofu_fixture, objc_test_tuple_get_front_and_back);
+    FOSSIL_TEST_ADD(objc_tuple_tofu_fixture, objc_test_tuple_set_and_get);
+    FOSSIL_TEST_ADD(objc_tuple_tofu_fixture, objc_test_tuple_remove);
+    FOSSIL_TEST_ADD(objc_tuple_tofu_fixture, objc_test_tuple_clear_and_is_empty);
+    FOSSIL_TEST_ADD(objc_tuple_tofu_fixture, objc_test_tuple_capacity_growth);
+    FOSSIL_TEST_ADD(objc_tuple_tofu_fixture, objc_test_tuple_copy_constructor);
+    FOSSIL_TEST_ADD(objc_tuple_tofu_fixture, objc_test_tuple_move_constructor);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(c_tuple_tofu_fixture);
+    FOSSIL_TEST_REGISTER(objc_tuple_tofu_fixture);
 } // end of tests
