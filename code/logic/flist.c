@@ -23,9 +23,6 @@
  * -----------------------------------------------------------------------------
  */
 #include "fossil/tofu/flist.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 fossil_flist_t* fossil_flist_create_container(char* type) {
     fossil_flist_t* flist = (fossil_flist_t*)fossil_tofu_alloc(sizeof(fossil_flist_t));
