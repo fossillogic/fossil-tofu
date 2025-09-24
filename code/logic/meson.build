@@ -3,10 +3,21 @@ add_project_arguments('-D_POSIX_C_SOURCE=200112L', language: 'c')
 add_project_arguments('-D_POSIX_C_SOURCE=200112L', language: 'cpp')
 
 fossil_tofu_lib = library('fossil_tofu',
-    files('dlist.c', 'flist.c', 'clist.c',
-          'dqueue.c', 'pqueue.c', 'queue.c', 'cqueue.c',
-          'setof.c', 'tuple.c', 'mapof.c',
-          'stack.c', 'vector.c', 'array.c', 'arraylist.c', 'tofu.c'),
+    files('dlist.c',
+          'flist.c',
+          'clist.c',
+          'dqueue.c', 
+          'pqueue.c',
+          'queue.c',
+          'cqueue.c',
+          'setof.c',
+          'tuple.c',
+          'mapof.c',
+          'stack.c',
+          'vector.c',
+          'array.c',
+          'arraylist.c',
+          'tofu.c'),
     install: true,
     include_directories: dir)
 
