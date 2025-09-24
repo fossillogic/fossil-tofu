@@ -30,9 +30,9 @@
 
 // array family
 #include "vector.h"
+#include "matrix.h"
 #include "tuple.h"
 #include "array.h"
-// TODO: Add matrix implementation when available
 #include "arraylist.h"
 
 // queue family
