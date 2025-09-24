@@ -46,7 +46,6 @@
 // key-value family
 #include "setof.h"
 #include "mapof.h"
-#include "trie.h"
 
 // linked list family
 #include "clist.h"

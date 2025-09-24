@@ -1,4 +1,5 @@
 dir = include_directories('.')
+cc = meson.get_compiler('c')
 add_project_arguments('-D_POSIX_C_SOURCE=200112L', language: 'c')
 add_project_arguments('-D_POSIX_C_SOURCE=200112L', language: 'cpp')
 
@@ -14,7 +15,6 @@ fossil_tofu_lib = library('fossil_tofu',
         'setof.c',
         'tuple.c',
         'mapof.c',
-        'trie.c',
         'stack.c',
         'vector.c',
         'array.c',
@@ -22,7 +22,8 @@ fossil_tofu_lib = library('fossil_tofu',
         'tofu.c'
         ),
     install: true,
-    include_directories: dir)
+    include_directories: dir,
+    dependencies: [cc.find_library('m', required: false)])
 
 fossil_tofu_dep = declare_dependency(
     link_with: [fossil_tofu_lib],
