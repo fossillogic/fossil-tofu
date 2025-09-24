@@ -31,7 +31,7 @@
 // array family
 #include "vector.h"
 #include "tuple.h"
-// TODO: Add array implementation when available
+#include "array.h"
 // TODO: Add matrix implementation when available
 #include "arraylist.h"
 
