@@ -47,19 +47,11 @@
 #include "setof.h"
 #include "mapof.h"
 #include "trie.h"
-#include "bloom.h"
 
 // linked list family
 #include "clist.h"
 #include "flist.h"
 #include "dlist.h"
-//
-// TODO: Add cross-list implementation when available
-// TODO: Add skip-list implementation when available
-// TODO: Add xor-linked list implementation when available
-// TODO: Add intrusive list implementation when available
-// TODO: Add unrolled linked list implementation when available
-//
 
 // tree family
 // TODO add tree family headers when implemented
