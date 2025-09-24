@@ -216,26 +216,29 @@ bool fossil_matrix_is_empty(const fossil_matrix_t* matrix) {
     return !matrix || matrix->size == 0;
 }
 
-// NOTE: Simple serialization as JSON array of tofu values
 char* fossil_matrix_serialize(const fossil_matrix_t* matrix) {
-    if (!matrix) return fossil_tofu_strdup("[]");
+    if (!matrix) return fossil_tofu_strdup("array: []");
 
-    size_t total_len = 2; // for '[' and ']'
+    size_t total_len = strlen("array: [") + 2; // '[' and ']'
     char** serialized_items = (char**)fossil_tofu_alloc(matrix->size * sizeof(char*));
 
     for (size_t i = 0; i < matrix->size; ++i) {
         serialized_items[i] = fossil_tofu_serialize(&matrix->data[i]);
-        total_len += strlen(serialized_items[i]) + 2;
+        total_len += strlen(serialized_items[i]) + 3; // comma + newline
     }
 
     char* result = (char*)fossil_tofu_alloc(total_len + 1);
     char* ptr = result;
-    *ptr++ = '[';
+
+    ptr += sprintf(ptr, "array: [\n");
     for (size_t i = 0; i < matrix->size; ++i) {
         size_t len = strlen(serialized_items[i]);
         memcpy(ptr, serialized_items[i], len);
         ptr += len;
-        if (i < matrix->size - 1) *ptr++ = ',';
+        if (i < matrix->size - 1) {
+            *ptr++ = ',';
+        }
+        *ptr++ = '\n';
         fossil_tofu_free(serialized_items[i]);
     }
     *ptr++ = ']';
@@ -245,29 +248,50 @@ char* fossil_matrix_serialize(const fossil_matrix_t* matrix) {
     return result;
 }
 
-// NOTE: Basic parser — assumes well-formed serialized data.
 fossil_matrix_t* fossil_matrix_parse(const char* serialized) {
     if (!serialized) return NULL;
-    fossil_matrix_t* matrix = fossil_matrix_create_default();
 
     const char* ptr = serialized;
-    while (*ptr) {
-        if (*ptr == '{') { // naive tofu parse
-            const char* start = ptr;
-            while (*ptr && *ptr != '}') ptr++;
-            if (*ptr == '}') {
-                size_t len = (ptr - start) + 1;
-                char* tofu_str = (char*)fossil_tofu_alloc(len + 1);
-                memcpy(tofu_str, start, len);
-                tofu_str[len] = '\0';
+    fossil_matrix_t* matrix = fossil_matrix_create_default();
+    if (!matrix) return NULL;
 
-                fossil_tofu_t* tofu = fossil_tofu_parse(tofu_str);
-                if (tofu) fossil_matrix_push_back(matrix, tofu);
+    // Skip optional "array:" keyword
+    while (isspace((unsigned char)*ptr)) ptr++;
+    if (strncmp(ptr, "array:", 6) == 0) {
+        ptr += 6;
+    }
+
+    // Find opening '['
+    while (*ptr && *ptr != '[') ptr++;
+    if (*ptr != '[') return matrix; // empty matrix if no array found
+    ptr++; // skip '['
+
+    while (*ptr && *ptr != ']') {
+        while (isspace((unsigned char)*ptr) || *ptr == ',') ptr++;
+        if (*ptr == '{') {
+            // Find matching '}'
+            const char* start = ptr;
+            int brace_count = 0;
+            do {
+                if (*ptr == '{') brace_count++;
+                else if (*ptr == '}') brace_count--;
+                ptr++;
+            } while (*ptr && brace_count > 0);
+
+            size_t len = ptr - start;
+            char* tofu_str = (char*)fossil_tofu_alloc(len + 1);
+            memcpy(tofu_str, start, len);
+            tofu_str[len] = '\0';
+
+            fossil_tofu_t* tofu = fossil_tofu_parse(tofu_str);
+            if (tofu) {
+                fossil_matrix_push_back(matrix, tofu);
                 fossil_tofu_destroy(tofu);
-                fossil_tofu_free(tofu_str);
             }
+            fossil_tofu_free(tofu_str);
+        } else {
+            ptr++;
         }
-        ptr++;
     }
 
     return matrix;
