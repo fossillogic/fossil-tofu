@@ -33,8 +33,7 @@
 #include "tuple.h"
 #include "array.h"
 // TODO: Add matrix implementation when available
-// TODO: Add sparse matrix implementation when available
-// TODO: Add linked array implementation when available
+#include "arraylist.h"
 
 // queue family
 #include "dqueue.h"
