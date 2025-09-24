@@ -161,8 +161,183 @@ fossil_matrix_t* fossil_matrix_parse(const char* serialized);
 #include <string>
 
 namespace fossil {
-    
+
 namespace tofu {
+
+    /**
+     * A C++ RAII wrapper class for the fossil_matrix_t structure.
+     * Provides type-safe management of dynamic arrays of fossil_tofu_t elements.
+     */
+    class Matrix {
+    public:
+        /**
+         * Default constructor. Creates a new matrix with default (generic) element type.
+         * Throws std::runtime_error on failure.
+         */
+        Matrix() : matrix(fossil_matrix_create_default()) {
+            if (!matrix) {
+                throw std::runtime_error("Failed to create matrix");
+            }
+        }
+
+        /**
+         * Constructor that creates a new matrix with a specified expected type.
+         * Throws std::runtime_error on failure.
+         *
+         * @param type Expected type of elements in the matrix (e.g. "string", "i32").
+         */
+        explicit Matrix(const std::string& type)
+            : matrix(fossil_matrix_create(type.c_str())) {
+            if (!matrix) {
+                throw std::runtime_error("Failed to create matrix");
+            }
+        }
+
+        /**
+         * Copy constructor. Deep-clones the underlying matrix and all tofu elements.
+         * Throws std::runtime_error on failure.
+         */
+        Matrix(const Matrix& other)
+            : matrix(fossil_matrix_clone(other.matrix)) {
+            if (!matrix) {
+                throw std::runtime_error("Failed to clone matrix");
+            }
+        }
+
+        /**
+         * Move constructor. Transfers ownership from another Matrix instance.
+         * Noexcept for strong exception guarantee.
+         */
+        Matrix(Matrix&& other) noexcept : matrix(other.matrix) {
+            other.matrix = nullptr;
+        }
+
+        /**
+         * Destructor. Destroys the matrix and frees all elements.
+         */
+        ~Matrix() {
+            if (matrix) {
+                fossil_matrix_destroy(matrix);
+            }
+        }
+
+        /**
+         * Copy assignment (deep copy).
+         */
+        Matrix& operator=(const Matrix& other) {
+            if (this != &other) {
+                fossil_matrix_t* new_matrix = fossil_matrix_clone(other.matrix);
+                if (!new_matrix) {
+                    throw std::runtime_error("Failed to copy matrix");
+                }
+                fossil_matrix_destroy(matrix);
+                matrix = new_matrix;
+            }
+            return *this;
+        }
+
+        /**
+         * Move assignment (transfer ownership).
+         */
+        Matrix& operator=(Matrix&& other) noexcept {
+            if (this != &other) {
+                fossil_matrix_destroy(matrix);
+                matrix = other.matrix;
+                other.matrix = nullptr;
+            }
+            return *this;
+        }
+
+        // ---------------------------------------------------------------------
+        // Element management
+        // ---------------------------------------------------------------------
+
+        void push_back(const fossil_tofu_t* element) {
+            fossil_matrix_push_back(matrix, element);
+        }
+
+        void push_front(const fossil_tofu_t* element) {
+            fossil_matrix_push_front(matrix, element);
+        }
+
+        void insert_at(size_t index, const fossil_tofu_t* element) {
+            fossil_matrix_insert_at(matrix, index, element);
+        }
+
+        void pop_back() {
+            fossil_matrix_pop_back(matrix);
+        }
+
+        void pop_front() {
+            fossil_matrix_pop_front(matrix);
+        }
+
+        void remove_at(size_t index) {
+            fossil_matrix_remove_at(matrix, index);
+        }
+
+        void clear() {
+            fossil_matrix_clear(matrix);
+        }
+
+        bool is_empty() const {
+            return fossil_matrix_is_empty(matrix);
+        }
+
+        size_t size() const {
+            return fossil_matrix_size(matrix);
+        }
+
+        size_t capacity() const {
+            return fossil_matrix_capacity(matrix);
+        }
+
+        const fossil_tofu_t* get(size_t index) const {
+            return fossil_matrix_get(matrix, index);
+        }
+
+        const fossil_tofu_t* get_front() const {
+            return fossil_matrix_get_front(matrix);
+        }
+
+        const fossil_tofu_t* get_back() const {
+            return fossil_matrix_get_back(matrix);
+        }
+
+        void set(size_t index, const fossil_tofu_t* element) {
+            fossil_matrix_set(matrix, index, element);
+        }
+
+        // ---------------------------------------------------------------------
+        // Serialization
+        // ---------------------------------------------------------------------
+
+        std::string serialize() const {
+            char* serialized = fossil_matrix_serialize(matrix);
+            if (!serialized) {
+                throw std::runtime_error("Failed to serialize matrix");
+            }
+            std::string result(serialized);
+            free(serialized);
+            return result;
+        }
+
+        static Matrix parse(const std::string& serialized) {
+            fossil_matrix_t* parsed = fossil_matrix_parse(serialized.c_str());
+            if (!parsed) {
+                throw std::runtime_error("Failed to parse matrix");
+            }
+            return Matrix(parsed);
+        }
+
+    private:
+        /**
+         * Private constructor for use by parse() and move semantics.
+         */
+        explicit Matrix(fossil_matrix_t* existing) : matrix(existing) {}
+
+        fossil_matrix_t* matrix;
+    };
 
 } // namespace tofu
 
