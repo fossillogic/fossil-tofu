@@ -32,7 +32,6 @@
 #include "vector.h"
 #include "tuple.h"
 #include "array.h"
-// TODO: Add matrix implementation when available
 #include "arraylist.h"
 
 // queue family
@@ -47,8 +46,8 @@
 // key-value family
 #include "setof.h"
 #include "mapof.h"
-// TODO: Add trie implementation when available
-// TODO: Add bloom filter implementation when available
+#include "trie.h"
+#include "bloom.h"
 
 // linked list family
 #include "clist.h"
