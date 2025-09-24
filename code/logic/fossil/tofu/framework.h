@@ -31,7 +31,7 @@
 // array family
 #include "vector.h"
 #include "tuple.h"
-// TODO: Add array implementation when available
+#include "array.h"
 // TODO: Add matrix implementation when available
 // TODO: Add sparse matrix implementation when available
 // TODO: Add linked array implementation when available
