@@ -53,6 +53,6 @@
 #include "dlist.h"
 
 // tree family
-// TODO add tree family headers when implemented
+#include "tree.h"
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */
