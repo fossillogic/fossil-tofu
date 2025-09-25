@@ -36,16 +36,16 @@ extern "C"
 // Type definitions
 // *****************************************************************************
 
-typedef struct fossil_pqueue_node_t {
+typedef struct fossil_tofu_pqueue_node_t {
     fossil_tofu_t data;
     int32_t priority;
-    struct fossil_pqueue_node_t* next;
-} fossil_pqueue_node_t;
+    struct fossil_tofu_pqueue_node_t* next;
+} fossil_tofu_pqueue_node_t;
 
-typedef struct fossil_pqueue_t {
-    fossil_pqueue_node_t* front;
+typedef struct fossil_tofu_pqueue_t {
+    fossil_tofu_pqueue_node_t* front;
     char* type;
-} fossil_pqueue_t;
+} fossil_tofu_pqueue_t;
 
 // *****************************************************************************
 // Function prototypes
@@ -58,7 +58,7 @@ typedef struct fossil_pqueue_t {
  * @return           The created priority queue.
  * @note             Time complexity: O(1)
  */
-fossil_pqueue_t* fossil_pqueue_create_container(char* type);
+fossil_tofu_pqueue_t* fossil_tofu_pqueue_create_container(char* type);
 
 /**
  * Create a new priority queue with default values.
@@ -67,7 +67,7 @@ fossil_pqueue_t* fossil_pqueue_create_container(char* type);
  *
  * @return The created priority queue.
  */
-fossil_pqueue_t* fossil_pqueue_create_default(void);
+fossil_tofu_pqueue_t* fossil_tofu_pqueue_create_default(void);
 
 /**
  * Create a new priority queue by copying an existing priority queue.
@@ -77,7 +77,7 @@ fossil_pqueue_t* fossil_pqueue_create_default(void);
  * @param other The priority queue to copy.
  * @return      The created priority queue.
  */
-fossil_pqueue_t* fossil_pqueue_create_copy(const fossil_pqueue_t* other);
+fossil_tofu_pqueue_t* fossil_tofu_pqueue_create_copy(const fossil_tofu_pqueue_t* other);
 
 /**
  * Create a new priority queue by moving an existing priority queue.
@@ -87,7 +87,7 @@ fossil_pqueue_t* fossil_pqueue_create_copy(const fossil_pqueue_t* other);
  * @param other The priority queue to move.
  * @return      The created priority queue.
  */
-fossil_pqueue_t* fossil_pqueue_create_move(fossil_pqueue_t* other);
+fossil_tofu_pqueue_t* fossil_tofu_pqueue_create_move(fossil_tofu_pqueue_t* other);
 
 /**
  * Erase the contents of the priority queue and fossil_tofu_free allocated memory.
@@ -95,7 +95,7 @@ fossil_pqueue_t* fossil_pqueue_create_move(fossil_pqueue_t* other);
  * @param pqueue The priority queue to erase.
  * @note         Time complexity: O(n)
  */
-void fossil_pqueue_destroy(fossil_pqueue_t* pqueue);
+void fossil_tofu_pqueue_destroy(fossil_tofu_pqueue_t* pqueue);
 
 // *****************************************************************************
 // Utility functions
@@ -110,7 +110,7 @@ void fossil_pqueue_destroy(fossil_pqueue_t* pqueue);
  * @return         The error code indicating the success or failure of the operation.
  * @note           Time complexity: O(n)
  */
-int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, char *data, int32_t priority);
+int32_t fossil_tofu_pqueue_insert(fossil_tofu_pqueue_t* pqueue, char *data, int32_t priority);
 
 /**
  * Remove data from the priority queue.
@@ -120,7 +120,7 @@ int32_t fossil_pqueue_insert(fossil_pqueue_t* pqueue, char *data, int32_t priori
  * @return         The error code indicating the success or failure of the operation.
  * @note           Time complexity: O(1)
  */
-int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, int32_t priority);
+int32_t fossil_tofu_pqueue_remove(fossil_tofu_pqueue_t* pqueue, int32_t priority);
 
 /**
  * Get the size of the priority queue.
@@ -129,7 +129,7 @@ int32_t fossil_pqueue_remove(fossil_pqueue_t* pqueue, int32_t priority);
  * @return       The size of the priority queue.
  * @note         Time complexity: O(1)
  */
-size_t fossil_pqueue_size(const fossil_pqueue_t* pqueue);
+size_t fossil_tofu_pqueue_size(const fossil_tofu_pqueue_t* pqueue);
 
 /**
  * Check if the priority queue is not empty.
@@ -138,7 +138,7 @@ size_t fossil_pqueue_size(const fossil_pqueue_t* pqueue);
  * @return       True if the priority queue is not empty, false otherwise.
  * @note         Time complexity: O(1)
  */
-bool fossil_pqueue_not_empty(const fossil_pqueue_t* pqueue);
+bool fossil_tofu_pqueue_not_empty(const fossil_tofu_pqueue_t* pqueue);
 
 /**
  * Check if the priority queue is not a null pointer.
@@ -147,7 +147,7 @@ bool fossil_pqueue_not_empty(const fossil_pqueue_t* pqueue);
  * @return       True if the priority queue is not a null pointer, false otherwise.
  * @note         Time complexity: O(1)
  */
-bool fossil_pqueue_not_cnullptr(const fossil_pqueue_t* pqueue);
+bool fossil_tofu_pqueue_not_cnullptr(const fossil_tofu_pqueue_t* pqueue);
 
 /**
  * Check if the priority queue is empty.
@@ -156,7 +156,7 @@ bool fossil_pqueue_not_cnullptr(const fossil_pqueue_t* pqueue);
  * @return       True if the priority queue is empty, false otherwise.
  * @note         Time complexity: O(1)
  */
-bool fossil_pqueue_is_empty(const fossil_pqueue_t* pqueue);
+bool fossil_tofu_pqueue_is_empty(const fossil_tofu_pqueue_t* pqueue);
 
 /**
  * Check if the priority queue is a null pointer.
@@ -165,7 +165,7 @@ bool fossil_pqueue_is_empty(const fossil_pqueue_t* pqueue);
  * @return       True if the priority queue is a null pointer, false otherwise.
  * @note         Time complexity: O(1)
  */
-bool fossil_pqueue_is_cnullptr(const fossil_pqueue_t* pqueue);
+bool fossil_tofu_pqueue_is_cnullptr(const fossil_tofu_pqueue_t* pqueue);
 
 // *****************************************************************************
 // Getter and setter functions
@@ -179,7 +179,7 @@ bool fossil_pqueue_is_cnullptr(const fossil_pqueue_t* pqueue);
  * @param pqueue The priority queue from which to get the element.
  * @return       The element with the highest priority.
  */
-char *fossil_pqueue_get_front(const fossil_pqueue_t* pqueue);
+char *fossil_tofu_pqueue_get_front(const fossil_tofu_pqueue_t* pqueue);
 
 /**
  * Get the element with the lowest priority in the priority queue.
@@ -189,7 +189,7 @@ char *fossil_pqueue_get_front(const fossil_pqueue_t* pqueue);
  * @param pqueue The priority queue from which to get the element.
  * @return       The element with the lowest priority.
  */
-char *fossil_pqueue_get_back(const fossil_pqueue_t* pqueue);
+char *fossil_tofu_pqueue_get_back(const fossil_tofu_pqueue_t* pqueue);
 
 /**
  * Get the element at the specified priority in the priority queue.
@@ -200,7 +200,7 @@ char *fossil_pqueue_get_back(const fossil_pqueue_t* pqueue);
  * @param priority The priority of the element to get.
  * @return         The element at the specified priority.
  */
-char *fossil_pqueue_get_at(const fossil_pqueue_t* pqueue, int32_t priority);
+char *fossil_tofu_pqueue_get_at(const fossil_tofu_pqueue_t* pqueue, int32_t priority);
 
 /**
  * Set the element with the highest priority in the priority queue.
@@ -210,7 +210,7 @@ char *fossil_pqueue_get_at(const fossil_pqueue_t* pqueue, int32_t priority);
  * @param pqueue  The priority queue in which to set the element.
  * @param element The element to set.
  */
-void fossil_pqueue_set_front(fossil_pqueue_t* pqueue, char *element);
+void fossil_tofu_pqueue_set_front(fossil_tofu_pqueue_t* pqueue, char *element);
 
 /**
  * Set the element with the lowest priority in the priority queue.
@@ -220,7 +220,7 @@ void fossil_pqueue_set_front(fossil_pqueue_t* pqueue, char *element);
  * @param pqueue  The priority queue in which to set the element.
  * @param element The element to set.
  */
-void fossil_pqueue_set_back(fossil_pqueue_t* pqueue, char *element);
+void fossil_tofu_pqueue_set_back(fossil_tofu_pqueue_t* pqueue, char *element);
 
 /**
  * Set the element at the specified priority in the priority queue.
@@ -231,7 +231,7 @@ void fossil_pqueue_set_back(fossil_pqueue_t* pqueue, char *element);
  * @param priority The priority at which to set the element.
  * @param element  The element to set.
  */
-void fossil_pqueue_set_at(fossil_pqueue_t* pqueue, int32_t priority, char *element);
+void fossil_tofu_pqueue_set_at(fossil_tofu_pqueue_t* pqueue, int32_t priority, char *element);
 
 #ifdef __cplusplus
 }
@@ -250,7 +250,7 @@ namespace fossil {
              * @param type The type of data the priority queue will store.
              */
             PQueue(const std::string& type) {
-                pqueue = fossil_pqueue_create_container(const_cast<char*>(type.c_str()));
+                pqueue = fossil_tofu_pqueue_create_container(const_cast<char*>(type.c_str()));
                 if (pqueue == nullptr) {
                     throw std::runtime_error("Failed to create priority queue.");
                 }
@@ -260,7 +260,7 @@ namespace fossil {
              * Create a new priority queue with default values.
              */
             PQueue() {
-                pqueue = fossil_pqueue_create_default();
+                pqueue = fossil_tofu_pqueue_create_default();
                 if (pqueue == nullptr) {
                     throw std::runtime_error("Failed to create priority queue.");
                 }
@@ -272,7 +272,7 @@ namespace fossil {
              * @param other The priority queue to copy.
              */
             PQueue(const PQueue& other) {
-                pqueue = fossil_pqueue_create_copy(other.pqueue);
+                pqueue = fossil_tofu_pqueue_create_copy(other.pqueue);
                 if (pqueue == nullptr) {
                     throw std::runtime_error("Failed to create priority queue.");
                 }
@@ -284,14 +284,14 @@ namespace fossil {
              * @param other The priority queue to move.
              */
             PQueue(PQueue&& other) noexcept {
-                pqueue = fossil_pqueue_create_move(other.pqueue);
+                pqueue = fossil_tofu_pqueue_create_move(other.pqueue);
             }
 
             /**
              * Destroy the priority queue and fossil_tofu_free allocated memory.
              */
             ~PQueue() {
-                fossil_pqueue_destroy(pqueue);
+                fossil_tofu_pqueue_destroy(pqueue);
             }
 
             /**
@@ -301,7 +301,7 @@ namespace fossil {
              * @param priority The priority of the data.
              */
             void insert(const std::string& data, int32_t priority) {
-                fossil_pqueue_insert(pqueue, const_cast<char*>(data.c_str()), priority);
+                fossil_tofu_pqueue_insert(pqueue, const_cast<char*>(data.c_str()), priority);
             }
 
             /**
@@ -310,7 +310,7 @@ namespace fossil {
              * @param priority The priority of the data.
              */
             void remove(int32_t priority) {
-                fossil_pqueue_remove(pqueue, priority);
+                fossil_tofu_pqueue_remove(pqueue, priority);
             }
 
             /**
@@ -319,7 +319,7 @@ namespace fossil {
              * @return The size of the priority queue.
              */
             size_t size() const {
-                return fossil_pqueue_size(pqueue);
+                return fossil_tofu_pqueue_size(pqueue);
             }
 
             /**
@@ -328,7 +328,7 @@ namespace fossil {
              * @return True if the priority queue is not empty, false otherwise.
              */
             bool not_empty() const {
-                return fossil_pqueue_not_empty(pqueue);
+                return fossil_tofu_pqueue_not_empty(pqueue);
             }
 
             /**
@@ -337,7 +337,7 @@ namespace fossil {
              * @return True if the priority queue is not a null pointer, false otherwise.
              */
             bool not_cnullptr() const {
-                return fossil_pqueue_not_cnullptr(pqueue);
+                return fossil_tofu_pqueue_not_cnullptr(pqueue);
             }
 
             /**
@@ -346,7 +346,7 @@ namespace fossil {
              * @return True if the priority queue is empty, false otherwise.
              */
             bool is_empty() const {
-                return fossil_pqueue_is_empty(pqueue);
+                return fossil_tofu_pqueue_is_empty(pqueue);
             }
 
             /**
@@ -355,7 +355,7 @@ namespace fossil {
              * @return True if the priority queue is a null pointer, false otherwise.
              */
             bool is_cnullptr() const {
-                return fossil_pqueue_is_cnullptr(pqueue);
+                return fossil_tofu_pqueue_is_cnullptr(pqueue);
             }
 
             /**
@@ -364,7 +364,7 @@ namespace fossil {
              * @return The element with the highest priority.
              */
             std::string get_front() const {
-                char* result = fossil_pqueue_get_front(pqueue);
+                char* result = fossil_tofu_pqueue_get_front(pqueue);
                 return result ? std::string(result) : std::string();
             }
 
@@ -374,7 +374,7 @@ namespace fossil {
              * @return The element with the lowest priority.
              */
             std::string get_back() const {
-                char* result = fossil_pqueue_get_back(pqueue);
+                char* result = fossil_tofu_pqueue_get_back(pqueue);
                 return result ? std::string(result) : std::string();
             }
 
@@ -385,7 +385,7 @@ namespace fossil {
              * @return         The element at the specified priority.
              */
             std::string get_at(int32_t priority) const {
-                char* result = fossil_pqueue_get_at(pqueue, priority);
+                char* result = fossil_tofu_pqueue_get_at(pqueue, priority);
                 return result ? std::string(result) : std::string();
             }
 
@@ -395,7 +395,7 @@ namespace fossil {
              * @param element The element to set.
              */
             void set_front(const std::string& element) {
-                fossil_pqueue_set_front(pqueue, const_cast<char*>(element.c_str()));
+                fossil_tofu_pqueue_set_front(pqueue, const_cast<char*>(element.c_str()));
             }
 
             /**
@@ -404,7 +404,7 @@ namespace fossil {
              * @param element The element to set.
              */
             void set_back(const std::string& element) {
-                fossil_pqueue_set_back(pqueue, const_cast<char*>(element.c_str()));
+                fossil_tofu_pqueue_set_back(pqueue, const_cast<char*>(element.c_str()));
             }
 
             /**
@@ -414,11 +414,11 @@ namespace fossil {
              * @param element  The element to set.
              */
             void set_at(int32_t priority, const std::string& element) {
-                fossil_pqueue_set_at(pqueue, priority, const_cast<char*>(element.c_str()));
+                fossil_tofu_pqueue_set_at(pqueue, priority, const_cast<char*>(element.c_str()));
             }
 
         private:
-            fossil_pqueue_t* pqueue;
+            fossil_tofu_pqueue_t* pqueue;
         };
 
     } // namespace tofu

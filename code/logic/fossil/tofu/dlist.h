@@ -37,18 +37,18 @@ extern "C"
 // *****************************************************************************
 
 // Node structure for the doubly linked list
-typedef struct fossil_dlist_node_t {
+typedef struct fossil_tofu_dlist_node_t {
     fossil_tofu_t data;
-    struct fossil_dlist_node_t* prev;
-    struct fossil_dlist_node_t* next;
-} fossil_dlist_node_t;
+    struct fossil_tofu_dlist_node_t* prev;
+    struct fossil_tofu_dlist_node_t* next;
+} fossil_tofu_dlist_node_t;
 
 // Doubly linked list structure
-typedef struct fossil_dlist_t {
-    fossil_dlist_node_t* head;
-    fossil_dlist_node_t* tail;
+typedef struct fossil_tofu_dlist_t {
+    fossil_tofu_dlist_node_t* head;
+    fossil_tofu_dlist_node_t* tail;
     char* type;
-} fossil_dlist_t;
+} fossil_tofu_dlist_t;
 
 // *****************************************************************************
 // Function prototypes
@@ -61,7 +61,7 @@ typedef struct fossil_dlist_t {
  * @return     Pointer to the created doubly linked list container.
  * @note      Time complexity: O(1)
  */
-fossil_dlist_t* fossil_dlist_create_container(char* type);
+fossil_tofu_dlist_t* fossil_tofu_dlist_create_container(char* type);
 
 /**
  * Create a new doubly linked list with default values.
@@ -69,7 +69,7 @@ fossil_dlist_t* fossil_dlist_create_container(char* type);
  * @return Pointer to the created doubly linked list container.
  * @note   Time complexity: O(1)
  */
-fossil_dlist_t* fossil_dlist_create_default(void);
+fossil_tofu_dlist_t* fossil_tofu_dlist_create_default(void);
 
 /**
  * Create a new doubly linked list by copying an existing list.
@@ -78,7 +78,7 @@ fossil_dlist_t* fossil_dlist_create_default(void);
  * @return      Pointer to the newly created copy of the doubly linked list.
  * @note        Time complexity: O(n)
  */
-fossil_dlist_t* fossil_dlist_create_copy(const fossil_dlist_t* other);
+fossil_tofu_dlist_t* fossil_tofu_dlist_create_copy(const fossil_tofu_dlist_t* other);
 
 /**
  * Create a new doubly linked list by moving an existing list.
@@ -87,7 +87,7 @@ fossil_dlist_t* fossil_dlist_create_copy(const fossil_dlist_t* other);
  * @return      Pointer to the newly created doubly linked list after move.
  * @note        Time complexity: O(1)
  */
-fossil_dlist_t* fossil_dlist_create_move(fossil_dlist_t* other);
+fossil_tofu_dlist_t* fossil_tofu_dlist_create_move(fossil_tofu_dlist_t* other);
 
 /**
  * Destroy the doubly linked list and free all allocated memory.
@@ -95,7 +95,7 @@ fossil_dlist_t* fossil_dlist_create_move(fossil_dlist_t* other);
  * @param dlist Pointer to the doubly linked list to destroy.
  * @note        Time complexity: O(n)
  */
-void fossil_dlist_destroy(fossil_dlist_t* dlist);
+void fossil_tofu_dlist_destroy(fossil_tofu_dlist_t* dlist);
 
 // *****************************************************************************
 // Utility functions
@@ -109,7 +109,7 @@ void fossil_dlist_destroy(fossil_dlist_t* dlist);
  * @return      Error code indicating success or failure of the operation.
  * @note        Time complexity: O(1)
  */
-int32_t fossil_dlist_insert(fossil_dlist_t* dlist, char *data);
+int32_t fossil_tofu_dlist_insert(fossil_tofu_dlist_t* dlist, char *data);
 
 /**
  * Remove data from the doubly linked list.
@@ -118,7 +118,7 @@ int32_t fossil_dlist_insert(fossil_dlist_t* dlist, char *data);
  * @return      Error code indicating success or failure of the operation.
  * @note        Time complexity: O(1)
  */
-int32_t fossil_dlist_remove(fossil_dlist_t* dlist);
+int32_t fossil_tofu_dlist_remove(fossil_tofu_dlist_t* dlist);
 
 /**
  * Reverse the doubly linked list in the forward direction.
@@ -126,7 +126,7 @@ int32_t fossil_dlist_remove(fossil_dlist_t* dlist);
  * @param dlist Pointer to the doubly linked list to reverse.
  * @note        Time complexity: O(n)
  */
-void fossil_dlist_reverse_forward(fossil_dlist_t* dlist);
+void fossil_tofu_dlist_reverse_forward(fossil_tofu_dlist_t* dlist);
 
 /**
  * Reverse the doubly linked list in the backward direction.
@@ -134,7 +134,7 @@ void fossil_dlist_reverse_forward(fossil_dlist_t* dlist);
  * @param dlist Pointer to the doubly linked list to reverse.
  * @note        Time complexity: O(n)
  */
-void fossil_dlist_reverse_backward(fossil_dlist_t* dlist);
+void fossil_tofu_dlist_reverse_backward(fossil_tofu_dlist_t* dlist);
 
 /**
  * Get the size (number of elements) of the doubly linked list.
@@ -143,7 +143,7 @@ void fossil_dlist_reverse_backward(fossil_dlist_t* dlist);
  * @return      Number of elements in the list.
  * @note        Time complexity: O(n)
  */
-size_t fossil_dlist_size(const fossil_dlist_t* dlist);
+size_t fossil_tofu_dlist_size(const fossil_tofu_dlist_t* dlist);
 
 /**
  * Check if the doubly linked list is not empty.
@@ -152,7 +152,7 @@ size_t fossil_dlist_size(const fossil_dlist_t* dlist);
  * @return      True if the list is not empty, false otherwise.
  * @note        Time complexity: O(1)
  */
-bool fossil_dlist_not_empty(const fossil_dlist_t* dlist);
+bool fossil_tofu_dlist_not_empty(const fossil_tofu_dlist_t* dlist);
 
 /**
  * Check if the doubly linked list pointer is not NULL.
@@ -161,7 +161,7 @@ bool fossil_dlist_not_empty(const fossil_dlist_t* dlist);
  * @return      True if the pointer is not NULL, false otherwise.
  * @note        Time complexity: O(1)
  */
-bool fossil_dlist_not_cnullptr(const fossil_dlist_t* dlist);
+bool fossil_tofu_dlist_not_cnullptr(const fossil_tofu_dlist_t* dlist);
 
 /**
  * Check if the doubly linked list is empty.
@@ -170,7 +170,7 @@ bool fossil_dlist_not_cnullptr(const fossil_dlist_t* dlist);
  * @return      True if the list is empty, false otherwise.
  * @note        Time complexity: O(1)
  */
-bool fossil_dlist_is_empty(const fossil_dlist_t* dlist);
+bool fossil_tofu_dlist_is_empty(const fossil_tofu_dlist_t* dlist);
 
 /**
  * Check if the doubly linked list pointer is NULL.
@@ -179,7 +179,7 @@ bool fossil_dlist_is_empty(const fossil_dlist_t* dlist);
  * @return      True if the pointer is NULL, false otherwise.
  * @note        Time complexity: O(1)
  */
-bool fossil_dlist_is_cnullptr(const fossil_dlist_t* dlist);
+bool fossil_tofu_dlist_is_cnullptr(const fossil_tofu_dlist_t* dlist);
 
 // *****************************************************************************
 // Getter and setter functions
@@ -193,7 +193,7 @@ bool fossil_dlist_is_cnullptr(const fossil_dlist_t* dlist);
  * @return      Pointer to the element at the specified index, or NULL if out of bounds.
  * @note        Time complexity: O(n)
  */
-char *fossil_dlist_get(const fossil_dlist_t* dlist, size_t index);
+char *fossil_tofu_dlist_get(const fossil_tofu_dlist_t* dlist, size_t index);
 
 /**
  * Get the first element in the doubly linked list.
@@ -202,7 +202,7 @@ char *fossil_dlist_get(const fossil_dlist_t* dlist, size_t index);
  * @return      Pointer to the first element, or NULL if the list is empty.
  * @note        Time complexity: O(1)
  */
-char *fossil_dlist_get_front(const fossil_dlist_t* dlist);
+char *fossil_tofu_dlist_get_front(const fossil_tofu_dlist_t* dlist);
 
 /**
  * Get the last element in the doubly linked list.
@@ -211,7 +211,7 @@ char *fossil_dlist_get_front(const fossil_dlist_t* dlist);
  * @return      Pointer to the last element, or NULL if the list is empty.
  * @note        Time complexity: O(1)
  */
-char *fossil_dlist_get_back(const fossil_dlist_t* dlist);
+char *fossil_tofu_dlist_get_back(const fossil_tofu_dlist_t* dlist);
 
 /**
  * Set the element at the specified index in the doubly linked list.
@@ -221,7 +221,7 @@ char *fossil_dlist_get_back(const fossil_dlist_t* dlist);
  * @param element Pointer to the element to set.
  * @note         Time complexity: O(n)
  */
-void fossil_dlist_set(fossil_dlist_t* dlist, size_t index, char *element);
+void fossil_tofu_dlist_set(fossil_tofu_dlist_t* dlist, size_t index, char *element);
 
 /**
  * Set the first element in the doubly linked list.
@@ -230,7 +230,7 @@ void fossil_dlist_set(fossil_dlist_t* dlist, size_t index, char *element);
  * @param element Pointer to the element to set as the first element.
  * @note         Time complexity: O(1)
  */
-void fossil_dlist_set_front(fossil_dlist_t* dlist, char *element);
+void fossil_tofu_dlist_set_front(fossil_tofu_dlist_t* dlist, char *element);
 
 /**
  * Set the last element in the doubly linked list.
@@ -239,7 +239,7 @@ void fossil_dlist_set_front(fossil_dlist_t* dlist, char *element);
  * @param element Pointer to the element to set as the last element.
  * @note         Time complexity: O(1)
  */
-void fossil_dlist_set_back(fossil_dlist_t* dlist, char *element);
+void fossil_tofu_dlist_set_back(fossil_tofu_dlist_t* dlist, char *element);
 
 #ifdef __cplusplus
 }
@@ -270,7 +270,7 @@ namespace fossil {
              * @throws std::runtime_error If the list creation fails.
              */
             DList(std::string type)
-            : dlist(fossil_dlist_create_container(const_cast<char*>(type.c_str())))
+            : dlist(fossil_tofu_dlist_create_container(const_cast<char*>(type.c_str())))
             {
             if (dlist == nullptr) {
                 throw std::runtime_error("Failed to create doubly linked list.");
@@ -286,7 +286,7 @@ namespace fossil {
              * @throws std::runtime_error If the list creation fails.
              */
             DList()
-            : dlist(fossil_dlist_create_default())
+            : dlist(fossil_tofu_dlist_create_default())
             {
             if (dlist == nullptr) {
                 throw std::runtime_error("Failed to create doubly linked list.");
@@ -303,7 +303,7 @@ namespace fossil {
              * @throws std::runtime_error If the list creation fails.
              */
             DList(const DList& other)
-            : dlist(fossil_dlist_create_copy(other.dlist))
+            : dlist(fossil_tofu_dlist_create_copy(other.dlist))
             {
             if (dlist == nullptr) {
                 throw std::runtime_error("Failed to create doubly linked list.");
@@ -320,7 +320,7 @@ namespace fossil {
              * @throws std::runtime_error If the list creation fails.
              */
             DList(DList&& other)
-            : dlist(fossil_dlist_create_move(other.dlist))
+            : dlist(fossil_tofu_dlist_create_move(other.dlist))
             {
             if (dlist == nullptr) {
                 throw std::runtime_error("Failed to create doubly linked list.");
@@ -333,7 +333,7 @@ namespace fossil {
              * Destroys the underlying doubly linked list and releases all associated resources.
              */
             ~DList() {
-            fossil_dlist_destroy(dlist);
+            fossil_tofu_dlist_destroy(dlist);
             }
 
             /**
@@ -345,7 +345,7 @@ namespace fossil {
              * @return     The error code indicating the success or failure of the operation.
              */
             int32_t insert(const std::string& data) {
-            return fossil_dlist_insert(dlist, const_cast<char*>(data.c_str()));
+            return fossil_tofu_dlist_insert(dlist, const_cast<char*>(data.c_str()));
             }
 
             /**
@@ -356,7 +356,7 @@ namespace fossil {
              * @return The error code indicating the success or failure of the operation.
              */
             int32_t remove() {
-            return fossil_dlist_remove(dlist);
+            return fossil_tofu_dlist_remove(dlist);
             }
 
             /**
@@ -365,7 +365,7 @@ namespace fossil {
              * Reverses the order of elements in the doubly linked list from head to tail.
              */
             void reverse_forward() {
-            fossil_dlist_reverse_forward(dlist);
+            fossil_tofu_dlist_reverse_forward(dlist);
             }
 
             /**
@@ -374,7 +374,7 @@ namespace fossil {
              * Reverses the order of elements in the doubly linked list from tail to head.
              */
             void reverse_backward() {
-            fossil_dlist_reverse_backward(dlist);
+            fossil_tofu_dlist_reverse_backward(dlist);
             }
 
             /**
@@ -385,7 +385,7 @@ namespace fossil {
              * @return The size of the doubly linked list.
              */
             size_t size() const {
-            return fossil_dlist_size(dlist);
+            return fossil_tofu_dlist_size(dlist);
             }
 
             /**
@@ -396,7 +396,7 @@ namespace fossil {
              * @return True if the doubly linked list is not empty, false otherwise.
              */
             bool not_empty() const {
-            return fossil_dlist_not_empty(dlist);
+            return fossil_tofu_dlist_not_empty(dlist);
             }
 
             /**
@@ -407,7 +407,7 @@ namespace fossil {
              * @return True if the doubly linked list is not a null pointer, false otherwise.
              */
             bool not_cnullptr() const {
-            return fossil_dlist_not_cnullptr(dlist);
+            return fossil_tofu_dlist_not_cnullptr(dlist);
             }
 
             /**
@@ -418,7 +418,7 @@ namespace fossil {
              * @return True if the doubly linked list is empty, false otherwise.
              */
             bool is_empty() const {
-            return fossil_dlist_is_empty(dlist);
+            return fossil_tofu_dlist_is_empty(dlist);
             }
 
             /**
@@ -429,7 +429,7 @@ namespace fossil {
              * @return True if the doubly linked list is a null pointer, false otherwise.
              */
             bool is_cnullptr() const {
-            return fossil_dlist_is_cnullptr(dlist);
+            return fossil_tofu_dlist_is_cnullptr(dlist);
             }
 
             /**
@@ -441,7 +441,7 @@ namespace fossil {
              * @return      The element at the specified index as std::string.
              */
             std::string get(size_t index) const {
-            char* result = fossil_dlist_get(dlist, index);
+            char* result = fossil_tofu_dlist_get(dlist, index);
             return result ? std::string(result) : std::string();
             }
 
@@ -453,7 +453,7 @@ namespace fossil {
              * @return The first element in the doubly linked list as std::string.
              */
             std::string get_front() const {
-            char* result = fossil_dlist_get_front(dlist);
+            char* result = fossil_tofu_dlist_get_front(dlist);
             return result ? std::string(result) : std::string();
             }
 
@@ -465,7 +465,7 @@ namespace fossil {
              * @return The last element in the doubly linked list as std::string.
              */
             std::string get_back() const {
-            char* result = fossil_dlist_get_back(dlist);
+            char* result = fossil_tofu_dlist_get_back(dlist);
             return result ? std::string(result) : std::string();
             }
 
@@ -478,7 +478,7 @@ namespace fossil {
              * @param element The element to set as std::string.
              */
             void set(size_t index, const std::string& element) {
-            fossil_dlist_set(dlist, index, const_cast<char*>(element.c_str()));
+            fossil_tofu_dlist_set(dlist, index, const_cast<char*>(element.c_str()));
             }
 
             /**
@@ -489,7 +489,7 @@ namespace fossil {
              * @param element The element to set as std::string.
              */
             void set_front(const std::string& element) {
-            fossil_dlist_set_front(dlist, const_cast<char*>(element.c_str()));
+            fossil_tofu_dlist_set_front(dlist, const_cast<char*>(element.c_str()));
             }
 
             /**
@@ -500,14 +500,14 @@ namespace fossil {
              * @param element The element to set as std::string.
              */
             void set_back(const std::string& element) {
-            fossil_dlist_set_back(dlist, const_cast<char*>(element.c_str()));
+            fossil_tofu_dlist_set_back(dlist, const_cast<char*>(element.c_str()));
             }
 
         private:
             /**
              * @brief Pointer to the underlying C doubly linked list structure.
              */
-            fossil_dlist_t* dlist;
+            fossil_tofu_dlist_t* dlist;
         };
 
     } // namespace tofu

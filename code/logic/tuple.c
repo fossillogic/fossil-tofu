@@ -28,8 +28,8 @@
 // Function prototypes
 // *****************************************************************************
 
-fossil_tuple_t *fossil_tuple_create(char *type) {
-    fossil_tuple_t *tuple = (fossil_tuple_t*)fossil_tofu_alloc(sizeof(fossil_tuple_t));
+fossil_tofu_tuple_t *fossil_tofu_tuple_create(char *type) {
+    fossil_tofu_tuple_t *tuple = (fossil_tofu_tuple_t*)fossil_tofu_alloc(sizeof(fossil_tofu_tuple_t));
     if (tuple == NULL) {
         return NULL;
     }
@@ -44,12 +44,12 @@ fossil_tuple_t *fossil_tuple_create(char *type) {
     return tuple;
 }
 
-fossil_tuple_t* fossil_tuple_create_default(void) {
-    return fossil_tuple_create("any");
+fossil_tofu_tuple_t* fossil_tofu_tuple_create_default(void) {
+    return fossil_tofu_tuple_create("any");
 }
 
-fossil_tuple_t* fossil_tuple_create_copy(const fossil_tuple_t* other) {
-    fossil_tuple_t* tuple = (fossil_tuple_t*)fossil_tofu_alloc(sizeof(fossil_tuple_t));
+fossil_tofu_tuple_t* fossil_tofu_tuple_create_copy(const fossil_tofu_tuple_t* other) {
+    fossil_tofu_tuple_t* tuple = (fossil_tofu_tuple_t*)fossil_tofu_alloc(sizeof(fossil_tofu_tuple_t));
     if (tuple == NULL) {
         return NULL;
     }
@@ -67,8 +67,8 @@ fossil_tuple_t* fossil_tuple_create_copy(const fossil_tuple_t* other) {
     return tuple;
 }
 
-fossil_tuple_t* fossil_tuple_create_move(fossil_tuple_t* other) {
-    fossil_tuple_t* tuple = (fossil_tuple_t*)fossil_tofu_alloc(sizeof(fossil_tuple_t));
+fossil_tofu_tuple_t* fossil_tofu_tuple_create_move(fossil_tofu_tuple_t* other) {
+    fossil_tofu_tuple_t* tuple = (fossil_tofu_tuple_t*)fossil_tofu_alloc(sizeof(fossil_tofu_tuple_t));
     if (tuple == NULL) {
         return NULL;
     }
@@ -83,7 +83,7 @@ fossil_tuple_t* fossil_tuple_create_move(fossil_tuple_t* other) {
     return tuple;
 }
 
-void fossil_tuple_destroy(fossil_tuple_t *tuple) {
+void fossil_tofu_tuple_destroy(fossil_tofu_tuple_t *tuple) {
     if (tuple == NULL) {
         return;
     }
@@ -100,7 +100,7 @@ void fossil_tuple_destroy(fossil_tuple_t *tuple) {
 // Utility functions
 // *****************************************************************************
 
-void fossil_tuple_add(fossil_tuple_t *tuple, char *element) {
+void fossil_tofu_tuple_add(fossil_tofu_tuple_t *tuple, char *element) {
     if (tuple == NULL) {
         return;
     }
@@ -119,7 +119,7 @@ void fossil_tuple_add(fossil_tuple_t *tuple, char *element) {
     tuple->elements[tuple->element_count++] = fossil_tofu_create(tuple->type, element);
 }
 
-void fossil_tuple_remove(fossil_tuple_t *tuple, size_t index) {
+void fossil_tofu_tuple_remove(fossil_tofu_tuple_t *tuple, size_t index) {
     if (tuple == NULL || index >= tuple->element_count) {
         return;
     }
@@ -130,19 +130,19 @@ void fossil_tuple_remove(fossil_tuple_t *tuple, size_t index) {
     tuple->element_count--;
 }
 
-size_t fossil_tuple_size(fossil_tuple_t *tuple) {
+size_t fossil_tofu_tuple_size(fossil_tofu_tuple_t *tuple) {
     return tuple == NULL ? 0 : tuple->element_count;
 }
 
-size_t fossil_tuple_capacity(fossil_tuple_t *tuple) {
+size_t fossil_tofu_tuple_capacity(fossil_tofu_tuple_t *tuple) {
     return tuple == NULL ? 0 : tuple->capacity;
 }
 
-bool fossil_tuple_is_empty(fossil_tuple_t *tuple) {
+bool fossil_tofu_tuple_is_empty(fossil_tofu_tuple_t *tuple) {
     return tuple == NULL || tuple->element_count == 0;
 }
 
-void fossil_tuple_clear(fossil_tuple_t *tuple) {
+void fossil_tofu_tuple_clear(fossil_tofu_tuple_t *tuple) {
     if (tuple == NULL) {
         return;
     }
@@ -156,7 +156,7 @@ void fossil_tuple_clear(fossil_tuple_t *tuple) {
 // Getter and setter functions
 // *****************************************************************************
 
-char *fossil_tuple_get(fossil_tuple_t *tuple, size_t index) {
+char *fossil_tofu_tuple_get(fossil_tofu_tuple_t *tuple, size_t index) {
     if (tuple == NULL || index >= tuple->element_count) {
         return NULL;
     }
@@ -170,7 +170,7 @@ char *fossil_tuple_get(fossil_tuple_t *tuple, size_t index) {
  * @return The first element in the tuple.
  * @note Time complexity: O(1)
  */
-char *fossil_tuple_get_front(const fossil_tuple_t* tuple) {
+char *fossil_tofu_tuple_get_front(const fossil_tofu_tuple_t* tuple) {
     return tuple == NULL || tuple->element_count == 0 ? NULL : tuple->elements[0].value.data;
 }
 
@@ -181,7 +181,7 @@ char *fossil_tuple_get_front(const fossil_tuple_t* tuple) {
  * @return The last element in the tuple.
  * @note Time complexity: O(1)
  */
-char *fossil_tuple_get_back(const fossil_tuple_t* tuple) {
+char *fossil_tofu_tuple_get_back(const fossil_tofu_tuple_t* tuple) {
     return tuple == NULL || tuple->element_count == 0 ? NULL : tuple->elements[tuple->element_count - 1].value.data;
 }
 
@@ -193,7 +193,7 @@ char *fossil_tuple_get_back(const fossil_tuple_t* tuple) {
  * @param element The element to set.
  * @note Time complexity: O(1)
  */
-void fossil_tuple_set(fossil_tuple_t* tuple, size_t index, char *element) {
+void fossil_tofu_tuple_set(fossil_tofu_tuple_t* tuple, size_t index, char *element) {
     if (tuple == NULL || index >= tuple->element_count) {
         return;
     }
@@ -207,7 +207,7 @@ void fossil_tuple_set(fossil_tuple_t* tuple, size_t index, char *element) {
  * @param element The element to set.
  * @note Time complexity: O(1)
  */
-void fossil_tuple_set_front(fossil_tuple_t* tuple, char *element) {
+void fossil_tofu_tuple_set_front(fossil_tofu_tuple_t* tuple, char *element) {
     if (tuple == NULL || tuple->element_count == 0) {
         return;
     }
@@ -221,7 +221,7 @@ void fossil_tuple_set_front(fossil_tuple_t* tuple, char *element) {
  * @param element The element to set.
  * @note Time complexity: O(1)
  */
-void fossil_tuple_set_back(fossil_tuple_t* tuple, char *element) {
+void fossil_tofu_tuple_set_back(fossil_tofu_tuple_t* tuple, char *element) {
     if (tuple == NULL || tuple->element_count == 0) {
         return;
     }

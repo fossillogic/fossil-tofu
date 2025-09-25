@@ -44,36 +44,36 @@ FOSSIL_TEARDOWN(c_tree_tofu_fixture) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
 FOSSIL_TEST(c_test_tree_create_and_destroy) {
-    fossil_tree_t* tree = fossil_tree_create("i32");
+    fossil_tofu_tree_t* tree = fossil_tofu_tree_create("i32");
     ASSUME_NOT_CNULL(tree);
     ASSUME_ITS_EQUAL_I32(tree->size, 0);
-    fossil_tree_destroy(tree);
+    fossil_tofu_tree_destroy(tree);
 }
 
 FOSSIL_TEST(c_test_tree_insert_duplicate) {
-    fossil_tree_t* tree = fossil_tree_create("i32");
+    fossil_tofu_tree_t* tree = fossil_tofu_tree_create("i32");
     fossil_tofu_t v10 = fossil_tofu_create("i32", "10");
-    fossil_tree_insert(tree, &v10);
+    fossil_tofu_tree_insert(tree, &v10);
     fossil_tofu_t v10_dup = fossil_tofu_create("i32", "10");
-    ASSUME_ITS_EQUAL_I32(fossil_tree_insert(tree, &v10_dup), FOSSIL_TOFU_ERROR_OVERFLOW);
-    fossil_tree_destroy(tree);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_tree_insert(tree, &v10_dup), FOSSIL_TOFU_ERROR_OVERFLOW);
+    fossil_tofu_tree_destroy(tree);
 }
 
 FOSSIL_TEST(c_test_tree_null_pointer_safety) {
-    fossil_tree_t* tree = NULL;
-    ASSUME_ITS_CNULL(fossil_tree_search(tree, NULL));
-    fossil_tree_traverse(tree, NULL); // Should not crash
-    fossil_tree_destroy(tree); // Should not crash
+    fossil_tofu_tree_t* tree = NULL;
+    ASSUME_ITS_CNULL(fossil_tofu_tree_search(tree, NULL));
+    fossil_tofu_tree_traverse(tree, NULL); // Should not crash
+    fossil_tofu_tree_destroy(tree); // Should not crash
 }
 
 FOSSIL_TEST(c_test_tree_create_node_null_value) {
-    fossil_tree_node_t* node = fossil_tree_create_node(NULL);
+    fossil_tofu_tree_node_t* node = fossil_tofu_tree_create_node(NULL);
     ASSUME_ITS_CNULL(node);
 }
 
 FOSSIL_TEST(c_test_tree_create_node_valid_value) {
     fossil_tofu_t v42 = fossil_tofu_create("i32", "42");
-    fossil_tree_node_t* node = fossil_tree_create_node(&v42);
+    fossil_tofu_tree_node_t* node = fossil_tofu_tree_create_node(&v42);
     ASSUME_NOT_CNULL(node);
     ASSUME_ITS_EQUAL_I32(fossil_tofu_compare(node->value, &v42), 0);
     fossil_tofu_destroy(node->value);
@@ -81,22 +81,22 @@ FOSSIL_TEST(c_test_tree_create_node_valid_value) {
 }
 
 FOSSIL_TEST(c_test_tree_search_not_found) {
-    fossil_tree_t* tree = fossil_tree_create("i32");
+    fossil_tofu_tree_t* tree = fossil_tofu_tree_create("i32");
     fossil_tofu_t v10 = fossil_tofu_create("i32", "10");
-    fossil_tree_insert(tree, &v10);
+    fossil_tofu_tree_insert(tree, &v10);
     fossil_tofu_t v30 = fossil_tofu_create("i32", "30");
-    fossil_tree_node_t* found = fossil_tree_search(tree, &v30);
+    fossil_tofu_tree_node_t* found = fossil_tofu_tree_search(tree, &v30);
     ASSUME_ITS_CNULL(found);
-    fossil_tree_destroy(tree);
+    fossil_tofu_tree_destroy(tree);
 }
 
 FOSSIL_TEST(c_test_tree_insert_null_tree_or_value) {
     fossil_tofu_t v10 = fossil_tofu_create("i32", "10");
-    ASSUME_ITS_EQUAL_I32(fossil_tree_insert(NULL, &v10), FOSSIL_TOFU_ERROR_INVALID_ARGUMENT);
-    ASSUME_ITS_EQUAL_I32(fossil_tree_insert(NULL, NULL), FOSSIL_TOFU_ERROR_INVALID_ARGUMENT);
-    fossil_tree_t* tree = fossil_tree_create("i32");
-    ASSUME_ITS_EQUAL_I32(fossil_tree_insert(tree, NULL), FOSSIL_TOFU_ERROR_INVALID_ARGUMENT);
-    fossil_tree_destroy(tree);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_tree_insert(NULL, &v10), FOSSIL_TOFU_ERROR_INVALID_ARGUMENT);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_tree_insert(NULL, NULL), FOSSIL_TOFU_ERROR_INVALID_ARGUMENT);
+    fossil_tofu_tree_t* tree = fossil_tofu_tree_create("i32");
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_tree_insert(tree, NULL), FOSSIL_TOFU_ERROR_INVALID_ARGUMENT);
+    fossil_tofu_tree_destroy(tree);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *

@@ -28,8 +28,8 @@
 // Function prototypes
 // *****************************************************************************
 
-fossil_vector_t* fossil_vector_create_container(char* type) {
-    fossil_vector_t* vector = (fossil_vector_t*)fossil_tofu_alloc(sizeof(fossil_vector_t));
+fossil_tofu_vector_t* fossil_tofu_vector_create_container(char* type) {
+    fossil_tofu_vector_t* vector = (fossil_tofu_vector_t*)fossil_tofu_alloc(sizeof(fossil_tofu_vector_t));
     if (vector == NULL) {
         return NULL;
     }
@@ -44,12 +44,12 @@ fossil_vector_t* fossil_vector_create_container(char* type) {
     return vector;
 }
 
-fossil_vector_t* fossil_vector_create_default(void) {
-    return fossil_vector_create_container("any");
+fossil_tofu_vector_t* fossil_tofu_vector_create_default(void) {
+    return fossil_tofu_vector_create_container("any");
 }
 
-fossil_vector_t* fossil_vector_create_copy(const fossil_vector_t* other) {
-    fossil_vector_t* vector = (fossil_vector_t*)fossil_tofu_alloc(sizeof(fossil_vector_t));
+fossil_tofu_vector_t* fossil_tofu_vector_create_copy(const fossil_tofu_vector_t* other) {
+    fossil_tofu_vector_t* vector = (fossil_tofu_vector_t*)fossil_tofu_alloc(sizeof(fossil_tofu_vector_t));
     if (vector == NULL) {
         return NULL;
     }
@@ -67,8 +67,8 @@ fossil_vector_t* fossil_vector_create_copy(const fossil_vector_t* other) {
     return vector;
 }
 
-fossil_vector_t* fossil_vector_create_move(fossil_vector_t* other) {
-    fossil_vector_t* vector = (fossil_vector_t*)fossil_tofu_alloc(sizeof(fossil_vector_t));
+fossil_tofu_vector_t* fossil_tofu_vector_create_move(fossil_tofu_vector_t* other) {
+    fossil_tofu_vector_t* vector = (fossil_tofu_vector_t*)fossil_tofu_alloc(sizeof(fossil_tofu_vector_t));
     if (vector == NULL) {
         return NULL;
     }
@@ -83,7 +83,7 @@ fossil_vector_t* fossil_vector_create_move(fossil_vector_t* other) {
     return vector;
 }
 
-void fossil_vector_destroy(fossil_vector_t* vector) {
+void fossil_tofu_vector_destroy(fossil_tofu_vector_t* vector) {
     if (vector == NULL) {
         return;
     }
@@ -95,7 +95,7 @@ void fossil_vector_destroy(fossil_vector_t* vector) {
 // Utility functions
 // *****************************************************************************
 
-void fossil_vector_push_back(fossil_vector_t* vector, char *element) {
+void fossil_tofu_vector_push_back(fossil_tofu_vector_t* vector, char *element) {
     if (vector == NULL) {
         return;
     }
@@ -114,7 +114,7 @@ void fossil_vector_push_back(fossil_vector_t* vector, char *element) {
     vector->data[vector->size++] = fossil_tofu_create(vector->type, element);
 }
 
-void fossil_vector_push_front(fossil_vector_t* vector, char *element) {
+void fossil_tofu_vector_push_front(fossil_tofu_vector_t* vector, char *element) {
     if (vector == NULL) {
         return;
     }
@@ -138,7 +138,7 @@ void fossil_vector_push_front(fossil_vector_t* vector, char *element) {
     vector->size++;
 }
 
-void fossil_vector_push_at(fossil_vector_t* vector, size_t index, char *element) {
+void fossil_tofu_vector_push_at(fossil_tofu_vector_t* vector, size_t index, char *element) {
     if (vector == NULL || index > vector->size) {
         return;
     }
@@ -165,14 +165,14 @@ void fossil_vector_push_at(fossil_vector_t* vector, size_t index, char *element)
     vector->size++;
 }
 
-void fossil_vector_pop_back(fossil_vector_t* vector) {
+void fossil_tofu_vector_pop_back(fossil_tofu_vector_t* vector) {
     if (vector == NULL || vector->size == 0) {
         return;
     }
     fossil_tofu_destroy(&vector->data[--vector->size]);
 }
 
-void fossil_vector_pop_front(fossil_vector_t* vector) {
+void fossil_tofu_vector_pop_front(fossil_tofu_vector_t* vector) {
     if (vector == NULL || vector->size == 0) {
         return;
     }
@@ -183,7 +183,7 @@ void fossil_vector_pop_front(fossil_vector_t* vector) {
     vector->size--;
 }
 
-void fossil_vector_pop_at(fossil_vector_t* vector, size_t index) {
+void fossil_tofu_vector_pop_at(fossil_tofu_vector_t* vector, size_t index) {
     if (vector == NULL || index >= vector->size) {
         return;
     }
@@ -194,7 +194,7 @@ void fossil_vector_pop_at(fossil_vector_t* vector, size_t index) {
     vector->size--;
 }
 
-void fossil_vector_erase(fossil_vector_t* vector) {
+void fossil_tofu_vector_erase(fossil_tofu_vector_t* vector) {
     if (vector == NULL) {
         return;
     }
@@ -204,27 +204,27 @@ void fossil_vector_erase(fossil_vector_t* vector) {
     vector->size = 0;
 }
 
-bool fossil_vector_is_cnullptr(const fossil_vector_t* vector) {
+bool fossil_tofu_vector_is_cnullptr(const fossil_tofu_vector_t* vector) {
     return vector == NULL;
 }
 
-bool fossil_vector_not_cnullptr(const fossil_vector_t* vector) {
+bool fossil_tofu_vector_not_cnullptr(const fossil_tofu_vector_t* vector) {
     return vector != NULL;
 }
 
-bool fossil_vector_is_empty(const fossil_vector_t* vector) {
+bool fossil_tofu_vector_is_empty(const fossil_tofu_vector_t* vector) {
     return vector == NULL || vector->size == 0;
 }
 
-bool fossil_vector_not_empty(const fossil_vector_t* vector) {
+bool fossil_tofu_vector_not_empty(const fossil_tofu_vector_t* vector) {
     return vector != NULL && vector->size > 0;
 }
 
-size_t fossil_vector_size(const fossil_vector_t* vector) {
+size_t fossil_tofu_vector_size(const fossil_tofu_vector_t* vector) {
     return vector == NULL ? 0 : vector->size;
 }
 
-size_t fossil_vector_capacity(const fossil_vector_t* vector) {
+size_t fossil_tofu_vector_capacity(const fossil_tofu_vector_t* vector) {
     return vector == NULL ? 0 : vector->capacity;
 }
 
@@ -232,44 +232,44 @@ size_t fossil_vector_capacity(const fossil_vector_t* vector) {
 // Getter and setter functions
 // *****************************************************************************
 
-char *fossil_vector_get(const fossil_vector_t* vector, size_t index) {
+char *fossil_tofu_vector_get(const fossil_tofu_vector_t* vector, size_t index) {
     return vector == NULL || index >= vector->size ? NULL : fossil_tofu_get_value(&vector->data[index]);
 }
 
-char *fossil_vector_get_front(const fossil_vector_t* vector) {
+char *fossil_tofu_vector_get_front(const fossil_tofu_vector_t* vector) {
     return vector == NULL || vector->size == 0 ? NULL : fossil_tofu_get_value(&vector->data[0]);
 }
 
-char *fossil_vector_get_back(const fossil_vector_t* vector) {
+char *fossil_tofu_vector_get_back(const fossil_tofu_vector_t* vector) {
     return vector == NULL || vector->size == 0 ? NULL : fossil_tofu_get_value(&vector->data[vector->size - 1]);
 }
 
-char *fossil_vector_get_at(const fossil_vector_t* vector, size_t index) {
+char *fossil_tofu_vector_get_at(const fossil_tofu_vector_t* vector, size_t index) {
     return vector == NULL || index >= vector->size ? NULL : fossil_tofu_get_value(&vector->data[index]);
 }
 
-void fossil_vector_set(fossil_vector_t* vector, size_t index, char *element) {
+void fossil_tofu_vector_set(fossil_tofu_vector_t* vector, size_t index, char *element) {
     if (vector == NULL || index >= vector->size) {
         return;
     }
     fossil_tofu_set_value(&vector->data[index], element);
 }
 
-void fossil_vector_set_front(fossil_vector_t* vector, char *element) {
+void fossil_tofu_vector_set_front(fossil_tofu_vector_t* vector, char *element) {
     if (vector == NULL || vector->size == 0) {
         return;
     }
     fossil_tofu_set_value(&vector->data[0], element);
 }
 
-void fossil_vector_set_back(fossil_vector_t* vector, char *element) {
+void fossil_tofu_vector_set_back(fossil_tofu_vector_t* vector, char *element) {
     if (vector == NULL || vector->size == 0) {
         return;
     }
     fossil_tofu_set_value(&vector->data[vector->size - 1], element);
 }
 
-void fossil_vector_set_at(fossil_vector_t* vector, size_t index, char *element) {
+void fossil_tofu_vector_set_at(fossil_tofu_vector_t* vector, size_t index, char *element) {
     if (vector == NULL || index >= vector->size) {
         return;
     }

@@ -114,14 +114,14 @@ FOSSIL_TEST(cpp_test_stack_empty_and_not_empty) {
 }
 
 FOSSIL_TEST(cpp_test_stack_insert_null_stack) {
-    fossil_stack_t* null_stack = nullptr;
-    int32_t result = fossil_stack_insert(null_stack, const_cast<char *>("42"));
+    fossil_tofu_stack_t* null_stack = nullptr;
+    int32_t result = fossil_tofu_stack_insert(null_stack, const_cast<char *>("42"));
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_FAILURE);
 }
 
 FOSSIL_TEST(cpp_test_stack_remove_null_stack) {
-    fossil_stack_t* null_stack = nullptr;
-    int32_t result = fossil_stack_remove(null_stack);
+    fossil_tofu_stack_t* null_stack = nullptr;
+    int32_t result = fossil_tofu_stack_remove(null_stack);
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_FAILURE);
 }
 
@@ -132,8 +132,8 @@ FOSSIL_TEST(cpp_test_stack_remove_empty_stack) {
 }
 
 FOSSIL_TEST(cpp_test_stack_size_null_stack) {
-    fossil_stack_t* null_stack = nullptr;
-    size_t size = fossil_stack_size(null_stack);
+    fossil_tofu_stack_t* null_stack = nullptr;
+    size_t size = fossil_tofu_stack_size(null_stack);
     ASSUME_ITS_EQUAL_I32(size, FOSSIL_TOFU_SUCCESS);
 }
 
@@ -151,9 +151,9 @@ FOSSIL_TEST(cpp_test_stack_not_cnullptr_and_is_cnullptr) {
     ASSUME_ITS_TRUE(stack.not_cnullptr());
     ASSUME_ITS_FALSE(stack.is_cnullptr());
     // Can't set stack to nullptr directly, so test raw pointer
-    fossil_stack_t* raw = nullptr;
-    ASSUME_ITS_FALSE(fossil_stack_not_cnullptr(raw));
-    ASSUME_ITS_TRUE(fossil_stack_is_cnullptr(raw));
+    fossil_tofu_stack_t* raw = nullptr;
+    ASSUME_ITS_FALSE(fossil_tofu_stack_not_cnullptr(raw));
+    ASSUME_ITS_TRUE(fossil_tofu_stack_is_cnullptr(raw));
 }
 
 FOSSIL_TEST(cpp_test_stack_top_empty_stack) {

@@ -36,17 +36,17 @@ extern "C"
 // Type Definitions
 // *****************************************************************************
 
-typedef struct fossil_tree_node_t {
+typedef struct fossil_tofu_tree_node_t {
     fossil_tofu_t *value;
-    struct fossil_tree_node_t *left;
-    struct fossil_tree_node_t *right;
-} fossil_tree_node_t;
+    struct fossil_tofu_tree_node_t *left;
+    struct fossil_tofu_tree_node_t *right;
+} fossil_tofu_tree_node_t;
 
 typedef struct {
-    fossil_tree_node_t *root;
+    fossil_tofu_tree_node_t *root;
     char *type;
     size_t size;
-} fossil_tree_t;
+} fossil_tofu_tree_t;
 
 /**
  * -----------------------------------------------------------------------------
@@ -59,16 +59,16 @@ typedef struct {
  * 
  * @param type The type of values the tree will hold.
  * 
- * @return Pointer to the newly created fossil_tree_t structure.
+ * @return Pointer to the newly created fossil_tofu_tree_t structure.
  */
-fossil_tree_t* fossil_tree_create(char *type);
+fossil_tofu_tree_t* fossil_tofu_tree_create(char *type);
 
 /**
  * @brief Destroys the specified tree and releases its resources.
  * 
  * @param tree Pointer to the tree to be destroyed.
  */
-void fossil_tree_destroy(fossil_tree_t *tree);
+void fossil_tofu_tree_destroy(fossil_tofu_tree_t *tree);
 
 /**
  * -----------------------------------------------------------------------------
@@ -80,9 +80,9 @@ void fossil_tree_destroy(fossil_tree_t *tree);
  * @brief Creates a new tree node with the given value.
  * 
  * @param value Pointer to the value to store in the node.
- * @return Pointer to the newly created fossil_tree_node_t structure.
+ * @return Pointer to the newly created fossil_tofu_tree_node_t structure.
  */
-fossil_tree_node_t* fossil_tree_create_node(fossil_tofu_t *value);
+fossil_tofu_tree_node_t* fossil_tofu_tree_create_node(fossil_tofu_t *value);
 
 /**
  * @brief Inserts a value into the tree.
@@ -91,7 +91,7 @@ fossil_tree_node_t* fossil_tree_create_node(fossil_tofu_t *value);
  * @param value Pointer to the value to insert.
  * @return 0 on success, non-zero on failure.
  */
-int fossil_tree_insert(fossil_tree_t *tree, fossil_tofu_t *value);
+int fossil_tofu_tree_insert(fossil_tofu_tree_t *tree, fossil_tofu_t *value);
 
 /**
  * @brief Searches for a node with the specified value in the tree.
@@ -100,7 +100,7 @@ int fossil_tree_insert(fossil_tree_t *tree, fossil_tofu_t *value);
  * @param value Pointer to the value to search for.
  * @return Pointer to the found node, or NULL if not found.
  */
-fossil_tree_node_t* fossil_tree_search(fossil_tree_t *tree, const fossil_tofu_t *value);
+fossil_tofu_tree_node_t* fossil_tofu_tree_search(fossil_tofu_tree_t *tree, const fossil_tofu_t *value);
 
 /**
  * -----------------------------------------------------------------------------
@@ -113,7 +113,7 @@ fossil_tree_node_t* fossil_tree_search(fossil_tree_t *tree, const fossil_tofu_t 
  * 
  * @param value Pointer to the value in the node being visited.
  */
-typedef void (*fossil_tree_visit_fn)(fossil_tofu_t *value);
+typedef void (*fossil_tofu_tree_visit_fn)(fossil_tofu_t *value);
 
 /**
  * @brief Traverses the tree using the specified visit function.
@@ -121,7 +121,7 @@ typedef void (*fossil_tree_visit_fn)(fossil_tofu_t *value);
  * @param tree Pointer to the tree to traverse.
  * @param visit Function to call for each node's value.
  */
-void fossil_tree_traverse(fossil_tree_t *tree, fossil_tree_visit_fn visit);
+void fossil_tofu_tree_traverse(fossil_tofu_tree_t *tree, fossil_tofu_tree_visit_fn visit);
 
 /**
  * @brief Performs an inorder traversal of the tree nodes.
@@ -129,7 +129,7 @@ void fossil_tree_traverse(fossil_tree_t *tree, fossil_tree_visit_fn visit);
  * @param node Pointer to the current node.
  * @param visit Function to call for each node's value.
  */
-void fossil_tree_traverse_inorder(fossil_tree_node_t *node, fossil_tree_visit_fn visit);
+void fossil_tofu_tree_traverse_inorder(fossil_tofu_tree_node_t *node, fossil_tofu_tree_visit_fn visit);
 
 /**
  * @brief Performs a preorder traversal of the tree nodes.
@@ -137,7 +137,7 @@ void fossil_tree_traverse_inorder(fossil_tree_node_t *node, fossil_tree_visit_fn
  * @param node Pointer to the current node.
  * @param visit Function to call for each node's value.
  */
-void fossil_tree_traverse_preorder(fossil_tree_node_t *node, fossil_tree_visit_fn visit);
+void fossil_tofu_tree_traverse_preorder(fossil_tofu_tree_node_t *node, fossil_tofu_tree_visit_fn visit);
 
 /**
  * @brief Performs a postorder traversal of the tree nodes.
@@ -145,7 +145,7 @@ void fossil_tree_traverse_preorder(fossil_tree_node_t *node, fossil_tree_visit_f
  * @param node Pointer to the current node.
  * @param visit Function to call for each node's value.
  */
-void fossil_tree_traverse_postorder(fossil_tree_node_t *node, fossil_tree_visit_fn visit);
+void fossil_tofu_tree_traverse_postorder(fossil_tofu_tree_node_t *node, fossil_tofu_tree_visit_fn visit);
 
 #ifdef __cplusplus
 }
@@ -167,7 +167,7 @@ namespace fossil {
              * @throws std::runtime_error If the tree cannot be created.
              */
             explicit Tree(const std::string& type) {
-                tree_ = fossil_tree_create(const_cast<char*>(type.c_str()));
+                tree_ = fossil_tofu_tree_create(const_cast<char*>(type.c_str()));
                 if (!tree_) {
                     throw std::runtime_error("Failed to create tree.");
                 }
@@ -177,7 +177,7 @@ namespace fossil {
              * @brief Destroys the Tree object and releases its resources.
              */
             ~Tree() {
-                fossil_tree_destroy(tree_);
+                fossil_tofu_tree_destroy(tree_);
             }
 
             /**
@@ -187,7 +187,7 @@ namespace fossil {
              */
             void insert(const Tofu& value) {
                 fossil_tofu_t tofu_copy = value.get_c_struct();
-                if (fossil_tree_insert(tree_, &tofu_copy) != 0) {
+                if (fossil_tofu_tree_insert(tree_, &tofu_copy) != 0) {
                     throw std::runtime_error("Failed to insert value into tree.");
                 }
             }
@@ -197,8 +197,8 @@ namespace fossil {
              * @param value The Tofu object to search for.
              * @return Pointer to the found node, or nullptr if not found.
              */
-            fossil_tree_node_t* search(const Tofu& value) const {
-                return fossil_tree_search(tree_, &value.get_c_struct());
+            fossil_tofu_tree_node_t* search(const Tofu& value) const {
+                return fossil_tofu_tree_search(tree_, &value.get_c_struct());
             }
 
             /**
@@ -221,36 +221,36 @@ namespace fossil {
              * @brief Traverses the tree using the specified visit function.
              * @param visit Function to call for each node's value.
              */
-            void traverse(fossil_tree_visit_fn visit) {
-                fossil_tree_traverse(tree_, visit);
+            void traverse(fossil_tofu_tree_visit_fn visit) {
+                fossil_tofu_tree_traverse(tree_, visit);
             }
 
             /**
              * @brief Performs an inorder traversal of the tree nodes.
              * @param visit Function to call for each node's value.
              */
-            void traverse_inorder(fossil_tree_visit_fn visit) {
-                fossil_tree_traverse_inorder(tree_->root, visit);
+            void traverse_inorder(fossil_tofu_tree_visit_fn visit) {
+                fossil_tofu_tree_traverse_inorder(tree_->root, visit);
             }
 
             /**
              * @brief Performs a preorder traversal of the tree nodes.
              * @param visit Function to call for each node's value.
              */
-            void traverse_preorder(fossil_tree_visit_fn visit) {
-                fossil_tree_traverse_preorder(tree_->root, visit);
+            void traverse_preorder(fossil_tofu_tree_visit_fn visit) {
+                fossil_tofu_tree_traverse_preorder(tree_->root, visit);
             }
 
             /**
              * @brief Performs a postorder traversal of the tree nodes.
              * @param visit Function to call for each node's value.
              */
-            void traverse_postorder(fossil_tree_visit_fn visit) {
-                fossil_tree_traverse_postorder(tree_->root, visit);
+            void traverse_postorder(fossil_tofu_tree_visit_fn visit) {
+                fossil_tofu_tree_traverse_postorder(tree_->root, visit);
             }
 
         private:
-            fossil_tree_t* tree_; /**< Pointer to the underlying C tree structure. */
+            fossil_tofu_tree_t* tree_; /**< Pointer to the underlying C tree structure. */
         };
 
     } // namespace tofu

@@ -55,7 +55,7 @@ FOSSIL_TEST(cpp_test_tree_null_pointer_safety) {
 }
 
 FOSSIL_TEST(cpp_test_tree_create_node_null_value) {
-    fossil_tree_node_t* node = fossil_tree_create_node(NULL);
+    fossil_tofu_tree_node_t* node = fossil_tofu_tree_create_node(NULL);
     ASSUME_ITS_CNULL(node);
 }
 

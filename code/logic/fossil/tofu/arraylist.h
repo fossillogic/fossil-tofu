@@ -37,17 +37,17 @@ extern "C"
 // *****************************************************************************
 
 // Node structure for the array list
-typedef struct fossil_arraylist_node_t {
+typedef struct fossil_tofu_arraylist_node_t {
     fossil_tofu_t data;
-} fossil_arraylist_node_t;
+} fossil_tofu_arraylist_node_t;
 
 // Array list structure
-typedef struct fossil_arraylist_t {
-    fossil_arraylist_node_t* items;
+typedef struct fossil_tofu_arraylist_t {
+    fossil_tofu_arraylist_node_t* items;
     size_t capacity;
     size_t size;
     char* type;
-} fossil_arraylist_t;
+} fossil_tofu_arraylist_t;
 
 // *****************************************************************************
 // Function prototypes
@@ -65,7 +65,7 @@ typedef struct fossil_arraylist_t {
  * @return         Pointer to the created array list, or NULL on failure.
  * @complexity     O(1)
  */
-fossil_arraylist_t* fossil_arraylist_create_container(char* type, size_t capacity);
+fossil_tofu_arraylist_t* fossil_tofu_arraylist_create_container(char* type, size_t capacity);
 
 /**
  * @brief Create a new array list with default values.
@@ -76,7 +76,7 @@ fossil_arraylist_t* fossil_arraylist_create_container(char* type, size_t capacit
  * @return Pointer to the created array list, or NULL on failure.
  * @complexity O(1)
  */
-fossil_arraylist_t* fossil_arraylist_create_default(void);
+fossil_tofu_arraylist_t* fossil_tofu_arraylist_create_default(void);
 
 /**
  * @brief Create a new array list by copying an existing array list.
@@ -88,7 +88,7 @@ fossil_arraylist_t* fossil_arraylist_create_default(void);
  * @return      Pointer to the newly created copy, or NULL on failure.
  * @complexity  O(n)
  */
-fossil_arraylist_t* fossil_arraylist_create_copy(const fossil_arraylist_t* other);
+fossil_tofu_arraylist_t* fossil_tofu_arraylist_create_copy(const fossil_tofu_arraylist_t* other);
 
 /**
  * @brief Create a new array list by moving an existing array list.
@@ -100,7 +100,7 @@ fossil_arraylist_t* fossil_arraylist_create_copy(const fossil_arraylist_t* other
  * @return      Pointer to the newly created array list, or NULL on failure.
  * @complexity  O(1)
  */
-fossil_arraylist_t* fossil_arraylist_create_move(fossil_arraylist_t* other);
+fossil_tofu_arraylist_t* fossil_tofu_arraylist_create_move(fossil_tofu_arraylist_t* other);
 
 /**
  * @brief Erase the contents of the array list and free allocated memory.
@@ -112,7 +112,7 @@ fossil_arraylist_t* fossil_arraylist_create_move(fossil_arraylist_t* other);
  * @param alist Pointer to the array list to destroy.
  * @complexity  O(1)
  */
-void fossil_arraylist_destroy(fossil_arraylist_t* alist);
+void fossil_tofu_arraylist_destroy(fossil_tofu_arraylist_t* alist);
 
 // *****************************************************************************
 // Utility functions
@@ -129,7 +129,7 @@ void fossil_arraylist_destroy(fossil_arraylist_t* alist);
  * @return      Error code indicating success (0) or failure (non-zero).
  * @complexity  Amortized O(1)
  */
-int32_t fossil_arraylist_insert(fossil_arraylist_t* alist, char *data);
+int32_t fossil_tofu_arraylist_insert(fossil_tofu_arraylist_t* alist, char *data);
 
 /**
  * @brief Remove data from the array list at the specified index.
@@ -142,7 +142,7 @@ int32_t fossil_arraylist_insert(fossil_arraylist_t* alist, char *data);
  * @return      Error code indicating success (0) or failure (non-zero).
  * @complexity  O(n)
  */
-int32_t fossil_arraylist_remove(fossil_arraylist_t* alist, size_t index);
+int32_t fossil_tofu_arraylist_remove(fossil_tofu_arraylist_t* alist, size_t index);
 
 /**
  * @brief Get the size of the array list.
@@ -153,7 +153,7 @@ int32_t fossil_arraylist_remove(fossil_arraylist_t* alist, size_t index);
  * @return      Number of elements in the array list.
  * @complexity  O(1)
  */
-size_t fossil_arraylist_size(const fossil_arraylist_t* alist);
+size_t fossil_tofu_arraylist_size(const fossil_tofu_arraylist_t* alist);
 
 /**
  * @brief Get the capacity of the array list.
@@ -164,7 +164,7 @@ size_t fossil_arraylist_size(const fossil_arraylist_t* alist);
  * @return      Capacity of the array list.
  * @complexity  O(1)
  */
-size_t fossil_arraylist_capacity(const fossil_arraylist_t* alist);
+size_t fossil_tofu_arraylist_capacity(const fossil_tofu_arraylist_t* alist);
 
 /**
  * @brief Check if the array list is not empty.
@@ -175,7 +175,7 @@ size_t fossil_arraylist_capacity(const fossil_arraylist_t* alist);
  * @return      True if not empty, false otherwise.
  * @complexity  O(1)
  */
-bool fossil_arraylist_not_empty(const fossil_arraylist_t* alist);
+bool fossil_tofu_arraylist_not_empty(const fossil_tofu_arraylist_t* alist);
 
 /**
  * @brief Check if the array list is not a null pointer.
@@ -186,7 +186,7 @@ bool fossil_arraylist_not_empty(const fossil_arraylist_t* alist);
  * @return      True if not NULL, false otherwise.
  * @complexity  O(1)
  */
-bool fossil_arraylist_not_cnullptr(const fossil_arraylist_t* alist);
+bool fossil_tofu_arraylist_not_cnullptr(const fossil_tofu_arraylist_t* alist);
 
 /**
  * @brief Check if the array list is empty.
@@ -197,7 +197,7 @@ bool fossil_arraylist_not_cnullptr(const fossil_arraylist_t* alist);
  * @return      True if empty, false otherwise.
  * @complexity  O(1)
  */
-bool fossil_arraylist_is_empty(const fossil_arraylist_t* alist);
+bool fossil_tofu_arraylist_is_empty(const fossil_tofu_arraylist_t* alist);
 
 /**
  * @brief Check if the array list is a null pointer.
@@ -208,7 +208,7 @@ bool fossil_arraylist_is_empty(const fossil_arraylist_t* alist);
  * @return      True if NULL, false otherwise.
  * @complexity  O(1)
  */
-bool fossil_arraylist_is_cnullptr(const fossil_arraylist_t* alist);
+bool fossil_tofu_arraylist_is_cnullptr(const fossil_tofu_arraylist_t* alist);
 
 // *****************************************************************************
 // Getter and setter functions
@@ -225,7 +225,7 @@ bool fossil_arraylist_is_cnullptr(const fossil_arraylist_t* alist);
  * @return      Pointer to the element, or NULL if index is out of bounds.
  * @complexity  O(1)
  */
-char *fossil_arraylist_get(const fossil_arraylist_t* alist, size_t index);
+char *fossil_tofu_arraylist_get(const fossil_tofu_arraylist_t* alist, size_t index);
 
 /**
  * @brief Get the first element in the array list.
@@ -236,7 +236,7 @@ char *fossil_arraylist_get(const fossil_arraylist_t* alist, size_t index);
  * @return      Pointer to the first element, or NULL if the list is empty.
  * @complexity  O(1)
  */
-char *fossil_arraylist_get_front(const fossil_arraylist_t* alist);
+char *fossil_tofu_arraylist_get_front(const fossil_tofu_arraylist_t* alist);
 
 /**
  * @brief Get the last element in the array list.
@@ -247,7 +247,7 @@ char *fossil_arraylist_get_front(const fossil_arraylist_t* alist);
  * @return      Pointer to the last element, or NULL if the list is empty.
  * @complexity  O(1)
  */
-char *fossil_arraylist_get_back(const fossil_arraylist_t* alist);
+char *fossil_tofu_arraylist_get_back(const fossil_tofu_arraylist_t* alist);
 
 /**
  * @brief Set the element at the specified index in the array list.
@@ -259,7 +259,7 @@ char *fossil_arraylist_get_back(const fossil_arraylist_t* alist);
  * @param element Pointer to the new element value.
  * @complexity    O(1)
  */
-void fossil_arraylist_set(fossil_arraylist_t* alist, size_t index, char *element);
+void fossil_tofu_arraylist_set(fossil_tofu_arraylist_t* alist, size_t index, char *element);
 
 /**
  * @brief Set the first element in the array list.
@@ -270,7 +270,7 @@ void fossil_arraylist_set(fossil_arraylist_t* alist, size_t index, char *element
  * @param element Pointer to the new value for the first element.
  * @complexity    O(1)
  */
-void fossil_arraylist_set_front(fossil_arraylist_t* alist, char *element);
+void fossil_tofu_arraylist_set_front(fossil_tofu_arraylist_t* alist, char *element);
 
 /**
  * @brief Set the last element in the array list.
@@ -281,7 +281,7 @@ void fossil_arraylist_set_front(fossil_arraylist_t* alist, char *element);
  * @param element Pointer to the new value for the last element.
  * @complexity    O(1)
  */
-void fossil_arraylist_set_back(fossil_arraylist_t* alist, char *element);
+void fossil_tofu_arraylist_set_back(fossil_tofu_arraylist_t* alist, char *element);
 
 #ifdef __cplusplus
 }
@@ -294,10 +294,10 @@ namespace fossil {
 
         /**
          * @class ArrayList
-         * @brief A C++ wrapper for the fossil_arraylist_t array list using std::string.
+         * @brief A C++ wrapper for the fossil_tofu_arraylist_t array list using std::string.
          *
          * This class provides a convenient C++ interface for managing a dynamic array list
-         * of strings, backed by the C fossil_arraylist_t implementation. It supports
+         * of strings, backed by the C fossil_tofu_arraylist_t implementation. It supports
          * construction, destruction, copy/move semantics, and common container operations.
          */
         class ArrayList {
@@ -313,7 +313,7 @@ namespace fossil {
              * @param capacity The initial capacity of the array list.
              */
             ArrayList(const std::string& type, size_t capacity) {
-                alist = fossil_arraylist_create_container(const_cast<char*>(type.c_str()), capacity);
+                alist = fossil_tofu_arraylist_create_container(const_cast<char*>(type.c_str()), capacity);
             }
 
             /**
@@ -322,7 +322,7 @@ namespace fossil {
              * Initializes the array list with default type and capacity settings.
              */
             ArrayList() {
-                alist = fossil_arraylist_create_default();
+                alist = fossil_tofu_arraylist_create_default();
             }
 
             /**
@@ -334,7 +334,7 @@ namespace fossil {
              * @param other The array list to copy.
              */
             ArrayList(const ArrayList& other) {
-                alist = fossil_arraylist_create_copy(other.alist);
+                alist = fossil_tofu_arraylist_create_copy(other.alist);
             }
 
             /**
@@ -346,7 +346,7 @@ namespace fossil {
              * @param other The array list to move.
              */
             ArrayList(ArrayList&& other) noexcept {
-                alist = fossil_arraylist_create_move(other.alist);
+                alist = fossil_tofu_arraylist_create_move(other.alist);
                 other.alist = nullptr;
             }
 
@@ -357,7 +357,7 @@ namespace fossil {
              * and internal buffers.
              */
             ~ArrayList() {
-                fossil_arraylist_destroy(alist);
+                fossil_tofu_arraylist_destroy(alist);
             }
 
             /**
@@ -369,7 +369,7 @@ namespace fossil {
              * @param data The data to insert.
              */
             void insert(const std::string& data) {
-                fossil_arraylist_insert(alist, const_cast<char*>(data.c_str()));
+                fossil_tofu_arraylist_insert(alist, const_cast<char*>(data.c_str()));
             }
 
             /**
@@ -381,7 +381,7 @@ namespace fossil {
              * @param index The index of the element to remove.
              */
             void remove(size_t index) {
-                fossil_arraylist_remove(alist, index);
+                fossil_tofu_arraylist_remove(alist, index);
             }
 
             /**
@@ -392,7 +392,7 @@ namespace fossil {
              * @return The size of the array list.
              */
             size_t size() const {
-                return fossil_arraylist_size(alist);
+                return fossil_tofu_arraylist_size(alist);
             }
 
             /**
@@ -403,7 +403,7 @@ namespace fossil {
              * @return The capacity of the array list.
              */
             size_t capacity() const {
-                return fossil_arraylist_capacity(alist);
+                return fossil_tofu_arraylist_capacity(alist);
             }
 
             /**
@@ -414,7 +414,7 @@ namespace fossil {
              * @return True if the array list is not empty, false otherwise.
              */
             bool not_empty() const {
-                return fossil_arraylist_not_empty(alist);
+                return fossil_tofu_arraylist_not_empty(alist);
             }
 
             /**
@@ -425,7 +425,7 @@ namespace fossil {
              * @return True if the array list is not a null pointer, false otherwise.
              */
             bool not_cnullptr() const {
-                return fossil_arraylist_not_cnullptr(alist);
+                return fossil_tofu_arraylist_not_cnullptr(alist);
             }
 
             /**
@@ -436,7 +436,7 @@ namespace fossil {
              * @return True if the array list is empty, false otherwise.
              */
             bool is_empty() const {
-                return fossil_arraylist_is_empty(alist);
+                return fossil_tofu_arraylist_is_empty(alist);
             }
 
             /**
@@ -447,7 +447,7 @@ namespace fossil {
              * @return True if the array list is a null pointer, false otherwise.
              */
             bool is_cnullptr() const {
-                return fossil_arraylist_is_cnullptr(alist);
+                return fossil_tofu_arraylist_is_cnullptr(alist);
             }
 
             /**
@@ -460,7 +460,7 @@ namespace fossil {
              * @return      The element at the specified index as a string.
              */
             std::string get(size_t index) const {
-                const char* elem = fossil_arraylist_get(alist, index);
+                const char* elem = fossil_tofu_arraylist_get(alist, index);
                 return elem ? std::string(elem) : "";
             }
 
@@ -473,7 +473,7 @@ namespace fossil {
              * @return The first element in the array list as a string.
              */
             std::string front() const {
-                const char* elem = fossil_arraylist_get_front(alist);
+                const char* elem = fossil_tofu_arraylist_get_front(alist);
                 return elem ? std::string(elem) : "";
             }
 
@@ -486,7 +486,7 @@ namespace fossil {
              * @return The last element in the array list as a string.
              */
             std::string back() const {
-                const char* elem = fossil_arraylist_get_back(alist);
+                const char* elem = fossil_tofu_arraylist_get_back(alist);
                 return elem ? std::string(elem) : "";
             }
 
@@ -499,7 +499,7 @@ namespace fossil {
              * @param value The element to set.
              */
             void set(size_t index, const std::string& value) {
-                fossil_arraylist_set(alist, index, const_cast<char*>(value.c_str()));
+                fossil_tofu_arraylist_set(alist, index, const_cast<char*>(value.c_str()));
             }
 
             /**
@@ -510,7 +510,7 @@ namespace fossil {
              * @param value The element to set.
              */
             void set_front(const std::string& value) {
-                fossil_arraylist_set_front(alist, const_cast<char*>(value.c_str()));
+                fossil_tofu_arraylist_set_front(alist, const_cast<char*>(value.c_str()));
             }
 
             /**
@@ -521,7 +521,7 @@ namespace fossil {
              * @param value The element to set.
              */
             void set_back(const std::string& value) {
-                fossil_arraylist_set_back(alist, const_cast<char*>(value.c_str()));
+                fossil_tofu_arraylist_set_back(alist, const_cast<char*>(value.c_str()));
             }
 
             /**
@@ -535,8 +535,8 @@ namespace fossil {
              */
             ArrayList& operator=(const ArrayList& other) {
                 if (this != &other) {
-                    fossil_arraylist_destroy(alist);
-                    alist = fossil_arraylist_create_copy(other.alist);
+                    fossil_tofu_arraylist_destroy(alist);
+                    alist = fossil_tofu_arraylist_create_copy(other.alist);
                 }
                 return *this;
             }
@@ -552,7 +552,7 @@ namespace fossil {
              */
             ArrayList& operator=(ArrayList&& other) noexcept {
                 if (this != &other) {
-                    fossil_arraylist_destroy(alist);
+                    fossil_tofu_arraylist_destroy(alist);
                     alist = other.alist;
                     other.alist = nullptr;
                 }
@@ -560,30 +560,30 @@ namespace fossil {
             }
 
             /**
-             * @brief Get raw pointer to underlying fossil_arraylist_t.
+             * @brief Get raw pointer to underlying fossil_tofu_arraylist_t.
              *
              * Returns a non-const pointer to the underlying C array list structure.
              *
-             * @return fossil_arraylist_t* pointer.
+             * @return fossil_tofu_arraylist_t* pointer.
              */
-            fossil_arraylist_t* raw() { return alist; }
+            fossil_tofu_arraylist_t* raw() { return alist; }
 
             /**
-             * @brief Get const raw pointer to underlying fossil_arraylist_t.
+             * @brief Get const raw pointer to underlying fossil_tofu_arraylist_t.
              *
              * Returns a const pointer to the underlying C array list structure.
              *
-             * @return const fossil_arraylist_t* pointer.
+             * @return const fossil_tofu_arraylist_t* pointer.
              */
-            const fossil_arraylist_t* raw() const { return alist; }
+            const fossil_tofu_arraylist_t* raw() const { return alist; }
 
         private:
             /**
-             * @brief Pointer to the underlying fossil_arraylist_t structure.
+             * @brief Pointer to the underlying fossil_tofu_arraylist_t structure.
              *
              * This member holds the actual C array list instance managed by this wrapper.
              */
-            fossil_arraylist_t* alist = nullptr;
+            fossil_tofu_arraylist_t* alist = nullptr;
         };
 
     } // namespace tofu

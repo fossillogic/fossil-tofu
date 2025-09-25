@@ -52,119 +52,119 @@ FOSSIL_TEARDOWN(objc_dqueue_tofu_fixture) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
 FOSSIL_TEST(objc_test_dqueue_create_container_and_destroy) {
-    fossil_dqueue_t* dqueue = fossil_dqueue_create_container("i32");
+    fossil_tofu_dqueue_t* dqueue = fossil_tofu_dqueue_create_container("i32");
     ASSUME_NOT_CNULL(dqueue);
     ASSUME_ITS_EQUAL_CSTR(dqueue->type, "i32");
-    ASSUME_ITS_EQUAL_I32(fossil_dqueue_size(dqueue), 0);
-    fossil_dqueue_destroy(dqueue);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_dqueue_size(dqueue), 0);
+    fossil_tofu_dqueue_destroy(dqueue);
 }
 
 FOSSIL_TEST(objc_test_dqueue_create_default_and_destroy) {
-    fossil_dqueue_t* dqueue = fossil_dqueue_create_default();
+    fossil_tofu_dqueue_t* dqueue = fossil_tofu_dqueue_create_default();
     ASSUME_NOT_CNULL(dqueue);
     ASSUME_ITS_EQUAL_CSTR(dqueue->type, "any");
-    fossil_dqueue_destroy(dqueue);
+    fossil_tofu_dqueue_destroy(dqueue);
 }
 
 FOSSIL_TEST(objc_test_dqueue_insert_and_remove) {
-    fossil_dqueue_t* dqueue = fossil_dqueue_create_container("i32");
-    int32_t result1 = fossil_dqueue_insert(dqueue, "10");
-    int32_t result2 = fossil_dqueue_insert(dqueue, "20");
+    fossil_tofu_dqueue_t* dqueue = fossil_tofu_dqueue_create_container("i32");
+    int32_t result1 = fossil_tofu_dqueue_insert(dqueue, "10");
+    int32_t result2 = fossil_tofu_dqueue_insert(dqueue, "20");
     ASSUME_ITS_EQUAL_I32(result1, FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_EQUAL_I32(result2, FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_I32(fossil_dqueue_size(dqueue), 2);
-    ASSUME_ITS_EQUAL_CSTR(fossil_dqueue_get_front(dqueue), "10");
-    ASSUME_ITS_EQUAL_CSTR(fossil_dqueue_get_back(dqueue), "20");
-    fossil_dqueue_remove(dqueue);
-    ASSUME_ITS_EQUAL_I32(fossil_dqueue_size(dqueue), 1);
-    ASSUME_ITS_EQUAL_CSTR(fossil_dqueue_get_front(dqueue), "20");
-    fossil_dqueue_destroy(dqueue);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_dqueue_size(dqueue), 2);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_dqueue_get_front(dqueue), "10");
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_dqueue_get_back(dqueue), "20");
+    fossil_tofu_dqueue_remove(dqueue);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_dqueue_size(dqueue), 1);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_dqueue_get_front(dqueue), "20");
+    fossil_tofu_dqueue_destroy(dqueue);
 }
 
 FOSSIL_TEST(objc_test_dqueue_create_copy) {
-    fossil_dqueue_t* dqueue1 = fossil_dqueue_create_container("i32");
-    fossil_dqueue_insert(dqueue1, "1");
-    fossil_dqueue_insert(dqueue1, "2");
-    fossil_dqueue_t* dqueue2 = fossil_dqueue_create_copy(dqueue1);
+    fossil_tofu_dqueue_t* dqueue1 = fossil_tofu_dqueue_create_container("i32");
+    fossil_tofu_dqueue_insert(dqueue1, "1");
+    fossil_tofu_dqueue_insert(dqueue1, "2");
+    fossil_tofu_dqueue_t* dqueue2 = fossil_tofu_dqueue_create_copy(dqueue1);
     ASSUME_NOT_CNULL(dqueue2);
-    ASSUME_ITS_EQUAL_I32(fossil_dqueue_size(dqueue2), 2);
-    ASSUME_ITS_EQUAL_CSTR(fossil_dqueue_get_front(dqueue2), "1");
-    ASSUME_ITS_EQUAL_CSTR(fossil_dqueue_get_back(dqueue2), "2");
-    fossil_dqueue_destroy(dqueue1);
-    fossil_dqueue_destroy(dqueue2);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_dqueue_size(dqueue2), 2);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_dqueue_get_front(dqueue2), "1");
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_dqueue_get_back(dqueue2), "2");
+    fossil_tofu_dqueue_destroy(dqueue1);
+    fossil_tofu_dqueue_destroy(dqueue2);
 }
 
 FOSSIL_TEST(objc_test_dqueue_create_move) {
-    fossil_dqueue_t* dqueue1 = fossil_dqueue_create_container("i32");
-    fossil_dqueue_insert(dqueue1, "42");
-    fossil_dqueue_t* dqueue2 = fossil_dqueue_create_move(dqueue1);
+    fossil_tofu_dqueue_t* dqueue1 = fossil_tofu_dqueue_create_container("i32");
+    fossil_tofu_dqueue_insert(dqueue1, "42");
+    fossil_tofu_dqueue_t* dqueue2 = fossil_tofu_dqueue_create_move(dqueue1);
     ASSUME_NOT_CNULL(dqueue2);
-    ASSUME_ITS_EQUAL_I32(fossil_dqueue_size(dqueue2), 1);
-    ASSUME_ITS_EQUAL_CSTR(fossil_dqueue_get_front(dqueue2), "42");
-    ASSUME_ITS_TRUE(fossil_dqueue_is_empty(dqueue1)); // dqueue1 should be empty after move
-    fossil_dqueue_destroy(dqueue1);
-    fossil_dqueue_destroy(dqueue2);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_dqueue_size(dqueue2), 1);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_dqueue_get_front(dqueue2), "42");
+    ASSUME_ITS_TRUE(fossil_tofu_dqueue_is_empty(dqueue1)); // dqueue1 should be empty after move
+    fossil_tofu_dqueue_destroy(dqueue1);
+    fossil_tofu_dqueue_destroy(dqueue2);
 }
 
 FOSSIL_TEST(objc_test_dqueue_not_empty_and_is_empty) {
-    fossil_dqueue_t* dqueue = fossil_dqueue_create_container("i32");
-    ASSUME_ITS_TRUE(fossil_dqueue_is_empty(dqueue));
-    ASSUME_ITS_FALSE(fossil_dqueue_not_empty(dqueue));
-    fossil_dqueue_insert(dqueue, "1");
-    ASSUME_ITS_FALSE(fossil_dqueue_is_empty(dqueue));
-    ASSUME_ITS_TRUE(fossil_dqueue_not_empty(dqueue));
-    fossil_dqueue_remove(dqueue);
-    ASSUME_ITS_TRUE(fossil_dqueue_is_empty(dqueue));
-    fossil_dqueue_destroy(dqueue);
+    fossil_tofu_dqueue_t* dqueue = fossil_tofu_dqueue_create_container("i32");
+    ASSUME_ITS_TRUE(fossil_tofu_dqueue_is_empty(dqueue));
+    ASSUME_ITS_FALSE(fossil_tofu_dqueue_not_empty(dqueue));
+    fossil_tofu_dqueue_insert(dqueue, "1");
+    ASSUME_ITS_FALSE(fossil_tofu_dqueue_is_empty(dqueue));
+    ASSUME_ITS_TRUE(fossil_tofu_dqueue_not_empty(dqueue));
+    fossil_tofu_dqueue_remove(dqueue);
+    ASSUME_ITS_TRUE(fossil_tofu_dqueue_is_empty(dqueue));
+    fossil_tofu_dqueue_destroy(dqueue);
 }
 
 FOSSIL_TEST(objc_test_dqueue_not_cnullptr_and_is_cnullptr) {
-    fossil_dqueue_t* dqueue = fossil_dqueue_create_container("i32");
-    ASSUME_ITS_TRUE(fossil_dqueue_not_cnullptr(dqueue));
-    ASSUME_ITS_FALSE(fossil_dqueue_is_cnullptr(dqueue));
-    fossil_dqueue_destroy(dqueue);
+    fossil_tofu_dqueue_t* dqueue = fossil_tofu_dqueue_create_container("i32");
+    ASSUME_ITS_TRUE(fossil_tofu_dqueue_not_cnullptr(dqueue));
+    ASSUME_ITS_FALSE(fossil_tofu_dqueue_is_cnullptr(dqueue));
+    fossil_tofu_dqueue_destroy(dqueue);
     dqueue = NULL;
-    ASSUME_ITS_FALSE(fossil_dqueue_not_cnullptr(dqueue));
-    ASSUME_ITS_TRUE(fossil_dqueue_is_cnullptr(dqueue));
+    ASSUME_ITS_FALSE(fossil_tofu_dqueue_not_cnullptr(dqueue));
+    ASSUME_ITS_TRUE(fossil_tofu_dqueue_is_cnullptr(dqueue));
 }
 
 FOSSIL_TEST(objc_test_dqueue_set_front_and_set_back) {
-    fossil_dqueue_t* dqueue = fossil_dqueue_create_container("i32");
-    fossil_dqueue_insert(dqueue, "100");
-    fossil_dqueue_insert(dqueue, "200");
-    fossil_dqueue_set_front(dqueue, "111");
-    fossil_dqueue_set_back(dqueue, "222");
-    ASSUME_ITS_EQUAL_CSTR(fossil_dqueue_get_front(dqueue), "111");
-    ASSUME_ITS_EQUAL_CSTR(fossil_dqueue_get_back(dqueue), "222");
-    fossil_dqueue_destroy(dqueue);
+    fossil_tofu_dqueue_t* dqueue = fossil_tofu_dqueue_create_container("i32");
+    fossil_tofu_dqueue_insert(dqueue, "100");
+    fossil_tofu_dqueue_insert(dqueue, "200");
+    fossil_tofu_dqueue_set_front(dqueue, "111");
+    fossil_tofu_dqueue_set_back(dqueue, "222");
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_dqueue_get_front(dqueue), "111");
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_dqueue_get_back(dqueue), "222");
+    fossil_tofu_dqueue_destroy(dqueue);
 }
 
 FOSSIL_TEST(objc_test_dqueue_get_front_and_get_back_empty) {
-    fossil_dqueue_t* dqueue = fossil_dqueue_create_container("i32");
-    ASSUME_ITS_CNULL(fossil_dqueue_get_front(dqueue));
-    ASSUME_ITS_CNULL(fossil_dqueue_get_back(dqueue));
-    fossil_dqueue_destroy(dqueue);
+    fossil_tofu_dqueue_t* dqueue = fossil_tofu_dqueue_create_container("i32");
+    ASSUME_ITS_CNULL(fossil_tofu_dqueue_get_front(dqueue));
+    ASSUME_ITS_CNULL(fossil_tofu_dqueue_get_back(dqueue));
+    fossil_tofu_dqueue_destroy(dqueue);
 }
 
 FOSSIL_TEST(objc_test_dqueue_remove_empty) {
-    fossil_dqueue_t* dqueue = fossil_dqueue_create_container("i32");
-    int32_t result = fossil_dqueue_remove(dqueue);
+    fossil_tofu_dqueue_t* dqueue = fossil_tofu_dqueue_create_container("i32");
+    int32_t result = fossil_tofu_dqueue_remove(dqueue);
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_FAILURE);
-    fossil_dqueue_destroy(dqueue);
+    fossil_tofu_dqueue_destroy(dqueue);
 }
 
 FOSSIL_TEST(objc_test_dqueue_size_consistency) {
-    fossil_dqueue_t* dqueue = fossil_dqueue_create_container("i32");
-    ASSUME_ITS_EQUAL_I32(fossil_dqueue_size(dqueue), 0);
-    fossil_dqueue_insert(dqueue, "1");
-    ASSUME_ITS_EQUAL_I32(fossil_dqueue_size(dqueue), 1);
-    fossil_dqueue_insert(dqueue, "2");
-    ASSUME_ITS_EQUAL_I32(fossil_dqueue_size(dqueue), 2);
-    fossil_dqueue_remove(dqueue);
-    ASSUME_ITS_EQUAL_I32(fossil_dqueue_size(dqueue), 1);
-    fossil_dqueue_remove(dqueue);
-    ASSUME_ITS_EQUAL_I32(fossil_dqueue_size(dqueue), 0);
-    fossil_dqueue_destroy(dqueue);
+    fossil_tofu_dqueue_t* dqueue = fossil_tofu_dqueue_create_container("i32");
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_dqueue_size(dqueue), 0);
+    fossil_tofu_dqueue_insert(dqueue, "1");
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_dqueue_size(dqueue), 1);
+    fossil_tofu_dqueue_insert(dqueue, "2");
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_dqueue_size(dqueue), 2);
+    fossil_tofu_dqueue_remove(dqueue);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_dqueue_size(dqueue), 1);
+    fossil_tofu_dqueue_remove(dqueue);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_dqueue_size(dqueue), 0);
+    fossil_tofu_dqueue_destroy(dqueue);
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *
