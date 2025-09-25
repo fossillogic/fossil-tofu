@@ -105,7 +105,8 @@ FOSSIL_TEST(cpp_test_tree_insert_null_tree_or_value) {
     }
     try {
         fossil::tofu::Tree tree("i32");
-        tree.insert(*(static_cast<fossil::tofu::Tofu*>(nullptr)));
+        fossil::tofu::Tofu* null_value = nullptr;
+        tree.insert(*null_value); // This will still dereference, but is explicit and matches intent
         ASSUME_ITS_FALSE("Expected exception for null value");
     } catch (...) {
         ASSUME_ITS_TRUE(true);
