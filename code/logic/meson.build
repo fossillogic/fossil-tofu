@@ -19,6 +19,7 @@ fossil_tofu_lib = library('fossil_tofu',
         'vector.c',
         'array.c',
         'arraylist.c',
+        'tree.c',
         'tofu.c'
         ),
     install: true,
