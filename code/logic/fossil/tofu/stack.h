@@ -207,160 +207,160 @@ void fossil_stack_set(fossil_stack_t* stack, size_t index, fossil_tofu_t element
 
 namespace fossil {
 
-namespace tofu {
+    namespace tofu {
 
-    /**
-     * A C++ wrapper class for the fossil_stack_t structure, providing a more
-     * user-friendly interface for stack operations.
-     */
-    class Stack {
-        public:
-            /**
-             * Constructor to create a stack with a specified type.
-             *
-             * @param type The type of data the stack will store.
-             * @throws std::runtime_error If the stack creation fails.
-             */
-            Stack(const std::string& type) {
-                stack_ = fossil_stack_create_container(const_cast<char*>(type.c_str()));
-                if (!stack_) {
-                    throw std::runtime_error("Failed to create stack.");
+        /**
+         * A C++ wrapper class for the fossil_stack_t structure, providing a more
+         * user-friendly interface for stack operations.
+         */
+        class Stack {
+            public:
+                /**
+                 * Constructor to create a stack with a specified type.
+                 *
+                 * @param type The type of data the stack will store.
+                 * @throws std::runtime_error If the stack creation fails.
+                 */
+                Stack(const std::string& type) {
+                    stack_ = fossil_stack_create_container(const_cast<char*>(type.c_str()));
+                    if (!stack_) {
+                        throw std::runtime_error("Failed to create stack.");
+                    }
                 }
-            }
 
-            /**
-             * Default constructor to create a stack with default values.
-             *
-             * @throws std::runtime_error If the stack creation fails.
-             */
-            Stack() {
-                stack_ = fossil_stack_create_default();
-                if (!stack_) {
-                    throw std::runtime_error("Failed to create stack.");
+                /**
+                 * Default constructor to create a stack with default values.
+                 *
+                 * @throws std::runtime_error If the stack creation fails.
+                 */
+                Stack() {
+                    stack_ = fossil_stack_create_default();
+                    if (!stack_) {
+                        throw std::runtime_error("Failed to create stack.");
+                    }
                 }
-            }
 
-            /**
-             * Copy constructor to create a stack by copying another stack.
-             *
-             * @param other The stack to copy.
-             * @throws std::runtime_error If the stack creation fails.
-             */
-            Stack(const Stack& other) {
-                stack_ = fossil_stack_create_copy(other.stack_);
-                if (!stack_) {
-                    throw std::runtime_error("Failed to create stack.");
+                /**
+                 * Copy constructor to create a stack by copying another stack.
+                 *
+                 * @param other The stack to copy.
+                 * @throws std::runtime_error If the stack creation fails.
+                 */
+                Stack(const Stack& other) {
+                    stack_ = fossil_stack_create_copy(other.stack_);
+                    if (!stack_) {
+                        throw std::runtime_error("Failed to create stack.");
+                    }
                 }
-            }
 
-            /**
-             * Destructor to destroy the stack and free allocated memory.
-             */
-            ~Stack() {
-                fossil_stack_destroy(stack_);
-            }
+                /**
+                 * Destructor to destroy the stack and free allocated memory.
+                 */
+                ~Stack() {
+                    fossil_stack_destroy(stack_);
+                }
 
-            /**
-             * Insert data into the stack.
-             *
-             * @param data The data to insert.
-             * @return     The error code indicating the success or failure of the operation.
-             */
-            int32_t insert(const std::string& data) {
-                return fossil_stack_insert(stack_, const_cast<char*>(data.c_str()));
-            }
+                /**
+                 * Insert data into the stack.
+                 *
+                 * @param data The data to insert.
+                 * @return     The error code indicating the success or failure of the operation.
+                 */
+                int32_t insert(const std::string& data) {
+                    return fossil_stack_insert(stack_, const_cast<char*>(data.c_str()));
+                }
 
-            /**
-             * Remove data from the stack.
-             *
-             * @return The error code indicating the success or failure of the operation.
-             */
-            int32_t remove() {
-                return fossil_stack_remove(stack_);
-            }
+                /**
+                 * Remove data from the stack.
+                 *
+                 * @return The error code indicating the success or failure of the operation.
+                 */
+                int32_t remove() {
+                    return fossil_stack_remove(stack_);
+                }
 
-            /**
-             * Get the size of the stack.
-             *
-             * @return The size of the stack.
-             */
-            size_t size() const {
-                return fossil_stack_size(stack_);
-            }
+                /**
+                 * Get the size of the stack.
+                 *
+                 * @return The size of the stack.
+                 */
+                size_t size() const {
+                    return fossil_stack_size(stack_);
+                }
 
-            /**
-             * Check if the stack is not empty.
-             *
-             * @return True if the stack is not empty, false otherwise.
-             */
-            bool not_empty() const {
-                return fossil_stack_not_empty(stack_);
-            }
+                /**
+                 * Check if the stack is not empty.
+                 *
+                 * @return True if the stack is not empty, false otherwise.
+                 */
+                bool not_empty() const {
+                    return fossil_stack_not_empty(stack_);
+                }
 
-            /**
-             * Check if the stack is not a null pointer.
-             *
-             * @return True if the stack is not a null pointer, false otherwise.
-             */
-            bool not_cnullptr() const {
-                return fossil_stack_not_cnullptr(stack_);
-            }
+                /**
+                 * Check if the stack is not a null pointer.
+                 *
+                 * @return True if the stack is not a null pointer, false otherwise.
+                 */
+                bool not_cnullptr() const {
+                    return fossil_stack_not_cnullptr(stack_);
+                }
 
-            /**
-             * Check if the stack is empty.
-             *
-             * @return True if the stack is empty, false otherwise.
-             */
-            bool is_empty() const {
-                return fossil_stack_is_empty(stack_);
-            }
+                /**
+                 * Check if the stack is empty.
+                 *
+                 * @return True if the stack is empty, false otherwise.
+                 */
+                bool is_empty() const {
+                    return fossil_stack_is_empty(stack_);
+                }
 
-            /**
-             * Check if the stack is a null pointer.
-             *
-             * @return True if the stack is a null pointer, false otherwise.
-             */
-            bool is_cnullptr() const {
-                return fossil_stack_is_cnullptr(stack_);
-            }
+                /**
+                 * Check if the stack is a null pointer.
+                 *
+                 * @return True if the stack is a null pointer, false otherwise.
+                 */
+                bool is_cnullptr() const {
+                    return fossil_stack_is_cnullptr(stack_);
+                }
 
-            /**
-             * Get the top element of the stack.
-             *
-             * @return The top element of the stack or the default value if the stack is empty.
-             */
-            fossil_tofu_t top() {
-                return fossil_stack_top(stack_);
-            }
+                /**
+                 * Get the top element of the stack.
+                 *
+                 * @return The top element of the stack or the default value if the stack is empty.
+                 */
+                fossil_tofu_t top() {
+                    return fossil_stack_top(stack_);
+                }
 
-            /**
-             * Get the element at the specified index in the stack.
-             *
-             * @param index The index of the element to get.
-             * @return      The element at the specified index.
-             */
-            fossil_tofu_t get(size_t index) const {
-                return fossil_stack_get(stack_, index);
-            }
+                /**
+                 * Get the element at the specified index in the stack.
+                 *
+                 * @param index The index of the element to get.
+                 * @return      The element at the specified index.
+                 */
+                fossil_tofu_t get(size_t index) const {
+                    return fossil_stack_get(stack_, index);
+                }
 
-            /**
-             * Set the element at the specified index in the stack.
-             *
-             * @param index   The index at which to set the element.
-             * @param element The element to set.
-             */
-            void set(size_t index, fossil_tofu_t element) {
-                fossil_stack_set(stack_, index, element);
-            }
+                /**
+                 * Set the element at the specified index in the stack.
+                 *
+                 * @param index   The index at which to set the element.
+                 * @param element The element to set.
+                 */
+                void set(size_t index, fossil_tofu_t element) {
+                    fossil_stack_set(stack_, index, element);
+                }
 
-        private:
-            /**
-             * Pointer to the underlying fossil_stack_t structure.
-             */
-            fossil_stack_t* stack_;
-    };
+            private:
+                /**
+                 * Pointer to the underlying fossil_stack_t structure.
+                 */
+                fossil_stack_t* stack_;
+        };
 
-} // namespace tofu
+    } // namespace tofu
 
 } // namespace fossil
 

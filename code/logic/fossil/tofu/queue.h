@@ -218,167 +218,167 @@ void fossil_queue_set_rear(fossil_queue_t* queue, char *element);
 
 namespace fossil {
 
-namespace tofu {
+    namespace tofu {
 
-    class Queue {
-    public:
-        /**
-         * Create a new queue with the specified data type.
-         *
-         * @param type The type of data the queue will store.
-         */
-        Queue(const std::string& type) {
-            queue = fossil_queue_create_container(const_cast<char*>(type.c_str()));
-            if (queue == nullptr) {
-                throw std::runtime_error("Failed to create queue.");
+        class Queue {
+        public:
+            /**
+             * Create a new queue with the specified data type.
+             *
+             * @param type The type of data the queue will store.
+             */
+            Queue(const std::string& type) {
+                queue = fossil_queue_create_container(const_cast<char*>(type.c_str()));
+                if (queue == nullptr) {
+                    throw std::runtime_error("Failed to create queue.");
+                }
             }
-        }
 
-        /**
-         * Create a new queue with default values.
-         */
-        Queue() {
-            queue = fossil_queue_create_default();
-            if (queue == nullptr) {
-                throw std::runtime_error("Failed to create queue.");
+            /**
+             * Create a new queue with default values.
+             */
+            Queue() {
+                queue = fossil_queue_create_default();
+                if (queue == nullptr) {
+                    throw std::runtime_error("Failed to create queue.");
+                }
             }
-        }
 
-        /**
-         * Create a new queue by copying an existing queue.
-         *
-         * @param other The queue to copy.
-         */
-        Queue(const Queue& other) {
-            queue = fossil_queue_create_copy(other.queue);
-            if (queue == nullptr) {
-                throw std::runtime_error("Failed to create queue.");
+            /**
+             * Create a new queue by copying an existing queue.
+             *
+             * @param other The queue to copy.
+             */
+            Queue(const Queue& other) {
+                queue = fossil_queue_create_copy(other.queue);
+                if (queue == nullptr) {
+                    throw std::runtime_error("Failed to create queue.");
+                }
             }
-        }
 
-        /**
-         * Create a new queue by moving an existing queue.
-         *
-         * @param other The queue to move.
-         */
-        Queue(Queue&& other) noexcept {
-            queue = fossil_queue_create_move(other.queue);
-        }
+            /**
+             * Create a new queue by moving an existing queue.
+             *
+             * @param other The queue to move.
+             */
+            Queue(Queue&& other) noexcept {
+                queue = fossil_queue_create_move(other.queue);
+            }
 
-        /**
-         * Destroy the queue and fossil_tofu_free allocated memory.
-         */
-        ~Queue() {
-            fossil_queue_destroy(queue);
-        }
+            /**
+             * Destroy the queue and fossil_tofu_free allocated memory.
+             */
+            ~Queue() {
+                fossil_queue_destroy(queue);
+            }
 
-        /**
-         * Insert data into the queue.
-         *
-         * @param data The data to insert.
-         * @return     The error code indicating the success or failure of the operation.
-         */
-        int32_t insert(const std::string& data) {
-            return fossil_queue_insert(queue, const_cast<char*>(data.c_str()));
-        }
+            /**
+             * Insert data into the queue.
+             *
+             * @param data The data to insert.
+             * @return     The error code indicating the success or failure of the operation.
+             */
+            int32_t insert(const std::string& data) {
+                return fossil_queue_insert(queue, const_cast<char*>(data.c_str()));
+            }
 
-        /**
-         * Remove data from the queue.
-         *
-         * @return The error code indicating the success or failure of the operation.
-         */
-        int32_t remove() {
-            return fossil_queue_remove(queue);
-        }
+            /**
+             * Remove data from the queue.
+             *
+             * @return The error code indicating the success or failure of the operation.
+             */
+            int32_t remove() {
+                return fossil_queue_remove(queue);
+            }
 
-        /**
-         * Get the size of the queue.
-         *
-         * @return The size of the queue.
-         */
-        size_t size() const {
-            return fossil_queue_size(queue);
-        }
+            /**
+             * Get the size of the queue.
+             *
+             * @return The size of the queue.
+             */
+            size_t size() const {
+                return fossil_queue_size(queue);
+            }
 
-        /**
-         * Check if the queue is not empty.
-         *
-         * @return True if the queue is not empty, false otherwise.
-         */
-        bool not_empty() const {
-            return fossil_queue_not_empty(queue);
-        }
+            /**
+             * Check if the queue is not empty.
+             *
+             * @return True if the queue is not empty, false otherwise.
+             */
+            bool not_empty() const {
+                return fossil_queue_not_empty(queue);
+            }
 
-        /**
-         * Check if the queue is not a null pointer.
-         *
-         * @return True if the queue is not a null pointer, false otherwise.
-         */
-        bool not_cnullptr() const {
-            return fossil_queue_not_cnullptr(queue);
-        }
+            /**
+             * Check if the queue is not a null pointer.
+             *
+             * @return True if the queue is not a null pointer, false otherwise.
+             */
+            bool not_cnullptr() const {
+                return fossil_queue_not_cnullptr(queue);
+            }
 
-        /**
-         * Check if the queue is empty.
-         *
-         * @return True if the queue is empty, false otherwise.
-         */
-        bool is_empty() const {
-            return fossil_queue_is_empty(queue);
-        }
+            /**
+             * Check if the queue is empty.
+             *
+             * @return True if the queue is empty, false otherwise.
+             */
+            bool is_empty() const {
+                return fossil_queue_is_empty(queue);
+            }
 
-        /**
-         * Check if the queue is a null pointer.
-         *
-         * @return True if the queue is a null pointer, false otherwise.
-         */
-        bool is_cnullptr() const {
-            return fossil_queue_is_cnullptr(queue);
-        }
+            /**
+             * Check if the queue is a null pointer.
+             *
+             * @return True if the queue is a null pointer, false otherwise.
+             */
+            bool is_cnullptr() const {
+                return fossil_queue_is_cnullptr(queue);
+            }
 
-        /**
-         * Get the element at the front of the queue.
-         *
-         * @return The element at the front of the queue.
-         */
-        std::string get_front() const {
-            char* front = fossil_queue_get_front(queue);
-            return front ? std::string(front) : std::string();
-        }
+            /**
+             * Get the element at the front of the queue.
+             *
+             * @return The element at the front of the queue.
+             */
+            std::string get_front() const {
+                char* front = fossil_queue_get_front(queue);
+                return front ? std::string(front) : std::string();
+            }
 
-        /**
-         * Get the element at the rear of the queue.
-         *
-         * @return The element at the rear of the queue.
-         */
-        std::string get_rear() const {
-            char* rear = fossil_queue_get_rear(queue);
-            return rear ? std::string(rear) : std::string();
-        }
+            /**
+             * Get the element at the rear of the queue.
+             *
+             * @return The element at the rear of the queue.
+             */
+            std::string get_rear() const {
+                char* rear = fossil_queue_get_rear(queue);
+                return rear ? std::string(rear) : std::string();
+            }
 
-        /**
-         * Set the element at the front of the queue.
-         *
-         * @param element The element to set at the front.
-         */
-        void set_front(const std::string& element) {
-            fossil_queue_set_front(queue, const_cast<char*>(element.c_str()));
-        }
+            /**
+             * Set the element at the front of the queue.
+             *
+             * @param element The element to set at the front.
+             */
+            void set_front(const std::string& element) {
+                fossil_queue_set_front(queue, const_cast<char*>(element.c_str()));
+            }
 
-        /**
-         * Set the element at the rear of the queue.
-         *
-         * @param element The element to set at the rear.
-         */
-        void set_rear(const std::string& element) {
-            fossil_queue_set_rear(queue, const_cast<char*>(element.c_str()));
-        }
+            /**
+             * Set the element at the rear of the queue.
+             *
+             * @param element The element to set at the rear.
+             */
+            void set_rear(const std::string& element) {
+                fossil_queue_set_rear(queue, const_cast<char*>(element.c_str()));
+            }
 
-    private:
-        fossil_queue_t* queue;
-    };
+        private:
+            fossil_queue_t* queue;
+        };
 
-} // namespace tofu
+    } // namespace tofu
 
 } // namespace fossil
 

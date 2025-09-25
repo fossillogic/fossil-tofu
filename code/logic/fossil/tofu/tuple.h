@@ -214,189 +214,189 @@ void fossil_tuple_set_back(fossil_tuple_t* tuple, char *element);
 
 namespace fossil {
 
-namespace tofu {
+    namespace tofu {
 
-    /**
-     * @class Tuple
-     * @brief A C++ wrapper for the fossil_tuple_t structure, providing a more
-     *        user-friendly interface for managing tuples of ToFu elements.
-     */
-    class Tuple {
-        public:
-            /**
-             * @brief Constructs a Tuple with a specified type.
-             * 
-             * @param type The expected type of elements in the tuple.
-             * @throws std::runtime_error If the tuple creation fails.
-             */
-            Tuple(const std::string& type) {
-                tuple_ = fossil_tuple_create(const_cast<char*>(type.c_str()));
-                if (!tuple_) {
-                    throw std::runtime_error("Failed to create tuple.");
+        /**
+         * @class Tuple
+         * @brief A C++ wrapper for the fossil_tuple_t structure, providing a more
+         *        user-friendly interface for managing tuples of ToFu elements.
+         */
+        class Tuple {
+            public:
+                /**
+                 * @brief Constructs a Tuple with a specified type.
+                 * 
+                 * @param type The expected type of elements in the tuple.
+                 * @throws std::runtime_error If the tuple creation fails.
+                 */
+                Tuple(const std::string& type) {
+                    tuple_ = fossil_tuple_create(const_cast<char*>(type.c_str()));
+                    if (!tuple_) {
+                        throw std::runtime_error("Failed to create tuple.");
+                    }
                 }
-            }
 
-            /**
-             * @brief Constructs a Tuple with default values.
-             * 
-             * @throws std::runtime_error If the tuple creation fails.
-             */
-            Tuple() {
-                tuple_ = fossil_tuple_create_default();
-                if (!tuple_) {
-                    throw std::runtime_error("Failed to create tuple.");
+                /**
+                 * @brief Constructs a Tuple with default values.
+                 * 
+                 * @throws std::runtime_error If the tuple creation fails.
+                 */
+                Tuple() {
+                    tuple_ = fossil_tuple_create_default();
+                    if (!tuple_) {
+                        throw std::runtime_error("Failed to create tuple.");
+                    }
                 }
-            }
 
-            /**
-             * @brief Constructs a Tuple by copying another Tuple.
-             * 
-             * @param other The Tuple to copy.
-             * @throws std::runtime_error If the tuple creation fails.
-             */
-            Tuple(const Tuple& other) {
-                tuple_ = fossil_tuple_create_copy(other.tuple_);
-                if (!tuple_) {
-                    throw std::runtime_error("Failed to create tuple.");
+                /**
+                 * @brief Constructs a Tuple by copying another Tuple.
+                 * 
+                 * @param other The Tuple to copy.
+                 * @throws std::runtime_error If the tuple creation fails.
+                 */
+                Tuple(const Tuple& other) {
+                    tuple_ = fossil_tuple_create_copy(other.tuple_);
+                    if (!tuple_) {
+                        throw std::runtime_error("Failed to create tuple.");
+                    }
                 }
-            }
 
-            /**
-             * @brief Constructs a Tuple by moving another Tuple.
-             * 
-             * @param other The Tuple to move.
-             * @throws std::runtime_error If the tuple creation fails.
-             */
-            Tuple(Tuple&& other) {
-                tuple_ = fossil_tuple_create_move(other.tuple_);
-                if (!tuple_) {
-                    throw std::runtime_error("Failed to create tuple.");
+                /**
+                 * @brief Constructs a Tuple by moving another Tuple.
+                 * 
+                 * @param other The Tuple to move.
+                 * @throws std::runtime_error If the tuple creation fails.
+                 */
+                Tuple(Tuple&& other) {
+                    tuple_ = fossil_tuple_create_move(other.tuple_);
+                    if (!tuple_) {
+                        throw std::runtime_error("Failed to create tuple.");
+                    }
                 }
-            }
 
-            /**
-             * @brief Destroys the Tuple and releases its resources.
-             */
-            ~Tuple() {
-                fossil_tuple_destroy(tuple_);
-            }
+                /**
+                 * @brief Destroys the Tuple and releases its resources.
+                 */
+                ~Tuple() {
+                    fossil_tuple_destroy(tuple_);
+                }
 
-            /**
-             * @brief Adds an element to the Tuple.
-             * 
-             * @param element The element to add.
-             */
-            void add(const std::string& element) {
-                fossil_tuple_add(tuple_, const_cast<char*>(element.c_str()));
-            }
+                /**
+                 * @brief Adds an element to the Tuple.
+                 * 
+                 * @param element The element to add.
+                 */
+                void add(const std::string& element) {
+                    fossil_tuple_add(tuple_, const_cast<char*>(element.c_str()));
+                }
 
-            /**
-             * @brief Removes the element at the specified index from the Tuple.
-             * 
-             * @param index The index of the element to remove.
-             */
-            void remove(size_t index) {
-                fossil_tuple_remove(tuple_, index);
-            }
+                /**
+                 * @brief Removes the element at the specified index from the Tuple.
+                 * 
+                 * @param index The index of the element to remove.
+                 */
+                void remove(size_t index) {
+                    fossil_tuple_remove(tuple_, index);
+                }
 
-            /**
-             * @brief Gets the number of elements in the Tuple.
-             * 
-             * @return The number of elements in the Tuple.
-             */
-            size_t size() const {
-                return fossil_tuple_size(tuple_);
-            }
+                /**
+                 * @brief Gets the number of elements in the Tuple.
+                 * 
+                 * @return The number of elements in the Tuple.
+                 */
+                size_t size() const {
+                    return fossil_tuple_size(tuple_);
+                }
 
-            /**
-             * @brief Gets the capacity of the Tuple.
-             * 
-             * @return The capacity of the Tuple.
-             */
-            size_t capacity() const {
-                return fossil_tuple_capacity(tuple_);
-            }
+                /**
+                 * @brief Gets the capacity of the Tuple.
+                 * 
+                 * @return The capacity of the Tuple.
+                 */
+                size_t capacity() const {
+                    return fossil_tuple_capacity(tuple_);
+                }
 
-            /**
-             * @brief Checks if the Tuple is empty.
-             * 
-             * @return true if the Tuple is empty, false otherwise.
-             */
-            bool is_empty() const {
-                return fossil_tuple_is_empty(tuple_);
-            }
+                /**
+                 * @brief Checks if the Tuple is empty.
+                 * 
+                 * @return true if the Tuple is empty, false otherwise.
+                 */
+                bool is_empty() const {
+                    return fossil_tuple_is_empty(tuple_);
+                }
 
-            /**
-             * @brief Clears all elements from the Tuple.
-             */
-            void clear() {
-                fossil_tuple_clear(tuple_);
-            }
+                /**
+                 * @brief Clears all elements from the Tuple.
+                 */
+                void clear() {
+                    fossil_tuple_clear(tuple_);
+                }
 
-            /**
-             * @brief Gets the element at the specified index in the Tuple.
-             * 
-             * @param index The index of the element to get.
-             * @return The element at the specified index.
-             */
-            std::string get(size_t index) const {
-                char* result = fossil_tuple_get(tuple_, index);
-                return result ? std::string(result) : std::string();
-            }
+                /**
+                 * @brief Gets the element at the specified index in the Tuple.
+                 * 
+                 * @param index The index of the element to get.
+                 * @return The element at the specified index.
+                 */
+                std::string get(size_t index) const {
+                    char* result = fossil_tuple_get(tuple_, index);
+                    return result ? std::string(result) : std::string();
+                }
 
-            /**
-             * @brief Gets the first element in the Tuple.
-             * 
-             * @return The first element in the Tuple.
-             */
-            std::string get_front() const {
-                char* result = fossil_tuple_get_front(tuple_);
-                return result ? std::string(result) : std::string();
-            }
+                /**
+                 * @brief Gets the first element in the Tuple.
+                 * 
+                 * @return The first element in the Tuple.
+                 */
+                std::string get_front() const {
+                    char* result = fossil_tuple_get_front(tuple_);
+                    return result ? std::string(result) : std::string();
+                }
 
-            /**
-             * @brief Gets the last element in the Tuple.
-             * 
-             * @return The last element in the Tuple.
-             */
-            std::string get_back() const {
-                char* result = fossil_tuple_get_back(tuple_);
-                return result ? std::string(result) : std::string();
-            }
+                /**
+                 * @brief Gets the last element in the Tuple.
+                 * 
+                 * @return The last element in the Tuple.
+                 */
+                std::string get_back() const {
+                    char* result = fossil_tuple_get_back(tuple_);
+                    return result ? std::string(result) : std::string();
+                }
 
-            /**
-             * @brief Sets the element at the specified index in the Tuple.
-             * 
-             * @param index The index at which to set the element.
-             * @param element The element to set.
-             */
-            void set(size_t index, const std::string& element) {
-                fossil_tuple_set(tuple_, index, const_cast<char*>(element.c_str()));
-            }
+                /**
+                 * @brief Sets the element at the specified index in the Tuple.
+                 * 
+                 * @param index The index at which to set the element.
+                 * @param element The element to set.
+                 */
+                void set(size_t index, const std::string& element) {
+                    fossil_tuple_set(tuple_, index, const_cast<char*>(element.c_str()));
+                }
 
-            /**
-             * @brief Sets the first element in the Tuple.
-             * 
-             * @param element The element to set.
-             */
-            void set_front(const std::string& element) {
-                fossil_tuple_set_front(tuple_, const_cast<char*>(element.c_str()));
-            }
+                /**
+                 * @brief Sets the first element in the Tuple.
+                 * 
+                 * @param element The element to set.
+                 */
+                void set_front(const std::string& element) {
+                    fossil_tuple_set_front(tuple_, const_cast<char*>(element.c_str()));
+                }
 
-            /**
-             * @brief Sets the last element in the Tuple.
-             * 
-             * @param element The element to set.
-             */
-            void set_back(const std::string& element) {
-                fossil_tuple_set_back(tuple_, const_cast<char*>(element.c_str()));
-            }
+                /**
+                 * @brief Sets the last element in the Tuple.
+                 * 
+                 * @param element The element to set.
+                 */
+                void set_back(const std::string& element) {
+                    fossil_tuple_set_back(tuple_, const_cast<char*>(element.c_str()));
+                }
 
-        private:
-            fossil_tuple_t* tuple_; /**< Pointer to the underlying fossil_tuple_t structure. */
-    };
+            private:
+                fossil_tuple_t* tuple_; /**< Pointer to the underlying fossil_tuple_t structure. */
+        };
 
-} // namespace tofu
+    } // namespace tofu
 
 } // namespace fossil
 

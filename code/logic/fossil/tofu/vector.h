@@ -321,227 +321,227 @@ void fossil_vector_set_at(fossil_vector_t* vector, size_t index, char *element);
 
 namespace fossil {
 
-namespace tofu {
+    namespace tofu {
 
-    /**
-     * A wrapper class for the fossil_vector_t structure, providing a C++ interface
-     * for managing dynamic arrays of elements.
-     */
-    class Vector {
-    public:
         /**
-         * Default constructor. Creates a new vector with default values.
-         * Throws a runtime_error if the vector creation fails.
+         * A wrapper class for the fossil_vector_t structure, providing a C++ interface
+         * for managing dynamic arrays of elements.
          */
-        Vector() : vector(fossil_vector_create_default()) {
-            if (fossil_vector_is_cnullptr(vector)) {
-                throw std::runtime_error("Failed to create vector");
+        class Vector {
+        public:
+            /**
+             * Default constructor. Creates a new vector with default values.
+             * Throws a runtime_error if the vector creation fails.
+             */
+            Vector() : vector(fossil_vector_create_default()) {
+                if (fossil_vector_is_cnullptr(vector)) {
+                    throw std::runtime_error("Failed to create vector");
+                }
             }
-        }
 
-        /**
-         * Constructor that creates a new vector with the specified type.
-         * Throws a runtime_error if the vector creation fails.
-         *
-         * @param type The expected type of elements in the vector.
-         */
-        Vector(const std::string& type) : vector(fossil_vector_create_container(const_cast<char*>(type.c_str()))) {
-            if (fossil_vector_is_cnullptr(vector)) {
-                throw std::runtime_error("Failed to create vector");
+            /**
+             * Constructor that creates a new vector with the specified type.
+             * Throws a runtime_error if the vector creation fails.
+             *
+             * @param type The expected type of elements in the vector.
+             */
+            Vector(const std::string& type) : vector(fossil_vector_create_container(const_cast<char*>(type.c_str()))) {
+                if (fossil_vector_is_cnullptr(vector)) {
+                    throw std::runtime_error("Failed to create vector");
+                }
             }
-        }
 
-        /**
-         * Copy constructor. Creates a new vector by copying an existing vector.
-         * Throws a runtime_error if the vector creation fails.
-         *
-         * @param other The vector to copy.
-         */
-        Vector(const Vector& other) : vector(fossil_vector_create_copy(other.vector)) {
-            if (fossil_vector_is_cnullptr(vector)) {
-                throw std::runtime_error("Failed to create vector");
+            /**
+             * Copy constructor. Creates a new vector by copying an existing vector.
+             * Throws a runtime_error if the vector creation fails.
+             *
+             * @param other The vector to copy.
+             */
+            Vector(const Vector& other) : vector(fossil_vector_create_copy(other.vector)) {
+                if (fossil_vector_is_cnullptr(vector)) {
+                    throw std::runtime_error("Failed to create vector");
+                }
             }
-        }
 
-        /**
-         * Move constructor. Creates a new vector by moving an existing vector.
-         * Does not throw exceptions.
-         *
-         * @param other The vector to move.
-         */
-        Vector(Vector&& other) noexcept : vector(fossil_vector_create_move(other.vector)) {
-            other.vector = nullptr;
-        }
-
-        /**
-         * Destructor. Destroys the vector and frees allocated memory.
-         */
-        ~Vector() {
-            if (vector) {
-                fossil_vector_destroy(vector);
+            /**
+             * Move constructor. Creates a new vector by moving an existing vector.
+             * Does not throw exceptions.
+             *
+             * @param other The vector to move.
+             */
+            Vector(Vector&& other) noexcept : vector(fossil_vector_create_move(other.vector)) {
+                other.vector = nullptr;
             }
-        }
 
-        /**
-         * Adds an element to the end of the vector.
-         *
-         * @param element The element to add.
-         */
-        void push_back(const std::string& element) {
-            fossil_vector_push_back(vector, const_cast<char*>(element.c_str()));
-        }
+            /**
+             * Destructor. Destroys the vector and frees allocated memory.
+             */
+            ~Vector() {
+                if (vector) {
+                    fossil_vector_destroy(vector);
+                }
+            }
 
-        /**
-         * Adds an element to the front of the vector.
-         *
-         * @param element The element to add.
-         */
-        void push_front(const std::string& element) {
-            fossil_vector_push_front(vector, const_cast<char*>(element.c_str()));
-        }
+            /**
+             * Adds an element to the end of the vector.
+             *
+             * @param element The element to add.
+             */
+            void push_back(const std::string& element) {
+                fossil_vector_push_back(vector, const_cast<char*>(element.c_str()));
+            }
 
-        /**
-         * Adds an element at the specified index in the vector.
-         *
-         * @param index   The index at which to add the element.
-         * @param element The element to add.
-         */
-        void push_at(size_t index, const std::string& element) {
-            fossil_vector_push_at(vector, index, const_cast<char*>(element.c_str()));
-        }
+            /**
+             * Adds an element to the front of the vector.
+             *
+             * @param element The element to add.
+             */
+            void push_front(const std::string& element) {
+                fossil_vector_push_front(vector, const_cast<char*>(element.c_str()));
+            }
 
-        /**
-         * Removes the last element from the vector.
-         */
-        void pop_back() {
-            fossil_vector_pop_back(vector);
-        }
+            /**
+             * Adds an element at the specified index in the vector.
+             *
+             * @param index   The index at which to add the element.
+             * @param element The element to add.
+             */
+            void push_at(size_t index, const std::string& element) {
+                fossil_vector_push_at(vector, index, const_cast<char*>(element.c_str()));
+            }
 
-        /**
-         * Removes the first element from the vector.
-         */
-        void pop_front() {
-            fossil_vector_pop_front(vector);
-        }
+            /**
+             * Removes the last element from the vector.
+             */
+            void pop_back() {
+                fossil_vector_pop_back(vector);
+            }
 
-        /**
-         * Removes the element at the specified index in the vector.
-         *
-         * @param index The index at which to remove the element.
-         */
-        void pop_at(size_t index) {
-            fossil_vector_pop_at(vector, index);
-        }
+            /**
+             * Removes the first element from the vector.
+             */
+            void pop_front() {
+                fossil_vector_pop_front(vector);
+            }
 
-        /**
-         * Removes all elements from the vector.
-         */
-        void erase() {
-            fossil_vector_erase(vector);
-        }
+            /**
+             * Removes the element at the specified index in the vector.
+             *
+             * @param index The index at which to remove the element.
+             */
+            void pop_at(size_t index) {
+                fossil_vector_pop_at(vector, index);
+            }
 
-        /**
-         * Checks if the vector is empty.
-         *
-         * @return True if the vector is empty, false otherwise.
-         */
-        bool is_empty() const {
-            return fossil_vector_is_empty(vector);
-        }
+            /**
+             * Removes all elements from the vector.
+             */
+            void erase() {
+                fossil_vector_erase(vector);
+            }
 
-        /**
-         * Gets the size of the vector.
-         *
-         * @return The size of the vector.
-         */
-        size_t size() const {
-            return fossil_vector_size(vector);
-        }
+            /**
+             * Checks if the vector is empty.
+             *
+             * @return True if the vector is empty, false otherwise.
+             */
+            bool is_empty() const {
+                return fossil_vector_is_empty(vector);
+            }
 
-        /**
-         * Gets the element at the specified index in the vector.
-         *
-         * @param index The index of the element to get.
-         * @return      The element at the specified index.
-         */
-        std::string get(size_t index) const {
-            return std::string(fossil_vector_get(vector, index));
-        }
+            /**
+             * Gets the size of the vector.
+             *
+             * @return The size of the vector.
+             */
+            size_t size() const {
+                return fossil_vector_size(vector);
+            }
 
-        /**
-         * Gets the first element in the vector.
-         *
-         * @return The first element in the vector.
-         */
-        std::string get_front() const {
-            return std::string(fossil_vector_get_front(vector));
-        }
+            /**
+             * Gets the element at the specified index in the vector.
+             *
+             * @param index The index of the element to get.
+             * @return      The element at the specified index.
+             */
+            std::string get(size_t index) const {
+                return std::string(fossil_vector_get(vector, index));
+            }
 
-        /**
-         * Gets the last element in the vector.
-         *
-         * @return The last element in the vector.
-         */
-        std::string get_back() const {
-            return std::string(fossil_vector_get_back(vector));
-        }
+            /**
+             * Gets the first element in the vector.
+             *
+             * @return The first element in the vector.
+             */
+            std::string get_front() const {
+                return std::string(fossil_vector_get_front(vector));
+            }
 
-        /**
-         * Gets the element at the specified index in the vector.
-         *
-         * @param index The index of the element to get.
-         * @return      The element at the specified index.
-         */
-        std::string get_at(size_t index) const {
-            return std::string(fossil_vector_get_at(vector, index));
-        }
+            /**
+             * Gets the last element in the vector.
+             *
+             * @return The last element in the vector.
+             */
+            std::string get_back() const {
+                return std::string(fossil_vector_get_back(vector));
+            }
 
-        /**
-         * Sets the element at the specified index in the vector.
-         *
-         * @param index   The index at which to set the element.
-         * @param element The element to set.
-         */
-        void set(size_t index, const std::string& element) {
-            fossil_vector_set(vector, index, const_cast<char*>(element.c_str()));
-        }
+            /**
+             * Gets the element at the specified index in the vector.
+             *
+             * @param index The index of the element to get.
+             * @return      The element at the specified index.
+             */
+            std::string get_at(size_t index) const {
+                return std::string(fossil_vector_get_at(vector, index));
+            }
 
-        /**
-         * Sets the first element in the vector.
-         *
-         * @param element The element to set.
-         */
-        void set_front(const std::string& element) {
-            fossil_vector_set_front(vector, const_cast<char*>(element.c_str()));
-        }
+            /**
+             * Sets the element at the specified index in the vector.
+             *
+             * @param index   The index at which to set the element.
+             * @param element The element to set.
+             */
+            void set(size_t index, const std::string& element) {
+                fossil_vector_set(vector, index, const_cast<char*>(element.c_str()));
+            }
 
-        /**
-         * Sets the last element in the vector.
-         *
-         * @param element The element to set.
-         */
-        void set_back(const std::string& element) {
-            fossil_vector_set_back(vector, const_cast<char*>(element.c_str()));
-        }
+            /**
+             * Sets the first element in the vector.
+             *
+             * @param element The element to set.
+             */
+            void set_front(const std::string& element) {
+                fossil_vector_set_front(vector, const_cast<char*>(element.c_str()));
+            }
 
-        /**
-         * Sets the element at the specified index in the vector.
-         *
-         * @param index   The index at which to set the element.
-         * @param element The element to set.
-         */
-        void set_at(size_t index, const std::string& element) {
-            fossil_vector_set_at(vector, index, const_cast<char*>(element.c_str()));
-        }
+            /**
+             * Sets the last element in the vector.
+             *
+             * @param element The element to set.
+             */
+            void set_back(const std::string& element) {
+                fossil_vector_set_back(vector, const_cast<char*>(element.c_str()));
+            }
 
-    private:
-        /**
-         * A pointer to the underlying fossil_vector_t structure.
-         */
-        fossil_vector_t* vector;
-    };
+            /**
+             * Sets the element at the specified index in the vector.
+             *
+             * @param index   The index at which to set the element.
+             * @param element The element to set.
+             */
+            void set_at(size_t index, const std::string& element) {
+                fossil_vector_set_at(vector, index, const_cast<char*>(element.c_str()));
+            }
 
-} // namespace tofu
+        private:
+            /**
+             * A pointer to the underlying fossil_vector_t structure.
+             */
+            fossil_vector_t* vector;
+        };
+
+    } // namespace tofu
 
 } // namespace fossil
 

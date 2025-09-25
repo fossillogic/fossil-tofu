@@ -64,35 +64,32 @@ fossil_dqueue_t* fossil_dqueue_create_container(char* type);
 
 /**
  * Create a new double-ended queue with default values.
- * 
- * Time complexity: O(1)
  *
  * @return The created double-ended queue.
+ * @note   Time complexity: O(1)
  */
 fossil_dqueue_t* fossil_dqueue_create_default(void);
 
 /**
  * Create a new double-ended queue by copying an existing queue.
- * 
- * Time complexity: O(n)
  *
  * @param other The queue to copy.
  * @return      The created double-ended queue.
+ * @note        Time complexity: O(n)
  */
 fossil_dqueue_t* fossil_dqueue_create_copy(const fossil_dqueue_t* other);
 
 /**
  * Create a new double-ended queue by moving an existing queue.
- * 
- * Time complexity: O(1)
  *
  * @param other The queue to move.
  * @return      The created double-ended queue.
+ * @note        Time complexity: O(1)
  */
 fossil_dqueue_t* fossil_dqueue_create_move(fossil_dqueue_t* other);
 
 /**
- * Erase the contents of the dynamic queue and fossil_tofu_free allocated memory.
+ * Erase the contents of the dynamic queue and free allocated memory.
  *
  * @param dqueue The dynamic queue to erase.
  * @note         Time complexity: O(n)
@@ -173,63 +170,57 @@ bool fossil_dqueue_is_cnullptr(const fossil_dqueue_t* dqueue);
 
 /**
  * Get the element at the specified index in the double-ended queue.
- * 
- * Time complexity: O(n)
  *
  * @param dqueue The double-ended queue from which to get the element.
  * @param index  The index of the element to get.
  * @return       The element at the specified index.
+ * @note         Time complexity: O(n)
  */
 char *fossil_dqueue_get(const fossil_dqueue_t* dqueue, size_t index);
 
 /**
  * Get the first element in the double-ended queue.
- * 
- * Time complexity: O(1)
  *
  * @param dqueue The double-ended queue from which to get the first element.
  * @return       The first element in the double-ended queue.
+ * @note         Time complexity: O(1)
  */
 char *fossil_dqueue_get_front(const fossil_dqueue_t* dqueue);
 
 /**
  * Get the last element in the double-ended queue.
- * 
- * Time complexity: O(1)
  *
  * @param dqueue The double-ended queue from which to get the last element.
  * @return       The last element in the double-ended queue.
+ * @note         Time complexity: O(1)
  */
 char *fossil_dqueue_get_back(const fossil_dqueue_t* dqueue);
 
 /**
  * Set the element at the specified index in the double-ended queue.
- * 
- * Time complexity: O(n)
  *
  * @param dqueue  The double-ended queue in which to set the element.
  * @param index   The index at which to set the element.
  * @param element The element to set.
+ * @note         Time complexity: O(n)
  */
 void fossil_dqueue_set(fossil_dqueue_t* dqueue, size_t index, char *element);
 
 /**
  * Set the first element in the double-ended queue.
- * 
- * Time complexity: O(1)
  *
  * @param dqueue  The double-ended queue in which to set the first element.
  * @param element The element to set.
+ * @note         Time complexity: O(1)
  */
 void fossil_dqueue_set_front(fossil_dqueue_t* dqueue, char *element);
 
 /**
  * Set the last element in the double-ended queue.
- * 
- * Time complexity: O(1)
  *
  * @param dqueue  The double-ended queue in which to set the last element.
  * @param element The element to set.
+ * @note         Time complexity: O(1)
  */
 void fossil_dqueue_set_back(fossil_dqueue_t* dqueue, char *element);
 
@@ -240,237 +231,237 @@ void fossil_dqueue_set_back(fossil_dqueue_t* dqueue, char *element);
 
 namespace fossil {
 
-namespace tofu {
+    namespace tofu {
 
-    /**
-     * A C++ wrapper class for the C-style double-ended queue (fossil_dqueue_t).
-     * Provides a more user-friendly interface for managing the queue.
-     */
-    class DQueue {
-    public:
         /**
-         * Constructor with a specified data type.
-         * Creates a new double-ended queue with the specified data type.
-         * 
-         * @param type The type of data the double-ended queue will store.
-         * @throws std::runtime_error if the queue creation fails.
+         * A C++ wrapper class for the C-style double-ended queue (fossil_dqueue_t).
+         * Provides a more user-friendly interface for managing the queue.
          */
-        DQueue(const std::string& type) : dqueue(fossil_dqueue_create_container(const_cast<char*>(type.c_str()))) {
-            if (dqueue == nullptr) {
-                throw std::runtime_error("Failed to create a new double-ended queue with type: " + type);
+        class DQueue {
+        public:
+            /**
+             * Constructor with a specified data type.
+             * Creates a new double-ended queue with the specified data type.
+             * 
+             * @param type The type of data the double-ended queue will store.
+             * @throws std::runtime_error if the queue creation fails.
+             */
+            DQueue(const std::string& type) : dqueue(fossil_dqueue_create_container(const_cast<char*>(type.c_str()))) {
+                if (dqueue == nullptr) {
+                    throw std::runtime_error("Failed to create a new double-ended queue with type: " + type);
+                }
             }
-        }
 
-        /**
-         * Default constructor.
-         * Creates a new double-ended queue with default values.
-         * 
-         * @throws std::runtime_error if the queue creation fails.
-         */
-        DQueue() : dqueue(fossil_dqueue_create_default()) {
-            if (dqueue == nullptr) {
-                throw std::runtime_error("Failed to create a new double-ended queue.");
+            /**
+             * Default constructor.
+             * Creates a new double-ended queue with default values.
+             * 
+             * @throws std::runtime_error if the queue creation fails.
+             */
+            DQueue() : dqueue(fossil_dqueue_create_default()) {
+                if (dqueue == nullptr) {
+                    throw std::runtime_error("Failed to create a new double-ended queue.");
+                }
             }
-        }
 
-        /**
-         * Copy constructor.
-         * Creates a new double-ended queue by copying an existing queue.
-         * 
-         * @param other The queue to copy.
-         * @throws std::runtime_error if the queue copy operation fails.
-         */
-        DQueue(const DQueue& other) : dqueue(fossil_dqueue_create_copy(other.dqueue)) {
-            if (dqueue == nullptr) {
-                throw std::runtime_error("Failed to create a new double-ended queue by copying an existing queue.");
-            }
-        }
-
-        /**
-         * Move constructor.
-         * Creates a new double-ended queue by moving an existing queue.
-         * 
-         * @param other The queue to move.
-         */
-        DQueue(DQueue&& other) noexcept {
-            dqueue = fossil_dqueue_create_move(other.dqueue);
-        }
-
-        /**
-         * Destructor.
-         * Destroys the double-ended queue and frees allocated memory.
-         */
-        ~DQueue() {
-            fossil_dqueue_destroy(dqueue);
-        }
-
-        /**
-         * Copy assignment operator.
-         * Copies the contents of another queue into this queue.
-         * 
-         * @param other The queue to copy.
-         * @return A reference to this queue.
-         * @throws std::runtime_error if the queue copy operation fails.
-         */
-        DQueue& operator=(const DQueue& other) {
-            if (this != &other) {
-                fossil_dqueue_destroy(dqueue);
-                dqueue = fossil_dqueue_create_copy(other.dqueue);
+            /**
+             * Copy constructor.
+             * Creates a new double-ended queue by copying an existing queue.
+             * 
+             * @param other The queue to copy.
+             * @throws std::runtime_error if the queue copy operation fails.
+             */
+            DQueue(const DQueue& other) : dqueue(fossil_dqueue_create_copy(other.dqueue)) {
                 if (dqueue == nullptr) {
                     throw std::runtime_error("Failed to create a new double-ended queue by copying an existing queue.");
                 }
             }
-            return *this;
-        }
 
-        /**
-         * Move assignment operator.
-         * Moves the contents of another queue into this queue.
-         * 
-         * @param other The queue to move.
-         * @return A reference to this queue.
-         */
-        DQueue& operator=(DQueue&& other) noexcept {
-            if (this != &other) {
+            /**
+             * Move constructor.
+             * Creates a new double-ended queue by moving an existing queue.
+             * 
+             * @param other The queue to move.
+             */
+            DQueue(DQueue&& other) noexcept {
+                dqueue = fossil_dqueue_create_move(other.dqueue);
+            }
+
+            /**
+             * Destructor.
+             * Destroys the double-ended queue and frees allocated memory.
+             */
+            ~DQueue() {
                 fossil_dqueue_destroy(dqueue);
-                dqueue = other.dqueue;
-                other.dqueue = nullptr; // Prevent double free
             }
-            return *this;
-        }
 
-        /**
-         * Inserts data into the queue.
-         * 
-         * @param data The data to insert.
-         * @throws std::runtime_error if the insertion fails.
-         */
-        void insert(const std::string& data) {
-            if (fossil_dqueue_insert(dqueue, const_cast<char*>(data.c_str())) != 0) {
-                throw std::runtime_error("Failed to insert data into the double-ended queue.");
+            /**
+             * Copy assignment operator.
+             * Copies the contents of another queue into this queue.
+             * 
+             * @param other The queue to copy.
+             * @return A reference to this queue.
+             * @throws std::runtime_error if the queue copy operation fails.
+             */
+            DQueue& operator=(const DQueue& other) {
+                if (this != &other) {
+                    fossil_dqueue_destroy(dqueue);
+                    dqueue = fossil_dqueue_create_copy(other.dqueue);
+                    if (dqueue == nullptr) {
+                        throw std::runtime_error("Failed to create a new double-ended queue by copying an existing queue.");
+                    }
+                }
+                return *this;
             }
-        }
 
-        /**
-         * Removes data from the queue.
-         * 
-         * @throws std::runtime_error if the removal fails.
-         */
-        void remove() {
-            if (fossil_dqueue_remove(dqueue) != 0) {
-                throw std::runtime_error("Failed to remove data from the double-ended queue.");
+            /**
+             * Move assignment operator.
+             * Moves the contents of another queue into this queue.
+             * 
+             * @param other The queue to move.
+             * @return A reference to this queue.
+             */
+            DQueue& operator=(DQueue&& other) noexcept {
+                if (this != &other) {
+                    fossil_dqueue_destroy(dqueue);
+                    dqueue = other.dqueue;
+                    other.dqueue = nullptr; // Prevent double free
+                }
+                return *this;
             }
-        }
 
-        /**
-         * Gets the size of the queue.
-         * 
-         * @return The size of the queue.
-         */
-        size_t size() const {
-            return fossil_dqueue_size(dqueue);
-        }
+            /**
+             * Inserts data into the queue.
+             * 
+             * @param data The data to insert.
+             * @throws std::runtime_error if the insertion fails.
+             */
+            void insert(const std::string& data) {
+                if (fossil_dqueue_insert(dqueue, const_cast<char*>(data.c_str())) != 0) {
+                    throw std::runtime_error("Failed to insert data into the double-ended queue.");
+                }
+            }
 
-        /**
-         * Checks if the queue is not empty.
-         * 
-         * @return True if the queue is not empty, false otherwise.
-         */
-        bool not_empty() const {
-            return fossil_dqueue_not_empty(dqueue);
-        }
+            /**
+             * Removes data from the queue.
+             * 
+             * @throws std::runtime_error if the removal fails.
+             */
+            void remove() {
+                if (fossil_dqueue_remove(dqueue) != 0) {
+                    throw std::runtime_error("Failed to remove data from the double-ended queue.");
+                }
+            }
 
-        /**
-         * Checks if the queue is not a null pointer.
-         * 
-         * @return True if the queue is not a null pointer, false otherwise.
-         */
-        bool not_cnullptr() const {
-            return fossil_dqueue_not_cnullptr(dqueue);
-        }
+            /**
+             * Gets the size of the queue.
+             * 
+             * @return The size of the queue.
+             */
+            size_t size() const {
+                return fossil_dqueue_size(dqueue);
+            }
 
-        /**
-         * Checks if the queue is empty.
-         * 
-         * @return True if the queue is empty, false otherwise.
-         */
-        bool is_empty() const {
-            return fossil_dqueue_is_empty(dqueue);
-        }
+            /**
+             * Checks if the queue is not empty.
+             * 
+             * @return True if the queue is not empty, false otherwise.
+             */
+            bool not_empty() const {
+                return fossil_dqueue_not_empty(dqueue);
+            }
 
-        /**
-         * Checks if the queue is a null pointer.
-         * 
-         * @return True if the queue is a null pointer, false otherwise.
-         */
-        bool is_cnullptr() const {
-            return fossil_dqueue_is_cnullptr(dqueue);
-        }
+            /**
+             * Checks if the queue is not a null pointer.
+             * 
+             * @return True if the queue is not a null pointer, false otherwise.
+             */
+            bool not_cnullptr() const {
+                return fossil_dqueue_not_cnullptr(dqueue);
+            }
 
-        /**
-         * Gets the element at the specified index in the queue.
-         * 
-         * @param index The index of the element to get.
-         * @return The element at the specified index as std::string.
-         */
-        std::string get(size_t index) const {
-            char* result = fossil_dqueue_get(dqueue, index);
-            return result ? std::string(result) : std::string();
-        }
+            /**
+             * Checks if the queue is empty.
+             * 
+             * @return True if the queue is empty, false otherwise.
+             */
+            bool is_empty() const {
+                return fossil_dqueue_is_empty(dqueue);
+            }
 
-        /**
-         * Gets the first element in the queue.
-         * 
-         * @return The first element in the queue as std::string.
-         */
-        std::string get_front() const {
-            char* result = fossil_dqueue_get_front(dqueue);
-            return result ? std::string(result) : std::string();
-        }
+            /**
+             * Checks if the queue is a null pointer.
+             * 
+             * @return True if the queue is a null pointer, false otherwise.
+             */
+            bool is_cnullptr() const {
+                return fossil_dqueue_is_cnullptr(dqueue);
+            }
 
-        /**
-         * Gets the last element in the queue.
-         * 
-         * @return The last element in the queue as std::string.
-         */
-        std::string get_back() const {
-            char* result = fossil_dqueue_get_back(dqueue);
-            return result ? std::string(result) : std::string();
-        }
+            /**
+             * Gets the element at the specified index in the queue.
+             * 
+             * @param index The index of the element to get.
+             * @return The element at the specified index as std::string.
+             */
+            std::string get(size_t index) const {
+                char* result = fossil_dqueue_get(dqueue, index);
+                return result ? std::string(result) : std::string();
+            }
 
-        /**
-         * Sets the element at the specified index in the queue.
-         * 
-         * @param index   The index at which to set the element.
-         * @param element The element to set as std::string.
-         */
-        void set(size_t index, const std::string& element) {
-            fossil_dqueue_set(dqueue, index, const_cast<char*>(element.c_str()));
-        }
+            /**
+             * Gets the first element in the queue.
+             * 
+             * @return The first element in the queue as std::string.
+             */
+            std::string get_front() const {
+                char* result = fossil_dqueue_get_front(dqueue);
+                return result ? std::string(result) : std::string();
+            }
 
-        /**
-         * Sets the first element in the queue.
-         * 
-         * @param element The element to set as std::string.
-         */
-        void set_front(const std::string& element) {
-            fossil_dqueue_set_front(dqueue, const_cast<char*>(element.c_str()));
-        }
+            /**
+             * Gets the last element in the queue.
+             * 
+             * @return The last element in the queue as std::string.
+             */
+            std::string get_back() const {
+                char* result = fossil_dqueue_get_back(dqueue);
+                return result ? std::string(result) : std::string();
+            }
 
-        /**
-         * Sets the last element in the queue.
-         * 
-         * @param element The element to set as std::string.
-         */
-        void set_back(const std::string& element) {
-            fossil_dqueue_set_back(dqueue, const_cast<char*>(element.c_str()));
-        }
+            /**
+             * Sets the element at the specified index in the queue.
+             * 
+             * @param index   The index at which to set the element.
+             * @param element The element to set as std::string.
+             */
+            void set(size_t index, const std::string& element) {
+                fossil_dqueue_set(dqueue, index, const_cast<char*>(element.c_str()));
+            }
 
-    private:
-        fossil_dqueue_t* dqueue; /**< Pointer to the underlying C-style double-ended queue. */
-    };
+            /**
+             * Sets the first element in the queue.
+             * 
+             * @param element The element to set as std::string.
+             */
+            void set_front(const std::string& element) {
+                fossil_dqueue_set_front(dqueue, const_cast<char*>(element.c_str()));
+            }
 
-} // namespace tofu
+            /**
+             * Sets the last element in the queue.
+             * 
+             * @param element The element to set as std::string.
+             */
+            void set_back(const std::string& element) {
+                fossil_dqueue_set_back(dqueue, const_cast<char*>(element.c_str()));
+            }
+
+        private:
+            fossil_dqueue_t* dqueue; /**< Pointer to the underlying C-style double-ended queue. */
+        };
+
+    } // namespace tofu
 
 } // namespace fossil
 

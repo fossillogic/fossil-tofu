@@ -177,151 +177,151 @@ bool fossil_mapof_is_empty(const fossil_mapof_t* map);
 
 namespace fossil {
 
-namespace tofu {
-
-    /**
-     * @brief A C++ wrapper class for the fossil_mapof_t structure.
-     */
-    class MapOf {
-    public:
-        /**
-         * @brief Construct a new MapOf object with specified key and value types.
-         *
-         * @param key_type The type of the keys.
-         * @param value_type The type of the values.
-         */
-        MapOf(const std::string& key_type, const std::string& value_type) {
-            map = fossil_mapof_create_container(const_cast<char*>(key_type.c_str()), const_cast<char*>(value_type.c_str()));
-            if (map == nullptr) {
-            throw std::runtime_error("Failed to create map container");
-            }
-        }
+    namespace tofu {
 
         /**
-         * @brief Construct a new MapOf object with default key and value types.
+         * @brief A C++ wrapper class for the fossil_mapof_t structure.
          */
-        MapOf() {
-            map = fossil_mapof_create_default();
-            if (map == nullptr) {
+        class MapOf {
+        public:
+            /**
+             * @brief Construct a new MapOf object with specified key and value types.
+             *
+             * @param key_type The type of the keys.
+             * @param value_type The type of the values.
+             */
+            MapOf(const std::string& key_type, const std::string& value_type) {
+                map = fossil_mapof_create_container(const_cast<char*>(key_type.c_str()), const_cast<char*>(value_type.c_str()));
+                if (map == nullptr) {
                 throw std::runtime_error("Failed to create map container");
+                }
             }
-        }
 
-        /**
-         * @brief Construct a new MapOf object by copying an existing MapOf object.
-         *
-         * @param other The MapOf object to copy.
-         */
-        MapOf(const MapOf& other) {
-            map = fossil_mapof_create_copy(other.map);
-            if (map == nullptr) {
-                throw std::runtime_error("Failed to create map container");
+            /**
+             * @brief Construct a new MapOf object with default key and value types.
+             */
+            MapOf() {
+                map = fossil_mapof_create_default();
+                if (map == nullptr) {
+                    throw std::runtime_error("Failed to create map container");
+                }
             }
-        }
 
-        /**
-         * @brief Construct a new MapOf object by moving an existing MapOf object.
-         *
-         * @param other The MapOf object to move.
-         */
-        MapOf(MapOf&& other) {
-            map = fossil_mapof_create_move(other.map);
-            if (map == nullptr) {
-                throw std::runtime_error("Failed to create map container");
+            /**
+             * @brief Construct a new MapOf object by copying an existing MapOf object.
+             *
+             * @param other The MapOf object to copy.
+             */
+            MapOf(const MapOf& other) {
+                map = fossil_mapof_create_copy(other.map);
+                if (map == nullptr) {
+                    throw std::runtime_error("Failed to create map container");
+                }
             }
-        }
 
-        /**
-         * @brief Destroy the MapOf object and free its memory.
-         */
-        ~MapOf() {
-            fossil_mapof_destroy(map);
-        }
+            /**
+             * @brief Construct a new MapOf object by moving an existing MapOf object.
+             *
+             * @param other The MapOf object to move.
+             */
+            MapOf(MapOf&& other) {
+                map = fossil_mapof_create_move(other.map);
+                if (map == nullptr) {
+                    throw std::runtime_error("Failed to create map container");
+                }
+            }
 
-        /**
-         * @brief Insert a key-value pair into the map.
-         *
-         * @param key The key to insert.
-         * @param value The value to insert.
-         * @return 0 on success, non-zero on failure.
-         */
-        int32_t insert(const std::string& key, const std::string& value) {
-            return fossil_mapof_insert(map, const_cast<char*>(key.c_str()), const_cast<char*>(value.c_str()));
-        }
+            /**
+             * @brief Destroy the MapOf object and free its memory.
+             */
+            ~MapOf() {
+                fossil_mapof_destroy(map);
+            }
 
-        /**
-         * @brief Remove a key-value pair from the map.
-         *
-         * @param key The key to remove.
-         * @return 0 on success, non-zero on failure.
-         */
-        int32_t remove(const std::string& key) {
-            return fossil_mapof_remove(map, const_cast<char*>(key.c_str()));
-        }
+            /**
+             * @brief Insert a key-value pair into the map.
+             *
+             * @param key The key to insert.
+             * @param value The value to insert.
+             * @return 0 on success, non-zero on failure.
+             */
+            int32_t insert(const std::string& key, const std::string& value) {
+                return fossil_mapof_insert(map, const_cast<char*>(key.c_str()), const_cast<char*>(value.c_str()));
+            }
 
-        /**
-         * @brief Check if the map contains a key.
-         *
-         * @param key The key to check.
-         * @return True if the key is found, false otherwise.
-         */
-        bool contains(const std::string& key) {
-            return fossil_mapof_contains(map, const_cast<char*>(key.c_str()));
-        }
+            /**
+             * @brief Remove a key-value pair from the map.
+             *
+             * @param key The key to remove.
+             * @return 0 on success, non-zero on failure.
+             */
+            int32_t remove(const std::string& key) {
+                return fossil_mapof_remove(map, const_cast<char*>(key.c_str()));
+            }
 
-        /**
-         * @brief Get the value associated with a key in the map.
-         *
-         * @param key The key to look up.
-         * @return The value associated with the key.
-         */
-        fossil_tofu_t get(const std::string& key) {
-            return fossil_mapof_get(map, const_cast<char*>(key.c_str()));
-        }
+            /**
+             * @brief Check if the map contains a key.
+             *
+             * @param key The key to check.
+             * @return True if the key is found, false otherwise.
+             */
+            bool contains(const std::string& key) {
+                return fossil_mapof_contains(map, const_cast<char*>(key.c_str()));
+            }
 
-        /**
-         * @brief Set the value associated with a key in the map.
-         *
-         * @param key The key to set.
-         * @param value The value to set.
-         * @return 0 on success, non-zero on failure.
-         */
-        int32_t set(const std::string& key, const std::string& value) {
-            return fossil_mapof_set(map, const_cast<char*>(key.c_str()), const_cast<char*>(value.c_str()));
-        }
+            /**
+             * @brief Get the value associated with a key in the map.
+             *
+             * @param key The key to look up.
+             * @return The value associated with the key.
+             */
+            fossil_tofu_t get(const std::string& key) {
+                return fossil_mapof_get(map, const_cast<char*>(key.c_str()));
+            }
 
-        /**
-         * @brief Get the number of elements in the map.
-         *
-         * @return The number of elements in the map.
-         */
-        size_t size() {
-            return fossil_mapof_size(map);
-        }
+            /**
+             * @brief Set the value associated with a key in the map.
+             *
+             * @param key The key to set.
+             * @param value The value to set.
+             * @return 0 on success, non-zero on failure.
+             */
+            int32_t set(const std::string& key, const std::string& value) {
+                return fossil_mapof_set(map, const_cast<char*>(key.c_str()), const_cast<char*>(value.c_str()));
+            }
 
-        /**
-         * @brief Check if the map is not empty.
-         *
-         * @return True if the map is not empty, false otherwise.
-         */
-        bool not_empty() {
-            return fossil_mapof_not_empty(map);
-        }
+            /**
+             * @brief Get the number of elements in the map.
+             *
+             * @return The number of elements in the map.
+             */
+            size_t size() {
+                return fossil_mapof_size(map);
+            }
 
-        /**
-         * @brief Check if the map is empty.
-         *
-         * @return True if the map is empty, false otherwise.
-         */
-        bool is_empty() {
-            return fossil_mapof_is_empty(map);
-        }
+            /**
+             * @brief Check if the map is not empty.
+             *
+             * @return True if the map is not empty, false otherwise.
+             */
+            bool not_empty() {
+                return fossil_mapof_not_empty(map);
+            }
 
-    private:
-        fossil_mapof_t* map; ///< Pointer to the underlying C map structure.
-    };
+            /**
+             * @brief Check if the map is empty.
+             *
+             * @return True if the map is empty, false otherwise.
+             */
+            bool is_empty() {
+                return fossil_mapof_is_empty(map);
+            }
 
-} // namespace tofu
+        private:
+            fossil_mapof_t* map; ///< Pointer to the underlying C map structure.
+        };
+
+    } // namespace tofu
 
 } // namespace fossil
 

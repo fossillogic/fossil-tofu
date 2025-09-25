@@ -154,106 +154,106 @@ void fossil_tree_traverse_postorder(fossil_tree_node_t *node, fossil_tree_visit_
 
 namespace fossil {
 
-namespace tofu {
+    namespace tofu {
 
-    /**
-     * @class Tree
-     * @brief A C++ wrapper class for managing a binary tree using the Fossil Logic library and Tofu objects.
-     */
-    class Tree {
-    public:
         /**
-         * @brief Constructs a new Tree object.
-         * @throws std::runtime_error If the tree cannot be created.
+         * @class Tree
+         * @brief A C++ wrapper class for managing a binary tree using the Fossil Logic library and Tofu objects.
          */
-        explicit Tree(const std::string& type) {
-            tree_ = fossil_tree_create(const_cast<char*>(type.c_str()));
-            if (!tree_) {
-                throw std::runtime_error("Failed to create tree.");
+        class Tree {
+        public:
+            /**
+             * @brief Constructs a new Tree object.
+             * @throws std::runtime_error If the tree cannot be created.
+             */
+            explicit Tree(const std::string& type) {
+                tree_ = fossil_tree_create(const_cast<char*>(type.c_str()));
+                if (!tree_) {
+                    throw std::runtime_error("Failed to create tree.");
+                }
             }
-        }
 
-        /**
-         * @brief Destroys the Tree object and releases its resources.
-         */
-        ~Tree() {
-            fossil_tree_destroy(tree_);
-        }
-
-        /**
-         * @brief Inserts a new Tofu value into the tree.
-         * @param value The Tofu object to insert.
-         * @throws std::runtime_error If the insertion fails.
-         */
-        void insert(const Tofu& value) {
-            fossil_tofu_t tofu_copy = value.get_c_struct();
-            if (fossil_tree_insert(tree_, &tofu_copy) != 0) {
-                throw std::runtime_error("Failed to insert value into tree.");
+            /**
+             * @brief Destroys the Tree object and releases its resources.
+             */
+            ~Tree() {
+                fossil_tree_destroy(tree_);
             }
-        }
 
-        /**
-         * @brief Searches for a node with the specified Tofu value in the tree.
-         * @param value The Tofu object to search for.
-         * @return Pointer to the found node, or nullptr if not found.
-         */
-        fossil_tree_node_t* search(const Tofu& value) const {
-            return fossil_tree_search(tree_, &value.get_c_struct());
-        }
+            /**
+             * @brief Inserts a new Tofu value into the tree.
+             * @param value The Tofu object to insert.
+             * @throws std::runtime_error If the insertion fails.
+             */
+            void insert(const Tofu& value) {
+                fossil_tofu_t tofu_copy = value.get_c_struct();
+                if (fossil_tree_insert(tree_, &tofu_copy) != 0) {
+                    throw std::runtime_error("Failed to insert value into tree.");
+                }
+            }
 
-        /**
-         * @brief Gets the number of nodes in the tree.
-         * @return The number of nodes in the tree.
-         */
-        size_t size() const {
-            return tree_->size;
-        }
+            /**
+             * @brief Searches for a node with the specified Tofu value in the tree.
+             * @param value The Tofu object to search for.
+             * @return Pointer to the found node, or nullptr if not found.
+             */
+            fossil_tree_node_t* search(const Tofu& value) const {
+                return fossil_tree_search(tree_, &value.get_c_struct());
+            }
 
-        /**
-         * @brief Checks if the tree is empty.
-         * @return True if the tree is empty, false otherwise.
-         */
-        bool is_empty() const {
-            return tree_->size == 0;
-        }
+            /**
+             * @brief Gets the number of nodes in the tree.
+             * @return The number of nodes in the tree.
+             */
+            size_t size() const {
+                return tree_->size;
+            }
 
-        /**
-         * @brief Traverses the tree using the specified visit function.
-         * @param visit Function to call for each node's value.
-         */
-        void traverse(fossil_tree_visit_fn visit) {
-            fossil_tree_traverse(tree_, visit);
-        }
+            /**
+             * @brief Checks if the tree is empty.
+             * @return True if the tree is empty, false otherwise.
+             */
+            bool is_empty() const {
+                return tree_->size == 0;
+            }
 
-        /**
-         * @brief Performs an inorder traversal of the tree nodes.
-         * @param visit Function to call for each node's value.
-         */
-        void traverse_inorder(fossil_tree_visit_fn visit) {
-            fossil_tree_traverse_inorder(tree_->root, visit);
-        }
+            /**
+             * @brief Traverses the tree using the specified visit function.
+             * @param visit Function to call for each node's value.
+             */
+            void traverse(fossil_tree_visit_fn visit) {
+                fossil_tree_traverse(tree_, visit);
+            }
 
-        /**
-         * @brief Performs a preorder traversal of the tree nodes.
-         * @param visit Function to call for each node's value.
-         */
-        void traverse_preorder(fossil_tree_visit_fn visit) {
-            fossil_tree_traverse_preorder(tree_->root, visit);
-        }
+            /**
+             * @brief Performs an inorder traversal of the tree nodes.
+             * @param visit Function to call for each node's value.
+             */
+            void traverse_inorder(fossil_tree_visit_fn visit) {
+                fossil_tree_traverse_inorder(tree_->root, visit);
+            }
 
-        /**
-         * @brief Performs a postorder traversal of the tree nodes.
-         * @param visit Function to call for each node's value.
-         */
-        void traverse_postorder(fossil_tree_visit_fn visit) {
-            fossil_tree_traverse_postorder(tree_->root, visit);
-        }
+            /**
+             * @brief Performs a preorder traversal of the tree nodes.
+             * @param visit Function to call for each node's value.
+             */
+            void traverse_preorder(fossil_tree_visit_fn visit) {
+                fossil_tree_traverse_preorder(tree_->root, visit);
+            }
 
-    private:
-        fossil_tree_t* tree_; /**< Pointer to the underlying C tree structure. */
-    };
+            /**
+             * @brief Performs a postorder traversal of the tree nodes.
+             * @param visit Function to call for each node's value.
+             */
+            void traverse_postorder(fossil_tree_visit_fn visit) {
+                fossil_tree_traverse_postorder(tree_->root, visit);
+            }
 
-} // namespace tofu
+        private:
+            fossil_tree_t* tree_; /**< Pointer to the underlying C tree structure. */
+        };
+
+    } // namespace tofu
 
 } // namespace fossil
 
