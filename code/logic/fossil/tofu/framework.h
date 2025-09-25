@@ -32,7 +32,6 @@
 #include "vector.h"
 #include "tuple.h"
 #include "array.h"
-// TODO: Add matrix implementation when available
 #include "arraylist.h"
 
 // queue family
@@ -47,22 +46,13 @@
 // key-value family
 #include "setof.h"
 #include "mapof.h"
-// TODO: Add trie implementation when available
-// TODO: Add bloom filter implementation when available
 
 // linked list family
 #include "clist.h"
 #include "flist.h"
 #include "dlist.h"
-//
-// TODO: Add cross-list implementation when available
-// TODO: Add skip-list implementation when available
-// TODO: Add xor-linked list implementation when available
-// TODO: Add intrusive list implementation when available
-// TODO: Add unrolled linked list implementation when available
-//
 
 // tree family
-// TODO add tree family headers when implemented
+#include "tree.h"
 
 #endif /* FOSSIL_TOFU_FRAMEWORK_H */

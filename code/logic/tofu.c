@@ -635,6 +635,23 @@ fossil_tofu_t* fossil_tofu_parse(const char *fson_text) {
         return tofu_ptr;
 }
 
+void fossil_tofu_dump(const fossil_tofu_t *tofu) {
+    if (tofu == NULL) {
+        printf("Tofu: cnull\n");
+        return;
+    }
+
+    printf("Tofu Dump:\n");
+    printf("  Type: %s (%d)\n", fossil_tofu_type_name(tofu->type), tofu->type);
+    printf("  Value: %s\n", tofu->value.data ? tofu->value.data : "(null)");
+    printf("  Value Hash: 0x%016llx\n", (unsigned long long)tofu->value.hash);
+    printf("  Mutable: %s\n", tofu->value.mutable_flag ? "true" : "false");
+    printf("  Attribute Name: %s\n", tofu->attribute.name ? tofu->attribute.name : "(null)");
+    printf("  Description: %s\n", tofu->attribute.description ? tofu->attribute.description : "(null)");
+    printf("  ID: %s\n", tofu->attribute.id ? tofu->attribute.id : "(null)");
+    printf("  Required: %s\n", tofu->attribute.required ? "true" : "false");
+}
+
 const char* fossil_tofu_get_value_or_default(const fossil_tofu_t *tofu, const char *default_value) {
     if (!tofu || !tofu->value.data) return default_value;
     return tofu->value.data;

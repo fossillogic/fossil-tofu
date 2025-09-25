@@ -312,6 +312,13 @@ char* fossil_tofu_serialize(const fossil_tofu_t *tofu);
 fossil_tofu_t* fossil_tofu_parse(const char *serialized);
 
 /**
+ * @brief Dumps the internal state of a tofu object for debugging.
+ *
+ * @param tofu The tofu object to dump.
+ */
+void fossil_tofu_dump(const fossil_tofu_t *tofu);
+
+/**
  * @brief Gets the value as a string or returns a default if NULL.
  */
 const char* fossil_tofu_get_value_or_default(const fossil_tofu_t *tofu, const char *default_value);
