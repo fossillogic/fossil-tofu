@@ -97,7 +97,6 @@ FOSSIL_TEST(cpp_test_tree_create_node_valid_value) {
 FOSSIL_TEST(cpp_test_tree_search_not_found) {
     fossil::tofu::Tree tree("i32");
     fossil_tofu_t v10 = fossil_tofu_create("i32", "10");
-    fossil_tofu_t v20 = fossil_tofu_create("i32", "20");
     tree.insert(&v10);
     fossil_tofu_t v30 = fossil_tofu_create("i32", "30");
     fossil_tree_node_t* found = tree.search(&v30);
