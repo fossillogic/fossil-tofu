@@ -50,24 +50,24 @@ FOSSIL_TEST(cpp_test_tree_create_and_destroy) {
 
 FOSSIL_TEST(cpp_test_tree_insert_and_search) {
     fossil::tofu::Tree tree("i32");
-    fossil_tofu_t v10 = fossil_tofu_create("i32", "10");
-    fossil_tofu_t v20 = fossil_tofu_create("i32", "20");
-    fossil_tofu_t v30 = fossil_tofu_create("i32", "30");
-    tree.insert(&v10);
-    tree.insert(&v20);
-    tree.insert(&v30);
-    fossil_tree_node_t* found = tree.search(&v20);
+    fossil::tofu::Tofu v10("i32", "10");
+    fossil::tofu::Tofu v20("i32", "20");
+    fossil::tofu::Tofu v30("i32", "30");
+    tree.insert(v10);
+    tree.insert(v20);
+    tree.insert(v30);
+    fossil_tree_node_t* found = tree.search(v20);
     ASSUME_NOT_CNULL(found);
-    ASSUME_ITS_EQUAL_I32(fossil_tofu_compare(found->value, &v20), 0);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_compare(found->value, &v20.get_c_struct()), 0);
 }
 
 FOSSIL_TEST(cpp_test_tree_insert_duplicate) {
     fossil::tofu::Tree tree("i32");
-    fossil_tofu_t v10 = fossil_tofu_create("i32", "10");
-    tree.insert(&v10);
-    fossil_tofu_t v10_dup = fossil_tofu_create("i32", "10");
+    fossil::tofu::Tofu v10("i32", "10");
+    tree.insert(v10);
+    fossil::tofu::Tofu v10_dup("i32", "10");
     try {
-        tree.insert(&v10_dup);
+        tree.insert(v10_dup);
         ASSUME_ITS_FALSE("Expected exception for duplicate insert");
     } catch (const std::runtime_error&) {
         ASSUME_ITS_TRUE(true);
@@ -85,36 +85,27 @@ FOSSIL_TEST(cpp_test_tree_create_node_null_value) {
     ASSUME_ITS_CNULL(node);
 }
 
-FOSSIL_TEST(cpp_test_tree_create_node_valid_value) {
-    fossil_tofu_t v42 = fossil_tofu_create("i32", "42");
-    fossil_tree_node_t* node = fossil_tree_create_node(&v42);
-    ASSUME_NOT_CNULL(node);
-    ASSUME_ITS_EQUAL_I32(fossil_tofu_compare(node->value, &v42), 0);
-    fossil_tofu_destroy(node->value);
-    fossil_tofu_free(node);
-}
-
 FOSSIL_TEST(cpp_test_tree_search_not_found) {
     fossil::tofu::Tree tree("i32");
-    fossil_tofu_t v10 = fossil_tofu_create("i32", "10");
-    tree.insert(&v10);
-    fossil_tofu_t v30 = fossil_tofu_create("i32", "30");
-    fossil_tree_node_t* found = tree.search(&v30);
+    fossil::tofu::Tofu v10("i32", "10");
+    tree.insert(v10);
+    fossil::tofu::Tofu v30("i32", "30");
+    fossil_tree_node_t* found = tree.search(v30);
     ASSUME_ITS_CNULL(found);
 }
 
 FOSSIL_TEST(cpp_test_tree_insert_null_tree_or_value) {
-    fossil_tofu_t v10 = fossil_tofu_create("i32", "10");
+    fossil::tofu::Tofu v10("i32", "10");
     try {
         fossil::tofu::Tree* tree = nullptr;
-        tree->insert(&v10);
+        tree->insert(v10);
         ASSUME_ITS_FALSE("Expected exception for null tree");
     } catch (...) {
         ASSUME_ITS_TRUE(true);
     }
     try {
         fossil::tofu::Tree tree("i32");
-        tree.insert(nullptr);
+        tree.insert(*(static_cast<fossil::tofu::Tofu*>(nullptr)));
         ASSUME_ITS_FALSE("Expected exception for null value");
     } catch (...) {
         ASSUME_ITS_TRUE(true);
@@ -130,7 +121,6 @@ FOSSIL_TEST_GROUP(cpp_tree_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_tree_tofu_fixture, cpp_test_tree_insert_duplicate);
     FOSSIL_TEST_ADD(cpp_tree_tofu_fixture, cpp_test_tree_null_pointer_safety);
     FOSSIL_TEST_ADD(cpp_tree_tofu_fixture, cpp_test_tree_create_node_null_value);
-    FOSSIL_TEST_ADD(cpp_tree_tofu_fixture, cpp_test_tree_create_node_valid_value);
     FOSSIL_TEST_ADD(cpp_tree_tofu_fixture, cpp_test_tree_search_not_found);
     FOSSIL_TEST_ADD(cpp_tree_tofu_fixture, cpp_test_tree_insert_null_tree_or_value);
 

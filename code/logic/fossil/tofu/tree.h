@@ -158,7 +158,7 @@ namespace tofu {
 
     /**
      * @class Tree
-     * @brief A C++ wrapper class for managing a binary tree using the Fossil Logic library.
+     * @brief A C++ wrapper class for managing a binary tree using the Fossil Logic library and Tofu objects.
      */
     class Tree {
     public:
@@ -181,23 +181,24 @@ namespace tofu {
         }
 
         /**
-         * @brief Inserts a new value into the tree.
-         * @param value Pointer to the value to insert.
+         * @brief Inserts a new Tofu value into the tree.
+         * @param value The Tofu object to insert.
          * @throws std::runtime_error If the insertion fails.
          */
-        void insert(fossil_tofu_t* value) {
-            if (fossil_tree_insert(tree_, value) != 0) {
+        void insert(const Tofu& value) {
+            fossil_tofu_t tofu_copy = value.get_c_struct();
+            if (fossil_tree_insert(tree_, &tofu_copy) != 0) {
                 throw std::runtime_error("Failed to insert value into tree.");
             }
         }
 
         /**
-         * @brief Searches for a node with the specified value in the tree.
-         * @param value Pointer to the value to search for.
+         * @brief Searches for a node with the specified Tofu value in the tree.
+         * @param value The Tofu object to search for.
          * @return Pointer to the found node, or nullptr if not found.
          */
-        fossil_tree_node_t* search(const fossil_tofu_t* value) const {
-            return fossil_tree_search(tree_, value);
+        fossil_tree_node_t* search(const Tofu& value) const {
+            return fossil_tree_search(tree_, &value.get_c_struct());
         }
 
         /**
