@@ -28,8 +28,8 @@
 // Function prototypes
 // *****************************************************************************
 
-fossil_queue_t* fossil_queue_create_container(char* type) {
-    fossil_queue_t* queue = (fossil_queue_t*)fossil_tofu_alloc(sizeof(fossil_queue_t));
+fossil_tofu_queue_t* fossil_tofu_queue_create_container(char* type) {
+    fossil_tofu_queue_t* queue = (fossil_tofu_queue_t*)fossil_tofu_alloc(sizeof(fossil_tofu_queue_t));
     if (queue == NULL) {
         return NULL;
     }
@@ -39,28 +39,28 @@ fossil_queue_t* fossil_queue_create_container(char* type) {
     return queue;
 }
 
-fossil_queue_t* fossil_queue_create_default(void) {
-    return fossil_queue_create_container("any");
+fossil_tofu_queue_t* fossil_tofu_queue_create_default(void) {
+    return fossil_tofu_queue_create_container("any");
 }
 
-fossil_queue_t* fossil_queue_create_copy(const fossil_queue_t* other) {
-    fossil_queue_t* queue = (fossil_queue_t*)fossil_tofu_alloc(sizeof(fossil_queue_t));
+fossil_tofu_queue_t* fossil_tofu_queue_create_copy(const fossil_tofu_queue_t* other) {
+    fossil_tofu_queue_t* queue = (fossil_tofu_queue_t*)fossil_tofu_alloc(sizeof(fossil_tofu_queue_t));
     if (queue == NULL) {
         return NULL;
     }
     queue->type = other->type;
     queue->front = NULL;
     queue->rear = NULL;
-    fossil_queue_node_t* current = other->front;
+    fossil_tofu_queue_node_t* current = other->front;
     while (current != NULL) {
-        fossil_queue_insert(queue, current->data.value.data);
+        fossil_tofu_queue_insert(queue, current->data.value.data);
         current = current->next;
     }
     return queue;
 }
 
-fossil_queue_t* fossil_queue_create_move(fossil_queue_t* other) {
-    fossil_queue_t* queue = (fossil_queue_t*)fossil_tofu_alloc(sizeof(fossil_queue_t));
+fossil_tofu_queue_t* fossil_tofu_queue_create_move(fossil_tofu_queue_t* other) {
+    fossil_tofu_queue_t* queue = (fossil_tofu_queue_t*)fossil_tofu_alloc(sizeof(fossil_tofu_queue_t));
     if (queue == NULL) {
         return NULL;
     }
@@ -72,12 +72,12 @@ fossil_queue_t* fossil_queue_create_move(fossil_queue_t* other) {
     return queue;
 }
 
-void fossil_queue_destroy(fossil_queue_t* queue) {
+void fossil_tofu_queue_destroy(fossil_tofu_queue_t* queue) {
     if (queue == NULL) {
         return;
     }
     while (queue->front != NULL) {
-        fossil_queue_node_t* temp = queue->front;
+        fossil_tofu_queue_node_t* temp = queue->front;
         queue->front = queue->front->next;
         fossil_tofu_destroy(&temp->data);
         fossil_tofu_free(temp);
@@ -89,11 +89,11 @@ void fossil_queue_destroy(fossil_queue_t* queue) {
 // Utility functions
 // *****************************************************************************
 
-int32_t fossil_queue_insert(fossil_queue_t* queue, char *data) {
+int32_t fossil_tofu_queue_insert(fossil_tofu_queue_t* queue, char *data) {
     if (queue == NULL) {
         return FOSSIL_TOFU_FAILURE;
     }
-    fossil_queue_node_t* node = (fossil_queue_node_t*)fossil_tofu_alloc(sizeof(fossil_queue_node_t));
+    fossil_tofu_queue_node_t* node = (fossil_tofu_queue_node_t*)fossil_tofu_alloc(sizeof(fossil_tofu_queue_node_t));
     if (node == NULL) {
         return FOSSIL_TOFU_FAILURE;
     }
@@ -108,20 +108,20 @@ int32_t fossil_queue_insert(fossil_queue_t* queue, char *data) {
     return FOSSIL_TOFU_SUCCESS;
 }
 
-int32_t fossil_queue_remove(fossil_queue_t* queue) {
+int32_t fossil_tofu_queue_remove(fossil_tofu_queue_t* queue) {
     if (queue == NULL || queue->front == NULL) {
         return FOSSIL_TOFU_FAILURE;
     }
-    fossil_queue_node_t* temp = queue->front;
+    fossil_tofu_queue_node_t* temp = queue->front;
     queue->front = queue->front->next;
     fossil_tofu_destroy(&temp->data);
     fossil_tofu_free(temp);
     return FOSSIL_TOFU_SUCCESS;
 }
 
-size_t fossil_queue_size(const fossil_queue_t* queue) {
+size_t fossil_tofu_queue_size(const fossil_tofu_queue_t* queue) {
     size_t size = 0;
-    fossil_queue_node_t* current = queue->front;
+    fossil_tofu_queue_node_t* current = queue->front;
     while (current != NULL) {
         size++;
         current = current->next;
@@ -129,19 +129,19 @@ size_t fossil_queue_size(const fossil_queue_t* queue) {
     return size;
 }
 
-bool fossil_queue_not_empty(const fossil_queue_t* queue) {
+bool fossil_tofu_queue_not_empty(const fossil_tofu_queue_t* queue) {
     return queue != NULL && queue->front != NULL;
 }
 
-bool fossil_queue_not_cnullptr(const fossil_queue_t* queue) {
+bool fossil_tofu_queue_not_cnullptr(const fossil_tofu_queue_t* queue) {
     return queue != NULL;
 }
 
-bool fossil_queue_is_empty(const fossil_queue_t* queue) {
+bool fossil_tofu_queue_is_empty(const fossil_tofu_queue_t* queue) {
     return queue == NULL || queue->front == NULL;
 }
 
-bool fossil_queue_is_cnullptr(const fossil_queue_t* queue) {
+bool fossil_tofu_queue_is_cnullptr(const fossil_tofu_queue_t* queue) {
     return queue == NULL;
 }
 
@@ -149,22 +149,22 @@ bool fossil_queue_is_cnullptr(const fossil_queue_t* queue) {
 // Getter and setter functions
 // *****************************************************************************
 
-char *fossil_queue_get_front(const fossil_queue_t* queue) {
+char *fossil_tofu_queue_get_front(const fossil_tofu_queue_t* queue) {
     return queue == NULL || queue->front == NULL ? NULL : queue->front->data.value.data;
 }
 
-char *fossil_queue_get_rear(const fossil_queue_t* queue) {
+char *fossil_tofu_queue_get_rear(const fossil_tofu_queue_t* queue) {
     return queue == NULL || queue->rear == NULL ? NULL : queue->rear->data.value.data;
 }
 
-void fossil_queue_set_front(fossil_queue_t* queue, char *element) {
+void fossil_tofu_queue_set_front(fossil_tofu_queue_t* queue, char *element) {
     if (queue == NULL || queue->front == NULL) {
         return;
     }
     fossil_tofu_set_value(&queue->front->data, element);
 }
 
-void fossil_queue_set_rear(fossil_queue_t* queue, char *element) {
+void fossil_tofu_queue_set_rear(fossil_tofu_queue_t* queue, char *element) {
     if (queue == NULL || queue->rear == NULL) {
         return;
     }

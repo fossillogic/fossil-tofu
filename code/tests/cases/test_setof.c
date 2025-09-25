@@ -52,105 +52,105 @@ FOSSIL_TEARDOWN(c_setof_tofu_fixture) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
 FOSSIL_TEST(c_test_setof_create_and_destroy) {
-    fossil_setof_t* set = fossil_setof_create_container("i32");
+    fossil_tofu_setof_t* set = fossil_tofu_setof_create_container("i32");
     ASSUME_NOT_CNULL(set);
     ASSUME_ITS_EQUAL_CSTR(set->type, "i32");
-    ASSUME_ITS_EQUAL_I32(fossil_setof_size(set), 0);
-    fossil_setof_destroy(set);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_setof_size(set), 0);
+    fossil_tofu_setof_destroy(set);
 }
 
 FOSSIL_TEST(c_test_setof_create_default) {
-    fossil_setof_t* set = fossil_setof_create_default();
+    fossil_tofu_setof_t* set = fossil_tofu_setof_create_default();
     ASSUME_NOT_CNULL(set);
     ASSUME_ITS_EQUAL_CSTR(set->type, "any");
-    fossil_setof_destroy(set);
+    fossil_tofu_setof_destroy(set);
 }
 
 FOSSIL_TEST(c_test_setof_insert_and_contains) {
-    fossil_setof_t* set = fossil_setof_create_container("i32");
-    int32_t result = fossil_setof_insert(set, "10");
+    fossil_tofu_setof_t* set = fossil_tofu_setof_create_container("i32");
+    int32_t result = fossil_tofu_setof_insert(set, "10");
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_TRUE(fossil_setof_contains(set, "10"));
-    ASSUME_ITS_EQUAL_I32(fossil_setof_size(set), 1);
-    fossil_setof_destroy(set);
+    ASSUME_ITS_TRUE(fossil_tofu_setof_contains(set, "10"));
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_setof_size(set), 1);
+    fossil_tofu_setof_destroy(set);
 }
 
 FOSSIL_TEST(c_test_setof_remove) {
-    fossil_setof_t* set = fossil_setof_create_container("i32");
-    fossil_setof_insert(set, "20");
-    fossil_setof_insert(set, "30");
-    ASSUME_ITS_TRUE(fossil_setof_contains(set, "20"));
-    int32_t result = fossil_setof_remove(set, "20");
+    fossil_tofu_setof_t* set = fossil_tofu_setof_create_container("i32");
+    fossil_tofu_setof_insert(set, "20");
+    fossil_tofu_setof_insert(set, "30");
+    ASSUME_ITS_TRUE(fossil_tofu_setof_contains(set, "20"));
+    int32_t result = fossil_tofu_setof_remove(set, "20");
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_FALSE(fossil_setof_contains(set, "20"));
-    ASSUME_ITS_EQUAL_I32(fossil_setof_size(set), 1);
-    fossil_setof_destroy(set);
+    ASSUME_ITS_FALSE(fossil_tofu_setof_contains(set, "20"));
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_setof_size(set), 1);
+    fossil_tofu_setof_destroy(set);
 }
 
 FOSSIL_TEST(c_test_setof_copy_constructor) {
-    fossil_setof_t* set1 = fossil_setof_create_container("i32");
-    fossil_setof_insert(set1, "100");
-    fossil_setof_insert(set1, "200");
-    fossil_setof_t* set2 = fossil_setof_create_copy(set1);
-    ASSUME_ITS_EQUAL_I32(fossil_setof_size(set1), fossil_setof_size(set2));
-    ASSUME_ITS_TRUE(fossil_setof_contains(set2, "100"));
-    ASSUME_ITS_TRUE(fossil_setof_contains(set2, "200"));
-    fossil_setof_destroy(set1);
-    fossil_setof_destroy(set2);
+    fossil_tofu_setof_t* set1 = fossil_tofu_setof_create_container("i32");
+    fossil_tofu_setof_insert(set1, "100");
+    fossil_tofu_setof_insert(set1, "200");
+    fossil_tofu_setof_t* set2 = fossil_tofu_setof_create_copy(set1);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_setof_size(set1), fossil_tofu_setof_size(set2));
+    ASSUME_ITS_TRUE(fossil_tofu_setof_contains(set2, "100"));
+    ASSUME_ITS_TRUE(fossil_tofu_setof_contains(set2, "200"));
+    fossil_tofu_setof_destroy(set1);
+    fossil_tofu_setof_destroy(set2);
 }
 
 FOSSIL_TEST(c_test_setof_move_constructor) {
-    fossil_setof_t* set1 = fossil_setof_create_container("i32");
-    fossil_setof_insert(set1, "300");
-    fossil_setof_insert(set1, "400");
-    size_t orig_size = fossil_setof_size(set1);
-    fossil_setof_t* set2 = fossil_setof_create_move(set1);
-    ASSUME_ITS_EQUAL_I32(fossil_setof_size(set2), orig_size);
-    ASSUME_ITS_TRUE(fossil_setof_contains(set2, "300"));
-    ASSUME_ITS_TRUE(fossil_setof_contains(set2, "400"));
-    ASSUME_ITS_EQUAL_I32(fossil_setof_size(set1), 0);
-    fossil_setof_destroy(set1);
-    fossil_setof_destroy(set2);
+    fossil_tofu_setof_t* set1 = fossil_tofu_setof_create_container("i32");
+    fossil_tofu_setof_insert(set1, "300");
+    fossil_tofu_setof_insert(set1, "400");
+    size_t orig_size = fossil_tofu_setof_size(set1);
+    fossil_tofu_setof_t* set2 = fossil_tofu_setof_create_move(set1);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_setof_size(set2), orig_size);
+    ASSUME_ITS_TRUE(fossil_tofu_setof_contains(set2, "300"));
+    ASSUME_ITS_TRUE(fossil_tofu_setof_contains(set2, "400"));
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_setof_size(set1), 0);
+    fossil_tofu_setof_destroy(set1);
+    fossil_tofu_setof_destroy(set2);
 }
 
 FOSSIL_TEST(c_test_setof_is_empty_and_not_empty) {
-    fossil_setof_t* set = fossil_setof_create_container("i32");
-    ASSUME_ITS_TRUE(fossil_setof_is_empty(set));
-    ASSUME_ITS_FALSE(fossil_setof_not_empty(set));
-    fossil_setof_insert(set, "1");
-    ASSUME_ITS_FALSE(fossil_setof_is_empty(set));
-    ASSUME_ITS_TRUE(fossil_setof_not_empty(set));
-    fossil_setof_destroy(set);
+    fossil_tofu_setof_t* set = fossil_tofu_setof_create_container("i32");
+    ASSUME_ITS_TRUE(fossil_tofu_setof_is_empty(set));
+    ASSUME_ITS_FALSE(fossil_tofu_setof_not_empty(set));
+    fossil_tofu_setof_insert(set, "1");
+    ASSUME_ITS_FALSE(fossil_tofu_setof_is_empty(set));
+    ASSUME_ITS_TRUE(fossil_tofu_setof_not_empty(set));
+    fossil_tofu_setof_destroy(set);
 }
 
 FOSSIL_TEST(c_test_setof_insert_duplicate) {
-    fossil_setof_t* set = fossil_setof_create_container("i32");
-    fossil_setof_insert(set, "55");
-    size_t size_before = fossil_setof_size(set);
-    fossil_setof_insert(set, "55"); // Should allow duplicate, as per current implementation
-    size_t size_after = fossil_setof_size(set);
+    fossil_tofu_setof_t* set = fossil_tofu_setof_create_container("i32");
+    fossil_tofu_setof_insert(set, "55");
+    size_t size_before = fossil_tofu_setof_size(set);
+    fossil_tofu_setof_insert(set, "55"); // Should allow duplicate, as per current implementation
+    size_t size_after = fossil_tofu_setof_size(set);
     ASSUME_ITS_EQUAL_I32(size_after, size_before + 1);
-    fossil_setof_destroy(set);
+    fossil_tofu_setof_destroy(set);
 }
 
 FOSSIL_TEST(c_test_setof_remove_nonexistent) {
-    fossil_setof_t* set = fossil_setof_create_container("i32");
-    fossil_setof_insert(set, "77");
-    int32_t result = fossil_setof_remove(set, "88");
+    fossil_tofu_setof_t* set = fossil_tofu_setof_create_container("i32");
+    fossil_tofu_setof_insert(set, "77");
+    int32_t result = fossil_tofu_setof_remove(set, "88");
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_FAILURE);
-    fossil_setof_destroy(set);
+    fossil_tofu_setof_destroy(set);
 }
 
 FOSSIL_TEST(c_test_setof_null_args) {
-    ASSUME_ITS_EQUAL_I32(fossil_setof_insert(NULL, "1"), FOSSIL_TOFU_FAILURE);
-    ASSUME_ITS_EQUAL_I32(fossil_setof_insert((fossil_setof_t*)1, NULL), FOSSIL_TOFU_FAILURE);
-    ASSUME_ITS_EQUAL_I32(fossil_setof_remove(NULL, "1"), FOSSIL_TOFU_FAILURE);
-    ASSUME_ITS_EQUAL_I32(fossil_setof_remove((fossil_setof_t*)1, NULL), FOSSIL_TOFU_FAILURE);
-    ASSUME_ITS_FALSE(fossil_setof_contains(NULL, "1"));
-    ASSUME_ITS_FALSE(fossil_setof_contains((fossil_setof_t*)1, NULL));
-    ASSUME_ITS_EQUAL_I32(fossil_setof_size(NULL), 0);
-    ASSUME_ITS_FALSE(fossil_setof_not_empty(NULL));
-    ASSUME_ITS_TRUE(fossil_setof_is_empty(NULL));
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_setof_insert(NULL, "1"), FOSSIL_TOFU_FAILURE);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_setof_insert((fossil_tofu_setof_t*)1, NULL), FOSSIL_TOFU_FAILURE);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_setof_remove(NULL, "1"), FOSSIL_TOFU_FAILURE);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_setof_remove((fossil_tofu_setof_t*)1, NULL), FOSSIL_TOFU_FAILURE);
+    ASSUME_ITS_FALSE(fossil_tofu_setof_contains(NULL, "1"));
+    ASSUME_ITS_FALSE(fossil_tofu_setof_contains((fossil_tofu_setof_t*)1, NULL));
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_setof_size(NULL), 0);
+    ASSUME_ITS_FALSE(fossil_tofu_setof_not_empty(NULL));
+    ASSUME_ITS_TRUE(fossil_tofu_setof_is_empty(NULL));
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * *

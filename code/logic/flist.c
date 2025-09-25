@@ -24,8 +24,8 @@
  */
 #include "fossil/tofu/flist.h"
 
-fossil_flist_t* fossil_flist_create_container(char* type) {
-    fossil_flist_t* flist = (fossil_flist_t*)fossil_tofu_alloc(sizeof(fossil_flist_t));
+fossil_tofu_flist_t* fossil_tofu_flist_create_container(char* type) {
+    fossil_tofu_flist_t* flist = (fossil_tofu_flist_t*)fossil_tofu_alloc(sizeof(fossil_tofu_flist_t));
     if (!flist) {
         return NULL;
     }
@@ -34,34 +34,34 @@ fossil_flist_t* fossil_flist_create_container(char* type) {
     return flist;
 }
 
-fossil_flist_t* fossil_flist_create_default(void) {
-    return fossil_flist_create_container("any");
+fossil_tofu_flist_t* fossil_tofu_flist_create_default(void) {
+    return fossil_tofu_flist_create_container("any");
 }
 
-fossil_flist_t* fossil_flist_create_copy(const fossil_flist_t* other) {
+fossil_tofu_flist_t* fossil_tofu_flist_create_copy(const fossil_tofu_flist_t* other) {
     if (!other) {
         return NULL;
     }
-    fossil_flist_t* copy = fossil_flist_create_container(other->type);
+    fossil_tofu_flist_t* copy = fossil_tofu_flist_create_container(other->type);
     if (!copy) {
         return NULL;
     }
     
     // Copy the elements from the other list
-    fossil_flist_node_t* current = other->head;
+    fossil_tofu_flist_node_t* current = other->head;
     while (current) {
-        fossil_flist_insert(copy, current->data.value.data);
+        fossil_tofu_flist_insert(copy, current->data.value.data);
         current = current->next;
     }
     
     return copy;
 }
 
-fossil_flist_t* fossil_flist_create_move(fossil_flist_t* other) {
+fossil_tofu_flist_t* fossil_tofu_flist_create_move(fossil_tofu_flist_t* other) {
     if (!other) {
         return NULL;
     }
-    fossil_flist_t* new_list = fossil_flist_create_container(other->type);
+    fossil_tofu_flist_t* new_list = fossil_tofu_flist_create_container(other->type);
     if (!new_list) {
         return NULL;
     }
@@ -70,13 +70,13 @@ fossil_flist_t* fossil_flist_create_move(fossil_flist_t* other) {
     return new_list;
 }
 
-void fossil_flist_destroy(fossil_flist_t* flist) {
+void fossil_tofu_flist_destroy(fossil_tofu_flist_t* flist) {
     if (!flist) {
         return;
     }
-    fossil_flist_node_t* current = flist->head;
+    fossil_tofu_flist_node_t* current = flist->head;
     while (current) {
-        fossil_flist_node_t* next = current->next;
+        fossil_tofu_flist_node_t* next = current->next;
         fossil_tofu_free(current);
         current = next;
     }
@@ -84,11 +84,11 @@ void fossil_flist_destroy(fossil_flist_t* flist) {
     fossil_tofu_free(flist);
 }
 
-int32_t fossil_flist_insert(fossil_flist_t* flist, char *data) {
+int32_t fossil_tofu_flist_insert(fossil_tofu_flist_t* flist, char *data) {
     if (!flist || !data) {
         return -1;  // Error
     }
-    fossil_flist_node_t* new_node = (fossil_flist_node_t*)fossil_tofu_alloc(sizeof(fossil_flist_node_t));
+    fossil_tofu_flist_node_t* new_node = (fossil_tofu_flist_node_t*)fossil_tofu_alloc(sizeof(fossil_tofu_flist_node_t));
     if (!new_node) {
         return -1;  // Error
     }
@@ -100,7 +100,7 @@ int32_t fossil_flist_insert(fossil_flist_t* flist, char *data) {
         flist->head = new_node;
     } else {
         // Traverse to the end and append
-        fossil_flist_node_t* current = flist->head;
+        fossil_tofu_flist_node_t* current = flist->head;
         while (current->next) {
             current = current->next;
         }
@@ -109,25 +109,25 @@ int32_t fossil_flist_insert(fossil_flist_t* flist, char *data) {
     return 0;  // Success
 }
 
-int32_t fossil_flist_remove(fossil_flist_t* flist) {
+int32_t fossil_tofu_flist_remove(fossil_tofu_flist_t* flist) {
     if (!flist || !flist->head) {
         return -1;  // Error
     }
-    fossil_flist_node_t* to_remove = flist->head;
+    fossil_tofu_flist_node_t* to_remove = flist->head;
     flist->head = to_remove->next;
     fossil_tofu_free(to_remove->data.value.data);
     fossil_tofu_free(to_remove);
     return 0;  // Success
 }
 
-void fossil_flist_reverse_forward(fossil_flist_t* flist) {
+void fossil_tofu_flist_reverse_forward(fossil_tofu_flist_t* flist) {
     if (!flist) {
         return;
     }
-    fossil_flist_node_t* prev = NULL;
-    fossil_flist_node_t* current = flist->head;
+    fossil_tofu_flist_node_t* prev = NULL;
+    fossil_tofu_flist_node_t* current = flist->head;
     while (current) {
-        fossil_flist_node_t* next = current->next;
+        fossil_tofu_flist_node_t* next = current->next;
         current->next = prev;
         prev = current;
         current = next;
@@ -135,14 +135,14 @@ void fossil_flist_reverse_forward(fossil_flist_t* flist) {
     flist->head = prev;
 }
 
-void fossil_flist_reverse_backward(fossil_flist_t* flist) {
+void fossil_tofu_flist_reverse_backward(fossil_tofu_flist_t* flist) {
     if (!flist) {
         return;
     }
-    fossil_flist_node_t* prev = NULL;
-    fossil_flist_node_t* current = flist->head;
+    fossil_tofu_flist_node_t* prev = NULL;
+    fossil_tofu_flist_node_t* current = flist->head;
     while (current) {
-        fossil_flist_node_t* next = current->next;
+        fossil_tofu_flist_node_t* next = current->next;
         current->next = prev;
         prev = current;
         current = next;
@@ -150,12 +150,12 @@ void fossil_flist_reverse_backward(fossil_flist_t* flist) {
     flist->head = prev;
 }
 
-size_t fossil_flist_size(const fossil_flist_t* flist) {
+size_t fossil_tofu_flist_size(const fossil_tofu_flist_t* flist) {
     if (!flist) {
         return 0;
     }
     size_t size = 0;
-    fossil_flist_node_t* current = flist->head;
+    fossil_tofu_flist_node_t* current = flist->head;
     while (current) {
         size++;
         current = current->next;
@@ -163,27 +163,27 @@ size_t fossil_flist_size(const fossil_flist_t* flist) {
     return size;
 }
 
-bool fossil_flist_not_empty(const fossil_flist_t* flist) {
+bool fossil_tofu_flist_not_empty(const fossil_tofu_flist_t* flist) {
     return flist && flist->head != NULL;
 }
 
-bool fossil_flist_not_cnullptr(const fossil_flist_t* flist) {
+bool fossil_tofu_flist_not_cnullptr(const fossil_tofu_flist_t* flist) {
     return flist != NULL;
 }
 
-bool fossil_flist_is_empty(const fossil_flist_t* flist) {
-    return !fossil_flist_not_empty(flist);
+bool fossil_tofu_flist_is_empty(const fossil_tofu_flist_t* flist) {
+    return !fossil_tofu_flist_not_empty(flist);
 }
 
-bool fossil_flist_is_cnullptr(const fossil_flist_t* flist) {
+bool fossil_tofu_flist_is_cnullptr(const fossil_tofu_flist_t* flist) {
     return flist == NULL;
 }
 
-char *fossil_flist_get(const fossil_flist_t* flist, size_t index) {
+char *fossil_tofu_flist_get(const fossil_tofu_flist_t* flist, size_t index) {
     if (!flist) {
         return NULL;  // Error
     }
-    fossil_flist_node_t* current = flist->head;
+    fossil_tofu_flist_node_t* current = flist->head;
     size_t count = 0;
     while (current) {
         if (count == index) {
@@ -195,29 +195,29 @@ char *fossil_flist_get(const fossil_flist_t* flist, size_t index) {
     return NULL;  // Index out of bounds
 }
 
-char *fossil_flist_get_front(const fossil_flist_t* flist) {
+char *fossil_tofu_flist_get_front(const fossil_tofu_flist_t* flist) {
     if (!flist || !flist->head) {
         return NULL;  // Error
     }
     return flist->head->data.value.data;
 }
 
-char *fossil_flist_get_back(const fossil_flist_t* flist) {
+char *fossil_tofu_flist_get_back(const fossil_tofu_flist_t* flist) {
     if (!flist || !flist->head) {
         return NULL;  // Error
     }
-    fossil_flist_node_t* current = flist->head;
+    fossil_tofu_flist_node_t* current = flist->head;
     while (current->next) {
         current = current->next;
     }
     return current->data.value.data;
 }
 
-void fossil_flist_set(fossil_flist_t* flist, size_t index, char *element) {
+void fossil_tofu_flist_set(fossil_tofu_flist_t* flist, size_t index, char *element) {
     if (!flist) {
         return;  // Error
     }
-    fossil_flist_node_t* current = flist->head;
+    fossil_tofu_flist_node_t* current = flist->head;
     size_t count = 0;
     while (current) {
         if (count == index) {
@@ -230,7 +230,7 @@ void fossil_flist_set(fossil_flist_t* flist, size_t index, char *element) {
     }
 }
 
-void fossil_flist_set_front(fossil_flist_t* flist, char *element) {
+void fossil_tofu_flist_set_front(fossil_tofu_flist_t* flist, char *element) {
     if (!flist || !flist->head) {
         return;  // Error
     }
@@ -238,11 +238,11 @@ void fossil_flist_set_front(fossil_flist_t* flist, char *element) {
     flist->head->data.value.data = fossil_tofu_strdup(element);  // Set new data
 }
 
-void fossil_flist_set_back(fossil_flist_t* flist, char *element) {
+void fossil_tofu_flist_set_back(fossil_tofu_flist_t* flist, char *element) {
     if (!flist || !flist->head) {
         return;  // Error
     }
-    fossil_flist_node_t* current = flist->head;
+    fossil_tofu_flist_node_t* current = flist->head;
     while (current->next) {
         current = current->next;
     }

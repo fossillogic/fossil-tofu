@@ -28,8 +28,8 @@
 // Function prototypes
 // *****************************************************************************
 
-fossil_array_t* fossil_array_create_container(char* type) {
-    fossil_array_t* array = (fossil_array_t*)fossil_tofu_alloc(sizeof(fossil_array_t));
+fossil_tofu_array_t* fossil_tofu_array_create_container(char* type) {
+    fossil_tofu_array_t* array = (fossil_tofu_array_t*)fossil_tofu_alloc(sizeof(fossil_tofu_array_t));
     if (array == NULL) {
         return NULL;
     }
@@ -44,12 +44,12 @@ fossil_array_t* fossil_array_create_container(char* type) {
     return array;
 }
 
-fossil_array_t* fossil_array_create_default(void) {
-    return fossil_array_create_container("any");
+fossil_tofu_array_t* fossil_tofu_array_create_default(void) {
+    return fossil_tofu_array_create_container("any");
 }
 
-fossil_array_t* fossil_array_create_copy(const fossil_array_t* other) {
-    fossil_array_t* array = (fossil_array_t*)fossil_tofu_alloc(sizeof(fossil_array_t));
+fossil_tofu_array_t* fossil_tofu_array_create_copy(const fossil_tofu_array_t* other) {
+    fossil_tofu_array_t* array = (fossil_tofu_array_t*)fossil_tofu_alloc(sizeof(fossil_tofu_array_t));
     if (array == NULL) {
         return NULL;
     }
@@ -67,8 +67,8 @@ fossil_array_t* fossil_array_create_copy(const fossil_array_t* other) {
     return array;
 }
 
-fossil_array_t* fossil_array_create_move(fossil_array_t* other) {
-    fossil_array_t* array = (fossil_array_t*)fossil_tofu_alloc(sizeof(fossil_array_t));
+fossil_tofu_array_t* fossil_tofu_array_create_move(fossil_tofu_array_t* other) {
+    fossil_tofu_array_t* array = (fossil_tofu_array_t*)fossil_tofu_alloc(sizeof(fossil_tofu_array_t));
     if (array == NULL) {
         return NULL;
     }
@@ -83,7 +83,7 @@ fossil_array_t* fossil_array_create_move(fossil_array_t* other) {
     return array;
 }
 
-void fossil_array_destroy(fossil_array_t* array) {
+void fossil_tofu_array_destroy(fossil_tofu_array_t* array) {
     if (array == NULL) {
         return;
     }
@@ -91,7 +91,7 @@ void fossil_array_destroy(fossil_array_t* array) {
     fossil_tofu_free(array);
 }
 
-void fossil_array_push_back(fossil_array_t* array, char *element) {
+void fossil_tofu_array_push_back(fossil_tofu_array_t* array, char *element) {
     if (array == NULL) {
         return;
     }
@@ -110,7 +110,7 @@ void fossil_array_push_back(fossil_array_t* array, char *element) {
     array->data[array->size++] = fossil_tofu_create(array->type, element);
 }
 
-void fossil_array_push_front(fossil_array_t* array, char *element) {
+void fossil_tofu_array_push_front(fossil_tofu_array_t* array, char *element) {
     if (array == NULL) {
         return;
     }
@@ -134,7 +134,7 @@ void fossil_array_push_front(fossil_array_t* array, char *element) {
     array->size++;
 }
 
-void fossil_array_push_at(fossil_array_t* array, size_t index, char *element) {
+void fossil_tofu_array_push_at(fossil_tofu_array_t* array, size_t index, char *element) {
     if (array == NULL || index > array->size) {
         return;
     }
@@ -161,14 +161,14 @@ void fossil_array_push_at(fossil_array_t* array, size_t index, char *element) {
     array->size++;
 }
 
-void fossil_array_pop_back(fossil_array_t* array) {
+void fossil_tofu_array_pop_back(fossil_tofu_array_t* array) {
     if (array == NULL || array->size == 0) {
         return;
     }
     fossil_tofu_destroy(&array->data[--array->size]);
 }
 
-void fossil_array_pop_front(fossil_array_t* array) {
+void fossil_tofu_array_pop_front(fossil_tofu_array_t* array) {
     if (array == NULL || array->size == 0) {
         return;
     }
@@ -179,7 +179,7 @@ void fossil_array_pop_front(fossil_array_t* array) {
     array->size--;
 }
 
-void fossil_array_pop_at(fossil_array_t* array, size_t index) {
+void fossil_tofu_array_pop_at(fossil_tofu_array_t* array, size_t index) {
     if (array == NULL || index >= array->size) {
         return;
     }
@@ -190,7 +190,7 @@ void fossil_array_pop_at(fossil_array_t* array, size_t index) {
     array->size--;
 }
 
-void fossil_array_erase(fossil_array_t* array) {
+void fossil_tofu_array_erase(fossil_tofu_array_t* array) {
     if (array == NULL) {
         return;
     }
@@ -200,68 +200,68 @@ void fossil_array_erase(fossil_array_t* array) {
     array->size = 0;
 }
 
-bool fossil_array_is_cnullptr(const fossil_array_t* array) {
+bool fossil_tofu_array_is_cnullptr(const fossil_tofu_array_t* array) {
     return array == NULL;
 }
 
-bool fossil_array_not_cnullptr(const fossil_array_t* array) {
+bool fossil_tofu_array_not_cnullptr(const fossil_tofu_array_t* array) {
     return array != NULL;
 }
 
-bool fossil_array_is_empty(const fossil_array_t* array) {
+bool fossil_tofu_array_is_empty(const fossil_tofu_array_t* array) {
     return array == NULL || array->size == 0;
 }
 
-bool fossil_array_not_empty(const fossil_array_t* array) {
+bool fossil_tofu_array_not_empty(const fossil_tofu_array_t* array) {
     return array != NULL && array->size > 0;
 }
 
-size_t fossil_array_size(const fossil_array_t* array) {
+size_t fossil_tofu_array_size(const fossil_tofu_array_t* array) {
     return array == NULL ? 0 : array->size;
 }
 
-size_t fossil_array_capacity(const fossil_array_t* array) {
+size_t fossil_tofu_array_capacity(const fossil_tofu_array_t* array) {
     return array == NULL ? 0 : array->capacity;
 }
 
-char *fossil_array_get(const fossil_array_t* array, size_t index) {
+char *fossil_tofu_array_get(const fossil_tofu_array_t* array, size_t index) {
     return array == NULL || index >= array->size ? NULL : fossil_tofu_get_value(&array->data[index]);
 }
 
-char *fossil_array_get_front(const fossil_array_t* array) {
+char *fossil_tofu_array_get_front(const fossil_tofu_array_t* array) {
     return array == NULL || array->size == 0 ? NULL : fossil_tofu_get_value(&array->data[0]);
 }
 
-char *fossil_array_get_back(const fossil_array_t* array) {
+char *fossil_tofu_array_get_back(const fossil_tofu_array_t* array) {
     return array == NULL || array->size == 0 ? NULL : fossil_tofu_get_value(&array->data[array->size - 1]);
 }
 
-char *fossil_array_get_at(const fossil_array_t* array, size_t index) {
+char *fossil_tofu_array_get_at(const fossil_tofu_array_t* array, size_t index) {
     return array == NULL || index >= array->size ? NULL : fossil_tofu_get_value(&array->data[index]);
 }
 
-void fossil_array_set(fossil_array_t* array, size_t index, char *element) {
+void fossil_tofu_array_set(fossil_tofu_array_t* array, size_t index, char *element) {
     if (array == NULL || index >= array->size) {
         return;
     }
     fossil_tofu_set_value(&array->data[index], element);
 }
 
-void fossil_array_set_front(fossil_array_t* array, char *element) {
+void fossil_tofu_array_set_front(fossil_tofu_array_t* array, char *element) {
     if (array == NULL || array->size == 0) {
         return;
     }
     fossil_tofu_set_value(&array->data[0], element);
 }
 
-void fossil_array_set_back(fossil_array_t* array, char *element) {
+void fossil_tofu_array_set_back(fossil_tofu_array_t* array, char *element) {
     if (array == NULL || array->size == 0) {
         return;
     }
     fossil_tofu_set_value(&array->data[array->size - 1], element);
 }
 
-void fossil_array_set_at(fossil_array_t* array, size_t index, char *element) {
+void fossil_tofu_array_set_at(fossil_tofu_array_t* array, size_t index, char *element) {
     if (array == NULL || index >= array->size) {
         return;
     }

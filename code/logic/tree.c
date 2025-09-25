@@ -28,8 +28,8 @@
 // Tree Management Functions
 // *****************************************************************************
 
-fossil_tree_t* fossil_tree_create(char *type) {
-    fossil_tree_t *tree = (fossil_tree_t*)fossil_tofu_alloc(sizeof(fossil_tree_t));
+fossil_tofu_tree_t* fossil_tofu_tree_create(char *type) {
+    fossil_tofu_tree_t *tree = (fossil_tofu_tree_t*)fossil_tofu_alloc(sizeof(fossil_tofu_tree_t));
     if (!tree) return NULL;
     tree->root = NULL;
     tree->size = 0;
@@ -37,17 +37,17 @@ fossil_tree_t* fossil_tree_create(char *type) {
     return tree;
 }
 
-static void fossil_tree_destroy_node(fossil_tree_node_t *node) {
+static void fossil_tofu_tree_destroy_node(fossil_tofu_tree_node_t *node) {
     if (!node) return;
-    fossil_tree_destroy_node(node->left);
-    fossil_tree_destroy_node(node->right);
+    fossil_tofu_tree_destroy_node(node->left);
+    fossil_tofu_tree_destroy_node(node->right);
     if (node->value) fossil_tofu_destroy(node->value);
     fossil_tofu_free(node);
 }
 
-void fossil_tree_destroy(fossil_tree_t *tree) {
+void fossil_tofu_tree_destroy(fossil_tofu_tree_t *tree) {
     if (!tree) return;
-    fossil_tree_destroy_node(tree->root);
+    fossil_tofu_tree_destroy_node(tree->root);
     fossil_tofu_free(tree);
 }
 
@@ -55,9 +55,9 @@ void fossil_tree_destroy(fossil_tree_t *tree) {
 // Node Operations
 // *****************************************************************************
 
-fossil_tree_node_t* fossil_tree_create_node(fossil_tofu_t *value) {
+fossil_tofu_tree_node_t* fossil_tofu_tree_create_node(fossil_tofu_t *value) {
     if (!value) return NULL;
-    fossil_tree_node_t *node = (fossil_tree_node_t*)fossil_tofu_alloc(sizeof(fossil_tree_node_t));
+    fossil_tofu_tree_node_t *node = (fossil_tofu_tree_node_t*)fossil_tofu_alloc(sizeof(fossil_tofu_tree_node_t));
     if (!node) return NULL;
     node->value = value;
     node->left = NULL;
@@ -65,10 +65,10 @@ fossil_tree_node_t* fossil_tree_create_node(fossil_tofu_t *value) {
     return node;
 }
 
-int fossil_tree_insert(fossil_tree_t *tree, fossil_tofu_t *value) {
+int fossil_tofu_tree_insert(fossil_tofu_tree_t *tree, fossil_tofu_t *value) {
     if (!tree || !value) return FOSSIL_TOFU_ERROR_INVALID_ARGUMENT;
 
-    fossil_tree_node_t *node = fossil_tree_create_node(value);
+    fossil_tofu_tree_node_t *node = fossil_tofu_tree_create_node(value);
     if (!node) return FOSSIL_TOFU_ERROR_MEMORY_ALLOCATION;
 
     if (!tree->root) {
@@ -77,7 +77,7 @@ int fossil_tree_insert(fossil_tree_t *tree, fossil_tofu_t *value) {
         return FOSSIL_TOFU_SUCCESS;
     }
 
-    fossil_tree_node_t *current = tree->root;
+    fossil_tofu_tree_node_t *current = tree->root;
     while (true) {
         int cmp = fossil_tofu_compare(value, current->value);
         if (cmp < 0) {
@@ -103,9 +103,9 @@ int fossil_tree_insert(fossil_tree_t *tree, fossil_tofu_t *value) {
     }
 }
 
-fossil_tree_node_t* fossil_tree_search(fossil_tree_t *tree, const fossil_tofu_t *value) {
+fossil_tofu_tree_node_t* fossil_tofu_tree_search(fossil_tofu_tree_t *tree, const fossil_tofu_t *value) {
     if (!tree || !value) return NULL;
-    fossil_tree_node_t *current = tree->root;
+    fossil_tofu_tree_node_t *current = tree->root;
     while (current) {
         int cmp = fossil_tofu_compare(value, current->value);
         if (cmp < 0) current = current->left;
@@ -119,28 +119,28 @@ fossil_tree_node_t* fossil_tree_search(fossil_tree_t *tree, const fossil_tofu_t 
 // Traversal Functions
 // *****************************************************************************
 
-void fossil_tree_traverse_inorder(fossil_tree_node_t *node, fossil_tree_visit_fn visit) {
+void fossil_tofu_tree_traverse_inorder(fossil_tofu_tree_node_t *node, fossil_tofu_tree_visit_fn visit) {
     if (!node) return;
-    fossil_tree_traverse_inorder(node->left, visit);
+    fossil_tofu_tree_traverse_inorder(node->left, visit);
     visit(node->value);
-    fossil_tree_traverse_inorder(node->right, visit);
+    fossil_tofu_tree_traverse_inorder(node->right, visit);
 }
 
-void fossil_tree_traverse_preorder(fossil_tree_node_t *node, fossil_tree_visit_fn visit) {
+void fossil_tofu_tree_traverse_preorder(fossil_tofu_tree_node_t *node, fossil_tofu_tree_visit_fn visit) {
     if (!node) return;
     visit(node->value);
-    fossil_tree_traverse_preorder(node->left, visit);
-    fossil_tree_traverse_preorder(node->right, visit);
+    fossil_tofu_tree_traverse_preorder(node->left, visit);
+    fossil_tofu_tree_traverse_preorder(node->right, visit);
 }
 
-void fossil_tree_traverse_postorder(fossil_tree_node_t *node, fossil_tree_visit_fn visit) {
+void fossil_tofu_tree_traverse_postorder(fossil_tofu_tree_node_t *node, fossil_tofu_tree_visit_fn visit) {
     if (!node) return;
-    fossil_tree_traverse_postorder(node->left, visit);
-    fossil_tree_traverse_postorder(node->right, visit);
+    fossil_tofu_tree_traverse_postorder(node->left, visit);
+    fossil_tofu_tree_traverse_postorder(node->right, visit);
     visit(node->value);
 }
 
-void fossil_tree_traverse(fossil_tree_t *tree, fossil_tree_visit_fn visit) {
+void fossil_tofu_tree_traverse(fossil_tofu_tree_t *tree, fossil_tofu_tree_visit_fn visit) {
     if (!tree || !visit) return;
-    fossil_tree_traverse_inorder(tree->root, visit);
+    fossil_tofu_tree_traverse_inorder(tree->root, visit);
 }
