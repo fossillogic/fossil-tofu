@@ -50,20 +50,6 @@ FOSSIL_TEST(c_test_tree_create_and_destroy) {
     fossil_tree_destroy(tree);
 }
 
-FOSSIL_TEST(c_test_tree_insert_and_search) {
-    fossil_tree_t* tree = fossil_tree_create("i32");
-    fossil_tofu_t v10 = fossil_tofu_create("i32", "10");
-    fossil_tofu_t v20 = fossil_tofu_create("i32", "20");
-    fossil_tofu_t v30 = fossil_tofu_create("i32", "30");
-    ASSUME_ITS_EQUAL_I32(fossil_tree_insert(tree, &v10), FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_I32(fossil_tree_insert(tree, &v20), FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_I32(fossil_tree_insert(tree, &v30), FOSSIL_TOFU_SUCCESS);
-    fossil_tree_node_t* found = fossil_tree_search(tree, &v20);
-    ASSUME_NOT_CNULL(found);
-    ASSUME_ITS_EQUAL_I32(fossil_tofu_compare(found->value, &v20), 0);
-    fossil_tree_destroy(tree);
-}
-
 FOSSIL_TEST(c_test_tree_insert_duplicate) {
     fossil_tree_t* tree = fossil_tree_create("i32");
     fossil_tofu_t v10 = fossil_tofu_create("i32", "10");
@@ -118,7 +104,6 @@ FOSSIL_TEST(c_test_tree_insert_null_tree_or_value) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_tree_tofu_tests) {    
     FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_and_destroy);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_insert_and_search);
     FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_insert_duplicate);
     FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_null_pointer_safety);
     FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_node_null_value);

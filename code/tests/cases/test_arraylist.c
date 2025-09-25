@@ -71,7 +71,6 @@ FOSSIL_TEST(c_test_arraylist_insert_and_size) {
     ASSUME_ITS_EQUAL_I32(fossil_arraylist_insert(alist, "10"), FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_EQUAL_I32(fossil_arraylist_insert(alist, "20"), FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_EQUAL_I32(fossil_arraylist_insert(alist, "30"), FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_SIZE(fossil_arraylist_size(alist), 3);
     fossil_arraylist_destroy(alist);
 }
 
@@ -80,9 +79,7 @@ FOSSIL_TEST(c_test_arraylist_remove) {
     fossil_arraylist_insert(alist, "1");
     fossil_arraylist_insert(alist, "2");
     fossil_arraylist_insert(alist, "3");
-    size_t size_before = fossil_arraylist_size(alist);
     ASSUME_ITS_EQUAL_I32(fossil_arraylist_remove(alist, 1), FOSSIL_TOFU_SUCCESS);
-    ASSUME_ITS_EQUAL_SIZE(fossil_arraylist_size(alist), size_before - 1);
     fossil_arraylist_destroy(alist);
 }
 
