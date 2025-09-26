@@ -99,6 +99,9 @@ void fossil_tofu_vector_push_back(fossil_tofu_vector_t* vector, char *element) {
     if (vector == NULL) {
         return;
     }
+    if (fossil_tofu_validate_type(vector->type) == FOSSIL_TOFU_TYPE_ANY) {
+        return;
+    }
     if (vector->size == vector->capacity) {
         fossil_tofu_t* new_data = (fossil_tofu_t*)fossil_tofu_alloc(2 * vector->capacity * sizeof(fossil_tofu_t));
         if (new_data == NULL) {
@@ -116,6 +119,9 @@ void fossil_tofu_vector_push_back(fossil_tofu_vector_t* vector, char *element) {
 
 void fossil_tofu_vector_push_front(fossil_tofu_vector_t* vector, char *element) {
     if (vector == NULL) {
+        return;
+    }
+    if (fossil_tofu_validate_type(vector->type) == FOSSIL_TOFU_TYPE_ANY) {
         return;
     }
     if (vector->size == vector->capacity) {
@@ -140,6 +146,9 @@ void fossil_tofu_vector_push_front(fossil_tofu_vector_t* vector, char *element) 
 
 void fossil_tofu_vector_push_at(fossil_tofu_vector_t* vector, size_t index, char *element) {
     if (vector == NULL || index > vector->size) {
+        return;
+    }
+    if (fossil_tofu_validate_type(vector->type) == FOSSIL_TOFU_TYPE_ANY) {
         return;
     }
     if (vector->size == vector->capacity) {
