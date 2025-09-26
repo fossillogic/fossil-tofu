@@ -245,7 +245,7 @@ void fossil_tofu_display(const fossil_tofu_t *tofu);
 /**
  * Function to validate if a string corresponds to a valid `fossil_tofu_type_t`.
  *
- * @param type_str The type string to validate (e.g., "i8", "float").
+ * @param type_str The type string to validate (e.g., "i8", "f32").
  * @return The corresponding `fossil_tofu_type_t` value if valid, `FOSSIL_TOFU_FAILURE` otherwise.
  * @note O(n) - Linear time complexity based on the number of types.
  */
@@ -293,7 +293,7 @@ bool fossil_tofu_equals(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2);
 int fossil_tofu_copy(fossil_tofu_t *dest, const fossil_tofu_t *src);
 
 /**
- * @brief Serializes a tofu object to a JSON-like string.
+ * @brief Serializes a tofu object to a FSON-like string.
  *
  * @param tofu The tofu object to serialize.
  * @return A newly allocated string containing the serialized representation.
