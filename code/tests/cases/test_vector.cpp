@@ -80,7 +80,7 @@ FOSSIL_TEST(cpp_test_vector_push_front_and_pop_front) {
 }
 
 FOSSIL_TEST(cpp_test_vector_push_at_and_pop_at) {
-    Vector vector("i32");
+    Vector vector("char");
     vector.push_back("a");
     vector.push_back("b");
     vector.push_back("d");
@@ -159,7 +159,7 @@ FOSSIL_TEST(cpp_test_vector_pop_until_empty) {
 }
 
 FOSSIL_TEST(cpp_test_vector_pop_front_until_empty) {
-    Vector vector("i32");
+    Vector vector("char");
     vector.push_back("a");
     vector.push_back("b");
     vector.push_back("c");
@@ -176,7 +176,7 @@ FOSSIL_TEST(cpp_test_vector_null_pointer_safety) {
 }
 
 FOSSIL_TEST(cpp_test_vector_set_at_various_positions) {
-    Vector vector("i32");
+    Vector vector("char");
     vector.push_back("a");
     vector.push_back("b");
     vector.push_back("c");
@@ -189,7 +189,7 @@ FOSSIL_TEST(cpp_test_vector_set_at_various_positions) {
 }
 
 FOSSIL_TEST(cpp_test_vector_push_at_beginning_and_end) {
-    Vector vector("i32");
+    Vector vector("cstr");
     vector.push_back("middle");
     vector.push_at(0, "start");
     vector.push_at(2, "end");
@@ -199,7 +199,7 @@ FOSSIL_TEST(cpp_test_vector_push_at_beginning_and_end) {
 }
 
 FOSSIL_TEST(cpp_test_vector_pop_at_various_positions) {
-    Vector vector("i32");
+    Vector vector("char");
     vector.push_back("a");
     vector.push_back("b");
     vector.push_back("c");

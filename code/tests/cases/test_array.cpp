@@ -164,7 +164,7 @@ FOSSIL_TEST(cpp_test_array_pop_front_until_empty) {
 // Null pointer safety test is not applicable for C++ class, so we skip it.
 
 FOSSIL_TEST(cpp_test_array_set_at_various_positions) {
-    Array array("cstr");
+    Array array("char");
     array.push_back("a");
     array.push_back("b");
     array.push_back("c");

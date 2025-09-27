@@ -54,9 +54,9 @@ FOSSIL_TEARDOWN(cpp_mapof_tofu_fixture) {
 using fossil::tofu::MapOf;
 
 FOSSIL_TEST(cpp_test_mapof_create_and_destroy) {
-    MapOf map("i32", "str");
+    MapOf map("i32", "cstr");
     ASSUME_ITS_EQUAL_CSTR(map.size() == 0 ? "i32" : "", "i32"); // Dummy check for type
-    ASSUME_ITS_EQUAL_CSTR(map.size() == 0 ? "str" : "", "str"); // Dummy check for type
+    ASSUME_ITS_EQUAL_CSTR(map.size() == 0 ? "cstr" : "", "cstr"); // Dummy check for type
     ASSUME_ITS_EQUAL_I32(map.size(), 0);
 }
 
@@ -67,7 +67,7 @@ FOSSIL_TEST(cpp_test_mapof_create_default) {
 }
 
 FOSSIL_TEST(cpp_test_mapof_insert_and_contains) {
-    MapOf map("i32", "str");
+    MapOf map("i32", "cstr");
     int32_t result = map.insert("10", "hello");
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(map.contains("10"));
@@ -77,7 +77,7 @@ FOSSIL_TEST(cpp_test_mapof_insert_and_contains) {
 }
 
 FOSSIL_TEST(cpp_test_mapof_remove) {
-    MapOf map("i32", "str");
+    MapOf map("i32", "cstr");
     map.insert("20", "foo");
     map.insert("30", "bar");
     ASSUME_ITS_TRUE(map.contains("20"));
@@ -88,7 +88,7 @@ FOSSIL_TEST(cpp_test_mapof_remove) {
 }
 
 FOSSIL_TEST(cpp_test_mapof_copy_constructor) {
-    MapOf map1("i32", "str");
+    MapOf map1("i32", "cstr");
     map1.insert("100", "alpha");
     map1.insert("200", "beta");
     MapOf map2 = map1;
@@ -102,7 +102,7 @@ FOSSIL_TEST(cpp_test_mapof_copy_constructor) {
 }
 
 FOSSIL_TEST(cpp_test_mapof_move_constructor) {
-    MapOf map1("i32", "str");
+    MapOf map1("i32", "cstr");
     map1.insert("300", "foo");
     map1.insert("400", "bar");
     size_t orig_size = map1.size();
@@ -114,7 +114,7 @@ FOSSIL_TEST(cpp_test_mapof_move_constructor) {
 }
 
 FOSSIL_TEST(cpp_test_mapof_is_empty_and_not_empty) {
-    MapOf map("i32", "str");
+    MapOf map("i32", "cstr");
     ASSUME_ITS_TRUE(map.is_empty());
     ASSUME_ITS_FALSE(map.not_empty());
     map.insert("1", "one");
@@ -123,7 +123,7 @@ FOSSIL_TEST(cpp_test_mapof_is_empty_and_not_empty) {
 }
 
 FOSSIL_TEST(cpp_test_mapof_insert_duplicate) {
-    MapOf map("i32", "str");
+    MapOf map("i32", "cstr");
     map.insert("55", "foo");
     size_t size_before = map.size();
     map.insert("55", "bar"); // Should update value, not add new entry
@@ -134,7 +134,7 @@ FOSSIL_TEST(cpp_test_mapof_insert_duplicate) {
 }
 
 FOSSIL_TEST(cpp_test_mapof_remove_nonexistent) {
-    MapOf map("i32", "str");
+    MapOf map("i32", "cstr");
     map.insert("77", "baz");
     int32_t result = map.remove("88");
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_FAILURE);

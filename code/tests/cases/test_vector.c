@@ -83,7 +83,7 @@ FOSSIL_TEST(c_test_vector_push_front_and_pop_front) {
 }
 
 FOSSIL_TEST(c_test_vector_push_at_and_pop_at) {
-    fossil_tofu_vector_t* vector = fossil_tofu_vector_create_container("i32");
+    fossil_tofu_vector_t* vector = fossil_tofu_vector_create_container("char");
     fossil_tofu_vector_push_back(vector, "a");
     fossil_tofu_vector_push_back(vector, "b");
     fossil_tofu_vector_push_back(vector, "d");
@@ -171,7 +171,7 @@ FOSSIL_TEST(c_test_vector_pop_until_empty) {
 }
 
 FOSSIL_TEST(c_test_vector_pop_front_until_empty) {
-    fossil_tofu_vector_t* vector = fossil_tofu_vector_create_container("i32");
+    fossil_tofu_vector_t* vector = fossil_tofu_vector_create_container("char");
     fossil_tofu_vector_push_back(vector, "a");
     fossil_tofu_vector_push_back(vector, "b");
     fossil_tofu_vector_push_back(vector, "c");
@@ -195,7 +195,7 @@ FOSSIL_TEST(c_test_vector_null_pointer_safety) {
 }
 
 FOSSIL_TEST(c_test_vector_set_at_various_positions) {
-    fossil_tofu_vector_t* vector = fossil_tofu_vector_create_container("i32");
+    fossil_tofu_vector_t* vector = fossil_tofu_vector_create_container("char");
     fossil_tofu_vector_push_back(vector, "a");
     fossil_tofu_vector_push_back(vector, "b");
     fossil_tofu_vector_push_back(vector, "c");
@@ -209,7 +209,7 @@ FOSSIL_TEST(c_test_vector_set_at_various_positions) {
 }
 
 FOSSIL_TEST(c_test_vector_push_at_beginning_and_end) {
-    fossil_tofu_vector_t* vector = fossil_tofu_vector_create_container("i32");
+    fossil_tofu_vector_t* vector = fossil_tofu_vector_create_container("cstr");
     fossil_tofu_vector_push_back(vector, "middle");
     fossil_tofu_vector_push_at(vector, 0, "start");
     fossil_tofu_vector_push_at(vector, 2, "end");
@@ -220,7 +220,7 @@ FOSSIL_TEST(c_test_vector_push_at_beginning_and_end) {
 }
 
 FOSSIL_TEST(c_test_vector_pop_at_various_positions) {
-    fossil_tofu_vector_t* vector = fossil_tofu_vector_create_container("i32");
+    fossil_tofu_vector_t* vector = fossil_tofu_vector_create_container("char");
     fossil_tofu_vector_push_back(vector, "a");
     fossil_tofu_vector_push_back(vector, "b");
     fossil_tofu_vector_push_back(vector, "c");

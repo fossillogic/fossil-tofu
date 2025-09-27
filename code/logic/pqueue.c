@@ -29,6 +29,10 @@
 // *****************************************************************************
 
 fossil_tofu_pqueue_t* fossil_tofu_pqueue_create_container(char* type) {
+    fossil_tofu_type_t t = fossil_tofu_validate_type(type);
+    if (t == FOSSIL_TOFU_TYPE_CNULL) {
+        return NULL;
+    }
     fossil_tofu_pqueue_t* pqueue = (fossil_tofu_pqueue_t*)fossil_tofu_alloc(sizeof(fossil_tofu_pqueue_t));
     if (pqueue == NULL) {
         return NULL;
@@ -43,14 +47,28 @@ fossil_tofu_pqueue_t* fossil_tofu_pqueue_create_default(void) {
 }
 
 fossil_tofu_pqueue_t* fossil_tofu_pqueue_create_copy(const fossil_tofu_pqueue_t* other) {
+    if (other == NULL) {
+        return NULL;
+    }
     fossil_tofu_pqueue_t* pqueue = (fossil_tofu_pqueue_t*)fossil_tofu_alloc(sizeof(fossil_tofu_pqueue_t));
     if (pqueue == NULL) {
         return NULL;
     }
     pqueue->type = other->type;
     pqueue->front = NULL;
+    fossil_tofu_type_t t1 = fossil_tofu_validate_type(pqueue->type);
+    fossil_tofu_type_t t2 = fossil_tofu_validate_type(other->type);
+    if (t1 != t2) {
+        fossil_tofu_free(pqueue);
+        return NULL;
+    }
     fossil_tofu_pqueue_node_t* current = other->front;
     while (current != NULL) {
+        fossil_tofu_type_t node_type = fossil_tofu_get_type(&current->data);
+        if (node_type != t1 && t1 != FOSSIL_TOFU_TYPE_CNULL) {
+            fossil_tofu_pqueue_destroy(pqueue);
+            return NULL;
+        }
         fossil_tofu_pqueue_insert(pqueue, current->data.value.data, current->priority);
         current = current->next;
     }
@@ -58,6 +76,13 @@ fossil_tofu_pqueue_t* fossil_tofu_pqueue_create_copy(const fossil_tofu_pqueue_t*
 }
 
 fossil_tofu_pqueue_t* fossil_tofu_pqueue_create_move(fossil_tofu_pqueue_t* other) {
+    if (other == NULL) {
+        return NULL;
+    }
+    fossil_tofu_type_t t = fossil_tofu_validate_type(other->type);
+    if (t == FOSSIL_TOFU_TYPE_CNULL) {
+        return NULL;
+    }
     fossil_tofu_pqueue_t* pqueue = (fossil_tofu_pqueue_t*)fossil_tofu_alloc(sizeof(fossil_tofu_pqueue_t));
     if (pqueue == NULL) {
         return NULL;

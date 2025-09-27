@@ -29,6 +29,11 @@
 // *****************************************************************************
 
 fossil_tofu_mapof_t* fossil_tofu_mapof_create_container(char* key_type, char* value_type) {
+    if (!key_type || !value_type) return NULL;
+    if (fossil_tofu_validate_type(key_type) == FOSSIL_TOFU_FAILURE ||
+        fossil_tofu_validate_type(value_type) == FOSSIL_TOFU_FAILURE)
+        return NULL;
+
     fossil_tofu_mapof_t* map = (fossil_tofu_mapof_t*)fossil_tofu_alloc(sizeof(fossil_tofu_mapof_t));
     if (!map) return NULL;
     map->key_type = key_type;
@@ -50,6 +55,12 @@ fossil_tofu_mapof_t* fossil_tofu_mapof_create_copy(const fossil_tofu_mapof_t* ot
 
     fossil_tofu_mapof_node_t* current = other->head;
     while (current) {
+        // Check type match for key and value
+        if (fossil_tofu_get_type(&current->key) != fossil_tofu_validate_type(map->key_type) ||
+            fossil_tofu_get_type(&current->value) != fossil_tofu_validate_type(map->value_type)) {
+            fossil_tofu_mapof_destroy(map);
+            return NULL;
+        }
         fossil_tofu_mapof_insert(map, fossil_tofu_get_value(&current->key), fossil_tofu_get_value(&current->value));
         current = current->next;
     }

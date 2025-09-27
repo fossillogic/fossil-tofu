@@ -52,10 +52,10 @@ FOSSIL_TEARDOWN(objc_mapof_tofu_fixture) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 
 FOSSIL_TEST(objc_test_mapof_create_and_destroy) {
-    fossil_tofu_mapof_t* map = fossil_tofu_mapof_create_container("i32", "str");
+    fossil_tofu_mapof_t* map = fossil_tofu_mapof_create_container("i32", "cstr");
     ASSUME_NOT_CNULL(map);
     ASSUME_ITS_EQUAL_CSTR(map->key_type, "i32");
-    ASSUME_ITS_EQUAL_CSTR(map->value_type, "str");
+    ASSUME_ITS_EQUAL_CSTR(map->value_type, "cstr");
     ASSUME_ITS_EQUAL_I32(fossil_tofu_mapof_size(map), 0);
     fossil_tofu_mapof_destroy(map);
 }
@@ -69,7 +69,7 @@ FOSSIL_TEST(objc_test_mapof_create_default) {
 }
 
 FOSSIL_TEST(objc_test_mapof_insert_and_contains) {
-    fossil_tofu_mapof_t* map = fossil_tofu_mapof_create_container("i32", "str");
+    fossil_tofu_mapof_t* map = fossil_tofu_mapof_create_container("i32", "cstr");
     int32_t result = fossil_tofu_mapof_insert(map, "10", "hello");
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_SUCCESS);
     ASSUME_ITS_TRUE(fossil_tofu_mapof_contains(map, "10"));
@@ -80,7 +80,7 @@ FOSSIL_TEST(objc_test_mapof_insert_and_contains) {
 }
 
 FOSSIL_TEST(objc_test_mapof_remove) {
-    fossil_tofu_mapof_t* map = fossil_tofu_mapof_create_container("i32", "str");
+    fossil_tofu_mapof_t* map = fossil_tofu_mapof_create_container("i32", "cstr");
     fossil_tofu_mapof_insert(map, "20", "foo");
     fossil_tofu_mapof_insert(map, "30", "bar");
     ASSUME_ITS_TRUE(fossil_tofu_mapof_contains(map, "20"));
@@ -92,7 +92,7 @@ FOSSIL_TEST(objc_test_mapof_remove) {
 }
 
 FOSSIL_TEST(objc_test_mapof_copy_constructor) {
-    fossil_tofu_mapof_t* map1 = fossil_tofu_mapof_create_container("i32", "str");
+    fossil_tofu_mapof_t* map1 = fossil_tofu_mapof_create_container("i32", "cstr");
     fossil_tofu_mapof_insert(map1, "100", "alpha");
     fossil_tofu_mapof_insert(map1, "200", "beta");
     fossil_tofu_mapof_t* map2 = fossil_tofu_mapof_create_copy(map1);
@@ -108,7 +108,7 @@ FOSSIL_TEST(objc_test_mapof_copy_constructor) {
 }
 
 FOSSIL_TEST(objc_test_mapof_move_constructor) {
-    fossil_tofu_mapof_t* map1 = fossil_tofu_mapof_create_container("i32", "str");
+    fossil_tofu_mapof_t* map1 = fossil_tofu_mapof_create_container("i32", "cstr");
     fossil_tofu_mapof_insert(map1, "300", "foo");
     fossil_tofu_mapof_insert(map1, "400", "bar");
     size_t orig_size = fossil_tofu_mapof_size(map1);
@@ -122,7 +122,7 @@ FOSSIL_TEST(objc_test_mapof_move_constructor) {
 }
 
 FOSSIL_TEST(objc_test_mapof_is_empty_and_not_empty) {
-    fossil_tofu_mapof_t* map = fossil_tofu_mapof_create_container("i32", "str");
+    fossil_tofu_mapof_t* map = fossil_tofu_mapof_create_container("i32", "cstr");
     ASSUME_ITS_TRUE(fossil_tofu_mapof_is_empty(map));
     ASSUME_ITS_FALSE(fossil_tofu_mapof_not_empty(map));
     fossil_tofu_mapof_insert(map, "1", "one");
@@ -132,7 +132,7 @@ FOSSIL_TEST(objc_test_mapof_is_empty_and_not_empty) {
 }
 
 FOSSIL_TEST(objc_test_mapof_insert_duplicate) {
-    fossil_tofu_mapof_t* map = fossil_tofu_mapof_create_container("i32", "str");
+    fossil_tofu_mapof_t* map = fossil_tofu_mapof_create_container("i32", "cstr");
     fossil_tofu_mapof_insert(map, "55", "foo");
     size_t size_before = fossil_tofu_mapof_size(map);
     fossil_tofu_mapof_insert(map, "55", "bar"); // Should update value, not add new entry
@@ -144,7 +144,7 @@ FOSSIL_TEST(objc_test_mapof_insert_duplicate) {
 }
 
 FOSSIL_TEST(objc_test_mapof_remove_nonexistent) {
-    fossil_tofu_mapof_t* map = fossil_tofu_mapof_create_container("i32", "str");
+    fossil_tofu_mapof_t* map = fossil_tofu_mapof_create_container("i32", "cstr");
     fossil_tofu_mapof_insert(map, "77", "baz");
     int32_t result = fossil_tofu_mapof_remove(map, "88");
     ASSUME_ITS_EQUAL_I32(result, FOSSIL_TOFU_FAILURE);

@@ -84,7 +84,8 @@ typedef enum {
     FOSSIL_TOFU_TYPE_SIZE,      // Size type (e.g., size_t)
     FOSSIL_TOFU_TYPE_DATETIME,  // ISO 8601 datetime */
     FOSSIL_TOFU_TYPE_DURATION,  // Time span (e.g. "30s", "5m", "1h") */
-    FOSSIL_TOFU_TYPE_ANY        // Any type (generic)
+    FOSSIL_TOFU_TYPE_ANY,       // Any type (generic)
+    FOSSIL_TOFU_TYPE_CNULL      // Null pointer type
 } fossil_tofu_type_t;
 
 typedef struct {
