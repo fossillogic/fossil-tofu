@@ -30,8 +30,8 @@
 
 fossil_tofu_mapof_t* fossil_tofu_mapof_create_container(char* key_type, char* value_type) {
     if (!key_type || !value_type) return NULL;
-    if (fossil_tofu_validate_type(key_type) == FOSSIL_TOFU_FAILURE ||
-        fossil_tofu_validate_type(value_type) == FOSSIL_TOFU_FAILURE)
+    if (fossil_tofu_validate_type(key_type) == FOSSIL_TOFU_TYPE_CNULL ||
+        fossil_tofu_validate_type(value_type) == FOSSIL_TOFU_TYPE_CNULL)
         return NULL;
 
     fossil_tofu_mapof_t* map = (fossil_tofu_mapof_t*)fossil_tofu_alloc(sizeof(fossil_tofu_mapof_t));

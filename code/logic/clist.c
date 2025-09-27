@@ -34,7 +34,7 @@ fossil_tofu_clist_t* fossil_tofu_clist_create_container(char* type) {
         return NULL;
     }
     // Validate type
-    if (fossil_tofu_validate_type(type) == FOSSIL_TOFU_FAILURE) {
+    if (fossil_tofu_validate_type(type) == FOSSIL_TOFU_TYPE_CNULL) {
         fossil_tofu_free(clist);
         return NULL;
     }

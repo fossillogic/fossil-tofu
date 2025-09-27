@@ -29,7 +29,7 @@
 // *****************************************************************************
 
 fossil_tofu_arraylist_t* fossil_tofu_arraylist_create_container(char* type, size_t capacity) {
-    if (type == NULL || fossil_tofu_validate_type(type) == FOSSIL_TOFU_FAILURE) {
+    if (type == NULL || fossil_tofu_validate_type(type) == FOSSIL_TOFU_TYPE_CNULL) {
         return NULL;
     }
     fossil_tofu_arraylist_t* alist = (fossil_tofu_arraylist_t*)fossil_tofu_alloc(sizeof(fossil_tofu_arraylist_t));
