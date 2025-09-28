@@ -121,7 +121,7 @@ typedef struct {
  * @return The created `fossil_tofu_t` object.
  * @note O(1) - Constant time complexity.
  */
-fossil_tofu_t fossil_tofu_create(char* type, char* value);
+fossil_tofu_t fossil_tofu_create(const char* type, const char* value);
 
 /**
  * @brief Creates a new tofu with default values.
@@ -344,6 +344,291 @@ fossil_tofu_t* fossil_tofu_clone(const fossil_tofu_t *tofu);
  * @brief Permanently locks a tofu object to make it immutable.
  */
 int fossil_tofu_lock(fossil_tofu_t *tofu);
+
+// *****************************************************************************
+// "as type" and "from type" function prototypes
+// *****************************************************************************
+
+/**
+ * @brief Converts a tofu object to an int8_t value.
+ * @param tofu Pointer to the tofu object.
+ * @return The int8_t value represented by the tofu object.
+ */
+int8_t fossil_tofu_as_i8(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from an int8_t value.
+ * @param value The int8_t value to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_i8(int8_t value);
+
+/**
+ * @brief Converts a tofu object to an int16_t value.
+ * @param tofu Pointer to the tofu object.
+ * @return The int16_t value represented by the tofu object.
+ */
+int16_t fossil_tofu_as_i16(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from an int16_t value.
+ * @param value The int16_t value to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_i16(int16_t value);
+
+/**
+ * @brief Converts a tofu object to an int32_t value.
+ * @param tofu Pointer to the tofu object.
+ * @return The int32_t value represented by the tofu object.
+ */
+int32_t fossil_tofu_as_i32(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from an int32_t value.
+ * @param value The int32_t value to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_i32(int32_t value);
+
+/**
+ * @brief Converts a tofu object to an int64_t value.
+ * @param tofu Pointer to the tofu object.
+ * @return The int64_t value represented by the tofu object.
+ */
+int64_t fossil_tofu_as_i64(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from an int64_t value.
+ * @param value The int64_t value to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_i64(int64_t value);
+
+/**
+ * @brief Converts a tofu object to a uint8_t value.
+ * @param tofu Pointer to the tofu object.
+ * @return The uint8_t value represented by the tofu object.
+ */
+uint8_t fossil_tofu_as_u8(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a uint8_t value.
+ * @param value The uint8_t value to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_u8(uint8_t value);
+
+/**
+ * @brief Converts a tofu object to a uint16_t value.
+ * @param tofu Pointer to the tofu object.
+ * @return The uint16_t value represented by the tofu object.
+ */
+uint16_t fossil_tofu_as_u16(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a uint16_t value.
+ * @param value The uint16_t value to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_u16(uint16_t value);
+
+/**
+ * @brief Converts a tofu object to a uint32_t value.
+ * @param tofu Pointer to the tofu object.
+ * @return The uint32_t value represented by the tofu object.
+ */
+uint32_t fossil_tofu_as_u32(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a uint32_t value.
+ * @param value The uint32_t value to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_u32(uint32_t value);
+
+/**
+ * @brief Converts a tofu object to a uint64_t value.
+ * @param tofu Pointer to the tofu object.
+ * @return The uint64_t value represented by the tofu object.
+ */
+uint64_t fossil_tofu_as_u64(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a uint64_t value.
+ * @param value The uint64_t value to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_u64(uint64_t value);
+
+/**
+ * @brief Converts a tofu object to a hexadecimal string representation.
+ * @param tofu Pointer to the tofu object.
+ * @return The hexadecimal string, or NULL if not applicable.
+ */
+const char* fossil_tofu_as_hex(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a hexadecimal string.
+ * @param hex_str The hexadecimal string to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_hex(const char *hex_str);
+
+/**
+ * @brief Converts a tofu object to an octal string representation.
+ * @param tofu Pointer to the tofu object.
+ * @return The octal string, or NULL if not applicable.
+ */
+const char* fossil_tofu_as_oct(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from an octal string.
+ * @param oct_str The octal string to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_oct(const char *oct_str);
+
+/**
+ * @brief Converts a tofu object to a binary string representation.
+ * @param tofu Pointer to the tofu object.
+ * @return The binary string, or NULL if not applicable.
+ */
+const char* fossil_tofu_as_bin(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a binary string.
+ * @param bin_str The binary string to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_bin(const char *bin_str);
+
+/**
+ * @brief Converts a tofu object to a float (single-precision).
+ * @param tofu Pointer to the tofu object.
+ * @return The float value represented by the tofu object.
+ */
+float fossil_tofu_as_f32(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a float value.
+ * @param value The float value to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_f32(float value);
+
+/**
+ * @brief Converts a tofu object to a double (double-precision).
+ * @param tofu Pointer to the tofu object.
+ * @return The double value represented by the tofu object.
+ */
+double fossil_tofu_as_f64(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a double value.
+ * @param value The double value to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_f64(double value);
+
+/**
+ * @brief Converts a tofu object to a C-style string.
+ * @param tofu Pointer to the tofu object.
+ * @return The C-string, or NULL if not applicable.
+ */
+const char* fossil_tofu_as_cstr(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a C-style string.
+ * @param str The string to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_cstr(const char *str);
+
+/**
+ * @brief Converts a tofu object to a char value.
+ * @param tofu Pointer to the tofu object.
+ * @return The char value represented by the tofu object.
+ */
+char fossil_tofu_as_char(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a char value.
+ * @param value The char value to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_char(char value);
+
+/**
+ * @brief Converts a tofu object to a boolean value.
+ * @param tofu Pointer to the tofu object.
+ * @return The boolean value represented by the tofu object.
+ */
+bool fossil_tofu_as_bool(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a boolean value.
+ * @param value The boolean value to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_bool(bool value);
+
+/**
+ * @brief Converts a tofu object to a size_t value.
+ * @param tofu Pointer to the tofu object.
+ * @return The size_t value represented by the tofu object.
+ */
+size_t fossil_tofu_as_size(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a size_t value.
+ * @param value The size_t value to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_size(size_t value);
+
+/**
+ * @brief Converts a tofu object to a datetime string (ISO 8601).
+ * @param tofu Pointer to the tofu object.
+ * @return The datetime string, or NULL if not applicable.
+ */
+const char* fossil_tofu_as_datetime(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a datetime string.
+ * @param datetime_str The datetime string to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_datetime(const char *datetime_str);
+
+/**
+ * @brief Converts a tofu object to a duration string.
+ * @param tofu Pointer to the tofu object.
+ * @return The duration string, or NULL if not applicable.
+ */
+const char* fossil_tofu_as_duration(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a duration string.
+ * @param duration_str The duration string to store.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_duration(const char *duration_str);
+
+/**
+ * @brief Converts a tofu object to a generic pointer (void*), if applicable.
+ * @param tofu Pointer to the tofu object.
+ * @return A pointer to the internal data, or NULL if not applicable.
+ */
+void* fossil_tofu_as_any(const fossil_tofu_t *tofu);
+
+/**
+ * @brief Creates a tofu object from a generic pointer and size.
+ * @param data Pointer to the data to store.
+ * @param size Size of the data in bytes.
+ * @return The created tofu object.
+ */
+fossil_tofu_t fossil_tofu_from_any(void *data, size_t size);
 
 // *****************************************************************************
 // Memory management functions
@@ -622,6 +907,287 @@ namespace fossil {
                     throw std::runtime_error("Failed to lock Tofu");
                 }
             }
+
+            // "as type" and "from type" C++ wrappers
+
+            /**
+             * @brief Converts the Tofu object to an int8_t value.
+             * @return The int8_t value represented by the Tofu object.
+             */
+            int8_t as_i8() const { return fossil_tofu_as_i8(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from an int8_t value.
+             * @param value The int8_t value to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_i8(int8_t value) { return Tofu(fossil_tofu_from_i8(value)); }
+
+            /**
+             * @brief Converts the Tofu object to an int16_t value.
+             * @return The int16_t value represented by the Tofu object.
+             */
+            int16_t as_i16() const { return fossil_tofu_as_i16(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from an int16_t value.
+             * @param value The int16_t value to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_i16(int16_t value) { return Tofu(fossil_tofu_from_i16(value)); }
+
+            /**
+             * @brief Converts the Tofu object to an int32_t value.
+             * @return The int32_t value represented by the Tofu object.
+             */
+            int32_t as_i32() const { return fossil_tofu_as_i32(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from an int32_t value.
+             * @param value The int32_t value to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_i32(int32_t value) { return Tofu(fossil_tofu_from_i32(value)); }
+
+            /**
+             * @brief Converts the Tofu object to an int64_t value.
+             * @return The int64_t value represented by the Tofu object.
+             */
+            int64_t as_i64() const { return fossil_tofu_as_i64(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from an int64_t value.
+             * @param value The int64_t value to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_i64(int64_t value) { return Tofu(fossil_tofu_from_i64(value)); }
+
+            /**
+             * @brief Converts the Tofu object to a uint8_t value.
+             * @return The uint8_t value represented by the Tofu object.
+             */
+            uint8_t as_u8() const { return fossil_tofu_as_u8(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from a uint8_t value.
+             * @param value The uint8_t value to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_u8(uint8_t value) { return Tofu(fossil_tofu_from_u8(value)); }
+
+            /**
+             * @brief Converts the Tofu object to a uint16_t value.
+             * @return The uint16_t value represented by the Tofu object.
+             */
+            uint16_t as_u16() const { return fossil_tofu_as_u16(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from a uint16_t value.
+             * @param value The uint16_t value to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_u16(uint16_t value) { return Tofu(fossil_tofu_from_u16(value)); }
+
+            /**
+             * @brief Converts the Tofu object to a uint32_t value.
+             * @return The uint32_t value represented by the Tofu object.
+             */
+            uint32_t as_u32() const { return fossil_tofu_as_u32(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from a uint32_t value.
+             * @param value The uint32_t value to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_u32(uint32_t value) { return Tofu(fossil_tofu_from_u32(value)); }
+
+            /**
+             * @brief Converts the Tofu object to a uint64_t value.
+             * @return The uint64_t value represented by the Tofu object.
+             */
+            uint64_t as_u64() const { return fossil_tofu_as_u64(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from a uint64_t value.
+             * @param value The uint64_t value to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_u64(uint64_t value) { return Tofu(fossil_tofu_from_u64(value)); }
+
+            /**
+             * @brief Converts the Tofu object to a hexadecimal string representation.
+             * @return The hexadecimal string, or an empty string if not applicable.
+             */
+            std::string as_hex() const {
+                const char* s = fossil_tofu_as_hex(&tofu_);
+                return s ? std::string(s) : std::string();
+            }
+
+            /**
+             * @brief Creates a Tofu object from a hexadecimal string.
+             * @param hex_str The hexadecimal string to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_hex(const std::string& hex_str) { return Tofu(fossil_tofu_from_hex(hex_str.c_str())); }
+
+            /**
+             * @brief Converts the Tofu object to an octal string representation.
+             * @return The octal string, or an empty string if not applicable.
+             */
+            std::string as_oct() const {
+                const char* s = fossil_tofu_as_oct(&tofu_);
+                return s ? std::string(s) : std::string();
+            }
+
+            /**
+             * @brief Creates a Tofu object from an octal string.
+             * @param oct_str The octal string to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_oct(const std::string& oct_str) { return Tofu(fossil_tofu_from_oct(oct_str.c_str())); }
+
+            /**
+             * @brief Converts the Tofu object to a binary string representation.
+             * @return The binary string, or an empty string if not applicable.
+             */
+            std::string as_bin() const {
+                const char* s = fossil_tofu_as_bin(&tofu_);
+                return s ? std::string(s) : std::string();
+            }
+
+            /**
+             * @brief Creates a Tofu object from a binary string.
+             * @param bin_str The binary string to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_bin(const std::string& bin_str) { return Tofu(fossil_tofu_from_bin(bin_str.c_str())); }
+
+            /**
+             * @brief Converts the Tofu object to a float (single-precision).
+             * @return The float value represented by the Tofu object.
+             */
+            float as_f32() const { return fossil_tofu_as_f32(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from a float value.
+             * @param value The float value to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_f32(float value) { return Tofu(fossil_tofu_from_f32(value)); }
+
+            /**
+             * @brief Converts the Tofu object to a double (double-precision).
+             * @return The double value represented by the Tofu object.
+             */
+            double as_f64() const { return fossil_tofu_as_f64(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from a double value.
+             * @param value The double value to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_f64(double value) { return Tofu(fossil_tofu_from_f64(value)); }
+
+            /**
+             * @brief Converts the Tofu object to a C-style string.
+             * @return The C-string, or an empty string if not applicable.
+             */
+            std::string as_cstr() const {
+                const char* s = fossil_tofu_as_cstr(&tofu_);
+                return s ? std::string(s) : std::string();
+            }
+
+            /**
+             * @brief Creates a Tofu object from a C-style string.
+             * @param str The string to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_cstr(const std::string& str) { return Tofu(fossil_tofu_from_cstr(str.c_str())); }
+
+            /**
+             * @brief Converts the Tofu object to a char value.
+             * @return The char value represented by the Tofu object.
+             */
+            char as_char() const { return fossil_tofu_as_char(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from a char value.
+             * @param value The char value to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_char(char value) { return Tofu(fossil_tofu_from_char(value)); }
+
+            /**
+             * @brief Converts the Tofu object to a boolean value.
+             * @return The boolean value represented by the Tofu object.
+             */
+            bool as_bool() const { return fossil_tofu_as_bool(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from a boolean value.
+             * @param value The boolean value to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_bool(bool value) { return Tofu(fossil_tofu_from_bool(value)); }
+
+            /**
+             * @brief Converts the Tofu object to a size_t value.
+             * @return The size_t value represented by the Tofu object.
+             */
+            size_t as_size() const { return fossil_tofu_as_size(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from a size_t value.
+             * @param value The size_t value to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_size(size_t value) { return Tofu(fossil_tofu_from_size(value)); }
+
+            /**
+             * @brief Converts the Tofu object to a datetime string (ISO 8601).
+             * @return The datetime string, or an empty string if not applicable.
+             */
+            std::string as_datetime() const {
+                const char* s = fossil_tofu_as_datetime(&tofu_);
+                return s ? std::string(s) : std::string();
+            }
+
+            /**
+             * @brief Creates a Tofu object from a datetime string.
+             * @param datetime_str The datetime string to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_datetime(const std::string& datetime_str) { return Tofu(fossil_tofu_from_datetime(datetime_str.c_str())); }
+
+            /**
+             * @brief Converts the Tofu object to a duration string.
+             * @return The duration string, or an empty string if not applicable.
+             */
+            std::string as_duration() const {
+                const char* s = fossil_tofu_as_duration(&tofu_);
+                return s ? std::string(s) : std::string();
+            }
+
+            /**
+             * @brief Creates a Tofu object from a duration string.
+             * @param duration_str The duration string to store.
+             * @return The created Tofu object.
+             */
+            static Tofu from_duration(const std::string& duration_str) { return Tofu(fossil_tofu_from_duration(duration_str.c_str())); }
+
+            /**
+             * @brief Converts the Tofu object to a generic pointer (void*), if applicable.
+             * @return A pointer to the internal data, or NULL if not applicable.
+             */
+            void* as_any() const { return fossil_tofu_as_any(&tofu_); }
+
+            /**
+             * @brief Creates a Tofu object from a generic pointer and size.
+             * @param data Pointer to the data to store.
+             * @param size Size of the data in bytes.
+             * @return The created Tofu object.
+             */
+            static Tofu from_any(void* data, size_t size) { return Tofu(fossil_tofu_from_any(data, size)); }
 
             /**
              * @brief Displays the Tofu object using the default renderer (typically to stdout).

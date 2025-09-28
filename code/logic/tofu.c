@@ -45,7 +45,8 @@ static char *_TOFU_TYPE_ID[] = {
     "size",
     "datetime",
     "duration",
-    "any"
+    "any",
+    "null"
 };
 
 static char *_TOFU_TYPE_NAME[] = {
@@ -68,7 +69,8 @@ static char *_TOFU_TYPE_NAME[] = {
     "Size",
     "Date time",
     "Duration",
-    "Any"
+    "Any",
+    "Null"
 };
 
 static char *_TOFU_TYPE_INFO[] = {
@@ -91,7 +93,8 @@ static char *_TOFU_TYPE_INFO[] = {
     "A size value",
     "A date and time",
     "A duration",
-    "A generic value"
+    "A generic value",
+    "A null value"
 };
 
 fossil_tofu_type_t fossil_tofu_validate_type(const char *type_str) {
@@ -184,7 +187,7 @@ uint64_t fossil_tofu_hash64(const char *data) {
 // Managment functions
 // *****************************************************************************
 
-fossil_tofu_t fossil_tofu_create(char* type, char* value) {
+fossil_tofu_t fossil_tofu_create(const char* type, const char* value) {
     if (!type || !value) {
         fprintf(stderr, "Error: NULL argument passed to fossil_tofu_create\n");
         return (fossil_tofu_t){0};
@@ -726,6 +729,228 @@ int fossil_tofu_lock(fossil_tofu_t *tofu) {
     if (!tofu) return FOSSIL_TOFU_ERROR_NULL_POINTER;
     tofu->value.mutable_flag = false;
     return FOSSIL_TOFU_SUCCESS;
+}
+
+// *****************************************************************************
+// "as type" and "from type" function prototypes
+// *****************************************************************************
+
+int8_t fossil_tofu_as_i8(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return 0;
+    return (int8_t)strtol(tofu->value.data, NULL, 10);
+}
+
+fossil_tofu_t fossil_tofu_from_i8(int8_t value) {
+    char buf[8];
+    snprintf(buf, sizeof(buf), "%d", value);
+    return fossil_tofu_create("i8", buf);
+}
+
+int16_t fossil_tofu_as_i16(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return 0;
+    return (int16_t)strtol(tofu->value.data, NULL, 10);
+}
+
+fossil_tofu_t fossil_tofu_from_i16(int16_t value) {
+    char buf[16];
+    snprintf(buf, sizeof(buf), "%d", value);
+    return fossil_tofu_create("i16", buf);
+}
+
+int32_t fossil_tofu_as_i32(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return 0;
+    return (int32_t)strtol(tofu->value.data, NULL, 10);
+}
+
+fossil_tofu_t fossil_tofu_from_i32(int32_t value) {
+    char buf[24];
+    snprintf(buf, sizeof(buf), "%d", value);
+    return fossil_tofu_create("i32", buf);
+}
+
+int64_t fossil_tofu_as_i64(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return 0;
+    return (int64_t)strtoll(tofu->value.data, NULL, 10);
+}
+
+fossil_tofu_t fossil_tofu_from_i64(int64_t value) {
+    char buf[32];
+    snprintf(buf, sizeof(buf), "%lld", (long long)value);
+    return fossil_tofu_create("i64", buf);
+}
+
+uint8_t fossil_tofu_as_u8(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return 0;
+    return (uint8_t)strtoul(tofu->value.data, NULL, 10);
+}
+
+fossil_tofu_t fossil_tofu_from_u8(uint8_t value) {
+    char buf[8];
+    snprintf(buf, sizeof(buf), "%u", value);
+    return fossil_tofu_create("u8", buf);
+}
+
+uint16_t fossil_tofu_as_u16(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return 0;
+    return (uint16_t)strtoul(tofu->value.data, NULL, 10);
+}
+
+fossil_tofu_t fossil_tofu_from_u16(uint16_t value) {
+    char buf[16];
+    snprintf(buf, sizeof(buf), "%u", value);
+    return fossil_tofu_create("u16", buf);
+}
+
+uint32_t fossil_tofu_as_u32(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return 0;
+    return (uint32_t)strtoul(tofu->value.data, NULL, 10);
+}
+
+fossil_tofu_t fossil_tofu_from_u32(uint32_t value) {
+    char buf[24];
+    snprintf(buf, sizeof(buf), "%u", value);
+    return fossil_tofu_create("u32", buf);
+}
+
+uint64_t fossil_tofu_as_u64(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return 0;
+    return (uint64_t)strtoull(tofu->value.data, NULL, 10);
+}
+
+fossil_tofu_t fossil_tofu_from_u64(uint64_t value) {
+    char buf[32];
+    snprintf(buf, sizeof(buf), "%llu", (unsigned long long)value);
+    return fossil_tofu_create("u64", buf);
+}
+
+const char* fossil_tofu_as_hex(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return NULL;
+    return tofu->value.data;
+}
+
+fossil_tofu_t fossil_tofu_from_hex(const char *hex_str) {
+    return fossil_tofu_create("hex", hex_str ? hex_str : "");
+}
+
+const char* fossil_tofu_as_oct(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return NULL;
+    return tofu->value.data;
+}
+
+fossil_tofu_t fossil_tofu_from_oct(const char *oct_str) {
+    return fossil_tofu_create("oct", oct_str ? oct_str : "");
+}
+
+const char* fossil_tofu_as_bin(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return NULL;
+    return tofu->value.data;
+}
+
+fossil_tofu_t fossil_tofu_from_bin(const char *bin_str) {
+    return fossil_tofu_create("bin", bin_str ? bin_str : "");
+}
+
+float fossil_tofu_as_f32(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return 0.0f;
+    return (float)strtof(tofu->value.data, NULL);
+}
+
+fossil_tofu_t fossil_tofu_from_f32(float value) {
+    char buf[32];
+    snprintf(buf, sizeof(buf), "%f", value);
+    return fossil_tofu_create("f32", buf);
+}
+
+double fossil_tofu_as_f64(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return 0.0;
+    // Only parse as double if type is F64, otherwise fallback to strtod
+    if (tofu->type == FOSSIL_TOFU_TYPE_F64) {
+        return strtod(tofu->value.data, NULL);
+    }
+    return 0.0;
+}
+
+fossil_tofu_t fossil_tofu_from_f64(double value) {
+    char buf[48];
+    snprintf(buf, sizeof(buf), "%lf", value);
+    return fossil_tofu_create("f64", buf);
+}
+
+const char* fossil_tofu_as_cstr(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return NULL;
+    return tofu->value.data;
+}
+
+fossil_tofu_t fossil_tofu_from_cstr(const char *str) {
+    return fossil_tofu_create("cstr", str ? str : "");
+}
+
+char fossil_tofu_as_char(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data || tofu->value.data[0] == '\0') return '\0';
+    return tofu->value.data[0];
+}
+
+fossil_tofu_t fossil_tofu_from_char(char value) {
+    char buf[2] = { value, '\0' };
+    return fossil_tofu_create("char", buf);
+}
+
+bool fossil_tofu_as_bool(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return false;
+    if (strcmp(tofu->value.data, "true") == 0 || strcmp(tofu->value.data, "1") == 0)
+        return true;
+    return false;
+}
+
+fossil_tofu_t fossil_tofu_from_bool(bool value) {
+    return fossil_tofu_create("bool", value ? "true" : "false");
+}
+
+size_t fossil_tofu_as_size(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return 0;
+    return (size_t)strtoull(tofu->value.data, NULL, 10);
+}
+
+fossil_tofu_t fossil_tofu_from_size(size_t value) {
+    char buf[32];
+    snprintf(buf, sizeof(buf), "%zu", value);
+    return fossil_tofu_create("size", buf);
+}
+
+const char* fossil_tofu_as_datetime(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return NULL;
+    return tofu->value.data;
+}
+
+fossil_tofu_t fossil_tofu_from_datetime(const char *datetime_str) {
+    return fossil_tofu_create("datetime", datetime_str ? datetime_str : "");
+}
+
+const char* fossil_tofu_as_duration(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return NULL;
+    return tofu->value.data;
+}
+
+fossil_tofu_t fossil_tofu_from_duration(const char *duration_str) {
+    return fossil_tofu_create("duration", duration_str ? duration_str : "");
+}
+
+void* fossil_tofu_as_any(const fossil_tofu_t *tofu) {
+    if (!tofu || !tofu->value.data) return NULL;
+    return (void*)tofu->value.data;
+}
+
+fossil_tofu_t fossil_tofu_from_any(void *data, size_t size) {
+    // Store as a hex string representation of the bytes
+    if (!data || size == 0) return fossil_tofu_create("any", "");
+    size_t bufsize = size * 2 + 1;
+    char *buf = (char*)fossil_tofu_alloc(bufsize);
+    if (!buf) return fossil_tofu_create("any", "");
+    for (size_t i = 0; i < size; ++i)
+        snprintf(buf + i * 2, 3, "%02x", ((unsigned char*)data)[i]);
+    fossil_tofu_t tofu = fossil_tofu_create("any", buf);
+    fossil_tofu_free(buf);
+    return tofu;
 }
 
 // *****************************************************************************
