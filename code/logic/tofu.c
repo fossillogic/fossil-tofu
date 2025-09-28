@@ -395,13 +395,55 @@ void fossil_tofu_destroy(fossil_tofu_t *tofu) {
 // *****************************************************************************
 
 int fossil_tofu_compare(const fossil_tofu_t *tofu1, const fossil_tofu_t *tofu2) {
-    if (tofu1 == NULL || tofu2 == NULL || tofu1->value.data == NULL || tofu2->value.data == NULL) return FOSSIL_TOFU_SUCCESS;
+    if (tofu1 == NULL || tofu2 == NULL || tofu1->value.data == NULL || tofu2->value.data == NULL)
+        return 0;
 
     if (tofu1->type != tofu2->type) {
         return (int)tofu1->type - (int)tofu2->type;
     }
 
-    return strcmp(tofu1->value.data, tofu2->value.data);
+    // Numeric comparison for integer types
+    switch (tofu1->type) {
+        case FOSSIL_TOFU_TYPE_I8:
+        case FOSSIL_TOFU_TYPE_I16:
+        case FOSSIL_TOFU_TYPE_I32:
+        case FOSSIL_TOFU_TYPE_I64:
+        case FOSSIL_TOFU_TYPE_U8:
+        case FOSSIL_TOFU_TYPE_U16:
+        case FOSSIL_TOFU_TYPE_U32:
+        case FOSSIL_TOFU_TYPE_U64: {
+            // Use strtoll/strtoull for signed/unsigned
+            int is_signed =
+                tofu1->type == FOSSIL_TOFU_TYPE_I8 ||
+                tofu1->type == FOSSIL_TOFU_TYPE_I16 ||
+                tofu1->type == FOSSIL_TOFU_TYPE_I32 ||
+                tofu1->type == FOSSIL_TOFU_TYPE_I64;
+            if (is_signed) {
+                long long v1 = strtoll(tofu1->value.data, NULL, 10);
+                long long v2 = strtoll(tofu2->value.data, NULL, 10);
+                if (v1 < v2) return -1;
+                if (v1 > v2) return 1;
+                return 0;
+            } else {
+                unsigned long long v1 = strtoull(tofu1->value.data, NULL, 10);
+                unsigned long long v2 = strtoull(tofu2->value.data, NULL, 10);
+                if (v1 < v2) return -1;
+                if (v1 > v2) return 1;
+                return 0;
+            }
+        }
+        case FOSSIL_TOFU_TYPE_F32:
+        case FOSSIL_TOFU_TYPE_F64: {
+            double v1 = strtod(tofu1->value.data, NULL);
+            double v2 = strtod(tofu2->value.data, NULL);
+            if (v1 < v2) return -1;
+            if (v1 > v2) return 1;
+            return 0;
+        }
+        default:
+            // Fallback to string comparison
+            return strcmp(tofu1->value.data, tofu2->value.data);
+    }
 }
 
 int fossil_tofu_set_value(fossil_tofu_t *tofu, char *value) {

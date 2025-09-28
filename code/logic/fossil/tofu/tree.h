@@ -103,6 +103,56 @@ int fossil_tofu_tree_insert(fossil_tofu_tree_t *tree, fossil_tofu_t *value);
 fossil_tofu_tree_node_t* fossil_tofu_tree_search(fossil_tofu_tree_t *tree, const fossil_tofu_t *value);
 
 /**
+ * @brief Removes a node with the specified value from the tree.
+ * 
+ * @param tree Pointer to the tree.
+ * @param value Pointer to the value to remove.
+ * @return 0 on success, non-zero on failure.
+ */
+int fossil_tofu_tree_remove(fossil_tofu_tree_t *tree, const fossil_tofu_t *value);
+
+/**
+ * @brief Compares two fossil_tofu_t values for ordering.
+ * 
+ * @param a Pointer to the first value.
+ * @param b Pointer to the second value.
+ * @return Negative if a < b, 0 if a == b, positive if a > b.
+ */
+int fossil_tofu_tree_compare(const fossil_tofu_t *a, const fossil_tofu_t *b);
+
+/**
+ * @brief Gets the minimum value node in the tree.
+ * 
+ * @param tree Pointer to the tree.
+ * @return Pointer to the node with the minimum value, or NULL if tree is empty.
+ */
+fossil_tofu_tree_node_t* fossil_tofu_tree_min(fossil_tofu_tree_t *tree);
+
+/**
+ * @brief Gets the maximum value node in the tree.
+ * 
+ * @param tree Pointer to the tree.
+ * @return Pointer to the node with the maximum value, or NULL if tree is empty.
+ */
+fossil_tofu_tree_node_t* fossil_tofu_tree_max(fossil_tofu_tree_t *tree);
+
+/**
+ * @brief Gets the height of the tree.
+ * 
+ * @param tree Pointer to the tree.
+ * @return Height of the tree.
+ */
+int fossil_tofu_tree_height(fossil_tofu_tree_t *tree);
+
+/**
+ * @brief Checks if the tree is empty.
+ * 
+ * @param tree Pointer to the tree.
+ * @return 1 if empty, 0 otherwise.
+ */
+int fossil_tofu_tree_is_empty(fossil_tofu_tree_t *tree);
+
+/**
  * -----------------------------------------------------------------------------
  * Traversal Functions
  * -----------------------------------------------------------------------------
@@ -146,6 +196,27 @@ void fossil_tofu_tree_traverse_preorder(fossil_tofu_tree_node_t *node, fossil_to
  * @param visit Function to call for each node's value.
  */
 void fossil_tofu_tree_traverse_postorder(fossil_tofu_tree_node_t *node, fossil_tofu_tree_visit_fn visit);
+
+/**
+ * -----------------------------------------------------------------------------
+ * Utility Functions
+ * -----------------------------------------------------------------------------
+ */
+
+/**
+ * @brief Clears all nodes from the tree, but does not destroy the tree itself.
+ * 
+ * @param tree Pointer to the tree to clear.
+ */
+void fossil_tofu_tree_clear(fossil_tofu_tree_t *tree);
+
+/**
+ * @brief Returns the number of nodes in the tree.
+ * 
+ * @param tree Pointer to the tree.
+ * @return Number of nodes in the tree.
+ */
+size_t fossil_tofu_tree_size(fossil_tofu_tree_t *tree);
 
 #ifdef __cplusplus
 }
@@ -198,7 +269,75 @@ namespace fossil {
              * @return Pointer to the found node, or nullptr if not found.
              */
             fossil_tofu_tree_node_t* search(const Tofu& value) const {
-                return fossil_tofu_tree_search(tree_, &value.get_c_struct());
+                // If value is empty, return nullptr for safety
+                if (value.is_empty()) return nullptr;
+                fossil_tofu_tree_node_t* node = fossil_tofu_tree_search(tree_, &value.get_c_struct());
+                return node;
+            }
+
+            /**
+             * @brief Removes a node with the specified Tofu value from the tree.
+             * @param value The Tofu object to remove.
+             * @throws std::runtime_error If the removal fails (including if value not found).
+             */
+            void remove(const Tofu& value) {
+                // If value is empty, throw immediately
+                if (value.is_empty()) {
+                    throw std::runtime_error("Cannot remove empty value from tree.");
+                }
+                // Check if value exists before attempting removal
+                fossil_tofu_tree_node_t* node = fossil_tofu_tree_search(tree_, &value.get_c_struct());
+                if (!node) {
+                    throw std::runtime_error("Value not found in tree.");
+                }
+                if (fossil_tofu_tree_remove(tree_, &value.get_c_struct()) != 0) {
+                    throw std::runtime_error("Failed to remove value from tree.");
+                }
+            }
+
+            /**
+             * @brief Compares two Tofu values for ordering.
+             * @param a The first Tofu object.
+             * @param b The second Tofu object.
+             * @return Negative if a < b, 0 if a == b, positive if a > b.
+             */
+            int compare(const Tofu& a, const Tofu& b) const {
+                return fossil_tofu_tree_compare(&a.get_c_struct(), &b.get_c_struct());
+            }
+
+            /**
+             * @brief Gets the node with the minimum value in the tree.
+             * @return Pointer to the node with the minimum value, or nullptr if tree is empty.
+             */
+            fossil_tofu_tree_node_t* min() const {
+                if (tree_->size == 0) return nullptr;
+                return fossil_tofu_tree_min(tree_);
+            }
+
+            /**
+             * @brief Gets the node with the maximum value in the tree.
+             * @return Pointer to the node with the maximum value, or nullptr if tree is empty.
+             */
+            fossil_tofu_tree_node_t* max() const {
+                if (tree_->size == 0) return nullptr;
+                return fossil_tofu_tree_max(tree_);
+            }
+
+            /**
+             * @brief Gets the height of the tree.
+             * @return Height of the tree.
+             */
+            int height() const {
+                if (!tree_ || tree_->size == 0) return 0;
+                return fossil_tofu_tree_height(tree_);
+            }
+
+            /**
+             * @brief Checks if the tree is empty.
+             * @return True if the tree is empty, false otherwise.
+             */
+            bool empty() const {
+                return !tree_ || tree_->size == 0;
             }
 
             /**
@@ -206,7 +345,7 @@ namespace fossil {
              * @return The number of nodes in the tree.
              */
             size_t size() const {
-                return tree_->size;
+                return tree_ ? tree_->size : 0;
             }
 
             /**
@@ -214,7 +353,7 @@ namespace fossil {
              * @return True if the tree is empty, false otherwise.
              */
             bool is_empty() const {
-                return tree_->size == 0;
+                return size() == 0;
             }
 
             /**
@@ -222,6 +361,7 @@ namespace fossil {
              * @param visit Function to call for each node's value.
              */
             void traverse(fossil_tofu_tree_visit_fn visit) {
+                if (!tree_ || !visit) return;
                 fossil_tofu_tree_traverse(tree_, visit);
             }
 
@@ -230,6 +370,7 @@ namespace fossil {
              * @param visit Function to call for each node's value.
              */
             void traverse_inorder(fossil_tofu_tree_visit_fn visit) {
+                if (!tree_ || !tree_->root || !visit) return;
                 fossil_tofu_tree_traverse_inorder(tree_->root, visit);
             }
 
@@ -238,6 +379,7 @@ namespace fossil {
              * @param visit Function to call for each node's value.
              */
             void traverse_preorder(fossil_tofu_tree_visit_fn visit) {
+                if (!tree_ || !tree_->root || !visit) return;
                 fossil_tofu_tree_traverse_preorder(tree_->root, visit);
             }
 
@@ -246,7 +388,24 @@ namespace fossil {
              * @param visit Function to call for each node's value.
              */
             void traverse_postorder(fossil_tofu_tree_visit_fn visit) {
+                if (!tree_ || !tree_->root || !visit) return;
                 fossil_tofu_tree_traverse_postorder(tree_->root, visit);
+            }
+
+            /**
+             * @brief Clears all nodes from the tree, but does not destroy the tree itself.
+             */
+            void clear() {
+                if (!tree_) return;
+                fossil_tofu_tree_clear(tree_);
+            }
+
+            /**
+             * @brief Returns the number of nodes in the tree.
+             * @return The number of nodes in the tree.
+             */
+            size_t get_size() const {
+                return fossil_tofu_tree_size(tree_);
             }
 
         private:

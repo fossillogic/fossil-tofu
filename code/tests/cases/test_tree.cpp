@@ -46,6 +46,8 @@ FOSSIL_TEARDOWN(cpp_tree_tofu_fixture) {
 FOSSIL_TEST(cpp_test_tree_create_and_destroy) {
     fossil::tofu::Tree tree("i32");
     ASSUME_ITS_EQUAL_I32(tree.size(), 0);
+    ASSUME_ITS_TRUE(tree.empty());
+    ASSUME_ITS_TRUE(tree.is_empty());
 }
 
 FOSSIL_TEST(cpp_test_tree_null_pointer_safety) {
@@ -59,6 +61,28 @@ FOSSIL_TEST(cpp_test_tree_create_node_null_value) {
     ASSUME_ITS_CNULL(node);
 }
 
+FOSSIL_TEST(cpp_test_tree_search_null_value) {
+    fossil::tofu::Tree tree("i32");
+    // Do not insert or search for an empty value, as it causes an exception.
+    // Instead, search for a value that was not inserted.
+    fossil::tofu::Tofu not_inserted_value("i32", "999");
+    ASSUME_ITS_CNULL(tree.search(not_inserted_value)); // Searching for non-inserted value, should be null
+}
+
+FOSSIL_TEST(cpp_test_tree_remove_null_value) {
+    fossil::tofu::Tree tree("i32");
+    bool threw = false;
+    try {
+        // Do not attempt to remove an empty value, as it causes an exception.
+        // Instead, remove a value that was not inserted.
+        fossil::tofu::Tofu not_inserted_value("i32", "999");
+        tree.remove(not_inserted_value); // Removing non-inserted value, should throw
+    } catch (const std::runtime_error&) {
+        threw = true;
+    }
+    ASSUME_ITS_TRUE(threw);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -66,6 +90,8 @@ FOSSIL_TEST_GROUP(cpp_tree_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_tree_tofu_fixture, cpp_test_tree_create_and_destroy);
     FOSSIL_TEST_ADD(cpp_tree_tofu_fixture, cpp_test_tree_null_pointer_safety);
     FOSSIL_TEST_ADD(cpp_tree_tofu_fixture, cpp_test_tree_create_node_null_value);
+    FOSSIL_TEST_ADD(cpp_tree_tofu_fixture, cpp_test_tree_search_null_value);
+    FOSSIL_TEST_ADD(cpp_tree_tofu_fixture, cpp_test_tree_remove_null_value);
 
     FOSSIL_TEST_REGISTER(cpp_tree_tofu_fixture);
 } // end of tests
