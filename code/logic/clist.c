@@ -33,6 +33,11 @@ fossil_tofu_clist_t* fossil_tofu_clist_create_container(char* type) {
     if (clist == NULL) {
         return NULL;
     }
+    // Validate type
+    if (fossil_tofu_validate_type(type) == FOSSIL_TOFU_TYPE_CNULL) {
+        fossil_tofu_free(clist);
+        return NULL;
+    }
     clist->head = NULL;
     clist->type = fossil_tofu_strdup(type);
     return clist;
@@ -43,6 +48,9 @@ fossil_tofu_clist_t* fossil_tofu_clist_create_default(void) {
 }
 
 fossil_tofu_clist_t* fossil_tofu_clist_create_copy(const fossil_tofu_clist_t* other) {
+    if (other == NULL || other->type == NULL) {
+        return NULL;
+    }
     fossil_tofu_clist_t* clist = (fossil_tofu_clist_t*)fossil_tofu_alloc(sizeof(fossil_tofu_clist_t));
     if (clist == NULL) {
         return NULL;
@@ -52,14 +60,24 @@ fossil_tofu_clist_t* fossil_tofu_clist_create_copy(const fossil_tofu_clist_t* ot
     fossil_tofu_clist_node_t* current = other->head;
     if (current != NULL) {
         do {
+            // Check type match before insert
+            fossil_tofu_type_t t1 = fossil_tofu_validate_type(clist->type);
+            fossil_tofu_type_t t2 = fossil_tofu_get_type(&current->data);
+            if (t1 != FOSSIL_TOFU_TYPE_ANY && t1 != t2) {
+                fossil_tofu_clist_destroy(clist);
+                return NULL;
+            }
             fossil_tofu_clist_insert(clist, fossil_tofu_get_value(&current->data));
             current = current->next;
-        } while (current != other->head);  // Continue until we reach the head node again
+        } while (current != other->head);
     }
     return clist;
 }
 
 fossil_tofu_clist_t* fossil_tofu_clist_create_move(fossil_tofu_clist_t* other) {
+    if (other == NULL || other->type == NULL) {
+        return NULL;
+    }
     fossil_tofu_clist_t* clist = (fossil_tofu_clist_t*)fossil_tofu_alloc(sizeof(fossil_tofu_clist_t));
     if (clist == NULL) {
         return NULL;

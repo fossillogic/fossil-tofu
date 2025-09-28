@@ -29,6 +29,9 @@
 // *****************************************************************************
 
 fossil_tofu_dqueue_t* fossil_tofu_dqueue_create_container(char* type) {
+    if (type == NULL || fossil_tofu_validate_type(type) == FOSSIL_TOFU_TYPE_CNULL) {
+        return NULL;
+    }
     fossil_tofu_dqueue_t* dqueue = (fossil_tofu_dqueue_t*)fossil_tofu_alloc(sizeof(fossil_tofu_dqueue_t));
     if (dqueue == NULL) {
         return NULL;
@@ -44,6 +47,9 @@ fossil_tofu_dqueue_t* fossil_tofu_dqueue_create_default(void) {
 }
 
 fossil_tofu_dqueue_t* fossil_tofu_dqueue_create_copy(const fossil_tofu_dqueue_t* other) {
+    if (other == NULL || other->type == NULL) {
+        return NULL;
+    }
     fossil_tofu_dqueue_t* dqueue = (fossil_tofu_dqueue_t*)fossil_tofu_alloc(sizeof(fossil_tofu_dqueue_t));
     if (dqueue == NULL) {
         return NULL;
@@ -53,6 +59,13 @@ fossil_tofu_dqueue_t* fossil_tofu_dqueue_create_copy(const fossil_tofu_dqueue_t*
     dqueue->rear = NULL;
     fossil_tofu_dqueue_node_t* current = other->front;
     while (current != NULL) {
+        // Check type match before insert
+        fossil_tofu_type_t dqueue_type = fossil_tofu_validate_type(dqueue->type);
+        fossil_tofu_type_t node_type = fossil_tofu_get_type(&current->data);
+        if (dqueue_type != FOSSIL_TOFU_TYPE_ANY && dqueue_type != node_type) {
+            fossil_tofu_dqueue_destroy(dqueue);
+            return NULL;
+        }
         fossil_tofu_dqueue_insert(dqueue, fossil_tofu_get_value(&current->data));
         current = current->next;
     }
@@ -60,7 +73,7 @@ fossil_tofu_dqueue_t* fossil_tofu_dqueue_create_copy(const fossil_tofu_dqueue_t*
 }
 
 fossil_tofu_dqueue_t* fossil_tofu_dqueue_create_move(fossil_tofu_dqueue_t* other) {
-    if (other == NULL) {
+    if (other == NULL || other->type == NULL) {
         return NULL;
     }
     fossil_tofu_dqueue_t* dqueue = (fossil_tofu_dqueue_t*)fossil_tofu_alloc(sizeof(fossil_tofu_dqueue_t));
@@ -71,7 +84,6 @@ fossil_tofu_dqueue_t* fossil_tofu_dqueue_create_move(fossil_tofu_dqueue_t* other
     dqueue->front = other->front;
     dqueue->rear = other->rear;
 
-    // Ensure 'other' is left in a valid, empty state
     other->type = NULL;
     other->front = NULL;
     other->rear = NULL;

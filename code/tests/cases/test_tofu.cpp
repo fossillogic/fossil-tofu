@@ -199,6 +199,131 @@ FOSSIL_TEST(cpp_test_tofu_lock) {
     ASSUME_ITS_FALSE(tofu.is_mutable());
 }
 
+FOSSIL_TEST(cpp_test_tofu_as_from_i8) {
+    auto tofu = fossil::tofu::Tofu::from_i8(-42);
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Signed 8-bit Integer");
+    ASSUME_ITS_EQUAL_I32(tofu.as_i8(), -42);
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_i16) {
+    auto tofu = fossil::tofu::Tofu::from_i16(-12345);
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Signed 16-bit Integer");
+    ASSUME_ITS_EQUAL_I32(tofu.as_i16(), -12345);
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_i32) {
+    auto tofu = fossil::tofu::Tofu::from_i32(-123456789);
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Signed 32-bit Integer");
+    ASSUME_ITS_EQUAL_I32(tofu.as_i32(), -123456789);
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_i64) {
+    auto tofu = fossil::tofu::Tofu::from_i64(-1234567890123LL);
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Signed 64-bit Integer");
+    ASSUME_ITS_EQUAL_I64(tofu.as_i64(), -1234567890123LL);
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_u8) {
+    auto tofu = fossil::tofu::Tofu::from_u8(200);
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Unsigned 8-bit Integer");
+    ASSUME_ITS_EQUAL_U32(tofu.as_u8(), 200);
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_u16) {
+    auto tofu = fossil::tofu::Tofu::from_u16(60000);
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Unsigned 16-bit Integer");
+    ASSUME_ITS_EQUAL_U32(tofu.as_u16(), 60000);
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_u32) {
+    auto tofu = fossil::tofu::Tofu::from_u32(4000000000U);
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Unsigned 32-bit Integer");
+    ASSUME_ITS_EQUAL_U32(tofu.as_u32(), 4000000000U);
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_u64) {
+    auto tofu = fossil::tofu::Tofu::from_u64(9000000000000000000ULL);
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Unsigned 64-bit Integer");
+    ASSUME_ITS_EQUAL_U64(tofu.as_u64(), 9000000000000000000ULL);
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_hex) {
+    auto tofu = fossil::tofu::Tofu::from_hex("0x1A2B3C");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Hexadecimal");
+    ASSUME_ITS_EQUAL_CSTR(tofu.as_hex().c_str(), "0x1A2B3C");
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_oct) {
+    auto tofu = fossil::tofu::Tofu::from_oct("0755");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Octal");
+    ASSUME_ITS_EQUAL_CSTR(tofu.as_oct().c_str(), "0755");
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_bin) {
+    auto tofu = fossil::tofu::Tofu::from_bin("101010");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Binary");
+    ASSUME_ITS_EQUAL_CSTR(tofu.as_bin().c_str(), "101010");
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_f32) {
+    auto tofu = fossil::tofu::Tofu::from_f32(3.14159f);
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Float");
+    ASSUME_ITS_TRUE(fabsf(tofu.as_f32() - 3.14159f) < 0.0001f);
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_f64) {
+    auto tofu = fossil::tofu::Tofu::from_f64(2.718281828459);
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Double");
+    ASSUME_ITS_EQUAL_F64(tofu.as_f64(), 2.718281828459, 1e-6);
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_cstr) {
+    auto tofu = fossil::tofu::Tofu::from_cstr("hello world");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "C String");
+    ASSUME_ITS_EQUAL_CSTR(tofu.as_cstr().c_str(), "hello world");
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_char) {
+    auto tofu = fossil::tofu::Tofu::from_char('Z');
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Char");
+    ASSUME_ITS_EQUAL_I32(tofu.as_char(), 'Z');
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_bool) {
+    auto tofu_true = fossil::tofu::Tofu::from_bool(true);
+    auto tofu_false = fossil::tofu::Tofu::from_bool(false);
+    ASSUME_ITS_EQUAL_CSTR(tofu_true.get_type_name().c_str(), "Boolean");
+    ASSUME_ITS_TRUE(tofu_true.as_bool());
+    ASSUME_ITS_FALSE(tofu_false.as_bool());
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_size) {
+    size_t val = 123456;
+    auto tofu = fossil::tofu::Tofu::from_size(val);
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Size");
+    ASSUME_ITS_EQUAL_U64(tofu.as_size(), val);
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_datetime) {
+    auto tofu = fossil::tofu::Tofu::from_datetime("2024-06-01T12:34:56Z");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Date time");
+    ASSUME_ITS_EQUAL_CSTR(tofu.as_datetime().c_str(), "2024-06-01T12:34:56Z");
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_duration) {
+    auto tofu = fossil::tofu::Tofu::from_duration("PT1H30M");
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Duration");
+    ASSUME_ITS_EQUAL_CSTR(tofu.as_duration().c_str(), "PT1H30M");
+}
+
+FOSSIL_TEST(cpp_test_tofu_as_from_any) {
+    int x = 42;
+    auto tofu = fossil::tofu::Tofu::from_any(&x, sizeof(x));
+    ASSUME_ITS_EQUAL_CSTR(tofu.get_type_name().c_str(), "Any");
+    void* ptr = tofu.as_any();
+    ASSUME_NOT_CNULL(ptr);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -224,6 +349,26 @@ FOSSIL_TEST_GROUP(cpp_generic_tofu_tests) {
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_is_empty);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_clone);
     FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_lock);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_i8);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_i16);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_i32);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_i64);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_u8);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_u16);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_u32);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_u64);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_hex);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_oct);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_bin);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_f32);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_f64);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_cstr);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_char);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_bool);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_size);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_datetime);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_duration);
+    FOSSIL_TEST_ADD(cpp_generic_tofu_fixture, cpp_test_tofu_as_from_any);
 
     // Register the test group
     FOSSIL_TEST_REGISTER(cpp_generic_tofu_fixture);

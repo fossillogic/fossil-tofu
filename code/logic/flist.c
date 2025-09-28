@@ -46,14 +46,13 @@ fossil_tofu_flist_t* fossil_tofu_flist_create_copy(const fossil_tofu_flist_t* ot
     if (!copy) {
         return NULL;
     }
-    
-    // Copy the elements from the other list
+
     fossil_tofu_flist_node_t* current = other->head;
     while (current) {
         fossil_tofu_flist_insert(copy, current->data.value.data);
         current = current->next;
     }
-    
+
     return copy;
 }
 
@@ -68,6 +67,23 @@ fossil_tofu_flist_t* fossil_tofu_flist_create_move(fossil_tofu_flist_t* other) {
     new_list->head = other->head;
     other->head = NULL;
     return new_list;
+}
+
+// Helper function to check type match
+static int fossil_tofu_flist_type_check(const fossil_tofu_flist_t* flist, const char* type) {
+    if (!flist || !type) return FOSSIL_TOFU_ERROR_INVALID_ARGUMENT;
+    if (strcmp(flist->type, "any") == 0) return FOSSIL_TOFU_SUCCESS;
+    if (strcmp(flist->type, type) == 0) return FOSSIL_TOFU_SUCCESS;
+    return FOSSIL_TOFU_ERROR_TYPE_MISMATCH;
+}
+
+// Modified insert to check type
+int32_t fossil_tofu_flist_insert_checked(fossil_tofu_flist_t* flist, char *data, const char* type) {
+    int type_check = fossil_tofu_flist_type_check(flist, type);
+    if (type_check != FOSSIL_TOFU_SUCCESS) {
+        return FOSSIL_TOFU_ERROR_TYPE_MISMATCH;
+    }
+    return fossil_tofu_flist_insert(flist, data);
 }
 
 void fossil_tofu_flist_destroy(fossil_tofu_flist_t* flist) {

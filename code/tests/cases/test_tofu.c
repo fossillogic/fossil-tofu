@@ -237,6 +237,152 @@ FOSSIL_TEST(c_test_tofu_lock) {
     fossil_tofu_destroy(&tofu);
 }
 
+FOSSIL_TEST(c_test_tofu_as_from_i8) {
+    fossil_tofu_t tofu = fossil_tofu_from_i8(-42);
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_I8);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_as_i8(&tofu), -42);
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_i16) {
+    fossil_tofu_t tofu = fossil_tofu_from_i16(-12345);
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_I16);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_as_i16(&tofu), -12345);
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_i32) {
+    fossil_tofu_t tofu = fossil_tofu_from_i32(-123456789);
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_I32);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_as_i32(&tofu), -123456789);
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_i64) {
+    fossil_tofu_t tofu = fossil_tofu_from_i64(-1234567890123LL);
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_I64);
+    ASSUME_ITS_EQUAL_I64(fossil_tofu_as_i64(&tofu), -1234567890123LL);
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_u8) {
+    fossil_tofu_t tofu = fossil_tofu_from_u8(200);
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_U8);
+    ASSUME_ITS_EQUAL_U32(fossil_tofu_as_u8(&tofu), 200);
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_u16) {
+    fossil_tofu_t tofu = fossil_tofu_from_u16(60000);
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_U16);
+    ASSUME_ITS_EQUAL_U32(fossil_tofu_as_u16(&tofu), 60000);
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_u32) {
+    fossil_tofu_t tofu = fossil_tofu_from_u32(4000000000U);
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_U32);
+    ASSUME_ITS_EQUAL_U32(fossil_tofu_as_u32(&tofu), 4000000000U);
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_u64) {
+    fossil_tofu_t tofu = fossil_tofu_from_u64(9000000000000000000ULL);
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_U64);
+    ASSUME_ITS_EQUAL_U64(fossil_tofu_as_u64(&tofu), 9000000000000000000ULL);
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_hex) {
+    fossil_tofu_t tofu = fossil_tofu_from_hex("0x1A2B3C");
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_HEX);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_as_hex(&tofu), "0x1A2B3C");
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_oct) {
+    fossil_tofu_t tofu = fossil_tofu_from_oct("0755");
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_OCT);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_as_oct(&tofu), "0755");
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_bin) {
+    fossil_tofu_t tofu = fossil_tofu_from_bin("101010");
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_BIN);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_as_bin(&tofu), "101010");
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_f32) {
+    fossil_tofu_t tofu = fossil_tofu_from_f32(3.14159f);
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_F32);
+    ASSUME_ITS_TRUE(fabsf(fossil_tofu_as_f32(&tofu) - 3.14159f) < 0.0001f);
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_f64) {
+    fossil_tofu_t tofu = fossil_tofu_from_f64(2.718281828459);
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_F64);
+    ASSUME_ITS_EQUAL_F64(fossil_tofu_as_f64(&tofu), 2.718281828459, 1e-6);
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_cstr) {
+    fossil_tofu_t tofu = fossil_tofu_from_cstr("hello world");
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_CSTR);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_as_cstr(&tofu), "hello world");
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_char) {
+    fossil_tofu_t tofu = fossil_tofu_from_char('Z');
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_CCHAR);
+    ASSUME_ITS_EQUAL_I32(fossil_tofu_as_char(&tofu), 'Z');
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_bool) {
+    fossil_tofu_t tofu_true = fossil_tofu_from_bool(true);
+    fossil_tofu_t tofu_false = fossil_tofu_from_bool(false);
+    ASSUME_ITS_EQUAL_I32(tofu_true.type, FOSSIL_TOFU_TYPE_BOOL);
+    ASSUME_ITS_TRUE(fossil_tofu_as_bool(&tofu_true));
+    ASSUME_ITS_FALSE(fossil_tofu_as_bool(&tofu_false));
+    fossil_tofu_destroy(&tofu_true);
+    fossil_tofu_destroy(&tofu_false);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_size) {
+    size_t val = 123456;
+    fossil_tofu_t tofu = fossil_tofu_from_size(val);
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_SIZE);
+    ASSUME_ITS_EQUAL_U64(fossil_tofu_as_size(&tofu), val);
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_datetime) {
+    fossil_tofu_t tofu = fossil_tofu_from_datetime("2024-06-01T12:34:56Z");
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_DATETIME);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_as_datetime(&tofu), "2024-06-01T12:34:56Z");
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_duration) {
+    fossil_tofu_t tofu = fossil_tofu_from_duration("PT1H30M");
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_DURATION);
+    ASSUME_ITS_EQUAL_CSTR(fossil_tofu_as_duration(&tofu), "PT1H30M");
+    fossil_tofu_destroy(&tofu);
+}
+
+FOSSIL_TEST(c_test_tofu_as_from_any) {
+    int x = 42;
+    fossil_tofu_t tofu = fossil_tofu_from_any(&x, sizeof(x));
+    ASSUME_ITS_EQUAL_I32(tofu.type, FOSSIL_TOFU_TYPE_ANY);
+    void* ptr = fossil_tofu_as_any(&tofu);
+    ASSUME_NOT_CNULL(ptr);
+    fossil_tofu_destroy(&tofu);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -267,6 +413,26 @@ FOSSIL_TEST_GROUP(c_generic_tofu_tests) {
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_is_empty);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_clone);
     FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_lock);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_i8);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_i16);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_i32);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_i64);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_u8);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_u16);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_u32);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_u64);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_hex);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_oct);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_bin);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_f32);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_f64);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_cstr);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_char);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_bool);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_size);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_datetime);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_duration);
+    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_any);
 
     // Register the test group
     FOSSIL_TEST_REGISTER(c_generic_tofu_fixture);
