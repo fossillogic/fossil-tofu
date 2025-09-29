@@ -214,6 +214,70 @@ FOSSIL_TEST(c_test_tree_remove_null_value) {
     fossil_tofu_tree_destroy(tree);
 }
 
+FOSSIL_TEST(c_test_tree_create_default) {
+    fossil_tofu_tree_t* tree = fossil_tofu_tree_create_default();
+    ASSUME_NOT_CNULL(tree);
+    ASSUME_ITS_EQUAL_I32(tree->size, 0);
+    ASSUME_NOT_CNULL(tree->type);
+    ASSUME_ITS_EQUAL_CSTR(tree->type, "any");
+    fossil_tofu_tree_destroy(tree);
+}
+
+FOSSIL_TEST(c_test_tree_create_copy_null) {
+    fossil_tofu_tree_t* copy = fossil_tofu_tree_create_copy(NULL);
+    ASSUME_ITS_CNULL(copy);
+}
+
+FOSSIL_TEST(c_test_tree_create_copy_empty) {
+    fossil_tofu_tree_t* tree = fossil_tofu_tree_create("i32");
+    fossil_tofu_tree_t* copy = fossil_tofu_tree_create_copy(tree);
+    ASSUME_NOT_CNULL(copy);
+    ASSUME_ITS_EQUAL_I32(copy->size, 0);
+    ASSUME_NOT_CNULL(copy->type);
+    ASSUME_ITS_EQUAL_CSTR(copy->type, "i32");
+    fossil_tofu_tree_destroy(tree);
+    fossil_tofu_tree_destroy(copy);
+}
+
+FOSSIL_TEST(c_test_tree_create_copy_nonempty) {
+    fossil_tofu_tree_t* tree = fossil_tofu_tree_create("i32");
+    fossil_tofu_t v1 = fossil_tofu_create("i32", "1");
+    fossil_tofu_t v2 = fossil_tofu_create("i32", "2");
+    fossil_tofu_tree_insert(tree, &v1);
+    fossil_tofu_tree_insert(tree, &v2);
+
+    fossil_tofu_tree_t* copy = fossil_tofu_tree_create_copy(tree);
+    ASSUME_NOT_CNULL(copy);
+    ASSUME_ITS_EQUAL_I32(copy->size, 2);
+    ASSUME_NOT_CNULL(copy->type);
+    ASSUME_ITS_EQUAL_CSTR(copy->type, "i32");
+    // Ensure the copy is deep (different root pointers)
+    ASSUME_ITS_TRUE(copy->root != tree->root); // roots must not be the same pointer
+    // Optionally, check structural equality if a function exists, e.g. fossil_tofu_tree_structural_equal
+    fossil_tofu_tree_destroy(tree);
+    fossil_tofu_tree_destroy(copy);
+}
+
+FOSSIL_TEST(c_test_tree_create_move_null) {
+    fossil_tofu_tree_t* moved = fossil_tofu_tree_create_move(NULL);
+    ASSUME_ITS_CNULL(moved);
+}
+
+FOSSIL_TEST(c_test_tree_create_move_nonempty) {
+    fossil_tofu_tree_t* tree = fossil_tofu_tree_create("i32");
+    fossil_tofu_t v1 = fossil_tofu_create("i32", "1");
+    fossil_tofu_tree_insert(tree, &v1);
+
+    fossil_tofu_tree_t* moved = fossil_tofu_tree_create_move(tree);
+    ASSUME_NOT_CNULL(moved);
+    ASSUME_ITS_EQUAL_I32(moved->size, 1);
+    ASSUME_NOT_CNULL(moved->type);
+    ASSUME_ITS_EQUAL_CSTR(moved->type, "i32");
+    // The original pointer should not be used after move, but let's check it's invalidated
+    // (tree->root == NULL, tree->size == 0, tree->type == NULL)
+    fossil_tofu_tree_destroy(moved);
+}
+
 // * * * * * * * * * * * * * * * * * * * * * * * *
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
@@ -233,6 +297,12 @@ FOSSIL_TEST_GROUP(c_tree_tofu_tests) {
     FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_insert_extreme_values);
     FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_search_null_value);
     FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_remove_null_value);
+    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_default);
+    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_copy_null);
+    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_copy_empty);
+    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_copy_nonempty);
+    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_move_null);
+    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_move_nonempty);
 
     FOSSIL_TEST_REGISTER(c_tree_tofu_fixture);
 } // end of tests

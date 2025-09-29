@@ -37,6 +37,44 @@ fossil_tofu_tree_t* fossil_tofu_tree_create(char *type) {
     return tree;
 }
 
+fossil_tofu_tree_t* fossil_tofu_tree_create_default(void) {
+    return fossil_tofu_tree_create("any");
+}
+
+static fossil_tofu_tree_node_t* fossil_tofu_tree_copy_node(const fossil_tofu_tree_node_t* node) {
+    if (!node) return NULL;
+    fossil_tofu_tree_node_t* new_node = (fossil_tofu_tree_node_t*)fossil_tofu_alloc(sizeof(fossil_tofu_tree_node_t));
+    if (!new_node) return NULL;
+    new_node->value = fossil_tofu_clone(node->value);
+    new_node->left = fossil_tofu_tree_copy_node(node->left);
+    new_node->right = fossil_tofu_tree_copy_node(node->right);
+    return new_node;
+}
+
+fossil_tofu_tree_t* fossil_tofu_tree_create_copy(const fossil_tofu_tree_t* other) {
+    if (!other) return NULL;
+    fossil_tofu_tree_t* tree = (fossil_tofu_tree_t*)fossil_tofu_alloc(sizeof(fossil_tofu_tree_t));
+    if (!tree) return NULL;
+    tree->type = other->type ? fossil_tofu_strdup(other->type) : NULL;
+    tree->size = other->size;
+    tree->root = fossil_tofu_tree_copy_node(other->root);
+    return tree;
+}
+
+fossil_tofu_tree_t* fossil_tofu_tree_create_move(fossil_tofu_tree_t* other) {
+    if (!other) return NULL;
+    fossil_tofu_tree_t* tree = (fossil_tofu_tree_t*)fossil_tofu_alloc(sizeof(fossil_tofu_tree_t));
+    if (!tree) return NULL;
+    tree->root = other->root;
+    tree->size = other->size;
+    tree->type = other->type;
+    other->root = NULL;
+    other->size = 0;
+    other->type = NULL;
+    fossil_tofu_free(other);
+    return tree;
+}
+
 static void fossil_tofu_tree_destroy_node(fossil_tofu_tree_node_t *node) {
     if (!node) return;
     fossil_tofu_tree_destroy_node(node->left);
@@ -162,9 +200,32 @@ int fossil_tofu_tree_remove(fossil_tofu_tree_t *tree, const fossil_tofu_t *value
 }
 
 int fossil_tofu_tree_compare(const fossil_tofu_t *a, const fossil_tofu_t *b) {
+    // If both are NULL, they are equal
     if (!a && !b) return 0;
-    if (!a) return -1;
-    if (!b) return 1;
+    // If only one is NULL, they are not equal
+    if (!a || !b) return -1;
+
+    // If both are tree nodes, compare structure and values recursively
+    const fossil_tofu_tree_node_t *na = (const fossil_tofu_tree_node_t *)a;
+    const fossil_tofu_tree_node_t *nb = (const fossil_tofu_tree_node_t *)b;
+
+    // If both have left/right pointers, treat as nodes, else treat as values
+    if (
+        (na->left || na->right || nb->left || nb->right)
+    ) {
+        // Compare values
+        int cmp = fossil_tofu_compare(na->value, nb->value);
+        if (cmp != 0) return cmp;
+
+        // Compare left subtrees
+        cmp = fossil_tofu_tree_compare((const fossil_tofu_t *)na->left, (const fossil_tofu_t *)nb->left);
+        if (cmp != 0) return cmp;
+
+        // Compare right subtrees
+        return fossil_tofu_tree_compare((const fossil_tofu_t *)na->right, (const fossil_tofu_t *)nb->right);
+    }
+
+    // Otherwise, treat as values
     return fossil_tofu_compare(a, b);
 }
 
