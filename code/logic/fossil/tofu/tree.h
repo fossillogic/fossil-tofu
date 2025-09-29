@@ -64,6 +64,32 @@ typedef struct {
 fossil_tofu_tree_t* fossil_tofu_tree_create(char *type);
 
 /**
+ * @brief Creates a new tree with default values.
+ *
+ * @return Pointer to the created tree.
+ * @note Time complexity: O(1)
+ */
+fossil_tofu_tree_t* fossil_tofu_tree_create_default(void);
+
+/**
+ * @brief Creates a new tree by copying an existing tree.
+ *
+ * @param other The tree to copy.
+ * @return Pointer to the created tree.
+ * @note Time complexity: O(n)
+ */
+fossil_tofu_tree_t* fossil_tofu_tree_create_copy(const fossil_tofu_tree_t* other);
+
+/**
+ * @brief Creates a new tree by moving an existing tree.
+ *
+ * @param other The tree to move.
+ * @return Pointer to the created tree.
+ * @note Time complexity: O(1)
+ */
+fossil_tofu_tree_t* fossil_tofu_tree_create_move(fossil_tofu_tree_t* other);
+
+/**
  * @brief Destroys the specified tree and releases its resources.
  * 
  * @param tree Pointer to the tree to be destroyed.
@@ -245,32 +271,117 @@ namespace fossil {
             }
 
             /**
+             * @brief Constructs a new Tree object with default values.
+             * @throws std::runtime_error If the tree cannot be created.
+             */
+            Tree() {
+                tree_ = fossil_tofu_tree_create_default();
+                if (!tree_) {
+                    throw std::runtime_error("Failed to create default tree.");
+                }
+            }
+
+            /**
+             * @brief Constructs a new Tree object by copying another Tree.
+             * @param other The Tree to copy.
+             * @throws std::runtime_error If the tree cannot be copied.
+             */
+            Tree(const Tree& other) {
+                tree_ = fossil_tofu_tree_create_copy(other.tree_);
+                if (!tree_) {
+                    throw std::runtime_error("Failed to copy tree.");
+                }
+            }
+
+            /**
+             * @brief Constructs a new Tree object by moving another Tree.
+             * @param other The Tree to move.
+             */
+            Tree(Tree&& other) noexcept {
+                tree_ = other.tree_;
+                other.tree_ = nullptr;
+            }
+
+            /**
+             * @brief Assignment operator for copying another Tree.
+             * @param other The Tree to copy.
+             * @return Reference to this Tree.
+             */
+            Tree& operator=(const Tree& other) {
+                if (this != &other) {
+                    if (tree_) {
+                        fossil_tofu_tree_destroy(tree_);
+                    }
+                    tree_ = fossil_tofu_tree_create_copy(other.tree_);
+                    if (!tree_) {
+                        throw std::runtime_error("Failed to copy tree in assignment.");
+                    }
+                }
+                return *this;
+            }
+
+            /**
+             * @brief Assignment operator for moving another Tree.
+             * @param other The Tree to move.
+             * @return Reference to this Tree.
+             */
+            Tree& operator=(Tree&& other) noexcept {
+                if (this != &other) {
+                    if (tree_) {
+                        fossil_tofu_tree_destroy(tree_);
+                    }
+                    tree_ = other.tree_;
+                    other.tree_ = nullptr;
+                }
+                return *this;
+            }
+
+            /**
              * @brief Destroys the Tree object and releases its resources.
              */
             ~Tree() {
-                fossil_tofu_tree_destroy(tree_);
+                if (tree_) {
+                    fossil_tofu_tree_destroy(tree_);
+                    tree_ = nullptr;
+                }
             }
 
             /**
              * @brief Inserts a new Tofu value into the tree.
              * @param value The Tofu object to insert.
-             * @throws std::runtime_error If the insertion fails.
+             * @throws std::runtime_error If the insertion fails or value is empty.
              */
             void insert(const Tofu& value) {
-                fossil_tofu_t tofu_copy = value.get_c_struct();
-                if (fossil_tofu_tree_insert(tree_, &tofu_copy) != 0) {
+                if (!tree_) {
+                    throw std::runtime_error("Tree is null.");
+                }
+                if (value.is_empty()) {
+                    throw std::runtime_error("Cannot insert empty value into tree.");
+                }
+
+                // Check for duplicate before inserting
+                fossil_tofu_tree_node_t* existing = fossil_tofu_tree_search(tree_, &value.get_c_struct());
+                if (existing) {
+                    throw std::runtime_error("Duplicate value insert attempted.");
+                }
+
+                // Dynamically allocate a copy to ensure lifetime is managed
+                fossil_tofu_t* tofu_copy = new fossil_tofu_t(value.get_c_struct());
+                int rc = fossil_tofu_tree_insert(tree_, tofu_copy);
+                if (rc != 0) {
+                    delete tofu_copy;
                     throw std::runtime_error("Failed to insert value into tree.");
                 }
+                // The tree now owns tofu_copy and is responsible for deleting it
             }
 
             /**
              * @brief Searches for a node with the specified Tofu value in the tree.
              * @param value The Tofu object to search for.
-             * @return Pointer to the found node, or nullptr if not found.
+             * @return Pointer to the found node, or nullptr if not found or value is empty.
              */
             fossil_tofu_tree_node_t* search(const Tofu& value) const {
-                // If value is empty, return nullptr for safety
-                if (value.is_empty()) return nullptr;
+                if (!tree_ || value.is_empty()) return nullptr;
                 fossil_tofu_tree_node_t* node = fossil_tofu_tree_search(tree_, &value.get_c_struct());
                 return node;
             }
@@ -278,14 +389,15 @@ namespace fossil {
             /**
              * @brief Removes a node with the specified Tofu value from the tree.
              * @param value The Tofu object to remove.
-             * @throws std::runtime_error If the removal fails (including if value not found).
+             * @throws std::runtime_error If the removal fails (including if value not found or empty).
              */
             void remove(const Tofu& value) {
-                // If value is empty, throw immediately
+                if (!tree_) {
+                    throw std::runtime_error("Tree is null.");
+                }
                 if (value.is_empty()) {
                     throw std::runtime_error("Cannot remove empty value from tree.");
                 }
-                // Check if value exists before attempting removal
                 fossil_tofu_tree_node_t* node = fossil_tofu_tree_search(tree_, &value.get_c_struct());
                 if (!node) {
                     throw std::runtime_error("Value not found in tree.");
@@ -310,7 +422,7 @@ namespace fossil {
              * @return Pointer to the node with the minimum value, or nullptr if tree is empty.
              */
             fossil_tofu_tree_node_t* min() const {
-                if (tree_->size == 0) return nullptr;
+                if (!tree_ || tree_->size == 0) return nullptr;
                 return fossil_tofu_tree_min(tree_);
             }
 
@@ -319,7 +431,7 @@ namespace fossil {
              * @return Pointer to the node with the maximum value, or nullptr if tree is empty.
              */
             fossil_tofu_tree_node_t* max() const {
-                if (tree_->size == 0) return nullptr;
+                if (!tree_ || tree_->size == 0) return nullptr;
                 return fossil_tofu_tree_max(tree_);
             }
 
@@ -350,10 +462,10 @@ namespace fossil {
 
             /**
              * @brief Checks if the tree is empty.
-             * @return True if the tree is empty, false otherwise.
+             * @return 1 if the tree is empty, 0 otherwise.
              */
-            bool is_empty() const {
-                return size() == 0;
+            int is_empty() const {
+                return (tree_ == nullptr || tree_->size == 0) ? 1 : 0;
             }
 
             /**

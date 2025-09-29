@@ -716,6 +716,16 @@ namespace fossil {
             }
 
             /**
+             * @brief Default constructor. Creates a Tofu object with default values.
+             */
+            Tofu() {
+                fossil_tofu_t* ptr = fossil_tofu_create_default();
+                if (!ptr) throw std::runtime_error("Failed to create default Tofu");
+                tofu_ = *ptr;
+                fossil_tofu_free(ptr);
+            }
+
+            /**
              * @brief Constructs a Tofu object from a fossil_tofu_t struct.
              */
             Tofu(const fossil_tofu_t& tofu) {
