@@ -1,5 +1,5 @@
 project('Fossil Tofu', 'c', 'cpp',
-    meson_version: '>=1.8.0',
+    meson_version: '>=1.10.0',
     license: 'Apache-2.0',
     version: '0.2.4',
     default_options: [
