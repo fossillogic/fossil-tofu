@@ -17,12 +17,12 @@
  * under the License.
  *
  * Author: Michael Gene Brockus (Dreamer)
- * Date: 04/05/2014
+ * Date: 04/05/2013
  *
- * Copyright (C) 2014-2025 Fossil Logic. All rights reserved.
+ * Copyright (C) 2013-Current Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/pizza/framework.h>
+#include <fossil/maip/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -388,52 +388,52 @@ FOSSIL_TEST(c_test_tofu_as_from_any) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_generic_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_create_destroy);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_default);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_copy_constructor);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_struct_move_constructor);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_set_and_get_value);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_mutability);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_type_and_info);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_set_and_get_attribute);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_validate_type);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_create_invalid_type);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_compare_equal_and_not_equal);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_set_value_null_and_immutable);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_get_value_null);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_is_mutable_null);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_set_mutable_null);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_get_type_null);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_type_name_and_info_invalid);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_set_attribute_null);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_get_attribute_null);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_equals_null);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_copy_null);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_get_value_or_default);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_is_empty);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_clone);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_lock);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_i8);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_i16);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_i32);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_i64);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_u8);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_u16);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_u32);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_u64);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_hex);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_oct);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_bin);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_f32);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_f64);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_cstr);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_char);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_bool);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_size);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_datetime);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_duration);
-    FOSSIL_TEST_ADD(c_generic_tofu_fixture, c_test_tofu_as_from_any);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_struct_create_destroy);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_struct_default);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_struct_copy_constructor);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_struct_move_constructor);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_set_and_get_value);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_mutability);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_type_and_info);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_set_and_get_attribute);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_validate_type);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_create_invalid_type);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_compare_equal_and_not_equal);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_set_value_null_and_immutable);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_get_value_null);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_is_mutable_null);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_set_mutable_null);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_get_type_null);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_type_name_and_info_invalid);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_set_attribute_null);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_get_attribute_null);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_equals_null);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_copy_null);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_get_value_or_default);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_is_empty);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_clone);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_lock);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_i8);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_i16);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_i32);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_i64);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_u8);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_u16);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_u32);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_u64);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_hex);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_oct);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_bin);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_f32);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_f64);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_cstr);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_char);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_bool);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_size);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_datetime);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_duration);
+    FOSSIL_ADD_TEST(c_generic_tofu_fixture, c_test_tofu_as_from_any);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(c_generic_tofu_fixture);
+    FOSSIL_ADD_SUITE(c_generic_tofu_fixture);
 } // end of tests

@@ -17,12 +17,12 @@
  * under the License.
  *
  * Author: Michael Gene Brockus (Dreamer)
- * Date: 04/05/2014
+ * Date: 04/05/2013
  *
- * Copyright (C) 2014-2025 Fossil Logic. All rights reserved.
+ * Copyright (C) 2013-Current Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/pizza/framework.h>
+#include <fossil/maip/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -204,27 +204,27 @@ FOSSIL_TEST(objcpp_test_tofu_lock) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(objcpp_generic_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_create_destroy);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_default);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_copy_constructor);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_move_constructor);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_copy_assignment);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_move_assignment);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_set_value);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_set_attribute);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_set_and_get_value);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_mutability);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_type_and_info);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_set_and_get_attribute);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_validate_type);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_create_invalid_type);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_compare_equal_and_not_equal);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_set_value_immutable);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_get_value_or_default);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_is_empty);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_clone);
-    FOSSIL_TEST_ADD(objcpp_generic_tofu_fixture, objcpp_test_tofu_lock);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_create_destroy);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_default);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_copy_constructor);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_move_constructor);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_copy_assignment);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_move_assignment);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_set_value);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_struct_set_attribute);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_set_and_get_value);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_mutability);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_type_and_info);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_set_and_get_attribute);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_validate_type);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_create_invalid_type);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_compare_equal_and_not_equal);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_set_value_immutable);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_get_value_or_default);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_is_empty);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_clone);
+    FOSSIL_ADD_TEST(objcpp_generic_tofu_fixture, objcpp_test_tofu_lock);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(objcpp_generic_tofu_fixture);
+    FOSSIL_ADD_SUITE(objcpp_generic_tofu_fixture);
 } // end of tests

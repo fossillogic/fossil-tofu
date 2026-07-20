@@ -17,12 +17,12 @@
  * under the License.
  *
  * Author: Michael Gene Brockus (Dreamer)
- * Date: 04/05/2014
+ * Date: 04/05/2013
  *
- * Copyright (C) 2014-2025 Fossil Logic. All rights reserved.
+ * Copyright (C) 2013-Current Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/pizza/framework.h>
+#include <fossil/maip/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -165,17 +165,17 @@ FOSSIL_TEST(c_test_clist_empty_and_null_checks) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_clist_tofu_tests) {    
     // clist ToFu Fixture
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_create_and_destroy);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_create_default);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_insert_and_size);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_remove);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_reverse);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_get_and_set);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_get_front_and_back);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_set_front_and_back);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_copy_and_move);
-    FOSSIL_TEST_ADD(c_clist_tofu_fixture, c_test_clist_empty_and_null_checks);
+    FOSSIL_ADD_TEST(c_clist_tofu_fixture, c_test_clist_create_and_destroy);
+    FOSSIL_ADD_TEST(c_clist_tofu_fixture, c_test_clist_create_default);
+    FOSSIL_ADD_TEST(c_clist_tofu_fixture, c_test_clist_insert_and_size);
+    FOSSIL_ADD_TEST(c_clist_tofu_fixture, c_test_clist_remove);
+    FOSSIL_ADD_TEST(c_clist_tofu_fixture, c_test_clist_reverse);
+    FOSSIL_ADD_TEST(c_clist_tofu_fixture, c_test_clist_get_and_set);
+    FOSSIL_ADD_TEST(c_clist_tofu_fixture, c_test_clist_get_front_and_back);
+    FOSSIL_ADD_TEST(c_clist_tofu_fixture, c_test_clist_set_front_and_back);
+    FOSSIL_ADD_TEST(c_clist_tofu_fixture, c_test_clist_copy_and_move);
+    FOSSIL_ADD_TEST(c_clist_tofu_fixture, c_test_clist_empty_and_null_checks);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(c_clist_tofu_fixture);
+    FOSSIL_ADD_SUITE(c_clist_tofu_fixture);
 } // end of tests

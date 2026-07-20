@@ -17,12 +17,12 @@
  * under the License.
  *
  * Author: Michael Gene Brockus (Dreamer)
- * Date: 04/05/2014
+ * Date: 04/05/2013
  *
- * Copyright (C) 2014-2025 Fossil Logic. All rights reserved.
+ * Copyright (C) 2013-Current Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/pizza/framework.h>
+#include <fossil/maip/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -282,27 +282,27 @@ FOSSIL_TEST(c_test_tree_create_move_nonempty) {
 // * Fossil Logic Test Pool
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(c_tree_tofu_tests) {    
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_and_destroy);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_insert_duplicate);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_null_pointer_safety);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_node_null_value);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_node_valid_value);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_search_not_found);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_insert_null_tree_or_value);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_remove_existing_and_nonexisting);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_min_max);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_height_and_is_empty);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_traverse_and_clear);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_size_function);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_insert_extreme_values);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_search_null_value);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_remove_null_value);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_default);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_copy_null);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_copy_empty);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_copy_nonempty);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_move_null);
-    FOSSIL_TEST_ADD(c_tree_tofu_fixture, c_test_tree_create_move_nonempty);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_create_and_destroy);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_insert_duplicate);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_null_pointer_safety);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_create_node_null_value);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_create_node_valid_value);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_search_not_found);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_insert_null_tree_or_value);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_remove_existing_and_nonexisting);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_min_max);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_height_and_is_empty);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_traverse_and_clear);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_size_function);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_insert_extreme_values);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_search_null_value);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_remove_null_value);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_create_default);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_create_copy_null);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_create_copy_empty);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_create_copy_nonempty);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_create_move_null);
+    FOSSIL_ADD_TEST(c_tree_tofu_fixture, c_test_tree_create_move_nonempty);
 
-    FOSSIL_TEST_REGISTER(c_tree_tofu_fixture);
+    FOSSIL_ADD_SUITE(c_tree_tofu_fixture);
 } // end of tests

@@ -17,12 +17,12 @@
  * under the License.
  *
  * Author: Michael Gene Brockus (Dreamer)
- * Date: 04/05/2014
+ * Date: 04/05/2013
  *
- * Copyright (C) 2014-2025 Fossil Logic. All rights reserved.
+ * Copyright (C) 2013-Current Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/pizza/framework.h>
+#include <fossil/maip/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -219,22 +219,22 @@ FOSSIL_TEST(cpp_test_vector_pop_at_various_positions) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(cpp_vector_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_create_and_destroy);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_push_and_get);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_push_front_and_pop_front);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_push_at_and_pop_at);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_set_and_get);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_erase_and_empty);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_copy_and_move);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_pop_back);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_push_beyond_initial_capacity);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_pop_until_empty);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_pop_front_until_empty);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_null_pointer_safety);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_set_at_various_positions);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_push_at_beginning_and_end);
-    FOSSIL_TEST_ADD(cpp_vector_tofu_fixture, cpp_test_vector_pop_at_various_positions);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_create_and_destroy);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_push_and_get);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_push_front_and_pop_front);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_push_at_and_pop_at);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_set_and_get);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_erase_and_empty);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_copy_and_move);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_pop_back);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_push_beyond_initial_capacity);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_pop_until_empty);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_pop_front_until_empty);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_null_pointer_safety);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_set_at_various_positions);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_push_at_beginning_and_end);
+    FOSSIL_ADD_TEST(cpp_vector_tofu_fixture, cpp_test_vector_pop_at_various_positions);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(cpp_vector_tofu_fixture);
+    FOSSIL_ADD_SUITE(cpp_vector_tofu_fixture);
 } // end of tests

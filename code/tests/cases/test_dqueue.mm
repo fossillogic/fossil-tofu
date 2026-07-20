@@ -17,12 +17,12 @@
  * under the License.
  *
  * Author: Michael Gene Brockus (Dreamer)
- * Date: 04/05/2014
+ * Date: 04/05/2013
  *
- * Copyright (C) 2014-2025 Fossil Logic. All rights reserved.
+ * Copyright (C) 2013-Current Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/pizza/framework.h>
+#include <fossil/maip/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -159,18 +159,18 @@ FOSSIL_TEST(objcpp_test_dqueue_size_consistency) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(objcpp_dqueue_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_create_container_and_destroy);
-    FOSSIL_TEST_ADD(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_create_default_and_destroy);
-    FOSSIL_TEST_ADD(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_insert_and_remove);
-    FOSSIL_TEST_ADD(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_create_copy);
-    FOSSIL_TEST_ADD(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_create_move);
-    FOSSIL_TEST_ADD(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_not_empty_and_is_empty);
-    FOSSIL_TEST_ADD(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_not_cnullptr_and_is_cnullptr);
-    FOSSIL_TEST_ADD(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_set_front_and_set_back);
-    FOSSIL_TEST_ADD(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_get_front_and_get_back_empty);
-    FOSSIL_TEST_ADD(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_remove_empty);
-    FOSSIL_TEST_ADD(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_size_consistency);
+    FOSSIL_ADD_TEST(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_create_container_and_destroy);
+    FOSSIL_ADD_TEST(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_create_default_and_destroy);
+    FOSSIL_ADD_TEST(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_insert_and_remove);
+    FOSSIL_ADD_TEST(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_create_copy);
+    FOSSIL_ADD_TEST(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_create_move);
+    FOSSIL_ADD_TEST(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_not_empty_and_is_empty);
+    FOSSIL_ADD_TEST(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_not_cnullptr_and_is_cnullptr);
+    FOSSIL_ADD_TEST(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_set_front_and_set_back);
+    FOSSIL_ADD_TEST(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_get_front_and_get_back_empty);
+    FOSSIL_ADD_TEST(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_remove_empty);
+    FOSSIL_ADD_TEST(objcpp_dqueue_tofu_fixture, objcpp_test_dqueue_size_consistency);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(objcpp_dqueue_tofu_fixture);
+    FOSSIL_ADD_SUITE(objcpp_dqueue_tofu_fixture);
 } // end of tests

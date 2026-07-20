@@ -17,12 +17,12 @@
  * under the License.
  *
  * Author: Michael Gene Brockus (Dreamer)
- * Date: 04/05/2014
+ * Date: 04/05/2013
  *
- * Copyright (C) 2014-2025 Fossil Logic. All rights reserved.
+ * Copyright (C) 2013-Current Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/pizza/framework.h>
+#include <fossil/maip/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -155,17 +155,17 @@ FOSSIL_TEST(cpp_test_tuple_move_constructor) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(cpp_tuple_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_create_and_destroy);
-    FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_create_default);
-    FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_add_and_get);
-    FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_get_front_and_back);
-    FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_set_and_get);
-    FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_remove);
-    FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_clear_and_is_empty);
-    FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_capacity_growth);
-    FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_copy_constructor);
-    FOSSIL_TEST_ADD(cpp_tuple_tofu_fixture, cpp_test_tuple_move_constructor);
+    FOSSIL_ADD_TEST(cpp_tuple_tofu_fixture, cpp_test_tuple_create_and_destroy);
+    FOSSIL_ADD_TEST(cpp_tuple_tofu_fixture, cpp_test_tuple_create_default);
+    FOSSIL_ADD_TEST(cpp_tuple_tofu_fixture, cpp_test_tuple_add_and_get);
+    FOSSIL_ADD_TEST(cpp_tuple_tofu_fixture, cpp_test_tuple_get_front_and_back);
+    FOSSIL_ADD_TEST(cpp_tuple_tofu_fixture, cpp_test_tuple_set_and_get);
+    FOSSIL_ADD_TEST(cpp_tuple_tofu_fixture, cpp_test_tuple_remove);
+    FOSSIL_ADD_TEST(cpp_tuple_tofu_fixture, cpp_test_tuple_clear_and_is_empty);
+    FOSSIL_ADD_TEST(cpp_tuple_tofu_fixture, cpp_test_tuple_capacity_growth);
+    FOSSIL_ADD_TEST(cpp_tuple_tofu_fixture, cpp_test_tuple_copy_constructor);
+    FOSSIL_ADD_TEST(cpp_tuple_tofu_fixture, cpp_test_tuple_move_constructor);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(cpp_tuple_tofu_fixture);
+    FOSSIL_ADD_SUITE(cpp_tuple_tofu_fixture);
 } // end of tests

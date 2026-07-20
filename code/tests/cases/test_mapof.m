@@ -17,12 +17,12 @@
  * under the License.
  *
  * Author: Michael Gene Brockus (Dreamer)
- * Date: 04/05/2014
+ * Date: 04/05/2013
  *
- * Copyright (C) 2014-2025 Fossil Logic. All rights reserved.
+ * Copyright (C) 2013-Current Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/pizza/framework.h>
+#include <fossil/maip/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -169,17 +169,17 @@ FOSSIL_TEST(objc_test_mapof_null_args) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(objc_mapof_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(objc_mapof_tofu_fixture, objc_test_mapof_create_and_destroy);
-    FOSSIL_TEST_ADD(objc_mapof_tofu_fixture, objc_test_mapof_create_default);
-    FOSSIL_TEST_ADD(objc_mapof_tofu_fixture, objc_test_mapof_insert_and_contains);
-    FOSSIL_TEST_ADD(objc_mapof_tofu_fixture, objc_test_mapof_remove);
-    FOSSIL_TEST_ADD(objc_mapof_tofu_fixture, objc_test_mapof_copy_constructor);
-    FOSSIL_TEST_ADD(objc_mapof_tofu_fixture, objc_test_mapof_move_constructor);
-    FOSSIL_TEST_ADD(objc_mapof_tofu_fixture, objc_test_mapof_is_empty_and_not_empty);
-    FOSSIL_TEST_ADD(objc_mapof_tofu_fixture, objc_test_mapof_insert_duplicate);
-    FOSSIL_TEST_ADD(objc_mapof_tofu_fixture, objc_test_mapof_remove_nonexistent);
-    FOSSIL_TEST_ADD(objc_mapof_tofu_fixture, objc_test_mapof_null_args);
+    FOSSIL_ADD_TEST(objc_mapof_tofu_fixture, objc_test_mapof_create_and_destroy);
+    FOSSIL_ADD_TEST(objc_mapof_tofu_fixture, objc_test_mapof_create_default);
+    FOSSIL_ADD_TEST(objc_mapof_tofu_fixture, objc_test_mapof_insert_and_contains);
+    FOSSIL_ADD_TEST(objc_mapof_tofu_fixture, objc_test_mapof_remove);
+    FOSSIL_ADD_TEST(objc_mapof_tofu_fixture, objc_test_mapof_copy_constructor);
+    FOSSIL_ADD_TEST(objc_mapof_tofu_fixture, objc_test_mapof_move_constructor);
+    FOSSIL_ADD_TEST(objc_mapof_tofu_fixture, objc_test_mapof_is_empty_and_not_empty);
+    FOSSIL_ADD_TEST(objc_mapof_tofu_fixture, objc_test_mapof_insert_duplicate);
+    FOSSIL_ADD_TEST(objc_mapof_tofu_fixture, objc_test_mapof_remove_nonexistent);
+    FOSSIL_ADD_TEST(objc_mapof_tofu_fixture, objc_test_mapof_null_args);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(objc_mapof_tofu_fixture);
+    FOSSIL_ADD_SUITE(objc_mapof_tofu_fixture);
 } // end of tests

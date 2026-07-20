@@ -17,12 +17,12 @@
  * under the License.
  *
  * Author: Michael Gene Brockus (Dreamer)
- * Date: 04/05/2014
+ * Date: 04/05/2013
  *
- * Copyright (C) 2014-2025 Fossil Logic. All rights reserved.
+ * Copyright (C) 2013-Current Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/pizza/framework.h>
+#include <fossil/maip/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -109,13 +109,13 @@ FOSSIL_TEST(objcpp_test_setof_remove_nonexistent) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(objcpp_setof_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(objcpp_setof_tofu_fixture, objcpp_test_setof_create_and_destroy);
-    FOSSIL_TEST_ADD(objcpp_setof_tofu_fixture, objcpp_test_setof_insert_and_contains);
-    FOSSIL_TEST_ADD(objcpp_setof_tofu_fixture, objcpp_test_setof_remove);
-    FOSSIL_TEST_ADD(objcpp_setof_tofu_fixture, objcpp_test_setof_is_empty_and_not_empty);
-    FOSSIL_TEST_ADD(objcpp_setof_tofu_fixture, objcpp_test_setof_insert_duplicate);
-    FOSSIL_TEST_ADD(objcpp_setof_tofu_fixture, objcpp_test_setof_remove_nonexistent);
+    FOSSIL_ADD_TEST(objcpp_setof_tofu_fixture, objcpp_test_setof_create_and_destroy);
+    FOSSIL_ADD_TEST(objcpp_setof_tofu_fixture, objcpp_test_setof_insert_and_contains);
+    FOSSIL_ADD_TEST(objcpp_setof_tofu_fixture, objcpp_test_setof_remove);
+    FOSSIL_ADD_TEST(objcpp_setof_tofu_fixture, objcpp_test_setof_is_empty_and_not_empty);
+    FOSSIL_ADD_TEST(objcpp_setof_tofu_fixture, objcpp_test_setof_insert_duplicate);
+    FOSSIL_ADD_TEST(objcpp_setof_tofu_fixture, objcpp_test_setof_remove_nonexistent);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(objcpp_setof_tofu_fixture);
+    FOSSIL_ADD_SUITE(objcpp_setof_tofu_fixture);
 } // end of tests

@@ -17,12 +17,12 @@
  * under the License.
  *
  * Author: Michael Gene Brockus (Dreamer)
- * Date: 04/05/2014
+ * Date: 04/05/2013
  *
- * Copyright (C) 2014-2025 Fossil Logic. All rights reserved.
+ * Copyright (C) 2013-Current Fossil Logic. All rights reserved.
  * -----------------------------------------------------------------------------
  */
-#include <fossil/pizza/framework.h>
+#include <fossil/maip/framework.h>
 
 #include "fossil/tofu/framework.h"
 
@@ -155,17 +155,17 @@ FOSSIL_TEST(cpp_test_pqueue_size_consistency) {
 // * * * * * * * * * * * * * * * * * * * * * * * *
 FOSSIL_TEST_GROUP(cpp_pqueue_tofu_tests) {    
     // Generic ToFu Fixture
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_create_container_and_destroy);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_insert_and_remove);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_create_copy);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_create_move);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_not_empty_and_is_empty);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_not_cnullptr_and_is_cnullptr);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_set_front_and_set_back);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_get_front_and_get_back_empty);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_remove_empty);
-    FOSSIL_TEST_ADD(cpp_pqueue_tofu_fixture, cpp_test_pqueue_size_consistency);
+    FOSSIL_ADD_TEST(cpp_pqueue_tofu_fixture, cpp_test_pqueue_create_container_and_destroy);
+    FOSSIL_ADD_TEST(cpp_pqueue_tofu_fixture, cpp_test_pqueue_insert_and_remove);
+    FOSSIL_ADD_TEST(cpp_pqueue_tofu_fixture, cpp_test_pqueue_create_copy);
+    FOSSIL_ADD_TEST(cpp_pqueue_tofu_fixture, cpp_test_pqueue_create_move);
+    FOSSIL_ADD_TEST(cpp_pqueue_tofu_fixture, cpp_test_pqueue_not_empty_and_is_empty);
+    FOSSIL_ADD_TEST(cpp_pqueue_tofu_fixture, cpp_test_pqueue_not_cnullptr_and_is_cnullptr);
+    FOSSIL_ADD_TEST(cpp_pqueue_tofu_fixture, cpp_test_pqueue_set_front_and_set_back);
+    FOSSIL_ADD_TEST(cpp_pqueue_tofu_fixture, cpp_test_pqueue_get_front_and_get_back_empty);
+    FOSSIL_ADD_TEST(cpp_pqueue_tofu_fixture, cpp_test_pqueue_remove_empty);
+    FOSSIL_ADD_TEST(cpp_pqueue_tofu_fixture, cpp_test_pqueue_size_consistency);
 
     // Register the test group
-    FOSSIL_TEST_REGISTER(cpp_pqueue_tofu_fixture);
+    FOSSIL_ADD_SUITE(cpp_pqueue_tofu_fixture);
 } // end of tests
